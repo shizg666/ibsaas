@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.leo.UserRoleDao">
+
+    <resultMap id="roleResultMap" type="com.landleaf.ibsaas.common.domain.leo.Role">
+        <id property="id" column="id" jdbcType="VARCHAR" />
+        <id property="roleCode" column="role_code" jdbcType="VARCHAR" />
+        <id property="roleName" column="role_name" jdbcType="VARCHAR" />
+        <id property="active" column="is_active" jdbcType="VARCHAR" />
+        <id property="belongSystem" column="belong_system" jdbcType="VARCHAR" />
+        <id property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+        <id property="createUserCode" column="create_user_code" jdbcType="VARCHAR" />
+        <id property="modifyTime" column="modify_time" jdbcType="TIMESTAMP" />
+        <id property="modifyUserCode" column="modify_user_code" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="roleFields">
+        b.id, b.role_code, b.role_name, b.is_active, b.belong_system,
+        b.create_time, b.create_user_code, b.modify_time, b.modify_user_code
+    </sql>
+
+    <select id="listUserRoles" parameterType="com.landleaf.ibsaas.common.domain.leo.UserRole" resultMap="roleResultMap">
+        select
+        <include refid="roleFields" />
+        from t_base_user_role a left join t_base_role b on a.role_code = b.role_code and a.belong_system = b.belong_system
+        where a.user_code = #{userCode, jdbcType=VARCHAR} and a.belong_system = #{belongSystem, jdbcType=VARCHAR} and a.is_active = 1 and b.is_active = 1
+    </select>
+
+    <select id="listSystemRoles" parameterType="string" resultMap="roleResultMap">
+        select
+        <include refid="roleFields" />
+        from t_base_role b
+        where b.belong_system = #{belongSystem, jdbcType=VARCHAR} and b.is_active = 1
+    </select>
+
+
+    <insert id="saveUserRoles">
+        insert into t_base_user_role(
+        id, user_code, role_code,belong_system,is_active,create_time,create_user_code,remark
+        )
+        values
+        <foreach collection="list" item="userRole" separator=",">
+            (#{userRole.id}, #{userRole.userCode}, #{userRole.roleCode}, #{userRole.belongSystem}, #{userRole.active}, #{userRole.createTime}, #{userRole.createUserCode}, #{userRole.remark})
+        </foreach>
+    </insert>
+
+    <update id="updateUserRoles">
+        update t_base_user_role   set
+        is_active=#{active},
+        modify_time=#{modifyTime},
+        modify_user_code=#{modifyUserCode}
+        where
+        user_code=#{userCode} AND  belong_system=#{belongSystem}
+        AND id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+
+</mapper>

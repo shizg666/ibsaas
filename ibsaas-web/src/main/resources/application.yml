@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: test
+debug: true
+logging:
+  config: classpath:logback.xml
+

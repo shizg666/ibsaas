@@ -1,0 +1,78 @@
+syntax = "proto3";
+option java_package = "com.google.proto";
+option java_outer_classname = "UsercrdtmListQueryProto";
+
+//进出记录查询
+message UsercrdtmListQuery {
+    string createTime = 1; //创建时间
+    string from = 2; //消息源头
+    string to = 3; //消息目的地
+    string msgId = 4; //消息编号
+    string msgName = 5; //消息名称
+    string subMsgName = 6; //子消息名称
+    UsercrdtmListQueryRequest requestBody = 7; //请求消息体
+    UsercrdtmListQueryResponse response = 8; //响应消息体
+}
+//请求入参
+message UsercrdtmListQueryRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    //起始时间
+    string startTime = 3;
+    //结束时间
+    string endTime = 4;
+    //收费类型编码
+    string chargeTypeCode = 5;
+    //收费类型名称
+    string chargeTypeName = 6;
+    //车牌号码
+    string carCode = 7;
+    //进出场通道编码
+    string channelCode = 8;
+    //进出场通道名称
+    string channelName = 9;
+    //通道类型(进/出)
+    string channelType = 10;
+}
+//响应集
+message UsercrdtmListQueryResponse {
+    //请求是否处理成功
+    bool success = 1;
+    //返回结果有业务异常
+    bool hasBusinessException = 2;
+    //业务异常错误代码
+    string errorCode = 3;
+    //业务异常错误信息
+    string errorMsg = 4;
+    //提示消息，需要进行国际化
+    string message = 5;
+    //正常返回参数
+    UsercrdtmListQueryPageInfo result = 6;
+
+}
+message UsercrdtmListQueryPageInfo {
+    int64 total = 3;
+    repeated UsercrdtmListQueryResult list = 4;
+}
+message UsercrdtmListQueryResult {
+    //记录唯一标记
+    string uniqueId = 1;
+    //车牌号码
+    string carCode = 2;
+    //车主姓名
+    string userName = 3;
+    //收费类型编码
+    string chargeTypeCode = 4;
+    //收费类型名称
+    string chargeTypeName = 5;
+    //通道类型(进/出)
+    string channelType = 6;
+    //进出场通道编码
+    string channelCode = 7;
+    //进出场通道名称
+    string channelName = 8;
+    //进出场时间
+    string occurTime = 9;
+}
+
+

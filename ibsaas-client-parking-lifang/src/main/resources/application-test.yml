@@ -1,0 +1,109 @@
+server:
+  port: 8887
+  servlet:
+    context-path: /client-parking-lifang
+    tomcat:
+      uri-encoding: UTF-8
+
+spring:
+  redis:
+    enable: true
+    database: 0
+    sentinel:
+      master: mymaster
+      nodes: 134.175.92.62:26301,134.175.92.62:26302,134.175.92.62:26303
+    pool:
+      max-idle: -1
+      max-wait: 3000
+      max-active: -1
+      min-idle: 10
+  freemarker:
+    cache: true
+    check-template-location: true
+    charset: UTF-8
+    content-type: text/html
+    suffix: .ftl
+    templateEncoding: UTF-8
+    template-loader-path: classpath:/templates/
+    expose-spring-macro-helpers: false
+    static-locations: classpath:/templates/,classpath:/static/
+  mvc:
+    static-path-pattern: /static/**
+
+ibsaas:
+  dynamic:
+    datasource:
+      enable: true
+      defaultDatasourceName: master
+      datasourceList:
+      - name: master
+        url: jdbc:mysql://40.73.246.184:3306/parking_lifang_lgc?characterEncoding=UTF-8
+        username: root
+        password: Landleaf@2019
+        driverClassName: com.mysql.jdbc.Driver
+        maxActive: 50
+        initialSize: 5
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+#       maxWait: 60000
+#       minIdle: 1
+#       timeBetweenEvictionRunsMillis: 60000
+#       minEvictableIdleTimeMillis: 300000
+#       spring.datasource.filters: stat
+      - name: slave
+        url: jdbc:mysql://40.73.246.184:3306/parking_lifang_lgc?characterEncoding=UTF-8
+        username: root
+        password: Landleaf@2019
+        driverClassName: com.mysql.jdbc.Driver
+        maxActive: 50
+        initialSize: 5
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+#       maxWait: 60000
+#       minIdle: 1
+#       timeBetweenEvictionRunsMillis: 60000
+#       minEvictableIdleTimeMillis: 300000
+#       spring.datasource.filters: stat
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params:
+    count: countSql
+
+id:
+  generate:
+    workId: 1
+    datacenterId: 1
+
+### xxl-sso
+#xxl:
+#  sso:
+#    server: http://xxlssoserver.com:8081/xxl-sso-server
+#    redirecturl: http://localhost:9999/leo/redirect
+#    logout.path: /logout
+#    excluded.paths:
+#    redis:
+#      address: redis://134.175.92.62:6301,redis://134.175.92.62:6302,redis://134.175.92.62:6303
+#ibsaas:
+#  face:
+#    redirecturl: http://localhost:8089
+#  filter:
+#    cors:
+#      enable: true
+tcp:
+  server:
+    port: 8888
+    ip: 127.0.0.1
+
+
+

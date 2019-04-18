@@ -1,0 +1,47 @@
+syntax = "proto3";
+option java_package = "com.google.proto";
+option java_outer_classname = "HeartbeatProto";
+
+//心跳保持
+message Heartbeat {
+    string createTime = 1; //创建时间
+    string from = 2; //消息源头
+    string to = 3; //消息目的地
+    string msgId = 4; //消息编号
+    string msgName = 5; //消息名称
+    string subMsgName = 6; //子消息名称
+
+    HeartbeatRequest requestBody = 7; //请求消息体
+    HeartbeatResponse response = 8; //响应消息体
+
+}
+
+message HeartbeatRequest {
+    //设备id 同from
+    string clientId = 1;
+    //设备描述
+    string clientInfo = 2;
+    //设备版本信息
+    string clientVersion = 3;
+}
+
+message HeartbeatResponse {
+    //请求是否处理成功
+    bool success = 1;
+    //返回结果有业务异常
+    bool hasBusinessException = 2;
+    //业务异常错误代码
+    string errorCode = 3;
+    //业务异常错误信息
+    string errorMsg = 4;
+    //提示消息，需要进行国际化
+    string message = 5;
+    //正常返回参数
+    HeartbeatResult result = 6;
+
+}
+
+message HeartbeatResult {
+
+}
+

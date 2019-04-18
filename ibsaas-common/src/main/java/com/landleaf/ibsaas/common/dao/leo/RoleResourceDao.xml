@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.leo.RoleResourceDao">
+
+    <resultMap id="resourceResultMap" type="com.landleaf.ibsaas.common.domain.leo.Resource">
+        <id property="id" column="id" jdbcType="VARCHAR" />
+        <id property="resourceCode" column="resource_code" jdbcType="VARCHAR" />
+        <id property="resourceName" column="resource_name" jdbcType="VARCHAR" />
+        <id property="resourceLevel" column="resource_level" jdbcType="INTEGER" />
+        <id property="entryUri" column="entry_uri" jdbcType="VARCHAR" />
+        <id property="componentPath" column="component_path" jdbcType="VARCHAR" />
+        <id property="parentCode" column="parent_code" jdbcType="VARCHAR" />
+        <id property="displayOrder" column="display_order" jdbcType="INTEGER" />
+        <id property="resourceType" column="resource_type" jdbcType="INTEGER" />
+        <id property="leaf" column="is_leaf" jdbcType="INTEGER" />
+        <id property="belongSystem" column="belong_system" jdbcType="VARCHAR" />
+        <id property="icon" column="icon" jdbcType="VARCHAR" />
+        <id property="versionNo" column="version_no" jdbcType="VARCHAR" />
+        <id property="active" column="is_active" jdbcType="INTEGER" />
+        <id property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+        <id property="createUserCode" column="create_user_code" jdbcType="VARCHAR" />
+        <id property="modifyTime" column="modify_time" jdbcType="TIMESTAMP" />
+        <id property="modifyUserCode" column="modify_user_code" jdbcType="VARCHAR" />
+    </resultMap>
+    
+    <select id="listRoleResources" parameterType="com.landleaf.ibsaas.common.domain.leo.RoleResource" resultMap="resourceResultMap">
+        select b.id, b.resource_code, b.resource_name, b.resource_level, b.entry_uri, b.component_path, b.parent_code,
+        b.display_order,  b.resource_type, b.is_leaf, b.belong_system, b.icon, b.version_no, b.is_active,
+        b.create_time, b.create_user_code, b.modify_time, b.modify_user_code
+        from t_base_role_resource a
+        join t_base_resource b on a.resource_code = b.resource_code and a.belong_system = b.belong_system
+        where a.role_code = #{roleCode, jdbcType=VARCHAR}
+        and a.belong_system = #{belongSystem, jdbcType=VARCHAR}
+        and a.is_active = 1 and b.is_active = 1
+        order by parent_code, display_order ASC
+    </select>
+
+
+
+    <insert id="saveRoleResources">
+        insert into t_base_role_resource(
+        id, role_code, resource_code,belong_system,is_active,version_no,create_time,create_user_code,remark
+        )
+        values
+        <foreach collection="list" item="roleResource" separator=",">
+            (#{roleResource.id}, #{roleResource.roleCode}, #{roleResource.resourceCode}, #{roleResource.belongSystem}, #{roleResource.active}, #{roleResource.versionNo}, #{roleResource.createTime}, #{roleResource.createUserCode}, #{roleResource.remark})
+        </foreach>
+    </insert>
+
+    <update id="updateRoleResources">
+        update t_base_role_resource   set
+        is_active=#{active},
+        modify_time=#{modifyTime},
+        modify_user_code=#{modifyUserCode},
+        version_no=#{versionNo}
+        where
+        role_code=#{roleCode} AND  belong_system=#{belongSystem}
+        AND id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+
+</mapper>
