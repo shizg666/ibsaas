@@ -140,6 +140,7 @@ public class UserinfoService extends AbstractBaseService<UserinfoDao, Userinfo> 
                 result.setCarCode(tempUserinfo.getCarCode());
                 result.setColour(tempUserinfo.getCarColor());
                 result.setContact(tempUserinfo.getUserTel());
+                result.setUserAddress(tempUserinfo.getUserAddress());
                 try {
                     result.setExpireStatus(ExpireStatusEnum.computedStatus(tempUserinfo.getEnddt()));
                 } catch (Exception e) {

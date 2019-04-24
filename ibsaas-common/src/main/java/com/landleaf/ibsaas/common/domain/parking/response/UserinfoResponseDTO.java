@@ -27,6 +27,8 @@ public class UserinfoResponseDTO {
     private String chargeTypeName;
     //备注
     private String remark;
+    //住址
+    private String userAddress;
 
     public String getCarCode() {
         return carCode;
@@ -114,5 +116,13 @@ public class UserinfoResponseDTO {
 
     public void setUniqueId(String uniqueId) {
         this.uniqueId = uniqueId;
+    }
+
+    public String getUserAddress() {
+        return userAddress;
+    }
+
+    public void setUserAddress(String userAddress) {
+        this.userAddress = userAddress;
     }
 }

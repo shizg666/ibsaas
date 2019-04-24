@@ -4117,6 +4117,24 @@ public final class UserinfoDetailQueryProto {
      */
     com.google.protobuf.ByteString
         getRemarkBytes();
+
+    /**
+     * <pre>
+     *住址
+     * </pre>
+     *
+     * <code>string userAddress = 12;</code>
+     */
+    String getUserAddress();
+    /**
+     * <pre>
+     *住址
+     * </pre>
+     *
+     * <code>string userAddress = 12;</code>
+     */
+    com.google.protobuf.ByteString
+        getUserAddressBytes();
   }
   /**
    * Protobuf type {@code UserinfoDetailQueryResult}
@@ -4142,6 +4160,7 @@ public final class UserinfoDetailQueryProto {
       chargeTypeCode_ = "";
       chargeTypeName_ = "";
       remark_ = "";
+      userAddress_ = "";
     }
 
     @Override
@@ -4232,6 +4251,12 @@ public final class UserinfoDetailQueryProto {
               String s = input.readStringRequireUtf8();
 
               remark_ = s;
+              break;
+            }
+            case 98: {
+              String s = input.readStringRequireUtf8();
+
+              userAddress_ = s;
               break;
             }
             default: {
@@ -4728,6 +4753,48 @@ public final class UserinfoDetailQueryProto {
       }
     }
 
+    public static final int USERADDRESS_FIELD_NUMBER = 12;
+    private volatile Object userAddress_;
+    /**
+     * <pre>
+     *住址
+     * </pre>
+     *
+     * <code>string userAddress = 12;</code>
+     */
+    public String getUserAddress() {
+      Object ref = userAddress_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        userAddress_ = s;
+        return s;
+      }
+    }
+    /**
+     * <pre>
+     *住址
+     * </pre>
+     *
+     * <code>string userAddress = 12;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUserAddressBytes() {
+      Object ref = userAddress_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (String) ref);
+        userAddress_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @Override
     public final boolean isInitialized() {
@@ -4775,6 +4842,9 @@ public final class UserinfoDetailQueryProto {
       if (!getRemarkBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 11, remark_);
       }
+      if (!getUserAddressBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 12, userAddress_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -4817,6 +4887,9 @@ public final class UserinfoDetailQueryProto {
       if (!getRemarkBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(11, remark_);
       }
+      if (!getUserAddressBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(12, userAddress_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -4854,6 +4927,8 @@ public final class UserinfoDetailQueryProto {
           .equals(other.getChargeTypeName())) return false;
       if (!getRemark()
           .equals(other.getRemark())) return false;
+      if (!getUserAddress()
+          .equals(other.getUserAddress())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -4887,6 +4962,8 @@ public final class UserinfoDetailQueryProto {
       hash = (53 * hash) + getChargeTypeName().hashCode();
       hash = (37 * hash) + REMARK_FIELD_NUMBER;
       hash = (53 * hash) + getRemark().hashCode();
+      hash = (37 * hash) + USERADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getUserAddress().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -5042,6 +5119,8 @@ public final class UserinfoDetailQueryProto {
 
         remark_ = "";
 
+        userAddress_ = "";
+
         return this;
       }
 
@@ -5079,6 +5158,7 @@ public final class UserinfoDetailQueryProto {
         result.chargeTypeCode_ = chargeTypeCode_;
         result.chargeTypeName_ = chargeTypeName_;
         result.remark_ = remark_;
+        result.userAddress_ = userAddress_;
         onBuilt();
         return result;
       }
@@ -5169,6 +5249,10 @@ public final class UserinfoDetailQueryProto {
         }
         if (!other.getRemark().isEmpty()) {
           remark_ = other.remark_;
+          onChanged();
+        }
+        if (!other.getUserAddress().isEmpty()) {
+          userAddress_ = other.userAddress_;
           onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
@@ -6178,6 +6262,95 @@ public final class UserinfoDetailQueryProto {
         onChanged();
         return this;
       }
+
+      private Object userAddress_ = "";
+      /**
+       * <pre>
+       *住址
+       * </pre>
+       *
+       * <code>string userAddress = 12;</code>
+       */
+      public String getUserAddress() {
+        Object ref = userAddress_;
+        if (!(ref instanceof String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          String s = bs.toStringUtf8();
+          userAddress_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      /**
+       * <pre>
+       *住址
+       * </pre>
+       *
+       * <code>string userAddress = 12;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUserAddressBytes() {
+        Object ref = userAddress_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (String) ref);
+          userAddress_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <pre>
+       *住址
+       * </pre>
+       *
+       * <code>string userAddress = 12;</code>
+       */
+      public Builder setUserAddress(
+          String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        userAddress_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *住址
+       * </pre>
+       *
+       * <code>string userAddress = 12;</code>
+       */
+      public Builder clearUserAddress() {
+        
+        userAddress_ = getDefaultInstance().getUserAddress();
+        onChanged();
+        return this;
+      }
+      /**
+       * <pre>
+       *住址
+       * </pre>
+       *
+       * <code>string userAddress = 12;</code>
+       */
+      public Builder setUserAddressBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        userAddress_ = value;
+        onChanged();
+        return this;
+      }
       @Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -6271,15 +6444,15 @@ public final class UserinfoDetailQueryProto {
       "ueryResponse\022\017\n\007success\030\001 \001(\010\022\034\n\024hasBusi" +
       "nessException\030\002 \001(\010\022\021\n\terrorCode\030\003 \001(\t\022\020" +
       "\n\010errorMsg\030\004 \001(\t\022\017\n\007message\030\005 \001(\t\022*\n\006res" +
-      "ult\030\006 \001(\0132\032.UserinfoDetailQueryResult\"\352\001" +
+      "ult\030\006 \001(\0132\032.UserinfoDetailQueryResult\"\377\001" +
       "\n\031UserinfoDetailQueryResult\022\020\n\010uniqueId\030" +
       "\001 \001(\t\022\017\n\007carCode\030\002 \001(\t\022\r\n\005brand\030\003 \001(\t\022\016\n" +
       "\006colour\030\004 \001(\t\022\020\n\010userName\030\005 \001(\t\022\017\n\007conta" +
       "ct\030\006 \001(\t\022\022\n\nexpireTime\030\007 \001(\t\022\024\n\014expireSt" +
       "atus\030\010 \001(\t\022\026\n\016chargeTypeCode\030\t \001(\t\022\026\n\016ch" +
-      "argeTypeName\030\n \001(\t\022\016\n\006remark\030\013 \001(\tB,\n\020co" +
-      "m.google.protoB\030UserinfoDetailQueryProto" +
-      "b\006proto3"
+      "argeTypeName\030\n \001(\t\022\016\n\006remark\030\013 \001(\t\022\023\n\013us" +
+      "erAddress\030\014 \001(\tB,\n\020com.google.protoB\030Use" +
+      "rinfoDetailQueryProtob\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
         new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
@@ -6316,7 +6489,7 @@ public final class UserinfoDetailQueryProto {
     internal_static_UserinfoDetailQueryResult_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_UserinfoDetailQueryResult_descriptor,
-        new String[] { "UniqueId", "CarCode", "Brand", "Colour", "UserName", "Contact", "ExpireTime", "ExpireStatus", "ChargeTypeCode", "ChargeTypeName", "Remark", });
+        new String[] { "UniqueId", "CarCode", "Brand", "Colour", "UserName", "Contact", "ExpireTime", "ExpireStatus", "ChargeTypeCode", "ChargeTypeName", "Remark", "UserAddress", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

@@ -63,6 +63,8 @@ message UserinfoDetailQueryResult {
     string chargeTypeName = 10;
     //备注
     string remark = 11;
+    //住址
+    string userAddress = 12;
 }
 
 
