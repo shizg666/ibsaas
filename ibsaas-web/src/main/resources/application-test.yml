@@ -7,7 +7,9 @@ server:
 tcp:
   server:
     port: 8888
-    ip: 40.73.246.184
+  heart:
+    beat:
+      interval: 60
   thread:
     server-handler:
       corePoolSize: 5
@@ -22,7 +24,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 134.175.92.62:26301,134.175.92.62:26302,134.175.92.62:26303
+      nodes: 40.73.246.184:26379,40.73.246.184:26380,40.73.246.184:26381
     pool:
       max-idle: -1
       max-wait: 3000
@@ -112,7 +114,7 @@ id:
 ### xxl-sso
 xxl:
   sso:
-    server: http://134.175.92.62:8081/xxl-sso-server
+    server: http://40.73.246.184:8081/xxl-sso-server
     redirecturl: http://localhost:8885/ibsaas/redirect
     logout:
       path: /logout
@@ -120,7 +122,7 @@ xxl:
 #      paths: /parking/**/*
       paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**
     redis:
-      address: redis://134.175.92.62:6301,redis://134.175.92.62:6302,redis://134.175.92.62:6303
+      address: redis://40.73.246.184:6379,redis://40.73.246.184:6380,redis://40.73.246.184:6381
 
 
 

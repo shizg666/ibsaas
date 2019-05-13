@@ -28,7 +28,7 @@ public class MsgListenerProcessor {
     /**
      * 根据msgName路由，查找处理processor
      */
-    public void process(String msgName , String subMsgName, TCPMessage tcpMessage, ChannelHandlerContext ctx) {
+    public void process(String msgName , String subMsgName, TCPMessage msg, ChannelHandlerContext ctx) {
 
         MsgProcessor msgProcessor = selectProcessorService(msgName,subMsgName);
 
@@ -37,10 +37,10 @@ public class MsgListenerProcessor {
                 logger.error(String.format("根据msgName:%s和子消息subMsgName：%s 没有找到对应的处理消息的服务", msgName,subMsgName));
                 throw new MsgProcessorException(MsgErrorEnum.NOT_FOUND_PROCESSORSERVICE);
             }
-            logger.info(String.format("根据msgName%s 子消息subMsgName：%s 没有找到对应的处理消息的服务", msgName, subMsgName,
+            logger.info(String.format("根据【msgName】%s 子消息【subMsgName】：%s 找到对应的处理消息的服务：", msgName, subMsgName,
                     msgProcessor.getClass().getName()));
             //调用该类的方法,处理消息
-            msgProcessor.handle(tcpMessage,ctx);
+            msgProcessor.handle(msg,ctx);
         } catch (Exception e) {
             //异常暂不处理
             logger.error(e.getMessage(), e);
@@ -54,7 +54,7 @@ public class MsgListenerProcessor {
      * @param subMsgName 子消息
      */
     private MsgProcessor selectProcessorService(String msgName,String subMsgName) {
-        MsgProcessor msgProcessor = null;
+         MsgProcessor msgProcessor = null;
         for (Entry<String, MsgProcessor> entry : msgProcessorServiceMap.entrySet()) {
             //获取service实现类上注解的topic和tags
             MsgServiceAnnotation msgServiceAnnotation = entry.getValue().getClass().getAnnotation(MsgServiceAnnotation.class);
@@ -66,7 +66,7 @@ public class MsgListenerProcessor {
             List<String> annotationSubMsgName =Arrays.asList(msgServiceAnnotation.subMsgNames());
 
             //根据消息与子消息筛选
-            if (!annotationMsgName.equals(msgName)||!annotationMsgName.contains(subMsgName)) {
+            if (!annotationMsgName.equals(msgName)||!annotationSubMsgName.contains(subMsgName)) {
                 continue;
             }
             msgProcessor = entry.getValue();

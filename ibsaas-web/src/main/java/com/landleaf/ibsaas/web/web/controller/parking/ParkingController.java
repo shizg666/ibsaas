@@ -15,8 +15,9 @@ import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.utils.MessageUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtil;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
+import com.landleaf.ibsaas.web.asyn.FutureService;
+import com.landleaf.ibsaas.web.asyn.IFutureService;
 import com.landleaf.ibsaas.web.tcp.cache.ConcurrentHashMapCacheUtils;
-import com.landleaf.ibsaas.web.tcp.init.IbsaasWebTCPClientHandler;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.exception.ParkingException;
 import com.landleaf.ibsaas.web.web.service.parking.IParkingRealCountInitService;
@@ -35,6 +36,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 /**
@@ -47,13 +52,13 @@ public class ParkingController extends BasicController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParkingController.class);
 
-    @Autowired
-    private IbsaasWebTCPClientHandler ibsaasWebTCPClientHandler;
 
     @Autowired
     private IParkingRealCountInitService parkingRealCountInitService;
 
 
+    @Autowired
+    private IFutureService futureService;
     /**
      * 获取通道类型
      */
@@ -62,14 +67,14 @@ public class ParkingController extends BasicController {
     public Response requestInnerClient() {
 
         //查找长连接会话
-        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.SERVER.clientId);
+        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
 
         //请求参数
         TCPMessage data = new TCPMessage();
         String msgId = MessageUtil.generateId(20);
         ChannelListQueryDTO queryDTO = new ChannelListQueryDTO();
         data.build(DateUtil.format(new Date()),
-                TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId,
+                TCPMessageSourceEnum.SERVER.clientId,
                 TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId,
                 msgId,//返回时消息唯一标记
                 MsgTypeEnum.PARKING.name,//主消息名称
@@ -78,7 +83,19 @@ public class ParkingController extends BasicController {
                 null);
         //发送消息
         writeAndFlush(ctx, data);
-        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 60 * 1000L);
+        TCPMessage tcpMessage = null;
+//        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        Long timeout =30 * 1000L;
+        Future<TCPMessage> cacheFuture = futureService.getCacheFuture(msgId, timeout);
+        try {
+            tcpMessage = cacheFuture.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
         if (tcpMessage == null) {
             LOGGER.error("与获取数据超时");
             throw new BusinessException(ParkingException.GET_DATA_TIMEOUT_FROM_SERVER);
@@ -124,13 +141,13 @@ public class ParkingController extends BasicController {
     @ApiOperation(value = "获取收费类型列表", notes = "获取收费类型列表")
     public Response queryAllChargerule() {
         //查找中转服务端长连接会话
-        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.SERVER.clientId);
+        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
 
         //请求参数
         TCPMessage data = new TCPMessage();
         String msgId = MessageUtil.generateId(20);
         data.build(DateUtil.format(new Date()),
-                TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId,
+                TCPMessageSourceEnum.SERVER.clientId,
                 TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId,
                 msgId,
                 MsgTypeEnum.PARKING.name,
@@ -139,8 +156,19 @@ public class ParkingController extends BasicController {
                 null);
         writeAndFlush(ctx, data);
 
-        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 60 * 1000L);
-        if (tcpMessage == null) {
+        TCPMessage tcpMessage = null;
+//        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        Long timeout =30 * 1000L;
+        Future<TCPMessage> cacheFuture = futureService.getCacheFuture(msgId, timeout);
+        try {
+            tcpMessage = cacheFuture.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }        if (tcpMessage == null) {
             LOGGER.error("与获取数据超时");
             throw new BusinessException(ParkingException.GET_DATA_TIMEOUT_FROM_SERVER);
         }
@@ -173,7 +201,7 @@ public class ParkingController extends BasicController {
     @GetMapping("/usercrdtm/real-count")
     @ApiOperation(value = "车位实时监控", notes = "车位实时监控")
     public Response realCount(@ApiParam UsercrdtmRealCountQueryDTO queryDTO) {
-        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.SERVER.clientId);
+        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
         //请求参数
         TCPMessage data = new TCPMessage();
 
@@ -189,15 +217,26 @@ public class ParkingController extends BasicController {
         String msgId = MessageUtil.generateId(20);
         BeanUtils.copyProperties(initParams, queryDTO);
         data.build(DateUtil.format(new Date()),
-                TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId,
+                TCPMessageSourceEnum.SERVER.clientId,
                 TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId,
                 msgId, MsgTypeEnum.PARKING.name,
                 SubMsgTypeEnum.PARKING_REAL_COUNT.name,
                 queryDTO,
                 null);
         writeAndFlush(ctx, data);
-        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 60 * 1000L);
-        if (tcpMessage == null) {
+        TCPMessage tcpMessage = null;
+//        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        Long timeout =30 * 1000L;
+        Future<TCPMessage> cacheFuture = futureService.getCacheFuture(msgId, timeout);
+        try {
+            tcpMessage = cacheFuture.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }        if (tcpMessage == null) {
             LOGGER.error("与获取数据超时");
             throw new BusinessException(ParkingException.GET_DATA_TIMEOUT_FROM_SERVER);
         }
@@ -212,7 +251,7 @@ public class ParkingController extends BasicController {
     @GetMapping("/usercrdtm/real-count/hour")
     @ApiOperation(value = "车位分时段监控", notes = "车位分时段监控")
     public Response realCountFHour(UsercrdtmRealCountQueryByHourDTO queryDTO) {
-        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.SERVER.clientId);
+        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
         //请求参数
         TCPMessage data = new TCPMessage();
         String msgId = MessageUtil.generateId(20);
@@ -225,9 +264,9 @@ public class ParkingController extends BasicController {
         if (initParams == null) {
             throw new BusinessException("车位初始化配置不存在,请联系管理员配置");
         }
-        BeanUtils.copyProperties(initParams,queryDTO);
+        BeanUtils.copyProperties(initParams, queryDTO);
         data.build(DateUtil.format(new Date()),
-                TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId,
+                TCPMessageSourceEnum.SERVER.clientId,
                 TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId,
                 msgId,
                 MsgTypeEnum.PARKING.name,
@@ -235,7 +274,19 @@ public class ParkingController extends BasicController {
                 queryDTO,
                 null);
         writeAndFlush(ctx, data);
-        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 60 * 1000L);
+        TCPMessage tcpMessage = null;
+//        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        Long timeout =30 * 1000L;
+        Future<TCPMessage> cacheFuture = futureService.getCacheFuture(msgId, timeout);
+        try {
+            tcpMessage = cacheFuture.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
         if (tcpMessage == null) {
             LOGGER.error("与获取数据超时");
             throw new BusinessException(ParkingException.GET_DATA_TIMEOUT_FROM_SERVER);
@@ -265,12 +316,12 @@ public class ParkingController extends BasicController {
     @GetMapping("/usercrdtm/list")
     @ApiOperation(value = "车辆进出记录", notes = "车辆进出记录")
     public Response usercrdtmList(UsercrdtmListQueryDTO queryDTO) {
-        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.SERVER.clientId);
+        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
         //请求参数
         TCPMessage data = new TCPMessage();
         String msgId = MessageUtil.generateId(20);
         data.build(DateUtil.format(new Date()),
-                TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId,
+                TCPMessageSourceEnum.SERVER.clientId,
                 TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId,
                 msgId,
                 MsgTypeEnum.PARKING.name,
@@ -278,16 +329,28 @@ public class ParkingController extends BasicController {
                 queryDTO,
                 null);
         writeAndFlush(ctx, data);
-        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 5 * 1000L);
+        TCPMessage tcpMessage = null;
+//        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        Long timeout =30 * 1000L;
+        Future<TCPMessage> cacheFuture = futureService.getCacheFuture(msgId, timeout);
+        try {
+            tcpMessage = cacheFuture.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
         if (tcpMessage == null) {
             LOGGER.error("与获取数据超时");
             throw new ParkingException(ParkingException.GET_DATA_TIMEOUT_FROM_SERVER);
         }
         JSONObject result = (JSONObject) tcpMessage.getResponse().getResult();
-        if(result==null||result.size()==0){
-            Map<String,Object> resultMap = Maps.newHashMap();
-            resultMap.put("total",0);
-            resultMap.put("list",Lists.newArrayList());
+        if (result == null || result.size() == 0) {
+            Map<String, Object> resultMap = Maps.newHashMap();
+            resultMap.put("total", 0);
+            resultMap.put("list", Lists.newArrayList());
             return returnSuccess(resultMap);
         }
         return returnSuccess(tcpMessage.getResponse().getResult());
@@ -301,12 +364,12 @@ public class ParkingController extends BasicController {
     @GetMapping("/userinfo/list")
     @ApiOperation(value = "车辆列表", notes = "车辆列表")
     public Response userinfoList(UserinfoListQueryDTO queryDTO) {
-        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.SERVER.clientId);
+        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
         //请求参数
         TCPMessage data = new TCPMessage();
         String msgId = MessageUtil.generateId(20);
         data.build(DateUtil.format(new Date()),
-                TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId,
+                TCPMessageSourceEnum.SERVER.clientId,
                 TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId,
                 msgId,
                 MsgTypeEnum.PARKING.name,
@@ -314,16 +377,28 @@ public class ParkingController extends BasicController {
                 queryDTO,
                 null);
         writeAndFlush(ctx, data);
-        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 5 * 1000L);
+        TCPMessage tcpMessage = null;
+//        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        Long timeout =30 * 1000L;
+        Future<TCPMessage> cacheFuture = futureService.getCacheFuture(msgId, timeout);
+        try {
+            tcpMessage = cacheFuture.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
         if (tcpMessage == null) {
             LOGGER.error("与获取数据超时");
             throw new ParkingException(ParkingException.GET_DATA_TIMEOUT_FROM_SERVER);
         }
         JSONObject result = (JSONObject) tcpMessage.getResponse().getResult();
-        if(result==null||result.size()==0){
-            Map<String,Object> resultMap = Maps.newHashMap();
-            resultMap.put("total",0);
-            resultMap.put("list",Lists.newArrayList());
+        if (result == null || result.size() == 0) {
+            Map<String, Object> resultMap = Maps.newHashMap();
+            resultMap.put("total", 0);
+            resultMap.put("list", Lists.newArrayList());
             return returnSuccess(resultMap);
         }
         return returnSuccess(tcpMessage.getResponse().getResult());
@@ -355,12 +430,12 @@ public class ParkingController extends BasicController {
     @GetMapping("/userinfo/detail")
     @ApiOperation(value = "车辆详情", notes = "车辆详情")
     public Response userinfoDetail(UserinfoDetailQueryDTO queryDTO) {
-        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.SERVER.clientId);
+        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
         //请求参数
         TCPMessage data = new TCPMessage();
         String msgId = MessageUtil.generateId(20);
         data.build(DateUtil.format(new Date()),
-                TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId,
+                TCPMessageSourceEnum.SERVER.clientId,
                 TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId,
                 msgId,
                 MsgTypeEnum.PARKING.name,
@@ -368,7 +443,19 @@ public class ParkingController extends BasicController {
                 queryDTO,
                 null);
         writeAndFlush(ctx, data);
-        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        TCPMessage tcpMessage = null;
+//        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        Long timeout =30 * 1000L;
+        Future<TCPMessage> cacheFuture = futureService.getCacheFuture(msgId, timeout);
+        try {
+            tcpMessage = cacheFuture.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
         if (tcpMessage == null) {
             LOGGER.error("与获取数据超时");
             tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
@@ -419,5 +506,66 @@ public class ParkingController extends BasicController {
         }
         return returnSuccess(parkingRealCountInitService.queryRealCountInitParams(clientId));
     }
+
+    @ApiOperation(value = "查询历史车流量", notes = "查询历史车流量")
+    @RequestMapping(value = "/traffic-flow", method = RequestMethod.POST)
+    public Response trafficFlow(@RequestBody UsercrdtmInHistoryQueryDTO queryDTO) {
+        ChannelHandlerContext ctx = getChannelHandlerContext(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
+        //请求参数
+        TCPMessage data = new TCPMessage();
+        String msgId = MessageUtil.generateId(20);
+        //查找初始配置
+        if (StringUtil.isEmpty(queryDTO.getClientId())) {
+            //后期由前端传入，暂写枚举
+            queryDTO.setClientId(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
+        }
+        data.build(DateUtil.format(new Date()),
+                TCPMessageSourceEnum.SERVER.clientId,
+                TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId,
+                msgId,
+                MsgTypeEnum.PARKING.name,
+                SubMsgTypeEnum.PARKING_IN_HISTROY.name,
+                queryDTO,
+                null);
+        writeAndFlush(ctx, data);
+        TCPMessage tcpMessage = null;
+//        TCPMessage tcpMessage = (TCPMessage) ConcurrentHashMapCacheUtils.getCache(msgId, 30 * 1000L);
+        Long timeout =30 * 1000L;
+        Future<TCPMessage> cacheFuture = futureService.getCacheFuture(msgId, timeout);
+        try {
+            tcpMessage = cacheFuture.get(timeout, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        }
+        if (tcpMessage == null) {
+            LOGGER.error("与获取数据超时");
+            throw new BusinessException(ParkingException.GET_DATA_TIMEOUT_FROM_SERVER);
+        }
+        Map<String, Object> map = null;
+        try {
+            List<UsercrdtmInHistoryQueryDTO> historyQueryDTOS = JSON.parseArray(JSON.toJSONString(tcpMessage.getResponse().getResult()), UsercrdtmInHistoryQueryDTO.class);
+            List<String> xList = historyQueryDTOS.stream().map(i -> i.getCurrent()).collect(Collectors.toList());
+            List<Integer> yList = historyQueryDTOS.stream().map(i -> {
+                Integer count = i.getCount();
+                if (count == null) {
+                    return 0;
+                } else {
+                    return count;
+                }
+            }).collect(Collectors.toList());
+            map = Maps.newHashMap();
+            map.put("x", xList);
+            map.put("y", yList);
+        } catch (Exception e) {
+            LOGGER.error("数据类型格式错误");
+            throw new BusinessException("接收到数据类型格式错误");
+        }
+        return returnSuccess(map);
+    }
+
 
 }

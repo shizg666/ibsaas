@@ -7,10 +7,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
 		<module>ibsaas-client-parking-lifang</module>
-		<module>ibsaas-server-parking</module>
 		<module>ibsaas-web</module>
 		<module>ibsaas-common</module>
 		<module>ibsaas-datasource</module>
+		<module>ibsaas-rocketmq</module>
     </modules>
 	<packaging>pom</packaging>
 

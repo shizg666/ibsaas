@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.client.parking.lifang.controller;
 import com.alibaba.fastjson.JSON;
 import com.landleaf.ibsaas.client.parking.lifang.service.IUsercrdtmService;
 import com.landleaf.ibsaas.common.domain.Response;
+import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmInHistoryQueryDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmListQueryDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmRealCountQueryByHourDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmRealCountQueryDTO;
@@ -25,27 +26,41 @@ public class UsercrdtmController extends BasicController {
     private IUsercrdtmService usercrdtmService;
 
     @PostMapping(value = "/list")
-    public Response usercrdtmList(@RequestBody UsercrdtmListQueryDTO queryDTO ){
-       return returnSuccess(usercrdtmService.pageQueryList(queryDTO));
+    public Response usercrdtmList(@RequestBody UsercrdtmListQueryDTO queryDTO) {
+        return returnSuccess(usercrdtmService.pageQueryList(queryDTO));
     }
 
     /**
      * 车位实时数量
+     *
      * @param queryDTO
      * @return
      */
     @PostMapping(value = "/real-count")
-    public Response realCount(@RequestBody UsercrdtmRealCountQueryDTO queryDTO ){
-       return returnSuccess(usercrdtmService.realCount(queryDTO));
+    public Response realCount(@RequestBody UsercrdtmRealCountQueryDTO queryDTO) {
+        return returnSuccess(usercrdtmService.realCount(queryDTO));
     }
+
     /**
      * 车位实时数量--时间段
+     *
      * @param queryDTO
      * @return
      */
     @PostMapping(value = "/real-count/hour")
-    public Response realCountFHour(@RequestBody UsercrdtmRealCountQueryByHourDTO queryDTO ){
-       return returnSuccess(usercrdtmService.realCountFHour(queryDTO));
+    public Response realCountFHour(@RequestBody UsercrdtmRealCountQueryByHourDTO queryDTO) {
+        return returnSuccess(usercrdtmService.realCountFHour(queryDTO));
+    }
+
+    /**
+     * 车流量查询
+     *
+     * @param queryDTO
+     * @return
+     */
+    @PostMapping(value = "/traffic-flow")
+    public Response trafficFlow(@RequestBody UsercrdtmInHistoryQueryDTO queryDTO) {
+        return returnSuccess(usercrdtmService.trafficFlow(queryDTO));
     }
 
     public static void main(String[] args) {
@@ -64,8 +79,6 @@ public class UsercrdtmController extends BasicController {
         usercrdtmRealCountQueryDTO.setResetTime("2068-11-21 23:59:59");
         System.out.println(JSON.toJSONString(usercrdtmRealCountQueryDTO));
     }
-
-
 
 
 }

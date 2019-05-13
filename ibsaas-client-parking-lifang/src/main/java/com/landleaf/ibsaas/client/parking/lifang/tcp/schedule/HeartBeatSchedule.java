@@ -31,29 +31,29 @@ public class HeartBeatSchedule {
 
 
 
-    @Scheduled(cron = "*/30 * * * * ? ")
+    @Scheduled(cron = "*/59 * * * * ? ")
     public void sendHeartBeat(){
 
-        TCPMessage data = new TCPMessage();
-        //改为外部配置
-        data.setFrom(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
-        data.setTo(TCPMessageSourceEnum.SERVER.clientId);
-        data.setMsgName(MsgTypeEnum.PARKING.name);
-        data.setSubMsgName(SubMsgTypeEnum.HEART_BEAT.name);
-        HeartBeatDTO heartBeatDTO = new HeartBeatDTO();
-        heartBeatDTO.setClientId(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
-        heartBeatDTO.setClientInfo("停车业务系统--立方");
-        heartBeatDTO.setClientVersion("停车业务系统--立方");
-        data.setRequestBody(heartBeatDTO);
-        String jsonBody = JSON.toJSONString(data);
-        byte[] byteBody = jsonBody.getBytes(Charset.forName("utf-8"));
-        ByteBuf firstMessage = Unpooled.buffer();
-        firstMessage.writeBytes(byteBody);
-        ChannelHandlerContext ctx = TcpConnectManager.getInstance().getCtx(TCPMessageSourceEnum.SERVER.clientId);
-        LOGGER.info("发送心跳消息{}", DateUtil.format(new Date()));
-        if(ctx!=null){
-            ctx.writeAndFlush(data);
-        }
+//        TCPMessage data = new TCPMessage();
+//        //改为外部配置
+//        data.setFrom(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
+//        data.setTo(TCPMessageSourceEnum.SERVER.clientId);
+//        data.setMsgName(MsgTypeEnum.PARKING.name);
+//        data.setSubMsgName(SubMsgTypeEnum.HEART_BEAT.name);
+//        HeartBeatDTO heartBeatDTO = new HeartBeatDTO();
+//        heartBeatDTO.setClientId(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
+//        heartBeatDTO.setClientInfo("停车业务系统--立方");
+//        heartBeatDTO.setClientVersion("停车业务系统--立方");
+//        data.setRequestBody(heartBeatDTO);
+//        String jsonBody = JSON.toJSONString(data);
+//        byte[] byteBody = jsonBody.getBytes(Charset.forName("utf-8"));
+//        ByteBuf firstMessage = Unpooled.buffer();
+//        firstMessage.writeBytes(byteBody);
+//        ChannelHandlerContext ctx = TcpConnectManager.getInstance().getCtx(TCPMessageSourceEnum.SERVER.clientId);
+//        LOGGER.info("发送心跳消息{}", DateUtil.format(new Date()));
+//        if(ctx!=null){
+//            ctx.writeAndFlush(data);
+//        }
 
     }
 

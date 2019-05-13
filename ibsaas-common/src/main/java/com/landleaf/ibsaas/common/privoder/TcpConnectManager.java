@@ -42,33 +42,6 @@ public enum TcpConnectManager {
     }
 
 
-    public void sendMsgTInner(ChannelHandlerContext ctx) {
-        TCPMessage data = new TCPMessage();
-        data.setFrom(TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.GET_TYPE);
-        data.setTo(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.GET_TYPE);
-        writeAndFlush(data, ctx);
-    }
-
-    public void sendMsgTOuter(ChannelHandlerContext ctx) {
-        TCPMessage data = new TCPMessage();
-        data.setFrom(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.GET_TYPE);
-        data.setTo(TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.GET_TYPE);
-        writeAndFlush(data, ctx);
-    }
-
-    public void serverMsgTOuter(ChannelHandlerContext ctx) {
-        TCPMessage data = new TCPMessage();
-        data.setFrom(TCPMessageSourceEnum.SERVER.GET_TYPE);
-        data.setTo(TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.GET_TYPE);
-        writeAndFlush(data, ctx);
-    }
-
-    public void serverMsgTInner(ChannelHandlerContext ctx) {
-        TCPMessage data = new TCPMessage();
-        data.setFrom(TCPMessageSourceEnum.SERVER.GET_TYPE);
-        data.setTo(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.GET_TYPE);
-        writeAndFlush(data, ctx);
-    }
 
     public  void writeAndFlush(TCPMessage data, ChannelHandlerContext ctx) {
 //        String jsonBody = JSON.toJSONString(data);

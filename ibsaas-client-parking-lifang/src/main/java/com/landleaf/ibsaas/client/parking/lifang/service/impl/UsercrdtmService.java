@@ -13,10 +13,14 @@ import com.landleaf.ibsaas.client.parking.lifang.enums.ChannelTypeEnum;
 import com.landleaf.ibsaas.client.parking.lifang.service.IChannelService;
 import com.landleaf.ibsaas.client.parking.lifang.service.IChargeruleService;
 import com.landleaf.ibsaas.client.parking.lifang.service.IUsercrdtmService;
+import com.landleaf.ibsaas.client.parking.lifang.service.trackflow.TrafficFlowHandler;
+import com.landleaf.ibsaas.client.parking.lifang.service.trackflow.TrafficFlowHandlerSelector;
+import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmInHistoryQueryDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmListQueryDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmRealCountQueryByHourDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmRealCountQueryDTO;
 import com.landleaf.ibsaas.common.domain.parking.response.UsercrdtmResponseDTO;
+import com.landleaf.ibsaas.common.enums.parking.UsercrdtmInHistoryQueryTypeEnum;
 import com.landleaf.ibsaas.common.utils.date.DateUtil;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
@@ -140,13 +144,13 @@ public class UsercrdtmService extends AbstractBaseService<UsercrdtmDao, Usercrdt
         Integer occupyCount = queryDTO.getOccupyCount();
         Integer remainCount = queryDTO.getRemainCount();
         Integer total = queryDTO.getTotal();
-        if(occupyCount==null){
+        if (occupyCount == null) {
             queryDTO.setOccupyCount(0);
         }
-        if(remainCount==null){
+        if (remainCount == null) {
             queryDTO.setRemainCount(0);
         }
-        if(total==null){
+        if (total == null) {
             queryDTO.setTotal(0);
         }
         String resetTime = queryDTO.getResetTime();
@@ -163,12 +167,12 @@ public class UsercrdtmService extends AbstractBaseService<UsercrdtmDao, Usercrdt
         criteria2.andCondition("inOrOut=", ChannelTypeEnum.OUT.type);
         int outCount = selectCountByExample(example2);
         BeanUtils.copyProperties(queryDTO, result);
-        if(outCount>inCount){
-            outCount=inCount;
+        if (outCount > inCount) {
+            outCount = inCount;
         }
         int resultOccupyCount = queryDTO.getOccupyCount() + inCount - outCount;
-        if(resultOccupyCount>=total){
-            resultOccupyCount=total;
+        if (resultOccupyCount >= total) {
+            resultOccupyCount = total;
         }
         result.setOccupyCount(resultOccupyCount);
         result.setRemainCount(queryDTO.getTotal() - result.getOccupyCount());
@@ -187,13 +191,13 @@ public class UsercrdtmService extends AbstractBaseService<UsercrdtmDao, Usercrdt
         Integer occupyCount = queryDTO.getOccupyCount();
         Integer remainCount = queryDTO.getRemainCount();
         Integer total = queryDTO.getTotal();
-        if(occupyCount==null){
+        if (occupyCount == null) {
             queryDTO.setOccupyCount(0);
         }
-        if(remainCount==null){
+        if (remainCount == null) {
             queryDTO.setRemainCount(0);
         }
-        if(total==null){
+        if (total == null) {
             queryDTO.setTotal(0);
         }
         String resetTime = queryDTO.getResetTime();
@@ -238,26 +242,26 @@ public class UsercrdtmService extends AbstractBaseService<UsercrdtmDao, Usercrdt
                 }).collect(Collectors.toList());
                 int inCount = inList.size();
                 int outCount = outList.size();
-                if(outCount>inCount){
-                    outCount=inCount;
+                if (outCount > inCount) {
+                    outCount = inCount;
                 }
                 int resultOccupyCount = queryDTO.getOccupyCount() + inCount - outCount;
-                if(resultOccupyCount<=0){
-                    resultOccupyCount=0;
+                if (resultOccupyCount <= 0) {
+                    resultOccupyCount = 0;
                 }
-                if(resultOccupyCount>=total){
-                    resultOccupyCount=total;
+                if (resultOccupyCount >= total) {
+                    resultOccupyCount = total;
                 }
                 temp.setOccupyCount(resultOccupyCount);
                 temp.setRemainCount(queryDTO.getTotal() - temp.getOccupyCount());
             }
-        }else{
+        } else {
             for (Date date : todayHourList) {
                 UsercrdtmRealCountQueryByHourDTO temp = new UsercrdtmRealCountQueryByHourDTO();
                 BeanUtils.copyProperties(queryDTO, temp);
-                int resultOccupyCount = queryDTO.getOccupyCount() ;
-                if(resultOccupyCount<=0){
-                    resultOccupyCount=0;
+                int resultOccupyCount = queryDTO.getOccupyCount();
+                if (resultOccupyCount <= 0) {
+                    resultOccupyCount = 0;
                 }
                 temp.setOccupyCount(resultOccupyCount);
                 temp.setRemainCount(queryDTO.getTotal() - temp.getOccupyCount());
@@ -266,6 +270,43 @@ public class UsercrdtmService extends AbstractBaseService<UsercrdtmDao, Usercrdt
             }
         }
         return result;
+    }
+
+    @Autowired
+    private TrafficFlowHandlerSelector trafficFlowHandlerSelector;
+
+    /**
+     * 车流量查询
+     *
+     * @param queryDTO
+     * @return
+     */
+    @Override
+    public List<UsercrdtmInHistoryQueryDTO> trafficFlow(UsercrdtmInHistoryQueryDTO queryDTO) {
+        String code = UsercrdtmInHistoryQueryTypeEnum.getInstByType(queryDTO.getType()).code;
+        TrafficFlowHandler handler = trafficFlowHandlerSelector.selectHandler(code);
+        return handler.handle(code, queryDTO);
+    }
+
+    @Override
+    public int selectCountBetween(String startTime, String endTime, Integer type) {
+        Example example = new Example(Usercrdtm.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        if (StringUtil.isBlank(startTime)) {
+            startTime = "2018-01-01 23:59:59";
+        }
+        if (StringUtil.isBlank(endTime)) {
+            endTime = "2019-01-01 23:59:59";
+        }
+        Date start = DateUtil.parseDate(startTime);
+        Date end = DateUtil.parseDate(endTime);
+        criteria.andGreaterThanOrEqualTo("crdtm", start);
+        criteria.andLessThanOrEqualTo("crdtm", end);
+        if (type != null) {
+            criteria.andCondition("inOrOut=", type);
+        }
+        return selectCountByExample(example);
     }
 
     public List<Date> getTodayHourList() {

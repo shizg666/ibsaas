@@ -7,7 +7,9 @@ server:
 tcp:
   server:
     port: 8888
-    ip: 40.73.246.184
+  heart:
+    beat:
+      interval: 60
   thread:
     server-handler:
       corePoolSize: 5

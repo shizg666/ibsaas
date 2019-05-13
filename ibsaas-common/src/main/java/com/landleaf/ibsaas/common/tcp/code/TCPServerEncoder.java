@@ -168,6 +168,10 @@ public class TCPServerEncoder extends MessageToByteEncoder<TCPMessage> {
                     HeartbeatProto.Heartbeat.Builder builder = HeartbeatProto.Heartbeat.newBuilder();
                     JsonFormat.merge(jsonBody, builder);
                     byteBuf = wrappedBuffer(((MessageLite) builder.build()).toByteArray());
+                } else if (StringUtil.isEquals(subMsgName, SubMsgTypeEnum.PARKING_IN_HISTROY.name)) {
+                    UsercrdtmInHistoryQueryProto.UsercrdtmInHistoryQuery.Builder builder = UsercrdtmInHistoryQueryProto.UsercrdtmInHistoryQuery.newBuilder();
+                    JsonFormat.merge(jsonBody, builder);
+                    byteBuf = wrappedBuffer(((MessageLite) builder.build()).toByteArray());
                 }
             }
         } catch (Exception e) {

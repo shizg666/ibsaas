@@ -17,7 +17,7 @@ public class ConcurrentHashMapCacheUtils {
     /**
      * 缓存最大个数
      */
-    private static final Integer CACHE_MAX_NUMBER = 100000;
+    private static final Integer CACHE_MAX_NUMBER = 1000000;
     /**
      * 当前缓存个数
      */
@@ -25,7 +25,7 @@ public class ConcurrentHashMapCacheUtils {
     /**
      * 时间一分钟
      */
-    static Long ONE_MINUTE = 1 * 60 * 1000L;
+    static Long ONE_MINUTE = 1 * 600 * 1000L;
     /**
      * 缓存对象
      */
@@ -89,6 +89,21 @@ public class ConcurrentHashMapCacheUtils {
                 if (cacheValue != null) {
                     return cacheValue;
                 }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取缓存
+     */
+    public static Object getCache(String cacheKey) {
+        startCleanThread();
+
+        if (checkCache(cacheKey)) {
+            Object cacheValue = CACHE_OBJECT_MAP.get(cacheKey).getCacheValue();
+            if (cacheValue != null) {
+                return cacheValue;
             }
         }
         return null;
@@ -226,7 +241,7 @@ public class ConcurrentHashMapCacheUtils {
 
         for (int i = 0; i < 100; i++) {
             if (i > 10) {
-                ConcurrentHashMapCacheUtils.getCache("test",30*1000L);
+                ConcurrentHashMapCacheUtils.getCache("test", 30 * 1000L);
             }
             try {
                 Thread.sleep(2 * 1000L);

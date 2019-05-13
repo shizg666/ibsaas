@@ -52,7 +52,7 @@ public class ParkingChannelListMsgProcess extends AbstractMsgProcessor {
         TCPMessage data = new TCPMessage();
         //改为外部配置
         data.setFrom(TCPMessageSourceEnum.CLIENT_INNER_CAR_SYSTEM.clientId);
-        data.setTo(TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId);
+        data.setTo(TCPMessageSourceEnum.SERVER.clientId);
         data.setMsgName(MsgTypeEnum.PARKING.name);
         data.setSubMsgName(SubMsgTypeEnum.CHANNEL_LIST.name);
         data.setMsgId(tcpMessage.getMsgId());

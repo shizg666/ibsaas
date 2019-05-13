@@ -1,6 +1,6 @@
 package com.landleaf.ibsaas.web;
 
-import com.landleaf.ibsaas.web.tcp.init.IbsaasWebTCPClient;
+import com.landleaf.ibsaas.web.tcp.init.TCPServer;
 import io.swagger.annotations.Api;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -20,21 +20,20 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
 //自动加载配置信息
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class,SecurityAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, SecurityAutoConfiguration.class})
 @SpringBootApplication
 @ComponentScan(basePackages = "com.landleaf.ibsaas.*")
 @MapperScan("com.landleaf.ibsaas.**.dao")
-public class IbsaasWebApplication  implements WebMvcConfigurer {
+public class IbsaasWebApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
         ApplicationContext context = SpringApplication.run(IbsaasWebApplication.class, args);
-        IbsaasWebTCPClient tcpClient = context.getBean(IbsaasWebTCPClient.class);
-        tcpClient.run();
+        TCPServer tcpServer = context.getBean(TCPServer.class);
+        tcpServer.run();
     }
 
     /**
@@ -57,6 +56,7 @@ public class IbsaasWebApplication  implements WebMvcConfigurer {
                 .paths(PathSelectors.any())
                 .build();
     }
+
     /**
      * 配置swagger.
      */
@@ -77,6 +77,7 @@ public class IbsaasWebApplication  implements WebMvcConfigurer {
                 .paths(PathSelectors.any())
                 .build();
     }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 

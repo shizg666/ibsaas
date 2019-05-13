@@ -28,25 +28,25 @@ public class HeartBeatSchedule {
     @Scheduled(cron = "*/30 * * * * ? ")
     public void sendHeartBeat(){
 
-        TCPMessage data = new TCPMessage();
-        //改为外部配置
-        data.setFrom(TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId);
-        data.setTo(TCPMessageSourceEnum.SERVER.clientId);
-        data.setMsgName(MsgTypeEnum.PARKING.name);
-        data.setSubMsgName(SubMsgTypeEnum.HEART_BEAT.name);
-        HeartBeatDTO heartBeatDTO = new HeartBeatDTO();
-        heartBeatDTO.setClientId(TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId);
-        heartBeatDTO.setClientInfo("云客户端");
-        heartBeatDTO.setClientVersion("云客户端");
-        data.setRequestBody(heartBeatDTO);
-        String jsonBody = JSON.toJSONString(data);
-        byte[] byteBody = jsonBody.getBytes(Charset.forName("utf-8"));
-        ByteBuf firstMessage = Unpooled.buffer();
-        firstMessage.writeBytes(byteBody);
-        ChannelHandlerContext ctx = TcpConnectManager.getInstance().getCtx(TCPMessageSourceEnum.SERVER.clientId);
-        if(ctx!=null){
-            ctx.writeAndFlush(data);
-        }
+//        TCPMessage data = new TCPMessage();
+//        //改为外部配置
+//        data.setFrom(TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId);
+//        data.setTo(TCPMessageSourceEnum.SERVER.clientId);
+//        data.setMsgName(MsgTypeEnum.PARKING.name);
+//        data.setSubMsgName(SubMsgTypeEnum.HEART_BEAT.name);
+//        HeartBeatDTO heartBeatDTO = new HeartBeatDTO();
+//        heartBeatDTO.setClientId(TCPMessageSourceEnum.CLIENT_OUTER_CLOUD_SYSTEM.clientId);
+//        heartBeatDTO.setClientInfo("云客户端");
+//        heartBeatDTO.setClientVersion("云客户端");
+//        data.setRequestBody(heartBeatDTO);
+//        String jsonBody = JSON.toJSONString(data);
+//        byte[] byteBody = jsonBody.getBytes(Charset.forName("utf-8"));
+//        ByteBuf firstMessage = Unpooled.buffer();
+//        firstMessage.writeBytes(byteBody);
+//        ChannelHandlerContext ctx = TcpConnectManager.getInstance().getCtx(TCPMessageSourceEnum.SERVER.clientId);
+//        if(ctx!=null){
+//            ctx.writeAndFlush(data);
+//        }
 
 
     }

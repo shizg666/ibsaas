@@ -19,6 +19,7 @@ public enum SubMsgTypeEnum implements BaseEnum {
     CAR_DETAIL(7,1,"car_detail","车辆详情"),
     PARKING_REAL_COUNT_HOUR(8,1,"parking_real_count_hour","车位当日各时段数量"),
     HEART_BEAT(9,1,"heart_beat","心跳保持"),
+    PARKING_IN_HISTROY(10,1,"parking_in_histroy","车流量历史"),
     ;
     public final int type;
     public int pid;

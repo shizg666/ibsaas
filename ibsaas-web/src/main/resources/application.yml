@@ -1,7 +1,7 @@
 spring:
   profiles:
-    active: prod
-debug: true
+    active: test
+debug: false
 logging:
   config: classpath:logback.xml
 

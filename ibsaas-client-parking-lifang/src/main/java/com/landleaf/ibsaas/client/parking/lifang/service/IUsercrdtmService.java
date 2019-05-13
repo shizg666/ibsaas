@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.client.parking.lifang.service;
 
 
 import com.github.pagehelper.PageInfo;
+import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmInHistoryQueryDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmListQueryDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmRealCountQueryByHourDTO;
 import com.landleaf.ibsaas.common.domain.parking.request.UsercrdtmRealCountQueryDTO;
@@ -21,4 +22,15 @@ public interface IUsercrdtmService<Usercrdtm> extends IBaseService<Usercrdtm> {
     UsercrdtmRealCountQueryDTO realCount(UsercrdtmRealCountQueryDTO queryDTO);
 
     List<UsercrdtmRealCountQueryByHourDTO> realCountFHour(UsercrdtmRealCountQueryByHourDTO queryDTO);
+
+    List<UsercrdtmInHistoryQueryDTO> trafficFlow(UsercrdtmInHistoryQueryDTO queryDTO);
+
+    /**
+     * 根据时间段查询数量
+     * @param startTime
+     * @param endTime
+     * @param type
+     * @return
+     */
+    int selectCountBetween(String startTime, String endTime, Integer type);
 }

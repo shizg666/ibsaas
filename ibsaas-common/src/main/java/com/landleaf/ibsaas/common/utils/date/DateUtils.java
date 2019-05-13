@@ -7,8 +7,10 @@ import org.slf4j.LoggerFactory;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 日期工具类
@@ -33,6 +35,8 @@ public class DateUtils {
     public static final String DC_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
     public static final String ZONED_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static final String ZONED_DATE_TIME_FORMAT2 = "yyyy-MM-dd'T'HH:mm:ss";
+
 
 	private DateUtils() {
 	}
@@ -592,4 +596,353 @@ public class DateUtils {
     	SimpleDateFormat sdf = new SimpleDateFormat(ZONED_DATE_TIME_FORMAT);
     	return sdf.parse(dateStr).getTime();
 	}
+
+	/**
+	 * 获取当年的起始时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getStartDateForYear(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.set(Calendar.DAY_OF_MONTH,1);
+		tempStart.set(Calendar.MONTH,0);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当年的截止时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getEndDateForYear(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.set(Calendar.DAY_OF_MONTH,1);
+		tempStart.set(Calendar.MONTH,0);
+		tempStart.add(Calendar.YEAR,1);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取前一月的起始时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getStartDateForLastMonth(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.set(Calendar.DAY_OF_MONTH,1);
+		tempStart.add(Calendar.MONTH,-1);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取前一月的截止时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getEndDateForLastMonth(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.set(Calendar.DAY_OF_MONTH,1);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当月的起始时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getStartDateForMonth(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.set(Calendar.DAY_OF_MONTH,1);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当月的截止时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getEndDateForMonth(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.set(Calendar.DAY_OF_MONTH,1);
+		tempStart.add(Calendar.MONTH,1);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当日的起始时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getStartDateForDay(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当前时间后7天
+	 * @param date
+	 * @return
+	 */
+	public static Date getDateAfter7(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.add(Calendar.DAY_OF_WEEK,7);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当前时间前7天
+	 * @param date
+	 * @return
+	 */
+	public static Date getDateBefore7(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.add(Calendar.DAY_OF_WEEK,-7);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当时的起始时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getStartDateForHour(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当时的截止时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getEndDateForHour(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.add(Calendar.HOUR,1);
+		return tempStart.getTime();
+	}
+	/**
+	 * 获取当日的截止时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getEndDateForDay(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.add(Calendar.HOUR,24);
+		return tempStart.getTime();
+	}
+
+	/**
+	 * 获取时间段--x轴
+	 *
+	 * @return
+	 */
+	public static List<Date> getYearList(String startTime, String endTime) {
+		List<Date> result = new ArrayList<Date>();
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(DateUtil.parseDate(startTime));
+		result.add(tempStart.getTime());
+
+		Calendar tempEnd = Calendar.getInstance();
+		tempEnd.setTime(DateUtil.parseDate(endTime));
+
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 0);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.set(Calendar.DAY_OF_MONTH, 1);
+		tempStart.set(Calendar.MONTH, 0);
+		tempStart.add(Calendar.YEAR, 1);
+
+		while (tempStart.before(tempEnd)&&(tempEnd.get(Calendar.YEAR) - tempStart.get(Calendar.YEAR))>=1) {
+			result.add(tempStart.getTime());
+			tempStart.add(Calendar.YEAR, 1);
+		}
+		result.add(tempEnd.getTime());
+		return result;
+	}
+	/**
+	 * 获取时间段--x轴
+	 *
+	 * @return
+	 */
+	public static  List<Date> getMonthList(String startTime, String endTime) {
+		List<Date> result = new ArrayList<Date>();
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(DateUtil.parseDate(startTime));
+		result.add(tempStart.getTime());
+
+		Calendar tempEnd = Calendar.getInstance();
+		tempEnd.setTime(DateUtil.parseDate(endTime));
+
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 0);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.set(Calendar.DAY_OF_MONTH,1);
+		tempStart.add(Calendar.MONTH, 1);
+
+
+		while (tempStart.before(tempEnd)&&(tempEnd.get(Calendar.MONTH) - tempStart.get(Calendar.MONTH))>=1) {
+			result.add(tempStart.getTime());
+			tempStart.add(Calendar.MONTH, 1);
+		}
+		result.add(tempEnd.getTime());
+		return result;
+	}
+	/**
+	 * 获取时间段--x轴
+	 *
+	 * @return
+	 */
+	public static  List<Date> getDayList(String startTime, String endTime) {
+		List<Date> result = new ArrayList<Date>();
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(DateUtil.parseDate(startTime));
+		result.add(tempStart.getTime());
+		Calendar tempEnd = Calendar.getInstance();
+		tempEnd.setTime(DateUtil.parseDate(endTime));
+
+		tempStart.add(Calendar.HOUR, 24);
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 0);
+		tempStart.set(Calendar.MILLISECOND, 0);
+
+		while (tempStart.before(tempEnd)&&(tempEnd.getTimeInMillis()-tempStart.getTimeInMillis())>1000*3600*24L) {
+			result.add(tempStart.getTime());
+			tempStart.add(Calendar.HOUR, 24);
+		}
+		result.add(tempEnd.getTime());
+		return result;
+	}
+
+	public static List<Date> getHourList(String startTime, String endTime) {
+		List<Date> result = new ArrayList<Date>();
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(DateUtil.parseDate(startTime));
+		result.add(tempStart.getTime());
+		Calendar tempEnd = Calendar.getInstance();
+		tempEnd.setTime(DateUtil.parseDate(endTime));
+
+		tempStart.add(Calendar.HOUR, 1);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 0);
+		tempStart.set(Calendar.MILLISECOND, 0);
+
+		while (tempStart.before(tempEnd)&&(tempEnd.getTimeInMillis()-tempStart.getTimeInMillis())>1000*3600L) {
+			result.add(tempStart.getTime());
+			tempStart.add(Calendar.HOUR, 1);
+		}
+		result.add(tempEnd.getTime());
+		return result;
+
+	}
+	public static List<Date> getWeekList(String startTime, String endTime) {
+		List<Date> result = new ArrayList<Date>();
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(DateUtil.parseDate(startTime));
+		result.add(tempStart.getTime());
+
+		Calendar tempEnd = Calendar.getInstance();
+		tempEnd.setTime(DateUtil.parseDate(endTime));
+
+		tempStart.set(Calendar.HOUR_OF_DAY, 0);
+		tempStart.set(Calendar.MINUTE, 0);
+		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.MILLISECOND, 0);
+		tempStart.add(Calendar.HOUR, 24*7);
+
+		while (tempStart.before(tempEnd)&&(tempEnd.getTimeInMillis()-tempStart.getTimeInMillis())>1000*3600*24*7L) {
+			result.add(tempStart.getTime());
+			tempStart.add(Calendar.HOUR, 24*7);
+		}
+		result.add(tempEnd.getTime());
+		return result;
+
+	}
+
+
+	/**
+	 * utc时间转北京时间
+	 * @param UTCStr
+	 * @return
+	 * @throws ParseException
+	 */
+	public static String UTCToCST(String UTCStr) throws ParseException {
+		Date date = null;
+		UTCStr=UTCStr.substring(0,UTCStr.lastIndexOf("."));
+		SimpleDateFormat sdf = new SimpleDateFormat(ZONED_DATE_TIME_FORMAT2);
+		date = sdf.parse(UTCStr);
+		System.out.println("UTC时间: " + date);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR, calendar.get(Calendar.HOUR) + 8);
+		//calendar.getTime() 返回的是Date类型，也可以使用calendar.getTimeInMillis()获取时间戳
+		System.out.println("北京时间: " + calendar.getTime());
+		return convert(calendar.getTime());
+	}
+	//北京时间转为utc时间
+	public static String CSTToUTC(String CSTStr) throws ParseException {
+
+		Date date = null;
+		SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT);
+		date = sdf.parse(CSTStr);
+		System.out.println("北京时间: " + date);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.set(Calendar.HOUR, calendar.get(Calendar.HOUR) - 8);
+		//calendar.getTime() 返回的是Date类型，也可以使用calendar.getTimeInMillis()获取时间戳
+		System.out.println("UTC: " + calendar.getTime());
+		return convert(calendar.getTime());
+	}
+
+
+
+	public static void main(String[] args) {
+
+        List<Date> monthList = getHourList("2018-5-21 00:59:59", "2018-5-21 23:59:59");
+        System.out.println(monthList);
+    }
+
+
 }

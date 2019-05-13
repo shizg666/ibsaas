@@ -162,6 +162,9 @@ public class TCPServerDecoder extends ByteToMessageDecoder {
                 } else if (StringUtil.isEquals(subMsgName, SubMsgTypeEnum.HEART_BEAT.name)) {
                     HeartbeatProto.Heartbeat.Builder builder = HeartbeatProto.Heartbeat.parseFrom(byteBody).toBuilder();
                     data = com.googlecode.protobuf.format.JsonFormat.printToString(builder.build());
+                } else if (StringUtil.isEquals(subMsgName, SubMsgTypeEnum.PARKING_IN_HISTROY.name)) {
+                    UsercrdtmInHistoryQueryProto.UsercrdtmInHistoryQuery.Builder builder = UsercrdtmInHistoryQueryProto.UsercrdtmInHistoryQuery.parseFrom(byteBody).toBuilder();
+                    data = com.googlecode.protobuf.format.JsonFormat.printToString(builder.build());
                 }
             }
         } catch (InvalidProtocolBufferException e) {
