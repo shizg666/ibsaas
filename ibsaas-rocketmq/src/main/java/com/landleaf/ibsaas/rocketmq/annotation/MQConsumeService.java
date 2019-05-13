@@ -1,6 +1,5 @@
 package com.landleaf.ibsaas.rocketmq.annotation;
 
-import com.landleaf.ibsaas.rocketmq.TopicEnum;
 import org.springframework.stereotype.Service;
 
 import java.lang.annotation.*;
@@ -17,7 +16,7 @@ public @interface MQConsumeService {
     /**
      * 消息主题
      */
-     TopicEnum topic();
+     String topic();
 
     /**
      * 消息标签,如果是该主题下所有的标签，使用“*”

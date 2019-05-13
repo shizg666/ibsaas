@@ -1,22 +1,9 @@
 server:
-  port: 8885
+  port: 10001
   servlet:
-    context-path: /ibsaas
+    context-path: /client-knight-lifang
     tomcat:
       uri-encoding: UTF-8
-tcp:
-  server:
-    port: 8888
-  heart:
-    beat:
-      interval: 60
-  thread:
-    server-handler:
-      corePoolSize: 5
-      maxPoolSize: 100
-      keepAliveSeconds: 100
-      queueCapacity: 1000
-
 
 spring:
   redis:
@@ -44,25 +31,13 @@ spring:
     static-path-pattern: /static/**
 
 ibsaas:
-  face:
-    redirecturl: http://localhost:8089
-  filter:
-    cors:
-      enable: true
-  swagger:
-    enable: true
-    title: 日志服务
-    description: 微服务之 ID 生成服务，仅用于 ID 生成
-    version: 1.0
-    contactName:
-    paths: [/generator]
   dynamic:
     datasource:
       enable: true
       defaultDatasourceName: master
       datasourceList:
       - name: master
-        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8
+        url: jdbc:mysql://40.73.246.184:3306/parking_lifang_lgc?characterEncoding=UTF-8
         username: root
         password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
@@ -80,7 +55,7 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
       - name: slave
-        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8
+        url: jdbc:mysql://40.73.246.184:3306/parking_lifang_lgc?characterEncoding=UTF-8
         username: root
         password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
@@ -98,7 +73,6 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
 
-
 pagehelper:
   helperDialect: mysql
   reasonable: true
@@ -106,28 +80,7 @@ pagehelper:
   params:
     count: countSql
 
-id:
-  generate:
-    workId: 1
-    datacenterId: 1
 
-### xxl-sso
-xxl:
-  sso:
-    server: http://40.73.246.184:8081/sso-server
-    redirecturl: http://localhost:8885/ibsaas/redirect
-    logout:
-      path: /logout
-    excluded:
-#      paths: /parking/**/*
-      paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**,/test/**
-    redis:
-      address: redis://40.73.100.153:6378,redis://40.73.100.153:6379,redis://40.73.100.153:6380
-      sentinel:
-        master: mymaster
-        nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
-
-#与数据业务子系统交互通过rokcetmq中间件
 rocketmq:
   producer:
     enable: true
@@ -139,12 +92,12 @@ rocketmq:
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
-    groupName: ibsaas_response
+    groupName: ibsaas_knight_lifang_lgc_1921681010
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
-    #门禁;停车
-    topics: knight-*;parking-*
+    #门禁
+    topics: ibsaas_knight_lifang_lgc_1921681010-*
+    topic: ibsaas_knight_lifang_lgc_1921681010
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10
-
 

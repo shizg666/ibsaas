@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
-@ComponentScan(basePackages = "com.landleaf.leo.*")
+@ComponentScan(basePackages = "com.landleaf.ibsaas.*")
 @MapperScan("com.landleaf.**.dao")
 public class IbsaasCommonApplication {
 

@@ -1,5 +1,6 @@
 package com.landleaf.ibsaas.web.asyn;
 
+import com.landleaf.ibsaas.common.domain.knight.KngihtMessage;
 import com.landleaf.ibsaas.common.domain.parking.TCPMessage;
 import com.landleaf.ibsaas.web.tcp.cache.ConcurrentHashMapCacheUtils;
 import org.slf4j.Logger;
@@ -32,6 +33,25 @@ public class FutureService implements IFutureService {
             LOGGER.error(e.getMessage(), e);
         }
         Future<TCPMessage> future = (Future<TCPMessage>) new AsyncResult<TCPMessage>(cache);
+        return future;
+    }
+    @Async
+    public Future getKnightCacheFuture(String msgId, Long timeout) {
+        long currentTimeMillis = System.currentTimeMillis();
+        long expireTimeMillis = currentTimeMillis + timeout;
+        KngihtMessage cache = null;
+        try {
+            while (System.currentTimeMillis() < expireTimeMillis) {
+                Thread.sleep(100L);
+                cache = (KngihtMessage) ConcurrentHashMapCacheUtils.getCache(msgId);
+                if (cache != null) {
+                    break;
+                }
+            }
+        } catch (InterruptedException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        Future<KngihtMessage> future = (Future<KngihtMessage>) new AsyncResult<KngihtMessage>(cache);
         return future;
     }
 }

@@ -7,14 +7,19 @@
         <artifactId>ibsaas</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>ibsaas-web</artifactId>
+    <artifactId>ibsaas-client-kngiht-lifang</artifactId>
     <packaging>jar</packaging>
 
-    <name>ibsaas-web</name>
-    <description>ibsaas web</description>
+    <name>ibsaas-client-kngiht-lifang</name>
+    <description>ibsaas-client-kngiht-lifang</description>
 
 
     <dependencies>
+        <dependency>
+            <groupId>com.landleaf.ibsaas</groupId>
+            <artifactId>ibsaas-datasource</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.landleaf.ibsaas</groupId>
             <artifactId>ibsaas-common</artifactId>
@@ -45,24 +50,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>0.5.0</version>
-                <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:${protobuf-java.version}:exe:${os.detected.classifier}</protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

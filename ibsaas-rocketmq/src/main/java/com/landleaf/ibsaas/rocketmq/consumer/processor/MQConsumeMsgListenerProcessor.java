@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -32,6 +33,9 @@ public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrentl
 
     @Autowired
     private Map<String,MQMsgProcessor> mqMsgProcessorServiceMap;
+
+    @Autowired
+	private Environment environment;
 	/**
 	 *  默认msgs里只有一条消息，可以通过设置consumeMessageBatchMaxSize参数来批量接收消息<br/>
 	 *  不要抛异常，如果没有return CONSUME_SUCCESS ，consumer会重新消费该消息，直到return CONSUME_SUCCESS
@@ -114,7 +118,12 @@ public class MQConsumeMsgListenerProcessor implements MessageListenerConcurrentl
 				logger.error("rocketmq==>消费者服务："+entry.getValue().getClass().getName()+"上没有添加MQConsumeService注解");
 				continue;
 			}
-			String annotationTopic = consumeService.topic().getCode();
+			String annotationTopic = consumeService.topic();
+
+            if(annotationTopic.startsWith("${")&&annotationTopic.endsWith("}")){
+				String realParam = annotationTopic.replaceAll("[${}]", "");
+				annotationTopic=environment.getProperty(realParam);
+			}
 			if(!annotationTopic.equals(topic)){
 				continue;
 			}
