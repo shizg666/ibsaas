@@ -11,7 +11,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 40.73.246.184:26379,40.73.246.184:26380,40.73.246.184:26381
+      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
     pool:
       max-idle: -1
       max-wait: 3000
@@ -85,21 +85,6 @@ id:
     workId: 1
     datacenterId: 1
 
-### xxl-sso
-#xxl:
-#  sso:
-#    server: http://xxlssoserver.com:8081/xxl-sso-server
-#    redirecturl: http://localhost:9999/leo/redirect
-#    logout.path: /logout
-#    excluded.paths:
-#    redis:
-#      address: redis://134.175.92.62:6301,redis://134.175.92.62:6302,redis://134.175.92.62:6303
-#ibsaas:
-#  face:
-#    redirecturl: http://localhost:8089
-#  filter:
-#    cors:
-#      enable: true
 tcp:
   server:
     port: 8888

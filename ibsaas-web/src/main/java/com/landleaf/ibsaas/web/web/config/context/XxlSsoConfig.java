@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.web.web.config.context;
 import com.landleaf.ibsaas.web.web.filter.sso.MyXxlSsoWebFilter;
 import com.xxl.sso.core.conf.Conf;
 import com.xxl.sso.core.util.JedisUtil;
+import com.xxl.sso.core.util.JedisUtil2;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,8 +28,13 @@ public class XxlSsoConfig implements DisposableBean {
     @Value("${xxl.sso.excluded.paths}")
     private String xxlSsoExcludedPaths;
 
+
     @Value("${xxl.sso.redis.address}")
     private String xxlSsoRedisAddress;
+    @Value("${xxl.sso.redis.sentinel.master}")
+    private String sentinelMaster;
+    @Value("${xxl.sso.redis.sentinel.nodes}")
+    private String sentinelnodes;
     @Value("${xxl.sso.redirecturl}")
     private String redirectUrl;
 
@@ -40,6 +46,7 @@ public class XxlSsoConfig implements DisposableBean {
 
         // xxl-sso, redis init
         JedisUtil.init(xxlSsoRedisAddress);
+        JedisUtil2.init(sentinelMaster,sentinelnodes);
 
         // xxl-sso, filter init
         FilterRegistrationBean registration = new FilterRegistrationBean();
@@ -62,6 +69,7 @@ public class XxlSsoConfig implements DisposableBean {
 
         // xxl-sso, redis close
         JedisUtil.close();
+        JedisUtil2.close();
     }
 
 }

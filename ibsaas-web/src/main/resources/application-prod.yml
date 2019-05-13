@@ -24,7 +24,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 134.175.92.62:26301,134.175.92.62:26302,134.175.92.62:26303
+      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
     pool:
       max-idle: -1
       max-wait: 3000
@@ -114,7 +114,7 @@ id:
 ### xxl-sso
 xxl:
   sso:
-    server: http://134.175.92.62:8081/xxl-sso-server
+    server: http://40.73.246.184:8081/sso-server
     redirecturl: http://40.73.246.184:8885/ibsaas/redirect
     logout:
       path: /logout
@@ -122,7 +122,10 @@ xxl:
 #      paths: /parking/**/*
       paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**
     redis:
-      address: redis://134.175.92.62:6301,redis://134.175.92.62:6302,redis://134.175.92.62:6303
+      address: redis://40.73.100.153:6378,redis://40.73.100.153:6379,redis://40.73.100.153:6380
+      sentinel:
+        master: mymaster
+        nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
 
 
 
