@@ -2,7 +2,7 @@ package com.landleaf.ibsaas.web.rocketmq;
 
 import com.alibaba.rocketmq.common.message.MessageExt;
 import com.google.gson.reflect.TypeToken;
-import com.landleaf.ibsaas.common.domain.knight.KngihtMessage;
+import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
 import com.landleaf.ibsaas.common.utils.MessageUtil;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.rocketmq.TopicConstants;
@@ -33,7 +33,7 @@ public class ComsumerMessageForKnight extends AbstractMQMsgProcessor {
             String msgBody = new String(message.getBody(), "utf-8");
             LOGGER.info("收到消息[topic:{}];[tag:{}];[消息:{}]", topic, tag, msgBody);
             //解析消息
-            KngihtMessage kngihtMessage = MessageUtil.getInstance().getGson().fromJson(msgBody, new TypeToken<KngihtMessage>() {
+            KnightMessage kngihtMessage = MessageUtil.getInstance().getGson().fromJson(msgBody, new TypeToken<KnightMessage>() {
             }.getType());
             // TODO 后期修改放入redis缓存
             try {

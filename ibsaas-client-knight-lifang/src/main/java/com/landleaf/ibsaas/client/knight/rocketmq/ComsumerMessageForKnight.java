@@ -1,9 +1,9 @@
 package com.landleaf.ibsaas.client.knight.rocketmq;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.rocketmq.common.message.MessageExt;
 import com.google.gson.reflect.TypeToken;
-import com.landleaf.ibsaas.common.domain.knight.KngihtMessage;
+import com.landleaf.ibsaas.client.knight.asyn.IFutureService;
+import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
 import com.landleaf.ibsaas.common.utils.MessageUtil;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.rocketmq.annotation.MQConsumeService;
@@ -26,7 +26,7 @@ public class ComsumerMessageForKnight extends AbstractMQMsgProcessor {
     private static final Logger LOGGER = LoggerFactory.getLogger(ComsumerMessageForKnight.class);
 
     @Autowired
-    private KnightMqProducer knightMqProducer;
+    private IFutureService futureService;
 
     @Override
     protected MQConsumeResult consumeMessage(String tag, List<String> keys, MessageExt message) {
@@ -36,22 +36,15 @@ public class ComsumerMessageForKnight extends AbstractMQMsgProcessor {
             String msgBody = new String(message.getBody(), "utf-8");
             LOGGER.info("收到消息[topic:{}];[tag:{}];[消息:{}]", topic, tag, msgBody);
             //解析消息
-            KngihtMessage kngihtMessage = MessageUtil.getInstance().getGson().fromJson(msgBody, new TypeToken<KngihtMessage>() {
+            KnightMessage kngihtMessage = MessageUtil.getInstance().getGson().fromJson(msgBody, new TypeToken<KnightMessage>() {
             }.getType());
-            try {
-                // TODO
-                //测试，原封不对还回去
-                knightMqProducer.sendMessageForWeb(JSON.toJSONString(kngihtMessage));
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
-            }
+
+            futureService.handlerMsg(kngihtMessage);
         } catch (Exception e) {
             e.printStackTrace();
             //本程序异常，无需通知MQ重复下发消息
             //return ConsumeConcurrentlyStatus.RECONSUME_LATER;
         }
-
-
         MQConsumeResult result = new MQConsumeResult();
         result.setSuccess(true);
         return result;
