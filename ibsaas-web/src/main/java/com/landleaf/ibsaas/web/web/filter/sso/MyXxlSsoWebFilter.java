@@ -100,13 +100,13 @@ public class MyXxlSsoWebFilter extends HttpServlet implements Filter, Applicatio
 
             String header = req.getHeader("content-type");
             boolean isJson = header != null && header.contains("json");
-            if (isJson) {
-
-                // json msg
-                res.setContentType("application/json;charset=utf-8");
-                res.getWriter().println("{\"code\":" + Conf.SSO_LOGIN_FAIL_RESULT.getCode() + ", \"msg\":\"" + Conf.SSO_LOGIN_FAIL_RESULT.getMsg() + "\"}");
-                return;
-            } else {
+//            if (isJson) {
+//
+//                // json msg
+//                res.setContentType("application/json;charset=utf-8");
+//                res.getWriter().println("{\"code\":" + Conf.SSO_LOGIN_FAIL_RESULT.getCode() + ", \"msg\":\"" + Conf.SSO_LOGIN_FAIL_RESULT.getMsg() + "\"}");
+//                return;
+//            } else {
 
                 // total link
 //                String link = req.getRequestURL().toString();
@@ -122,7 +122,7 @@ public class MyXxlSsoWebFilter extends HttpServlet implements Filter, Applicatio
                 PrintWriter writer = res.getWriter();
                 writer.write(JSON.toJSONString(redirectResponse));
                 return;
-            }
+//            }
 
         }
         String userId = xxlUser.getUserid();

@@ -77,6 +77,26 @@ public class IbsaasWebApplication implements WebMvcConfigurer {
                 .paths(PathSelectors.any())
                 .build();
     }
+    /**
+     * 配置swagger.
+     */
+    @Bean
+    public Docket createKnightRestApi() {
+        ApiInfo apiInfo = new ApiInfoBuilder()
+                .title("ibsaas")
+                .description("ibsaas管理系统")
+                .version("1.0")
+                .contact(new Contact("wenyilu", "", "wenyilu@landleaf-tech.com"))
+                .build();
+        return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("门禁业务服务")
+                .apiInfo(apiInfo)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.landleaf.ibsaas.web.web.controller.knight"))
+                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                .paths(PathSelectors.any())
+                .build();
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

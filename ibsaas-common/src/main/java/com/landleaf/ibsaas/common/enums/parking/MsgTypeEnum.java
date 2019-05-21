@@ -11,6 +11,7 @@ import java.util.Map;
  */
 public enum MsgTypeEnum implements BaseEnum {
     PARKING(1,"parking","停车业务相关消息"),
+    KNIGHT(2,"knight","门禁业务相关消息"),
     ;
     public final int type;
     public String name;
