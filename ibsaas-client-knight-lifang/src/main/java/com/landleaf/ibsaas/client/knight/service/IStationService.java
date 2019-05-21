@@ -1,6 +1,7 @@
 package com.landleaf.ibsaas.client.knight.service;
 
 
+import com.github.pagehelper.PageInfo;
 import com.landleaf.ibsaas.common.domain.knight.control.Station;
 import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
 
@@ -15,4 +16,6 @@ public interface IStationService<T> extends IBaseService<T> {
 
 
     List<Station> getMjDeviceByIdsDb(List<Integer> deviceSysIds);
+
+    PageInfo<Station> getMjDeviceByPageDb(int curPage, int pageSize);
 }

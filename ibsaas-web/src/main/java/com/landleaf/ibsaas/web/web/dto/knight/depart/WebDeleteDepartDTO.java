@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "删除部门DTO")
-public class DeleteDepartDTO {
+public class WebDeleteDepartDTO {
     //部门id
     @ApiModelProperty(value = "部门ID",  example = "1", dataType = "String",required = true)
     private Integer departId;

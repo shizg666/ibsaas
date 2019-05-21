@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "添加打卡记录")
-public class AddAttendanceRecordDTO {
+public class WebAddAttendanceRecordDTO {
     @ApiModelProperty(value = "卡号", name = "卡号", example = "0000000036B351B4", dataType = "String", required = true)
     private String serial;
     @ApiModelProperty(value = "门编号", name = "门编号", example = "1", dataType = "Integer", required = true)

@@ -2,6 +2,14 @@ package com.landleaf.ibsaas.web.web.service.knight;
 
 import com.github.pagehelper.PageInfo;
 import com.landleaf.ibsaas.common.domain.Response;
+import com.landleaf.ibsaas.web.web.dto.knight.attendance.WebAddAttendanceRecordDTO;
+import com.landleaf.ibsaas.web.web.dto.knight.control.WebQueryRegisterUserByDbDTO;
+import com.landleaf.ibsaas.web.web.dto.knight.control.WebRegisterUserDTO;
+import com.landleaf.ibsaas.web.web.dto.knight.control.WebUnRegisterUserDTO;
+import com.landleaf.ibsaas.web.web.dto.knight.depart.WebAddDepartDTO;
+import com.landleaf.ibsaas.web.web.dto.knight.depart.WebDeleteDepartDTO;
+import com.landleaf.ibsaas.web.web.dto.knight.emply.*;
+import com.landleaf.ibsaas.web.web.dto.knight.userrole.WebMjUserRoleDTO;
 
 import java.util.List;
 
@@ -57,4 +65,45 @@ public interface IKnightServeice {
      * @return
      */
     Response mjRoles(String name, Integer departId, int page, int limit);
+
+
+    /**
+     * 部门分页查询
+     * @param page       当前页
+     * @param limit      每页最大数
+     * @return
+     */
+    Response queryDepart(int page, int limit);
+
+    Response addDepart(WebAddDepartDTO requestBody);
+
+    Response deleteDepart(WebDeleteDepartDTO requestBody);
+
+    Response selectEmply(WebQueryEmplyDTO requestBody);
+
+    Response addEmply(WebAddEmplyDTO requestBody);
+
+    Response deleteEmply(WebDeleteEmplyDTO requestBody);
+
+    Response sendCard(WebSendCardDTO requestBody);
+
+    Response deleteCard(WebDeleteCardDTO requestBody);
+
+    Response updateEmply(WebUpdateEmplyDTO requestBody);
+
+    Response registeruser(WebRegisterUserDTO requestBody);
+
+    Response unregisteruser(WebUnRegisterUserDTO requestBody);
+
+    Response bindRole(WebMjUserRoleDTO requestBody);
+
+    Response queryRegisteruserByDb(WebQueryRegisterUserByDbDTO requestBody);
+
+    Response getMjDeviceByPageDb(int page, int limit);
+
+    Response getMjDeviceById(Integer deviceSysId);
+
+    Response getDoorInfoById(Integer doorId);
+
+    Response setAttendanceRecord(WebAddAttendanceRecordDTO requestBody);
 }

@@ -43,6 +43,7 @@ public enum KnightSubMsgTypeEnum implements BaseEnum {
     UN_REGISTER_USER_BY_DB(24,2, "unregisteruserByDb", "解除人员权限2"),
     QUERY_REGISTER_USER_BY_DB(25,2, "queryRegisteruserByDb", "查询人员权限"),
     GET_MJ_DEVICE_BY_IDS_DB(26,2, "getMjDeviceByIdsDb", "根据设备ids获取设备信息"),
+    GET_MJ_DEVICE_BY_PAGE_DB(27,2, "getMjDeviceByPageDb", "分页查询设备列表"),
     ;
     public final int type;
     public int pid;
