@@ -1,5 +1,7 @@
 package com.landleaf.ibsaas.client.knight.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.client.knight.service.IStationService;
 import com.landleaf.ibsaas.common.dao.knight.StationDao;
@@ -36,5 +38,17 @@ public class StationService extends AbstractBaseService<StationDao, Station> imp
             result.addAll(stationList);
         }
         return result;
+    }
+
+    @Override
+    public PageInfo<Station> getMjDeviceByPageDb(int curPage, int pageSize) {
+        PageHelper.startPage(curPage, pageSize, true);
+        Example example = new Example(Station.class);
+        Example.Criteria criteria = example.createCriteria();
+        List<Station> stationList = selectByExample(example);
+        if (CollectionUtils.isEmpty(stationList)) {
+            stationList = org.assertj.core.util.Lists.newArrayList();
+        }
+        return new PageInfo(stationList);
     }
 }

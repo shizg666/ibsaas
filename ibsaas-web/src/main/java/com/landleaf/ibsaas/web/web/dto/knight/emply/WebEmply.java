@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "人员")
-public class Emply {
+public class WebEmply {
     @ApiModelProperty(value = "1", name = "部门Id", example = "1", dataType = "Integer")
     private Integer dptId;
     @ApiModelProperty(value = "测试部门", name = "部门名称", example = "测试部门", dataType = "String")

@@ -151,6 +151,21 @@ public class KnightControlMsgProcess {
         return knightResponse;
     }
     /**
+     * 分页查询设备列表--通过数据库
+     * @param requestBody
+     * @return
+     */
+    public KnightResponse getMjDeviceByPageDb(QueryMjDeviceDTO requestBody) {
+        KnightResponse knightResponse = new KnightResponse();
+        LOGGER.info("收到【分页查询设备列表】请求,{}", JSON.toJSONString(requestBody));
+        String param = JSON.toJSONString(requestBody);
+        PageInfo<Station> pageInfo=stationService.getMjDeviceByPageDb(requestBody.getCurPage(),requestBody.getPageSize());
+        knightResponse.setObj(pageInfo);
+        knightResponse.setResult("200");
+        knightResponse.setResultInfo("操作成功");
+        return knightResponse;
+    }
+    /**
      * 获取全部门信息分页查询
      * @param requestBody
      * @return

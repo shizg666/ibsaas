@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "增加部门DTO")
-public class AddDepartDTO {
+public class WebAddDepartDTO {
     //部门名称
     @ApiModelProperty(value = "部门名称", example = "财务", dataType = "String",required = true)
     private String name;

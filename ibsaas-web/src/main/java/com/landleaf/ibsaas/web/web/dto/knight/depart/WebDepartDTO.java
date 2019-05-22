@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "部门")
-public class Depart {
+public class WebDepartDTO {
     //路径 1-1-
     @ApiModelProperty(value = "1-1-", name = "路径", example = "1-1-", dataType = "String")
     private String path;
