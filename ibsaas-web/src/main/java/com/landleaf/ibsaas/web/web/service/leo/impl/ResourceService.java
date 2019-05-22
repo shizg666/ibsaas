@@ -68,9 +68,9 @@ public class ResourceService implements IResourceService {
      */
     public List<TreeNodeVO> listUserAllResources(String systemCode, String userCode) {
         //根据当前cookie获取语言种类
-        String language = getCurrentLanguage();
+//        String language = getCurrentLanguage();
         Set<Resource> allResource = commonResourceService.listUserAllResources(systemCode, userCode);
-        getResourcesBoundLanguage(language, allResource);
+//        getResourcesBoundLanguage(null, allResource);
         //将菜单进行转换成前台菜单需要的
         return convertResources2Tree(allResource);
     }
