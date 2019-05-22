@@ -59,7 +59,7 @@ public class DoorController extends BasicController {
         return returnSuccess(tFloor1);
     }
 
-    @PostMapping("door/addOrUpdateFloor")
+    @PostMapping("door/addOrUpdateDoor")
     @ApiOperation(value = "添加或者修改门信息", notes = "添加或者修改楼层信息")
     public Response addOrUpdateDoor(@RequestBody TDoor tDoor) {
         TDoor tDoor1 = iDoorService.addDoorOrUpdate(tDoor);

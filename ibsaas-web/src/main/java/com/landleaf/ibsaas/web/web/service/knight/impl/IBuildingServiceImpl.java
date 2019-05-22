@@ -5,18 +5,19 @@ import com.landleaf.ibsaas.common.dao.knight.TBuildingMapper;
 import com.landleaf.ibsaas.common.dao.knight.TDoorMapper;
 import com.landleaf.ibsaas.common.dao.knight.TFloorMapper;
 import com.landleaf.ibsaas.common.domain.knight.TBuilding;
-import com.landleaf.ibsaas.common.domain.knight.TDoor;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.web.web.service.knight.IBuildingService;
 import com.landleaf.ibsaas.web.web.vo.BuildingReponseVO;
 import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Service
 public class IBuildingServiceImpl implements IBuildingService {
 
     @Autowired
