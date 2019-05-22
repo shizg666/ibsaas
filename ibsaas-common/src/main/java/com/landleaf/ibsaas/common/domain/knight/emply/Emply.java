@@ -3,9 +3,6 @@ package com.landleaf.ibsaas.common.domain.knight.emply;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.util.Date;
 
 @ApiModel(description = "人员")
@@ -14,6 +11,8 @@ public class Emply {
     private Integer sysNo;
     @ApiModelProperty(value = "1", name = "部门Id", example = "1", dataType = "Integer")
     private Integer departId;
+    @ApiModelProperty(value = "部门名称", name = "部门名称", example = "1", dataType = "String")
+    private String departName;
     @ApiModelProperty(value = "1832", name = "人员Id", example = "1832", dataType = "String")
     private String employeeId;
     @ApiModelProperty(value = "张君峰", name = "人员名称", example = "张君峰", dataType = "String")
@@ -54,17 +53,10 @@ public class Emply {
     private Integer leave;
     @ApiModelProperty(value = "0:普通用户 3 管理员", name = "0:普通用户 3 管理员", example = "", dataType = "Integer")
     private Integer admin;
-
-    @Transient
+    @ApiModelProperty(value = "普通用户/管理员", name = "普通用户/管理员", example = "", dataType = "Integer")
+    private String adminStr;
+    @ApiModelProperty(value = "人员有效期限", name = "人员有效期限", example = "2078-11-17", dataType = "Date")
     private String invalidateStr;
-
-    public String getInvalidateStr() {
-        return invalidateStr;
-    }
-
-    public void setInvalidateStr(String invalidateStr) {
-        this.invalidateStr = invalidateStr;
-    }
 
     public Integer getSysNo() {
         return sysNo;
@@ -80,6 +72,14 @@ public class Emply {
 
     public void setDepartId(Integer departId) {
         this.departId = departId;
+    }
+
+    public String getDepartName() {
+        return departName;
+    }
+
+    public void setDepartName(String departName) {
+        this.departName = departName;
     }
 
     public String getEmployeeId() {
@@ -240,5 +240,21 @@ public class Emply {
 
     public void setAdmin(Integer admin) {
         this.admin = admin;
+    }
+
+    public String getAdminStr() {
+        return adminStr;
+    }
+
+    public void setAdminStr(String adminStr) {
+        this.adminStr = adminStr;
+    }
+
+    public String getInvalidateStr() {
+        return invalidateStr;
+    }
+
+    public void setInvalidateStr(String invalidateStr) {
+        this.invalidateStr = invalidateStr;
     }
 }

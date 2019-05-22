@@ -28,7 +28,7 @@ public class EmplyService extends AbstractBaseService<EmplyDao, Emply> implement
     public PageInfo selectEmply(QueryEmplyDTO requestBody) {
         List<Emply> result = Lists.newArrayList();
         PageHelper.startPage(requestBody.getCurPage(), requestBody.getPageSize(), true);
-        Example example = new Example(MjReguser.class);
+        Example example = new Example(Emply.class);
         Example.Criteria criteria = example.createCriteria();
 
         Integer sysNo = requestBody.getSysNo();
@@ -39,7 +39,7 @@ public class EmplyService extends AbstractBaseService<EmplyDao, Emply> implement
         }
         //用户名称
         if (StringUtil.isNotEmpty(employeeName)) {
-            criteria.andCondition("employee_name=", employeeName);
+            criteria.andLike("employeeName","%"+employeeName+"%");
         }
         example.setOrderByClause("sys_no desc");
         List<Emply> emplies = selectByExample(example);

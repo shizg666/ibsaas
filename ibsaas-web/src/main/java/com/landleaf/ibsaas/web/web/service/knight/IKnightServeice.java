@@ -45,7 +45,7 @@ public interface IKnightServeice {
      * @param limit        最大记录数
      * @return
      */
-    Response mJUrgentEventRecord(String doorName, String start, String end, int page, int limit);
+    Response mJUrgentEventRecord(String doorName,String stationName, String start, String end, int page, int limit);
     /**
      * 进出记录分页查询
      * @param start        开始时间
@@ -106,4 +106,6 @@ public interface IKnightServeice {
     Response getDoorInfoById(Integer doorId);
 
     Response setAttendanceRecord(WebAddAttendanceRecordDTO requestBody);
+
+    Response queryAllDepart();
 }

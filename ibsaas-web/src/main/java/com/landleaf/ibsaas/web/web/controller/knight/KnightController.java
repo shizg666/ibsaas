@@ -50,7 +50,7 @@ public class KnightController extends BasicController {
     @ApiOperation(value = "门禁报警记录分页查询", notes = "门禁报警记录分页查询")
     public Response mJUrgentEventRecord(@RequestBody WebQueryMjUrgentEventRecordDTO requestBody) {
 
-        Response response = knightServeice.mJUrgentEventRecord(requestBody.getDoorName(), requestBody.getStart(), requestBody.getEnd(),
+        Response response = knightServeice.mJUrgentEventRecord(requestBody.getDoorName(),requestBody.getStationName(), requestBody.getStart(), requestBody.getEnd(),
                 requestBody.getPage(), requestBody.getLimit());
 
         return response;
@@ -76,6 +76,13 @@ public class KnightController extends BasicController {
     public Response queryDepart(@RequestBody WebQueryDepartDTO requestBody) {
         Response result = new Response();
         result = knightServeice.queryDepart(requestBody.getPage(), requestBody.getLimit());
+        return result;
+    }
+    @ApiOperation(value = "查询所有部门", notes = "查询所有部门")
+    @PostMapping("depart/queryAllDepart")
+    public Response queryAllDepart() {
+        Response result = new Response();
+        result = knightServeice.queryAllDepart();
         return result;
     }
 

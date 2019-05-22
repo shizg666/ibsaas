@@ -17,6 +17,7 @@ import com.landleaf.ibsaas.common.domain.knight.depart.Depart;
 import com.landleaf.ibsaas.common.domain.knight.depart.QueryDepartDTO;
 import com.landleaf.ibsaas.common.domain.knight.emply.*;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRole;
+import com.landleaf.ibsaas.common.domain.knight.role.MjRoleDTO;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource;
 import com.landleaf.ibsaas.common.enums.knight.KnightSubMsgTypeEnum;
 import com.landleaf.ibsaas.common.enums.parking.MsgTypeEnum;
@@ -33,7 +34,6 @@ import com.landleaf.ibsaas.web.web.dto.knight.control.WebUnRegisterUserDTO;
 import com.landleaf.ibsaas.web.web.dto.knight.depart.WebAddDepartDTO;
 import com.landleaf.ibsaas.web.web.dto.knight.depart.WebDeleteDepartDTO;
 import com.landleaf.ibsaas.web.web.dto.knight.emply.*;
-import com.landleaf.ibsaas.web.web.dto.knight.role.WebMjRoleDTO;
 import com.landleaf.ibsaas.web.web.dto.knight.userrole.WebMjUserRoleDTO;
 import com.landleaf.ibsaas.web.web.exception.BusinessException;
 import org.slf4j.Logger;
@@ -145,10 +145,11 @@ public class KnightService implements IKnightServeice {
      * @return
      */
     @Override
-    public Response mJUrgentEventRecord(String doorName, String start, String end, int page, int limit) {
+    public Response mJUrgentEventRecord(String doorName, String stationName, String start, String end, int page, int limit) {
         Response response = new Response();
         QueryMjUrgentEventRecordDTO sendRequest = new QueryMjUrgentEventRecordDTO();
         sendRequest.setDoorName(doorName);
+        sendRequest.setStationName(stationName);
         sendRequest.setStart(start);
         sendRequest.setEnd(end);
         sendRequest.setCurPage(page);
@@ -186,13 +187,13 @@ public class KnightService implements IKnightServeice {
         sendRequest.setPageSize(limit);
         response = sendMsgWaitForResult(sendRequest,
                 MsgTypeEnum.KNIGHT.getName(),
-                KnightSubMsgTypeEnum.MJ_OPEN_DOOR_RECORD.getName());
+                KnightSubMsgTypeEnum.MJ_OPEN_DOOR_RECORD_DB.getName());
         if (response != null && response.getResult() != null) {
             String jsonString = JSON.toJSONString(response.getResult());
-            PageInfo<MjOpenDoorRecord> mjOpenDoorRecordPageInfo = JSON.parseObject(jsonString, new TypeReference<PageInfo<MjOpenDoorRecord>>() {
+            PageInfo<KQCardRecord> mjOpenDoorRecordPageInfo = JSON.parseObject(jsonString, new TypeReference<PageInfo<KQCardRecord>>() {
             });
             response.setResult(mjOpenDoorRecordPageInfo);
-            List<MjOpenDoorRecord> mjOpenDoorRecords = mjOpenDoorRecordPageInfo.getList();
+            List<KQCardRecord> mjOpenDoorRecords = mjOpenDoorRecordPageInfo.getList();
         }
         return response;
     }
@@ -209,24 +210,21 @@ public class KnightService implements IKnightServeice {
     @Override
     public Response mjRoles(String name, Integer departId, int page, int limit) {
         Response response = new Response();
-        List<WebMjRoleDTO> dtoResult = Lists.newArrayList();
+        List<MjRoleDTO> dtoResult = Lists.newArrayList();
         PageInfo<MjRole> pageInfo = mjRoleService.getPageInfo(name, departId, page, limit);
         List<MjRole> list = pageInfo.getList();
         if (!CollectionUtils.isEmpty(list)) {
             Map<Integer, List<Depart>> departGroup = Maps.newHashMap();
             try {
                 Response<PageInfo> departResponse = queryDepart(1, 10000);
-
                 List<Depart> departList = departResponse.getResult().getList();
                 departGroup = departList.stream().collect(Collectors.groupingBy(Depart::getDepartId));
             } catch (Exception e) {
                 LOGGER.error("获取部门数据异常{}", e.getMessage(), e);
             }
-
-
             Map<Integer, List<Depart>> finalDepartGroup = departGroup;
             dtoResult = list.stream().map(i -> {
-                WebMjRoleDTO dto = new WebMjRoleDTO();
+                MjRoleDTO dto = new MjRoleDTO();
                 BeanUtils.copyProperties(i, dto);
                 List<Depart> departList = finalDepartGroup.get(i.getDepartId());
                 if (!CollectionUtils.isEmpty(departList)) {
@@ -270,6 +268,19 @@ public class KnightService implements IKnightServeice {
     }
 
     @Override
+    public Response queryAllDepart() {
+        Response response = queryDepart(1, 10000);
+        if (response != null && response.getResult() != null) {
+            String jsonString = JSON.toJSONString(response.getResult());
+            PageInfo<Depart> departPageInfo = JSON.parseObject(jsonString, new TypeReference<PageInfo<Depart>>() {
+            });
+            List<Depart> departList = departPageInfo.getList();
+            response.setResult(departList);
+        }
+        return response;
+    }
+
+    @Override
     public Response addDepart(WebAddDepartDTO requestBody) {
         Response response = new Response();
         AddDepartDTO sendRequest = new AddDepartDTO();
@@ -294,13 +305,44 @@ public class KnightService implements IKnightServeice {
     @Override
     public Response selectEmply(WebQueryEmplyDTO requestBody) {
         Response response = new Response();
-        QueryRegisterUserByDbDTO sendRequest = new QueryRegisterUserByDbDTO();
+        QueryEmplyDTO sendRequest = new QueryEmplyDTO();
         BeanUtils.copyProperties(requestBody, sendRequest);
         sendRequest.setCurPage(requestBody.getPage());
         sendRequest.setPageSize(requestBody.getLimit());
         response = sendMsgWaitForResult(sendRequest,
                 MsgTypeEnum.KNIGHT.getName(),
                 KnightSubMsgTypeEnum.SELECT_EMPLY.getName());
+        if (response != null && response.getResult() != null) {
+            String jsonString = JSON.toJSONString(response.getResult());
+            PageInfo<Emply> emplyPageInfo = JSON.parseObject(jsonString, new TypeReference<PageInfo<Emply>>() {
+            });
+            response.setResult(emplyPageInfo);
+            List<Emply> list = emplyPageInfo.getList();
+            Map<Integer, List<Depart>> departGroup = Maps.newHashMap();
+            try {
+                Response<PageInfo> departResponse = queryDepart(1, 10000);
+                List<Depart> departList = departResponse.getResult().getList();
+                departGroup = departList.stream().collect(Collectors.groupingBy(Depart::getDepartId));
+            } catch (Exception e) {
+                LOGGER.error("获取部门数据异常{}", e.getMessage(), e);
+            }
+            Map<Integer, List<Depart>> finalDepartGroup = departGroup;
+            for (Emply emply : list) {
+                List<Depart> departList = finalDepartGroup.get(emply.getDepartId());
+                if (!CollectionUtils.isEmpty(departList)) {
+                    emply.setDepartName(departList.get(0).getName());
+                }
+                try {
+                    if(emply.getInvalidate()!=null){
+                        emply.setInvalidateStr(DateUtils.convert(emply.getInvalidate()));
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("失效时间转换异常{}", e.getMessage(), e);
+                }
+            }
+        }
+
+
         return response;
     }
 
@@ -506,12 +548,13 @@ public class KnightService implements IKnightServeice {
     public Response setAttendanceRecord(WebAddAttendanceRecordDTO requestBody) {
         Response response = new Response();
         AddAttendanceRecordDTO sendRequest = new AddAttendanceRecordDTO();
-        BeanUtils.copyProperties(requestBody,sendRequest);
+        BeanUtils.copyProperties(requestBody, sendRequest);
         response = sendMsgWaitForResult(requestBody,
                 MsgTypeEnum.KNIGHT.getName(),
                 KnightSubMsgTypeEnum.SET_ATTENDANCE_RECORD.getName());
         return response;
     }
+
 
     /**
      * 获取门禁业务响应数据
@@ -548,9 +591,9 @@ public class KnightService implements IKnightServeice {
                     response.setMessage((String) knightResponse.get("resultInfo"));
                     response.setResult(knightResponse.get("obj"));
                     String resultCode = (String) knightResponse.get("result");
-                    if(StringUtil.isEquals("200",resultCode)){
+                    if (StringUtil.isEquals("200", resultCode)) {
                         response.setSuccess(true);
-                    }else {
+                    } else {
                         throw new BusinessException((String) knightResponse.get("resultInfo"));
                     }
                 }

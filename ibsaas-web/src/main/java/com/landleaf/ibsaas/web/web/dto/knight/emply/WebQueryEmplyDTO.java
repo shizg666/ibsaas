@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class WebQueryEmplyDTO {
     @ApiModelProperty(value = "人员名称",  example = "人员名称", dataType = "String")
     private String employeeName;
-    @ApiModelProperty(value = "001835", name = "人员系统编号", example = "业务逻辑使用的人员主键", dataType = "Integer")
+    @ApiModelProperty(value = "人员系统编号", name = "人员系统编号", example = "业务逻辑使用的人员主键", dataType = "Integer")
     private Integer sysNo;
     @ApiModelProperty(value = "分页查询当前页数",  example = "1", dataType = "int")
     private int page;

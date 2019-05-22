@@ -34,7 +34,7 @@ public enum KnightSubMsgTypeEnum implements BaseEnum {
     GET_MJ_DEVICE_BY_ID(15,2, "getMjDeviceById","根据设备id获取设备信息"),
     GET_DOOR_INFO_ALL(16, 2,"getDoorInfoAll", "获取全部门信息分页查询"),
     GET_DOOR_INFO_BY_ID(17,2, "getDoorInfoById", "根据门id获取门信息"),
-    MJ_OPEN_DOOR_RECORD(18, 2,"mjOpenDoorRecordByDb", "门禁记录分页查询"),
+    MJ_OPEN_DOOR_RECORD_DB(18, 2,"mjOpenDoorRecordByDb", "门禁记录分页查询"),
     MJ_URGENT_EVENT_RECORD(19,2, "mJUrgentEventRecord","门禁报警记录分页查询"),
     GET_ATTENDANCE_RESULT(20, 2,"getAttendanceResult", "查询考勤核算"),
     GET_ATTENDANCE_RECORD(21,2, "getAttendanceRecord", "考勤打卡记录分页查询"),

@@ -69,13 +69,9 @@ public class DoorController extends BasicController {
 
     @GetMapping("/v1/door/getDoorControlList")
     @ApiOperation(value = "获取门位置信息列表<id,name>")
-    public Response<Map<Long,String>> getDoorControlList() {
+    public Response<List<TDoor> > getDoorControlList() {
         List<TDoor> list = iDoorService.getDoorControlList();
-        Map<Long,String> map = new HashMap<>(list.size());
-        for (TDoor tDoor : list) {
-            map.put(tDoor.getId(),tDoor.getName());
-        }
-        return returnSuccess(map);
+        return returnSuccess(list);
     }
 
     @GetMapping("/v1/door/getDoorInfoByControlIds")
