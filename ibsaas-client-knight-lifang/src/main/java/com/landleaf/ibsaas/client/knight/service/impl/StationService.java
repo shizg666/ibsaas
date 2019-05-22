@@ -47,7 +47,7 @@ public class StationService extends AbstractBaseService<StationDao, Station> imp
         Example.Criteria criteria = example.createCriteria();
         List<Station> stationList = selectByExample(example);
         if (CollectionUtils.isEmpty(stationList)) {
-            stationList = org.assertj.core.util.Lists.newArrayList();
+            stationList = Lists.newArrayList();
         }
         return new PageInfo(stationList);
     }
