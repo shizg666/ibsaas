@@ -38,7 +38,6 @@ public class ComsumerMessageForKnight extends AbstractMQMsgProcessor {
             //解析消息
             KnightMessage kngihtMessage = MessageUtil.getInstance().getGson().fromJson(msgBody, new TypeToken<KnightMessage>() {
             }.getType());
-
             futureService.handlerMsg(kngihtMessage);
         } catch (Exception e) {
             e.printStackTrace();

@@ -10,6 +10,8 @@ import com.landleaf.ibsaas.web.web.service.knight.IBuildingService;
 import com.landleaf.ibsaas.web.web.service.knight.IDoorService;
 import com.landleaf.ibsaas.web.web.service.knight.IFloorService;
 import com.landleaf.ibsaas.web.web.vo.BuildingReponseVO;
+import com.landleaf.ibsaas.web.web.vo.DoorReponseVO;
+import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,15 +35,14 @@ public class DoorController extends BasicController {
     @GetMapping("door/getDoorInfoAll")
     @ApiOperation(value = "获取楼栋所有信息", notes = "获取楼栋所有信息")
     public Response getBuildingInfoAll() {
-        Response result = new Response();
         List<BuildingReponseVO> list = iBuildingService.getBuildingAllInfo();
         return returnSuccess(list);
     }
     @GetMapping("door/getDoorInfoAll/{floorId}")
-    @ApiOperation(value = "获取楼栋所有信息", notes = "获取楼栋所有信息")
+    @ApiOperation(value = "获取楼层所有门信息", notes = "获取楼栋所有信息")
     public Response getDoorsByflooId(@PathVariable @ApiParam(name="floorId",value="楼层id",required=true) Long floorId){
-//        List<DoorReponseVO> list = iFloorService.getByFloorId(floorId);
-        return returnSuccess();
+        FloorReponseVO floorReponseVO = iFloorService.getFloorAllById(floorId);
+        return returnSuccess(floorReponseVO);
     }
 
     @PostMapping("door/addOrUpdateBuilding")
@@ -63,6 +64,13 @@ public class DoorController extends BasicController {
     public Response addOrUpdateDoor(@RequestBody TDoor tDoor) {
         TDoor tDoor1 = iDoorService.addDoorOrUpdate(tDoor);
         return returnSuccess(tDoor1);
+    }
+
+    @PostMapping("door/bacthAddOrUpdateFloor")
+    @ApiOperation(value = "添加或者修改门信息", notes = "添加或者修改楼层信息")
+    public Response bacthAddOrUpdateFloor(@RequestBody List<TDoor> tDoors) {
+        List<TDoor> tDoorList = iDoorService.bacthAddOrUpdateFloor(tDoors);
+        return returnSuccess(tDoorList);
     }
 
 

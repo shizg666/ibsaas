@@ -1,9 +1,14 @@
 package com.landleaf.ibsaas.web.web.service.knight.impl;
 
+import com.landleaf.ibsaas.common.dao.knight.TDoorMapper;
 import com.landleaf.ibsaas.common.dao.knight.TFloorMapper;
+import com.landleaf.ibsaas.common.domain.knight.TDoor;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.web.web.service.knight.IFloorService;
 import com.landleaf.ibsaas.web.web.vo.DoorReponseVO;
+import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
+import org.assertj.core.util.Lists;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +20,8 @@ public class IFloorServiceImpl implements IFloorService {
 
     @Autowired
     private TFloorMapper tFloorMapper;
+    @Autowired
+    private TDoorMapper tDoorMapper;
 
 
     @Override
@@ -28,9 +35,19 @@ public class IFloorServiceImpl implements IFloorService {
     }
 
     @Override
-    public List<DoorReponseVO> getByFloorId(Long id) {
-        tFloorMapper.selectByParentId(id);
-        return null;
+    public FloorReponseVO getFloorAllById(Long id) {
+        FloorReponseVO floorReponseVO = new FloorReponseVO();
+        TFloor tFloor  = tFloorMapper.selectByPrimaryKey(id);
+        BeanUtils.copyProperties(tFloor,floorReponseVO);
+        List<TDoor> tDoors = tDoorMapper.selectParentId(tFloor.getId());
+        List<DoorReponseVO> doorReponseVOS = Lists.newArrayList();
+        tDoors.forEach(obj ->{
+            DoorReponseVO doorReponseVO = new DoorReponseVO();
+            BeanUtils.copyProperties(obj,doorReponseVO);
+            doorReponseVOS.add(doorReponseVO);
+        });
+        floorReponseVO.setList(doorReponseVOS);
+        return floorReponseVO;
     }
 
     public TFloor addFloor(TFloor tFloor) {

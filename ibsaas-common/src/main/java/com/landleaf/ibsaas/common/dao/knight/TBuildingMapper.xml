@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.knight.TBuildingMapper">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.knight.TBuilding">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_building
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getAllBuilding"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_building
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_building
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TBuilding">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">   SELECT LAST_INSERT_ID() </selectKey>
+    insert into t_building (id, name)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TBuilding">
+    insert into t_building
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TBuilding">
+    update t_building
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.landleaf.ibsaas.common.domain.knight.TBuilding">
+    update t_building
+    set name = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

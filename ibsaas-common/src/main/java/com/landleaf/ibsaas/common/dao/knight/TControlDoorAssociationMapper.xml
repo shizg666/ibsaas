@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.knight.TControlDoorAssociationMapper">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.knight.TControlDoorAssociation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="contrlo_id" jdbcType="INTEGER" property="contrloId" />
+    <result column="door_id" jdbcType="BIGINT" property="doorId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, contrlo_id, door_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_control_door_association
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_control_door_association
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TControlDoorAssociation">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">   SELECT LAST_INSERT_ID() </selectKey>
+    insert into t_control_door_association (id, contrlo_id, door_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{contrloId,jdbcType=INTEGER}, #{doorId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TControlDoorAssociation">
+    insert into t_control_door_association
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="contrloId != null">
+        contrlo_id,
+      </if>
+      <if test="doorId != null">
+        door_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="contrloId != null">
+        #{contrloId,jdbcType=INTEGER},
+      </if>
+      <if test="doorId != null">
+        #{doorId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TControlDoorAssociation">
+    update t_control_door_association
+    <set>
+      <if test="contrloId != null">
+        contrlo_id = #{contrloId,jdbcType=INTEGER},
+      </if>
+      <if test="doorId != null">
+        door_id = #{doorId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.landleaf.ibsaas.common.domain.knight.TControlDoorAssociation">
+    update t_control_door_association
+    set contrlo_id = #{contrloId,jdbcType=INTEGER},
+      door_id = #{doorId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

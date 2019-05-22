@@ -15,16 +15,18 @@ public class FloorReponseVO {
     private String img;
     @ApiModelProperty(value="楼栋id")
     private Long parentId;
-//    private List<DoorReponseVO> list;
+    @ApiModelProperty(value="门列表")
+    private List<DoorReponseVO> list;
 
 
-//    public List<DoorReponseVO> getList() {
-//        return list;
-//    }
-//
-//    public void setList(List<DoorReponseVO> list) {
-//        this.list = list;
-//    }
+    public List<DoorReponseVO> getList() {
+        return list;
+    }
+
+    public void setList(List<DoorReponseVO> list) {
+        this.list = list;
+    }
+
 
     public Long getId() {
         return id;
