@@ -19,8 +19,7 @@
     delete from t_control_door_association
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TControlDoorAssociation">
-    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">   SELECT LAST_INSERT_ID() </selectKey>
+  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TControlDoorAssociation" useGeneratedKeys="true" keyProperty="id">
     insert into t_control_door_association (id, contrlo_id, door_id
       )
     values (#{id,jdbcType=BIGINT}, #{contrloId,jdbcType=INTEGER}, #{doorId,jdbcType=BIGINT}

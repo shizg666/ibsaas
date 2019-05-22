@@ -1,11 +1,15 @@
 package com.landleaf.ibsaas.common.domain;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 /**
  * 统一返回参数
  * @param <T>
  */
+@ApiModel(value = "返回对象实体")
 public class Response<T> implements Serializable {
 
     /**
@@ -41,6 +45,7 @@ public class Response<T> implements Serializable {
     /**
      * 请求是否处理成功
      */
+    @ApiModelProperty(value="请求是否处理成功")
     private boolean success;
 
     /**
@@ -61,11 +66,13 @@ public class Response<T> implements Serializable {
     /**
      * 提示消息，需要进行国际化
      */
+    @ApiModelProperty(value="提示消息")
     private String message;
 
     /**
      * 正常返回参数
      */
+    @ApiModelProperty(value="数据")
     private T result;
 
     public boolean isSuccess() {

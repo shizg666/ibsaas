@@ -4,12 +4,12 @@
   <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.knight.TFloor">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="floor" jdbcType="INTEGER" property="floor" />
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="img" jdbcType="VARCHAR" property="img" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, name, order, parent_id, img
+    id, name, floor, parent_id, img
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -36,14 +36,13 @@
     delete from t_floor
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TFloor">
-    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">   SELECT LAST_INSERT_ID() </selectKey>
-    insert into t_floor (id, name, order, 
+  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TFloor" useGeneratedKeys="true" keyProperty="id">
+    insert into t_floor (id, name, floor,
       parent_id, img)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{floor,jdbcType=INTEGER},
       #{parentId,jdbcType=BIGINT}, #{img,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TFloor">
+  <insert id="insertSelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TFloor" useGeneratedKeys="true" keyProperty="id">
     insert into t_floor
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -52,8 +51,8 @@
       <if test="name != null">
         name,
       </if>
-      <if test="order != null">
-        order,
+      <if test="floor != null">
+        floor,
       </if>
       <if test="parentId != null">
         parent_id,
@@ -69,8 +68,8 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="order != null">
-        #{order,jdbcType=INTEGER},
+      <if test="floor != null">
+        #{floor,jdbcType=INTEGER},
       </if>
       <if test="parentId != null">
         #{parentId,jdbcType=BIGINT},
@@ -86,8 +85,8 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="order != null">
-        order = #{order,jdbcType=INTEGER},
+      <if test="floor != null">
+        floor = #{floor,jdbcType=INTEGER},
       </if>
       <if test="parentId != null">
         parent_id = #{parentId,jdbcType=BIGINT},
@@ -101,7 +100,7 @@
   <update id="updateByPrimaryKey" parameterType="com.landleaf.ibsaas.common.domain.knight.TFloor">
     update t_floor
     set name = #{name,jdbcType=VARCHAR},
-      order = #{order,jdbcType=INTEGER},
+      floor = #{floor,jdbcType=INTEGER},
       parent_id = #{parentId,jdbcType=BIGINT},
       img = #{img,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}

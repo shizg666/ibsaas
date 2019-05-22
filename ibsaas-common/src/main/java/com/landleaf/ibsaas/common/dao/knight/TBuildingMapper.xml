@@ -25,8 +25,7 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
 
-  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TBuilding">
-    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">   SELECT LAST_INSERT_ID() </selectKey>
+  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TBuilding" useGeneratedKeys="true" keyProperty="id">
     insert into t_building (id, name)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR})
   </insert>

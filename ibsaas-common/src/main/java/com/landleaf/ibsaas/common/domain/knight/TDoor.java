@@ -12,7 +12,27 @@ public class TDoor {
     @ApiModelProperty(value="门禁id")
     private Integer controlId;
     @ApiModelProperty(value="楼层id",required = true)
-    private Integer parentId;
+    private Long parentId;
+    @ApiModelProperty(value="横坐标",required = true)
+    private String xPos;
+    @ApiModelProperty(value="纵坐标",required = true)
+    private String yPos;
+
+    public String getxPos() {
+        return xPos;
+    }
+
+    public void setxPos(String xPos) {
+        this.xPos = xPos;
+    }
+
+    public String getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(String yPos) {
+        this.yPos = yPos;
+    }
 
     public Long getId() {
         return id;
@@ -38,11 +58,11 @@ public class TDoor {
         this.controlId = controlId;
     }
 
-    public Integer getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(Integer parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 }

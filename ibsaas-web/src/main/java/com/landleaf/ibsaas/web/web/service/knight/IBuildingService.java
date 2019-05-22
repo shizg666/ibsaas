@@ -7,8 +7,12 @@ import java.util.List;
 
 public interface IBuildingService {
 
+    Integer deleteBuilding(Long id);
+
     TBuilding addBuildingOrUpdate (TBuilding tBuilding);
 
 
     List<BuildingReponseVO> getBuildingAllInfo();
+
+    List<TBuilding> getBuildingList();
 }

@@ -1,6 +1,5 @@
 package com.landleaf.ibsaas.web.web.vo;
 
-import com.landleaf.ibsaas.common.domain.knight.TDoor;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -9,6 +8,9 @@ import java.util.List;
 @ApiModel(value = "楼层信息")
 public class FloorReponseVO {
     private Long id ;
+    @ApiModelProperty(value="标志")
+    private String key ;
+
     @ApiModelProperty(value="楼层名称")
     private String name;
     @ApiModelProperty(value="楼层图片锦")
@@ -18,6 +20,13 @@ public class FloorReponseVO {
     @ApiModelProperty(value="门列表")
     private List<DoorReponseVO> list;
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public List<DoorReponseVO> getList() {
         return list;

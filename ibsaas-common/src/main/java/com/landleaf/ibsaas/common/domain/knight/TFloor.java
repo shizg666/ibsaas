@@ -3,7 +3,7 @@ package com.landleaf.ibsaas.common.domain.knight;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "楼层信息")
+@ApiModel(value = "楼层信息对象")
 public class TFloor {
 
     @ApiModelProperty(value="楼栋id（修改必传）")
@@ -11,7 +11,7 @@ public class TFloor {
     @ApiModelProperty(value="楼层名称",required = true)
     private String name;
     @ApiModelProperty(value="楼层数（几楼）",required = true)
-    private Integer order;
+    private Integer floor;
     @ApiModelProperty(value="楼栋id",required = true)
     private Long parentId;
     @ApiModelProperty(value="图片")
@@ -33,12 +33,12 @@ public class TFloor {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getFloor() {
+        return floor;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setFloor(Integer floor) {
+        this.floor = floor;
     }
 
     public Long getParentId() {

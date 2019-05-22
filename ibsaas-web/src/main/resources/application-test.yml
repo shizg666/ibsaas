@@ -141,7 +141,7 @@ rocketmq:
     groupName: ibsaas_response
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
     #门禁;停车
-    topics: knight-*;parking-*
+    topics: knight1-*;parking1-*
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10

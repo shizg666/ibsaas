@@ -5,13 +5,15 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="control_id" jdbcType="INTEGER" property="controlId" />
-    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="x_pos" jdbcType="VARCHAR" property="xPos" />
+    <result column="y_pos" jdbcType="VARCHAR" property="yPos" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, name, control_id, parent_id
+    id, name, control_id, parent_id, x_pos, y_pos
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from t_door
     where id = #{id,jdbcType=BIGINT}
@@ -22,7 +24,7 @@
     from t_door
     where name = #{name,jdbcType=VARCHAR}
   </select>
-  <select id="selectParentIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByParentIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_door
@@ -31,22 +33,44 @@
       #{parentId}
     </foreach>
   </select>
-  <select id="selectParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from t_door
     where parent_id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="getDoorListOrderByfloor"  resultMap="BaseResultMap">
+    select
+    id, name
+    from t_door door inner join t_floor floor on  door.parent_id = floor.id
+   order by floor.floor
+  </select>
+  <select id="selectByContrloId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where control_id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getDoorInfoByControlIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where control_id in
+    <foreach collection="ids" open="(" separator="," close=")" item="controlId">
+      #{controlId}
+    </foreach>
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from t_door
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{controlId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TDoor">
-    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">   SELECT LAST_INSERT_ID() </selectKey>
-    insert into t_door (id, name, control_id, 
-      parent_id)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{controlId,jdbcType=INTEGER}, 
-      #{parentId,jdbcType=INTEGER})
+  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TDoor" useGeneratedKeys="true" keyProperty="id">
+   insert into t_door (id, name, control_id,
+      parent_id, x_pos, y_pos
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{controlId,jdbcType=INTEGER},
+      #{parentId,jdbcType=BIGINT}, #{xPos,jdbcType=VARCHAR}, #{yPos,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TDoor">
     insert into t_door
@@ -63,6 +87,12 @@
       <if test="parentId != null">
         parent_id,
       </if>
+      <if test="xPos != null">
+        x_pos,
+      </if>
+      <if test="yPos != null">
+        y_pos,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -75,7 +105,13 @@
         #{controlId,jdbcType=INTEGER},
       </if>
       <if test="parentId != null">
-        #{parentId,jdbcType=INTEGER},
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="xPos != null">
+        #{xPos,jdbcType=VARCHAR},
+      </if>
+      <if test="yPos != null">
+        #{yPos,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -89,7 +125,13 @@
         control_id = #{controlId,jdbcType=INTEGER},
       </if>
       <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=INTEGER},
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="xPos != null">
+        x_pos = #{xPos,jdbcType=VARCHAR},
+      </if>
+      <if test="yPos != null">
+        y_pos = #{yPos,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -98,7 +140,15 @@
     update t_door
     set name = #{name,jdbcType=VARCHAR},
       control_id = #{controlId,jdbcType=INTEGER},
-      parent_id = #{parentId,jdbcType=INTEGER}
+      parent_id = #{parentId,jdbcType=BIGINT},
+      x_pos = #{xPos,jdbcType=VARCHAR},
+      y_pos = #{yPos,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="bindingDoorControl">
+    update t_door
+    set
+      control_id = #{controId}
+    where id = #{id}
   </update>
 </mapper>

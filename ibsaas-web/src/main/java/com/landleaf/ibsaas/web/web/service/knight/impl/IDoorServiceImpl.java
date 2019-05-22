@@ -1,10 +1,18 @@
 package com.landleaf.ibsaas.web.web.service.knight.impl;
 
 import com.google.common.collect.Lists;
+import com.landleaf.ibsaas.common.dao.knight.TBuildingMapper;
 import com.landleaf.ibsaas.common.dao.knight.TDoorMapper;
+import com.landleaf.ibsaas.common.dao.knight.TFloorMapper;
+import com.landleaf.ibsaas.common.domain.knight.TBuilding;
 import com.landleaf.ibsaas.common.domain.knight.TDoor;
+import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.web.web.service.knight.IDoorService;
+import com.landleaf.ibsaas.web.web.vo.BuildingReponseVO;
+import com.landleaf.ibsaas.web.web.vo.DoorReponseVO;
+import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +23,12 @@ import java.util.List;
 public class IDoorServiceImpl implements IDoorService {
     @Autowired
     private TDoorMapper tDoorMapper;
+    @Autowired
+    private TFloorMapper tFloorMapper;
+    @Autowired
+    private TBuildingMapper tBuildingMapper;
+
+
     @Override
     public TDoor addDoorOrUpdate(TDoor tDoor) {
         if (tDoor.getId() == null || tDoor.getId() == 0){
@@ -34,6 +48,56 @@ public class IDoorServiceImpl implements IDoorService {
             resultData.add(tDoor);
         });
         return resultData;
+    }
+
+    @Override
+    public Integer bindingDoorControl(Long id, Long controId) {
+        Integer result = tDoorMapper.bindingDoorControl(id, controId);
+        if (result < 0 ){
+            throw new BusinessException("门禁绑定失败");
+        }
+        return result;
+    }
+
+    @Override
+    public Integer deleteDoor(Long id) {
+        Integer result = tDoorMapper.deleteByPrimaryKey(id);
+        if (result < 0 ){
+            throw new BusinessException("门删除失败");
+        }
+        return result;
+    }
+
+    @Override
+    public BuildingReponseVO getDoorAllInfobyControlId(Long controlId) {
+        BuildingReponseVO buildingReponseVO = new BuildingReponseVO();
+        FloorReponseVO floorReponseVO = new FloorReponseVO();
+        DoorReponseVO doorReponseVO = new DoorReponseVO();
+        TDoor tDoor = tDoorMapper.selectByContrloId(controlId);
+        BeanUtils.copyProperties(tDoor,doorReponseVO);
+        List<DoorReponseVO> doorReponseVOS = Lists.newArrayList();
+        doorReponseVOS.add(doorReponseVO);
+        floorReponseVO.setList(doorReponseVOS);
+        TFloor tFloor = tFloorMapper.selectByPrimaryKey(tDoor.getParentId());
+        BeanUtils.copyProperties(tFloor,floorReponseVO);
+        List<FloorReponseVO> floorReponseVOS = Lists.newArrayList();
+        floorReponseVOS.add(floorReponseVO);
+        buildingReponseVO.setList(floorReponseVOS);
+        TBuilding tBuilding = tBuildingMapper.selectByPrimaryKey(tFloor.getParentId());
+        BeanUtils.copyProperties(tBuilding,buildingReponseVO);
+        return buildingReponseVO;
+    }
+
+    @Override
+    public List<TDoor> getDoorControlList() {
+        List<TDoor> tDoors = tDoorMapper.getDoorListOrderByfloor();
+        return tDoors;
+    }
+
+    @Override
+    public List<TDoor> getDoorInfoByControlIds(List<Long> controlIds) {
+        List<TDoor> tDoors = tDoorMapper.getDoorInfoByControlIds(controlIds);
+        return tDoors;
     }
 
     public TDoor addDoor(TDoor tDoor) {

@@ -4,7 +4,7 @@ package com.landleaf.ibsaas.common.domain.knight;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-@ApiModel(value = "楼栋信息")
+@ApiModel(value = "楼栋信息对象")
 public class TBuilding {
 
     @ApiModelProperty(value="楼栋id（修改毕传）")

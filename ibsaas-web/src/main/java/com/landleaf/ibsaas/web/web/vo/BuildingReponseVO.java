@@ -5,13 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.util.List;
 
-@ApiModel(value = "楼栋信息")
+@ApiModel(value = "楼栋对象信息")
 public class BuildingReponseVO {
     @ApiModelProperty(value="楼栋id")
     private Long id ;
+
+    @ApiModelProperty(value="标志")
+    private String key ;
+
     @ApiModelProperty(value="楼栋名称")
     private String name;
-    @ApiModelProperty(value="日志类型")
+    @ApiModelProperty(value="楼层列表")
     private List<FloorReponseVO> list;
 
     public Long getId() {
@@ -20,6 +24,14 @@ public class BuildingReponseVO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getName() {
