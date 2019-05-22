@@ -12,7 +12,7 @@ import com.landleaf.ibsaas.common.service.leo.ICommonResourceService;
 import com.landleaf.ibsaas.web.web.constant.IbsaasWebConstants;
 import com.landleaf.ibsaas.web.web.constant.MessageConstants;
 import com.landleaf.ibsaas.web.web.context.RequestContext;
-import com.landleaf.ibsaas.web.web.context.UserContext;
+import com.landleaf.ibsaas.web.web.context.user.UserContext;
 import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
 import com.landleaf.ibsaas.web.web.dto.request.SelectorParamsDto;
 import com.landleaf.ibsaas.web.web.dto.response.SelectorResultDto;

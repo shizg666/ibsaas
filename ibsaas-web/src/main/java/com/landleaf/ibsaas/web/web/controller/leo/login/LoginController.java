@@ -1,27 +1,30 @@
 package com.landleaf.ibsaas.web.web.controller.leo.login;
 
+import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.leo.User;
+import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.utils.encode.EncryptMD5Util;
+import com.landleaf.ibsaas.web.web.context.user.SsoWebLoginHelper;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.leo.impl.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
-;
-
-@Controller
+@RestController
+@RequestMapping("/login")
+@Api(value = "/login", description = "登录相关操作")
 public class LoginController extends BasicController {
 
     private static Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
@@ -32,55 +35,42 @@ public class LoginController extends BasicController {
     private Environment environment;
 
 
-    @GetMapping(value = "/login")
-    public String login(HttpServletRequest request) {
-        //清除登录验证码
-        return "/login";
-    }
+    @Autowired
+    private SsoWebLoginHelper ssoWebLoginHelper;
 
-    @PostMapping(value = "/usernameLogin")
+    @ApiOperation(value = "用户登录", notes = "用户登录")
+    @PostMapping(value = "/username-login")
     @ResponseBody
-    public Map<String, Object> checkUsernameLogin(HttpServletRequest request) {
-
+    public Response login(HttpServletRequest request, @RequestBody User user) {
         HttpSession session = request.getSession();
         String sessionid = session.getId();
-//      取消验证码验证
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String origUrl = request.getParameter("origUrl");
-
-        if (StringUtils.isBlank(username)) {
-
-        }
-        if (StringUtils.isBlank(password)) {
-        }
-        User user = userService.getUser(username);
-        if (null == user) {
+        String userCode = user.getUserCode();
+        String password = user.getPassword();
+        User existUser = userService.getUser(userCode);
+        if (existUser == null) {
+            throw new BusinessException("用户不存在！");
         }
         //传过来已经加密一次了
         password = EncryptMD5Util.encryptMD5(password);
         if (!StringUtils.equals(user.getPassword(), password)) {
-
+            throw new BusinessException("密码错误！");
         }
-        session.setAttribute("loginuserid", user.getId());
-        origUrl = getOrigUrl(origUrl, user, sessionid);
-        LOGGER.info("login success login origUrl=" + origUrl);
+        ssoWebLoginHelper.set(sessionid, user, 3600 * 24L);
         Map<String, Object> data = new HashMap<>(16);
-        data.put("origUrl", origUrl);
-        return data;
-    }
-
-    public String getOrigUrl(String origUrl, User user, String sessionid) {
-        origUrl += (origUrl.contains("?") ? "&" : "?") + "randm=" + System.currentTimeMillis() + "&ticket=" + sessionid;
-        return origUrl;
+        data.put("sid", sessionid);
+        User saveUser = new User();
+        BeanUtils.copyProperties(user, saveUser);
+        saveUser.setPassword(null);
+        data.put("user", saveUser);
+        return returnSuccess(data);
     }
 
 
     @GetMapping(value = "/logout")
     @ResponseBody
-    public String logout(HttpServletRequest request) {
-        request.getSession(false).invalidate();
-        return null;
+    public Response logout(HttpServletRequest request, @RequestParam("sid") String sid) {
+        ssoWebLoginHelper.remove(sid);
+        return returnSuccess();
     }
 
 }

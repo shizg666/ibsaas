@@ -4,7 +4,7 @@ import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.leo.Resource;
 import com.landleaf.ibsaas.common.domain.leo.User;
 import com.landleaf.ibsaas.web.web.constant.MessageConstants;
-import com.landleaf.ibsaas.web.web.context.UserContext;
+import com.landleaf.ibsaas.web.web.context.user.UserContext;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.dto.request.SelectorParamsDto;
 import com.landleaf.ibsaas.web.web.service.leo.IResourceService;

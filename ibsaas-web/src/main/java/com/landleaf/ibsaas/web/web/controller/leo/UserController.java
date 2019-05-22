@@ -4,7 +4,7 @@ import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.leo.User;
 import com.landleaf.ibsaas.common.utils.CryptoUtil;
 import com.landleaf.ibsaas.web.web.constant.MessageConstants;
-import com.landleaf.ibsaas.web.web.context.SessionContext;
+import com.landleaf.ibsaas.web.web.context.user.UserContext;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.dto.request.SelectorParamsDto;
 import com.landleaf.ibsaas.web.web.exception.UserException;
@@ -36,30 +36,6 @@ public class UserController extends BasicController {
     @Autowired
     private IUserService userService;
 
-    /**
-     * 不启动cas情况下的登陆
-     *
-     * @param user
-     * @return
-     * @author wyl
-     * @date 2017年09月06日20:14:14
-     */
-    @RequestMapping(value = "/v1/session", method = RequestMethod.POST)
-    public Response login(@RequestBody User user) {
-        //校验用户名
-        User serverUser = userService.getUser(user.getUserCode());
-        if (serverUser == null) {
-            throw new UserException(UserException.BUSINESS_USER_LOGIN_USER_CODE_NOT_EXISTS);
-        }
-        //校验密码
-        String pwd = CryptoUtil.getInstance().getMD5ofStr(user.getPassword());
-        if (!StringUtils.equals(pwd, serverUser.getPassword())) {
-            throw new UserException(UserException.BUSINESS_USER_LOGIN_USER_PASSWORD_ERROR);
-        }
-        //登录成功
-        SessionContext.setCurrentUserId(user.getUserCode());
-        return returnSuccess(SessionContext.getSession().getId(), MessageConstants.COMMON_LOGIN_SUCCESS_MESSAGE);
-    }
 
 
    /**
@@ -72,24 +48,10 @@ public class UserController extends BasicController {
     @ApiOperation(value = "获取当前登录用户", notes = "获取当前登录用户，应该在用户访问主界面后第一个调用此接口")
     @RequestMapping(value = "/v1/current", method = RequestMethod.GET)
     public Response getCurrentUser() {
-//        return returnSuccess(UserContext.getCurrentUser());
-        return returnSuccess(userService.getUser("test"));
+        return returnSuccess(UserContext.getCurrentUser());
+//        return returnSuccess(userService.getUser("test"));
     }
 
-    /**
-     * @return
-     * @autor wyl
-     * @date 2017年08月03日17:53:29
-     * @description:登出
-     */
-    @RequestMapping(value = "/v1/session", method = RequestMethod.DELETE)
-    public Response logout() {
-        SessionContext.invalidateSession();
-        LogoutVO logoutVO = new LogoutVO();
-//        logoutVO.setCasServerLogoutUrl(casClientProperties.getCasServerLogoutUrl());
-//        logoutVO.setRedirectServerUrl(casClientProperties.getRedirectServerUrl());
-        return returnSuccess(logoutVO);
-    }
 
     /**
      * @param user

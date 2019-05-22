@@ -10,7 +10,7 @@ import com.landleaf.ibsaas.common.domain.leo.UserRole;
 import com.landleaf.ibsaas.common.service.leo.ICommonUserRoleService;
 import com.landleaf.ibsaas.common.service.leo.ICommonUserService;
 import com.landleaf.ibsaas.web.web.constant.IbsaasWebConstants;
-import com.landleaf.ibsaas.web.web.context.UserContext;
+import com.landleaf.ibsaas.web.web.context.user.UserContext;
 import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
 import com.landleaf.ibsaas.web.web.dto.request.SelectorParamsDto;
 import com.landleaf.ibsaas.web.web.dto.response.SelectorResultDto;

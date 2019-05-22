@@ -69,8 +69,6 @@
 		<spring.version>5.0.8.RELEASE</spring.version>
 		<spring-boot.version>2.0.6.RELEASE</spring-boot.version>
 		<pinyin4j.version>2.5.0</pinyin4j.version>
-        <!-- sso-->
-		<xxl-sso.version>1.1.1-SNAPSHOT</xxl-sso.version>
 
 		<!-- protobuf相关-->
 		<protobuf-java.version>3.7.0-rc1</protobuf-java.version>
@@ -135,7 +133,10 @@
 			<artifactId>mapper-spring-boot-starter</artifactId>
 			<version>${tk.mapper.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
 		<!-- HanyuPinyin-->
 		<dependency>
 			<groupId>com.belerweb</groupId>
@@ -298,12 +299,6 @@
 			<version>${netty-all.version}</version>
 		</dependency>
 
-		<!-- xxl-sso-core -->
-		<dependency>
-			<groupId>com.xuxueli</groupId>
-			<artifactId>xxl-sso-core</artifactId>
-			<version>${xxl-sso.version}</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.google.protobuf</groupId>

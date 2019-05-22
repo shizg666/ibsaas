@@ -10,7 +10,7 @@ import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.constant.IbsaasWebConstants;
 import com.landleaf.ibsaas.web.web.constant.MessageConstants;
-import com.landleaf.ibsaas.web.web.context.UserContext;
+import com.landleaf.ibsaas.web.web.context.user.UserContext;
 import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
 import com.landleaf.ibsaas.web.web.exception.ParkingException;
 import com.landleaf.ibsaas.web.web.service.parking.IParkingRealCountInitService;

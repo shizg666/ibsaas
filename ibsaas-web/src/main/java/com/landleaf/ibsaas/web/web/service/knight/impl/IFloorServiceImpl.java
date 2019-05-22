@@ -1,5 +1,6 @@
 package com.landleaf.ibsaas.web.web.service.knight.impl;
 
+import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.dao.knight.TDoorMapper;
 import com.landleaf.ibsaas.common.dao.knight.TFloorMapper;
 import com.landleaf.ibsaas.common.domain.knight.TDoor;
@@ -7,7 +8,6 @@ import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.web.web.service.knight.IFloorService;
 import com.landleaf.ibsaas.web.web.vo.DoorReponseVO;
 import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

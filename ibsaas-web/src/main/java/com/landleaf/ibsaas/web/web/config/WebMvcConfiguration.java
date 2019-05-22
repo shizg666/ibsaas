@@ -5,7 +5,6 @@ import com.landleaf.ibsaas.web.web.constant.UrlConstants;
 import com.landleaf.ibsaas.web.web.context.SpringApplicationContextHolder;
 import com.landleaf.ibsaas.web.web.filter.web.IpWhiteListFilter;
 import com.landleaf.ibsaas.web.web.filter.web.ParamsVerifyFilter;
-import com.landleaf.ibsaas.web.web.interceptor.AccessInterceptor;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,11 +46,6 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
 
     private ApplicationContext applicationContext;
 
-    private AccessInterceptor accessInterceptor;
-
-    public WebMvcConfiguration(ObjectProvider<AccessInterceptor> accessInterceptorObjectProvider) {
-        accessInterceptor = accessInterceptorObjectProvider.getIfAvailable();
-    }
 
     /**
      * 增加使用fastjson消息转换器
@@ -77,9 +71,6 @@ public class WebMvcConfiguration extends WebMvcConfigurerAdapter implements Appl
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        if (accessInterceptor != null) {
-            registry.addInterceptor(accessInterceptor);
-        }
         super.addInterceptors(registry);
     }
 
