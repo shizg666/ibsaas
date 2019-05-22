@@ -6,7 +6,7 @@ import com.alibaba.rocketmq.client.producer.SendCallback;
 import com.alibaba.rocketmq.client.producer.SendResult;
 import com.alibaba.rocketmq.common.message.Message;
 import com.alibaba.rocketmq.remoting.exception.RemotingException;
-import com.landleaf.ibsaas.common.utils.RandomUtil;
+import com.landleaf.ibsaas.client.knight.utils.RandomUtil;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.rocketmq.TopicConstants;
 import org.slf4j.Logger;

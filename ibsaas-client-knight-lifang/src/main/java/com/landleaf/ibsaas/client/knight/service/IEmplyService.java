@@ -2,8 +2,7 @@ package com.landleaf.ibsaas.client.knight.service;
 
 
 import com.github.pagehelper.PageInfo;
-import com.landleaf.ibsaas.common.domain.knight.KnightResponse;
-import com.landleaf.ibsaas.common.domain.knight.emply.QueryEmplyDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.emply.QueryEmplyDTO;
 import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
 
 /**

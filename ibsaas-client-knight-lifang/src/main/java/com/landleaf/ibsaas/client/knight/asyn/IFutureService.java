@@ -1,6 +1,6 @@
 package com.landleaf.ibsaas.client.knight.asyn;
 
-import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
+import com.landleaf.ibsaas.client.knight.domain.dto.KnightMessage;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.concurrent.Future;

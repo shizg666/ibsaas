@@ -7,17 +7,17 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.landleaf.ibsaas.client.knight.domain.dto.KnightResponse;
+import com.landleaf.ibsaas.client.knight.domain.dto.attendance.AttendanceRecordDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.attendance.AttendanceResultDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.control.DoorDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.control.MjOpenDoorRecordDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.control.MjUrgentEventRecordDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.control.StationDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.depart.DepartDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.emply.EmplyDTO;
 import com.landleaf.ibsaas.client.knight.restful.RestTemplateClient;
-import com.landleaf.ibsaas.common.domain.knight.attendance.AttendanceRecord;
-import com.landleaf.ibsaas.common.domain.knight.attendance.AttendanceResult;
-import com.landleaf.ibsaas.common.domain.knight.control.Door;
-import com.landleaf.ibsaas.common.domain.knight.control.MjOpenDoorRecord;
-import com.landleaf.ibsaas.common.domain.knight.control.MjUrgentEventRecord;
-import com.landleaf.ibsaas.common.domain.knight.control.Station;
-import com.landleaf.ibsaas.common.domain.knight.depart.Depart;
-import com.landleaf.ibsaas.common.domain.knight.emply.Emply;
-import com.landleaf.ibsaas.common.domain.knight.KnightResponse;
-import com.landleaf.ibsaas.common.utils.MessageUtil;
+import com.landleaf.ibsaas.client.knight.utils.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -119,9 +119,9 @@ public class LiFangHttpProvider implements InitializingBean {
             }
             knightResponse.setObj(pageInfo);
             List list = pageInfo.getList();
-            List<Depart> departs = Lists.newArrayList();
+            List<DepartDTO> departs = Lists.newArrayList();
             if(!CollectionUtils.isEmpty(list)){
-               departs = JSON.parseArray(JSON.toJSONString(list), Depart.class);
+               departs = JSON.parseArray(JSON.toJSONString(list), DepartDTO.class);
             }
             pageInfo.setList(departs);
         } catch (JsonSyntaxException e) {
@@ -137,11 +137,11 @@ public class LiFangHttpProvider implements InitializingBean {
             knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
             }.getType());
             Object obj = knightResponse.getObj();
-            Depart depart = new Depart();
+            DepartDTO departDTO = new DepartDTO();
             if(obj!=null){
-                depart = JSON.parseObject(JSON.toJSONString(obj), Depart.class);
+                departDTO = JSON.parseObject(JSON.toJSONString(obj), DepartDTO.class);
             }
-            knightResponse.setObj(depart);
+            knightResponse.setObj(departDTO);
         } catch (JsonSyntaxException e) {
             LOGGER.error(e.getMessage(),e);
         }
@@ -166,10 +166,10 @@ public class LiFangHttpProvider implements InitializingBean {
             String data = post(GET_ALL_EMPLY_LIST_URL, param);
             knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
             }.getType());
-            List<Emply> emplyList = Lists.newArrayList();
+            List<EmplyDTO> emplyList = Lists.newArrayList();
             Object obj = knightResponse.getObj();
             if(obj!=null){
-                emplyList= JSON.parseArray(JSON.toJSONString(obj), Emply.class);
+                emplyList= JSON.parseArray(JSON.toJSONString(obj), EmplyDTO.class);
             }
             knightResponse.setObj(emplyList);
         } catch (JsonSyntaxException e) {
@@ -185,10 +185,10 @@ public class LiFangHttpProvider implements InitializingBean {
             String data = post(SELECT_EMPLY_URL, param);
             knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
             }.getType());
-            List<Emply> emplyList = Lists.newArrayList();
+            List<EmplyDTO> emplyList = Lists.newArrayList();
             Object obj = knightResponse.getObj();
             if(obj!=null){
-                emplyList= JSON.parseArray(JSON.toJSONString(obj), Emply.class);
+                emplyList= JSON.parseArray(JSON.toJSONString(obj), EmplyDTO.class);
             }
             knightResponse.setObj(emplyList);
         } catch (JsonSyntaxException e) {
@@ -206,9 +206,9 @@ public class LiFangHttpProvider implements InitializingBean {
             knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
             }.getType());
             Object obj = knightResponse.getObj();
-            Emply emply = new Emply();
+            EmplyDTO emply = new EmplyDTO();
             if(obj!=null){
-                emply = JSON.parseObject(JSON.toJSONString(obj), Emply.class);
+                emply = JSON.parseObject(JSON.toJSONString(obj), EmplyDTO.class);
             }
             knightResponse.setObj(emply);
         } catch (JsonSyntaxException e) {
@@ -304,10 +304,10 @@ public class LiFangHttpProvider implements InitializingBean {
             String data = post(GET_MJ_DEVICE_ALL_URL, param);
             knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
             }.getType());
-            List<Station> stations = Lists.newArrayList();
+            List<StationDTO> stations = Lists.newArrayList();
             Object obj = knightResponse.getObj();
             if(obj!=null){
-                stations= JSON.parseArray(JSON.toJSONString(obj), Station.class);
+                stations= JSON.parseArray(JSON.toJSONString(obj), StationDTO.class);
             }
             knightResponse.setObj(stations);
         } catch (JsonSyntaxException e) {
@@ -323,9 +323,9 @@ public class LiFangHttpProvider implements InitializingBean {
             knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
             }.getType());
             Object obj = knightResponse.getObj();
-            Station station = new Station();
+            StationDTO station = new StationDTO();
             if(obj!=null){
-                station = JSON.parseObject(JSON.toJSONString(obj), Station.class);
+                station = JSON.parseObject(JSON.toJSONString(obj), StationDTO.class);
             }
             knightResponse.setObj(station);
         } catch (JsonSyntaxException e) {
@@ -347,9 +347,9 @@ public class LiFangHttpProvider implements InitializingBean {
             }
             knightResponse.setObj(pageInfo);
             List list = pageInfo.getList();
-            List<Door> doors = Lists.newArrayList();
+            List<DoorDTO> doors = Lists.newArrayList();
             if(!CollectionUtils.isEmpty(list)){
-                doors = JSON.parseArray(JSON.toJSONString(list), Door.class);
+                doors = JSON.parseArray(JSON.toJSONString(list), DoorDTO.class);
             }
             pageInfo.setList(doors);
         } catch (JsonSyntaxException e) {
@@ -368,9 +368,9 @@ public class LiFangHttpProvider implements InitializingBean {
             knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
             }.getType());
             Object obj = knightResponse.getObj();
-            Door door = new Door();
+            DoorDTO door = new DoorDTO();
             if(obj!=null){
-                door = JSON.parseObject(JSON.toJSONString(obj), Door.class);
+                door = JSON.parseObject(JSON.toJSONString(obj), DoorDTO.class);
             }
             knightResponse.setObj(door);
         } catch (JsonSyntaxException e) {
@@ -392,9 +392,9 @@ public class LiFangHttpProvider implements InitializingBean {
             }
             knightResponse.setObj(pageInfo);
             List list = pageInfo.getList();
-            List<MjOpenDoorRecord> records = Lists.newArrayList();
+            List<MjOpenDoorRecordDTO> records = Lists.newArrayList();
             if(!CollectionUtils.isEmpty(list)){
-                records = JSON.parseArray(JSON.toJSONString(list), MjOpenDoorRecord.class);
+                records = JSON.parseArray(JSON.toJSONString(list), MjOpenDoorRecordDTO.class);
             }
             pageInfo.setList(records);
         } catch (JsonSyntaxException e) {
@@ -416,9 +416,9 @@ public class LiFangHttpProvider implements InitializingBean {
             }
             knightResponse.setObj(pageInfo);
             List list = pageInfo.getList();
-            List<MjUrgentEventRecord> records = Lists.newArrayList();
+            List<MjUrgentEventRecordDTO> records = Lists.newArrayList();
             if(!CollectionUtils.isEmpty(list)){
-                records = JSON.parseArray(JSON.toJSONString(list), MjUrgentEventRecord.class);
+                records = JSON.parseArray(JSON.toJSONString(list), MjUrgentEventRecordDTO.class);
             }
             pageInfo.setList(records);
         } catch (JsonSyntaxException e) {
@@ -435,9 +435,9 @@ public class LiFangHttpProvider implements InitializingBean {
             knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
             }.getType());
             Object obj = knightResponse.getObj();
-            List<AttendanceResult> records = Lists.newArrayList();
+            List<AttendanceResultDTO> records = Lists.newArrayList();
             if(obj!=null){
-                records = JSON.parseArray(JSON.toJSONString(obj), AttendanceResult.class);
+                records = JSON.parseArray(JSON.toJSONString(obj), AttendanceResultDTO.class);
             }
             knightResponse.setObj(records);
         } catch (JsonSyntaxException e) {
@@ -459,9 +459,9 @@ public class LiFangHttpProvider implements InitializingBean {
             }
             knightResponse.setObj(pageInfo);
             List list = pageInfo.getList();
-            List<AttendanceRecord> records = Lists.newArrayList();
+            List<AttendanceRecordDTO> records = Lists.newArrayList();
             if(!CollectionUtils.isEmpty(list)){
-                records = JSON.parseArray(JSON.toJSONString(list), AttendanceRecord.class);
+                records = JSON.parseArray(JSON.toJSONString(list), AttendanceRecordDTO.class);
             }
             pageInfo.setList(records);
         } catch (JsonSyntaxException e) {

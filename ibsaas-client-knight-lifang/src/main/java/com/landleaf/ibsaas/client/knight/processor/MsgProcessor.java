@@ -1,14 +1,13 @@
 package com.landleaf.ibsaas.client.knight.processor;
 
 import com.alibaba.fastjson.JSON;
+import com.landleaf.ibsaas.client.knight.domain.dto.KnightMessage;
+import com.landleaf.ibsaas.client.knight.domain.dto.Response;
 import com.landleaf.ibsaas.client.knight.enums.KnightSubMsgTypeEnum;
+import com.landleaf.ibsaas.client.knight.exception.BusinessException;
 import com.landleaf.ibsaas.client.knight.spring.SpringManager;
-import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
-import com.landleaf.ibsaas.common.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 

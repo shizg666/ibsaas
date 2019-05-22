@@ -1,6 +1,6 @@
-package com.landleaf.ibsaas.common.dao.knight;
+package com.landleaf.ibsaas.client.knight.dao;
 
-import com.landleaf.ibsaas.common.domain.knight.control.Station;
+import com.landleaf.ibsaas.client.knight.domain.Station;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,6 @@
 package com.landleaf.ibsaas.client.knight;
 
 
-import com.landleaf.ibsaas.common.IbsaasCommonApplication;
 import io.swagger.annotations.Api;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -33,7 +32,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class IbsaasClientKnightLifangApplication implements WebMvcConfigurer {
 
     public static void main(String[] args) {
-        SpringApplication.run(IbsaasCommonApplication.class, args);
+        SpringApplication.run(IbsaasClientKnightLifangApplication.class, args);
 
     }
 

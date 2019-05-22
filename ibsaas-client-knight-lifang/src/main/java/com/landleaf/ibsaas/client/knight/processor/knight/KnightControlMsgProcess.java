@@ -2,15 +2,13 @@ package com.landleaf.ibsaas.client.knight.processor.knight;
 
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
+import com.landleaf.ibsaas.client.knight.domain.Station;
+import com.landleaf.ibsaas.client.knight.domain.dto.KnightResponse;
+import com.landleaf.ibsaas.client.knight.domain.dto.control.*;
 import com.landleaf.ibsaas.client.knight.processor.LiFangHttpProvider;
 import com.landleaf.ibsaas.client.knight.service.IKQCardRecordService;
 import com.landleaf.ibsaas.client.knight.service.IMjReguerService;
 import com.landleaf.ibsaas.client.knight.service.IStationService;
-import com.landleaf.ibsaas.common.domain.knight.KnightResponse;
-import com.landleaf.ibsaas.common.domain.knight.control.*;
-import com.landleaf.ibsaas.common.domain.knight.depart.AddDepartDTO;
-import com.landleaf.ibsaas.common.domain.knight.depart.DeleteDepartDTO;
-import com.landleaf.ibsaas.common.domain.knight.depart.QueryDepartDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

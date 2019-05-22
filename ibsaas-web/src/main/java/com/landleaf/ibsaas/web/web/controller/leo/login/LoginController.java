@@ -51,7 +51,7 @@ public class LoginController extends BasicController {
             throw new BusinessException("用户不存在！");
         }
         //传过来已经加密一次了
-        password = EncryptMD5Util.encryptMD5(password);
+//        password = EncryptMD5Util.encryptMD5(password);
         if (!StringUtils.equals(user.getPassword(), password)) {
             throw new BusinessException("密码错误！");
         }

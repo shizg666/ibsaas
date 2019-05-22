@@ -1,5 +1,7 @@
 package com.landleaf.ibsaas.web.web.filter.sso;
 
+import com.alibaba.fastjson.JSON;
+import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.leo.User;
 import com.landleaf.ibsaas.web.web.context.user.SsoWebLoginHelper;
 import com.landleaf.ibsaas.web.web.context.user.UserContext;
@@ -79,8 +81,14 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
         }
         // valid login fail
         if (sysUser == null) {
+            Response returnResponse = new Response<>();
+            returnResponse.setSuccess(false);
+            returnResponse.setErrorCode(Conf.SSO_LOGIN_FAIL_RESULT.getCode()+"");
+            returnResponse.setMessage(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
+            returnResponse.setErrorMsg(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
             res.setContentType("application/json;charset=utf-8");
-            res.getWriter().println("{\"code\":" + Conf.SSO_LOGIN_FAIL_RESULT.getCode() + ", \"msg\":\"" + Conf.SSO_LOGIN_FAIL_RESULT.getMsg() + "\"}");
+//            res.getWriter().println("{\"code\":" + Conf.SSO_LOGIN_FAIL_RESULT.getCode() + ", \"msg\":\"" + Conf.SSO_LOGIN_FAIL_RESULT.getMsg() + "\"}");
+            res.getWriter().println(JSON.toJSONString(returnResponse));
             return;
         }
         //将用户信息设置到UserContext中

@@ -1,9 +1,9 @@
 package com.landleaf.ibsaas.client.knight.asyn;
 
 import com.alibaba.fastjson.JSON;
+import com.landleaf.ibsaas.client.knight.domain.dto.KnightMessage;
 import com.landleaf.ibsaas.client.knight.processor.MsgProcessor;
 import com.landleaf.ibsaas.client.knight.rocketmq.KnightMqProducer;
-import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

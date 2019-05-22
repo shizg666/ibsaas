@@ -9,73 +9,50 @@ import javax.persistence.Transient;
 import java.util.Date;
 
 @ApiModel(description = "人员")
-@Table(name = "pb_emply")
 public class Emply {
     @ApiModelProperty(value = "001835", name = "人员系统编号", example = "业务逻辑使用的人员主键", dataType = "Integer")
-    @Column(name = "sys_no")
     private Integer sysNo;
     @ApiModelProperty(value = "1", name = "部门Id", example = "1", dataType = "Integer")
-    @Column(name = "depart_id")
     private Integer departId;
     @ApiModelProperty(value = "1832", name = "人员Id", example = "1832", dataType = "String")
-    @Column(name = "employee_id")
     private String employeeId;
     @ApiModelProperty(value = "张君峰", name = "人员名称", example = "张君峰", dataType = "String")
-    @Column(name = "employee_name")
     private String employeeName;
     @ApiModelProperty(value = "卡面编号", name = "卡面编号", example = "卡面编号", dataType = "String")
-    @Column(name = "card_no")
     private String cardNo;
     @ApiModelProperty(value = "卡号", name = "卡号", example = "卡号", dataType = "String")
-    @Column(name = "serial")
     private String serial;
     @ApiModelProperty(value = "人员类型", name = "人员类型", example = "0", dataType = "String")
-    @Column(name = "employee_type")
     private String employeeType;
     @ApiModelProperty(value = "男", name = "人员性别", example = "男", dataType = "Integer")
-    @Column(name = "employee_sex")
     private Integer employeeSex;
     @ApiModelProperty(value = "", name = "", example = "", dataType = "String")
-    @Column(name = "employee_pass")
     private String employeePass;
     @ApiModelProperty(value = "2078-11-17", name = "人员有效期限", example = "2078-11-17", dataType = "Date")
-    @Column(name = "invalidate")
     private Date invalidate;
     @ApiModelProperty(value = "wgj", name = "人员编码", example = "人员编码", dataType = "String")
-    @Column(name = "emplyee_code")
     private String emplyeeCode;
     @ApiModelProperty(value = "0：未删除;1：删除", name = "删除标记", example = "0：未删除;1：删除", dataType = "Integer")
-    @Column(name = "is_delete")
     private Integer deleted;
     @ApiModelProperty(value = "", name = "", example = "", dataType = "String")
-    @Column(name = "emplyee_login_pass")
     private String emplyeeLoginPass;
     @ApiModelProperty(value = "", name = "", example = "", dataType = "String")
-    @Column(name = "card_id")
     private String cardId;
     @ApiModelProperty(value = "", name = "", example = "", dataType = "Integer")
-    @Column(name = "ee_seq")
     private Integer eeSeq;
     @ApiModelProperty(value = "", name = "", example = "", dataType = "Integer")
-    @Column(name = "card_type")
     private Integer cardType;
     @ApiModelProperty(value = "", name = "", example = "", dataType = "Integer")
-    @Column(name = "card_status")
     private Integer cardStatus;
     @ApiModelProperty(value = "访客预约登录平台密码", name = "访客预约登录平台密码", example = "", dataType = "String")
-    @Column(name = "password")
     private String password;
     @ApiModelProperty(value = "访问状态，1表示可以访问，0表示不可以访问", name = "访问状态，1表示可以访问，0表示不可以访问", example = "", dataType = "Integer")
-    @Column(name = "visit_status")
     private Integer visitStatus;
     @ApiModelProperty(value = "手机号(keyfree对接用)", name = "手机号(keyfree对接用)", example = "", dataType = "String")
-    @Column(name = "phone")
     private String phone;
     @ApiModelProperty(value = "是否离开厂区。0,在厂，1离厂", name = "是否离开厂区。0,在厂，1离厂", example = "", dataType = "Integer")
-    @Column(name = "is_leave")
     private Integer leave;
     @ApiModelProperty(value = "0:普通用户 3 管理员", name = "0:普通用户 3 管理员", example = "", dataType = "Integer")
-    @Column(name = "is_admin")
     private Integer admin;
 
     @Transient

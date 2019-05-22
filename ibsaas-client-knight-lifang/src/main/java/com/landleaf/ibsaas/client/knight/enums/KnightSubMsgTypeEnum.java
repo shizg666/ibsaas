@@ -1,14 +1,14 @@
 package com.landleaf.ibsaas.client.knight.enums;
 
 import com.google.common.collect.Maps;
-import com.landleaf.ibsaas.common.domain.knight.attendance.AddAttendanceRecordDTO;
-import com.landleaf.ibsaas.common.domain.knight.attendance.QueryAttendanceRecordDTO;
-import com.landleaf.ibsaas.common.domain.knight.attendance.QueryAttendanceResultDTO;
-import com.landleaf.ibsaas.common.domain.knight.control.*;
-import com.landleaf.ibsaas.common.domain.knight.depart.AddDepartDTO;
-import com.landleaf.ibsaas.common.domain.knight.depart.DeleteDepartDTO;
-import com.landleaf.ibsaas.common.domain.knight.depart.QueryDepartDTO;
-import com.landleaf.ibsaas.common.domain.knight.emply.*;
+import com.landleaf.ibsaas.client.knight.domain.dto.attendance.AddAttendanceRecordDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.attendance.QueryAttendanceRecordDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.attendance.QueryAttendanceResultDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.control.*;
+import com.landleaf.ibsaas.client.knight.domain.dto.depart.AddDepartDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.depart.DeleteDepartDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.depart.QueryDepartDTO;
+import com.landleaf.ibsaas.client.knight.domain.dto.emply.*;
 
 import java.util.Map;
 

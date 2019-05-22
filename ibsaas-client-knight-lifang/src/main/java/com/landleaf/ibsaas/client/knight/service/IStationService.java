@@ -2,7 +2,7 @@ package com.landleaf.ibsaas.client.knight.service;
 
 
 import com.github.pagehelper.PageInfo;
-import com.landleaf.ibsaas.common.domain.knight.control.Station;
+import com.landleaf.ibsaas.client.knight.domain.Station;
 import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
 
 import java.util.List;
