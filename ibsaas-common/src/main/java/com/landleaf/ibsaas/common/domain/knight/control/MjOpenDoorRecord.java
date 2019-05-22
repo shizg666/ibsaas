@@ -5,37 +5,37 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "门禁记录")
 public class MjOpenDoorRecord {
-    @ApiModelProperty(value = "羊坊店", name = "门区名称", example = "羊坊店", dataType = "String")
+    @ApiModelProperty(value = "门区名称", name = "门区名称", example = "羊坊店", dataType = "String")
     private String areaName;
-    @ApiModelProperty(value = "1", name = "刷卡类型", example = "1", dataType = "Integer")
+    @ApiModelProperty(value = "刷卡类型", name = "刷卡类型", example = "1", dataType = "Integer")
     private Integer cardType;
-    @ApiModelProperty(value = "1", name = "设备ID", example = "1", dataType = "Integer")
+    @ApiModelProperty(value = "设备ID", name = "设备ID", example = "1", dataType = "Integer")
     private Integer deviceId;
-    @ApiModelProperty(value = "1", name = "门ID", example = "1", dataType = "Integer")
+    @ApiModelProperty(value = "门ID", name = "门ID", example = "1", dataType = "Integer")
     private Integer doorId;
-    @ApiModelProperty(value = "房门", name = "门", example = "房门", dataType = "String")
+    @ApiModelProperty(value = "门", name = "门", example = "房门", dataType = "String")
     private String doorName;
-    @ApiModelProperty(value = "1", name = "门状态", example = "1", dataType = "Integer")
+    @ApiModelProperty(value = "门状态", name = "门状态", example = "1", dataType = "Integer")
     private Integer doorStatus;
-    @ApiModelProperty(value = "1", name = "刷卡人员证件号", example = "1", dataType = "String")
+    @ApiModelProperty(value = "刷卡人员证件号", name = "刷卡人员证件号", example = "1", dataType = "String")
     private String employeeId;
-    @ApiModelProperty(value = "1", name = "刷卡人员姓名", example = "1", dataType = "String")
+    @ApiModelProperty(value = "刷卡人员姓名", name = "刷卡人员姓名", example = "1", dataType = "String")
     private String employeeName;
-    @ApiModelProperty(value = "1", name = "刷卡人员编号", example = "1", dataType = "Integer")
+    @ApiModelProperty(value = "刷卡人员编号", name = "刷卡人员编号", example = "1", dataType = "Integer")
     private Integer employeeSysNo;
-    @ApiModelProperty(value = "2018-01-12 17:54:53", name = "刷卡时间", example = "2018-01-12 17:54:53", dataType = "String")
+    @ApiModelProperty(value = "刷卡时间", name = "刷卡时间", example = "2018-01-12 17:54:53", dataType = "String")
     private String eventDate;
-    @ApiModelProperty(value = "1", name = "记录ID", example = "1", dataType = "Integer")
+    @ApiModelProperty(value = "记录ID", name = "记录ID", example = "1", dataType = "Integer")
     private Integer id;
     @ApiModelProperty(value = "1", name = "刷卡人员部门名称", example = "1", dataType = "String")
     private String name;
-    @ApiModelProperty(value = "1", name = "刷卡卡号", example = "1", dataType = "Integer")
+    @ApiModelProperty(value = "刷卡人员部门名称", name = "刷卡卡号", example = "1", dataType = "Integer")
     private String serial;
-    @ApiModelProperty(value = "1", name = "设备名称", example = "1", dataType = "String")
+    @ApiModelProperty(value = "设备名称", name = "设备名称", example = "1", dataType = "String")
     private String stationName;
-    @ApiModelProperty(value = "成员卡", name = "卡描述", example = "1", dataType = "String")
+    @ApiModelProperty(value = "卡描述", name = "卡描述", example = "1", dataType = "String")
     private String typedescribe;
-    @ApiModelProperty(value = "1", name = "出开门", example = "1", dataType = "String")
+    @ApiModelProperty(value = "出开门", name = "出开门", example = "1", dataType = "String")
     private String typename;
 
     public String getAreaName() {

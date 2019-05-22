@@ -40,6 +40,8 @@ public enum KnightSubMsgTypeEnum {
     REGISTER_USER_BY_DB(23, "registeruserByDb", "knightControlMsgProcess", "registeruserByDb", 1, RegisterUserByDbDTO.class),
     UN_REGISTER_USER_BY_DB(24, "unregisteruserByDb", "knightControlMsgProcess", "unregisteruserByDb", 1, UnRegisterUserByDbDTO.class),
     QUERY_REGISTER_USER_BY_DB(25, "queryRegisteruserByDb", "knightControlMsgProcess", "queryRegisteruserByDb", 1, QueryRegisterUserByDbDTO.class),
+    GET_MJ_DEVICE_BY_IDS_DB(26, "getMjDeviceByIdsDb", "knightControlMsgProcess", "getMjDeviceByIdsDb", 1, QueryMjDeviceDTO.class),
+    GET_MJ_DEVICE_BY_PAGE_DB(27, "getMjDeviceByPageDb", "knightControlMsgProcess", "getMjDeviceByPageDb", 1, QueryMjDeviceDTO.class),
     ;
 
     /**

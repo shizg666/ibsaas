@@ -19,6 +19,26 @@ public class Door {
     private String doorName;
 
     private String stationName;
+    @ApiModelProperty(value = "门位置名称", name = "门位置名称", example = "1", dataType = "String")
+    private String locationName;
+    @ApiModelProperty(value = "门位置ID", name = "门位置ID", example = "1", dataType = "String")
+    private String locationId;
+
+    public String getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(String locationId) {
+        this.locationId = locationId;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
 
     public String getStationName() {
         return stationName;

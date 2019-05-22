@@ -55,11 +55,11 @@ public class LoginController extends BasicController {
         if (!StringUtils.equals(user.getPassword(), password)) {
             throw new BusinessException("密码错误！");
         }
-        ssoWebLoginHelper.set(sessionid, user, 3600 * 24L);
+        ssoWebLoginHelper.set(sessionid, existUser, 3600 * 24L);
         Map<String, Object> data = new HashMap<>(16);
         data.put("sid", sessionid);
         User saveUser = new User();
-        BeanUtils.copyProperties(user, saveUser);
+        BeanUtils.copyProperties(existUser, saveUser);
         saveUser.setPassword(null);
         data.put("user", saveUser);
         return returnSuccess(data);

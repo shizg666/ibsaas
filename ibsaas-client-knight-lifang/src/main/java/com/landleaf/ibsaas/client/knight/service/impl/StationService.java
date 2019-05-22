@@ -27,7 +27,7 @@ public class StationService extends AbstractBaseService<StationDao, Station> imp
         Example.Criteria criteria = example.createCriteria();
 
         if (!CollectionUtils.isEmpty(deviceSysIds)) {
-            criteria.andIn("device_sys_id", deviceSysIds);
+            criteria.andIn("deviceSysId", deviceSysIds);
         }
         example.setOrderByClause("device_sys_id asc");
         List<Station> stationList = selectByExample(example);

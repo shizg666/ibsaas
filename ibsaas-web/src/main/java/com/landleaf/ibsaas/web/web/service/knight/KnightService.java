@@ -22,6 +22,7 @@ import com.landleaf.ibsaas.common.enums.knight.KnightSubMsgTypeEnum;
 import com.landleaf.ibsaas.common.enums.parking.MsgTypeEnum;
 import com.landleaf.ibsaas.common.utils.MessageUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.web.asyn.IFutureService;
 import com.landleaf.ibsaas.web.rocketmq.WebMqProducer;
@@ -50,7 +51,7 @@ import java.util.stream.Collectors;
 @Service
 public class KnightService implements IKnightServeice {
     private static String CLIENT_TOPIC = "ibsaas_knight_lifang_lgc_1921681010";
-    private static Long TIME_OUT = 30 * 1000L;
+    private static Long TIME_OUT = 20 * 1000L;
     ;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KnightService.class);
@@ -90,9 +91,13 @@ public class KnightService implements IKnightServeice {
             if (!CollectionUtils.isEmpty(doorList)) {
                 List<Integer> devicesysIds = doorList.stream().map(i -> i.getDevicesysid()).collect(Collectors.toList());
                 try {
+                    //设备名称
                     Response<List<Station>> mjDeviceResponse = getMjDeviceByIds(devicesysIds);
                     List<Station> stationList = mjDeviceResponse.getResult();
                     Map<Integer, List<Station>> stationGroup = stationList.stream().collect(Collectors.groupingBy(Station::getDeviceSysId));
+                    //位置名称
+
+
                     for (Door door : doorList) {
                         List<Station> findStations = stationGroup.get(door.getDevicesysid());
                         if (!CollectionUtils.isEmpty(findStations)) {
@@ -538,9 +543,16 @@ public class KnightService implements IKnightServeice {
             try {
                 Object tmpResult = result.getResponse().getResult();
                 if (tmpResult != null) {
+
                     LinkedTreeMap knightResponse = (LinkedTreeMap) result.getResponse().getResult();
                     response.setMessage((String) knightResponse.get("resultInfo"));
                     response.setResult(knightResponse.get("obj"));
+                    String resultCode = (String) knightResponse.get("result");
+                    if(StringUtil.isEquals("200",resultCode)){
+                        response.setSuccess(true);
+                    }else {
+                        throw new BusinessException((String) knightResponse.get("resultInfo"));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

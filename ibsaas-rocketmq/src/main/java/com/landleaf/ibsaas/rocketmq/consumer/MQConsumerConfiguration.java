@@ -62,9 +62,9 @@ public class MQConsumerConfiguration {
          * 设置消费模型，集群还是广播，默认为集群
          */
         //设置广播消费
-//        consumer.setMessageModel(MessageModel.BROADCASTING);
+        consumer.setMessageModel(MessageModel.BROADCASTING);
         //设置集群消费
-        consumer.setMessageModel(MessageModel.CLUSTERING);
+//        consumer.setMessageModel(MessageModel.CLUSTERING);
         /**
          * 设置一次消费消息的条数，默认为1条
          */
