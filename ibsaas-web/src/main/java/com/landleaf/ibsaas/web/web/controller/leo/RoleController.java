@@ -107,7 +107,7 @@ public class RoleController extends BasicController {
      */
     @ApiOperation(value = "根据角色主健id查询", notes = "根据角色主健id查询")
     @RequestMapping(value = "/v1/role", method = RequestMethod.GET)
-    public Response findRoleInfo(@RequestParam("id") String id) {
+    public Response<Role> findRoleInfo(@RequestParam("id") String id) {
         return returnSuccess(roleService.queryRoleById(id));
     }
 

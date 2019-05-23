@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -85,22 +86,27 @@ public class IFloorServiceImpl implements IFloorService {
     }
 
     @Override
-    public RoleFloorDoorsReponseVO getfloorDoorByRoleId(Long floorId, String roleId) {
+    public RoleFloorDoorsReponseVO getfloorControlDoorByRoleId(Long floorId, String roleId) {
         RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = new RoleFloorDoorsReponseVO();
         List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.findRoleResourceByRoleId(roleId);
+        List<Integer> doorIds=mjRoleResourceList.stream().map(obj -> obj.getMjDoorId()).collect(Collectors.toList());
         TFloor tFloor = tFloorMapper.selectByPrimaryKey(floorId);
         roleFloorDoorsReponseVO.setImg(StringUtil.isBlank(tFloor.getImg())?"":path+tFloor.getImg());
-        List<TDoor> tDoorList = tDoorMapper.selectByParentId(floorId);
+        roleFloorDoorsReponseVO.setRoleId(roleId);
+        List<TDoor> tDoorList = tDoorMapper.selectControlDoorByParentId(floorId);
         List<RoleDoorsReponseVO> roleDoorsReponseVOS = new ArrayList<>(tDoorList.size());
         tDoorList.forEach(item -> {
             RoleDoorsReponseVO roleDoorsReponseVO = new RoleDoorsReponseVO();
             BeanUtils.copyProperties(item,roleDoorsReponseVO);
-            if (mjRoleResourceList.contains(item)){
-                roleDoorsReponseVO.setAcessflag(1);
+            if (!doorIds.contains(item.getControlId())){
+                roleDoorsReponseVO.setAcessflag(false);
+            }else {
+                roleDoorsReponseVO.setAcessflag(true);
             }
             roleDoorsReponseVOS.add(roleDoorsReponseVO);
         });
-        return null;
+        roleFloorDoorsReponseVO.setList(roleDoorsReponseVOS);
+        return roleFloorDoorsReponseVO;
     }
 
     public TFloor addFloor(TFloor tFloor) {

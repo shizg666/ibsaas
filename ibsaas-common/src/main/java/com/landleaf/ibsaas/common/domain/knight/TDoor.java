@@ -5,9 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(value = "门信息")
 public class TDoor {
-    @ApiModelProperty(value="楼栋id（修改必传）")
+    @ApiModelProperty(value="门id主键（修改必传）")
     private Long id;
-    @ApiModelProperty(value="楼层名称",required = true)
+    @ApiModelProperty(value="门位置名称",required = true)
     private String name;
     @ApiModelProperty(value="门禁id")
     private Integer controlId;

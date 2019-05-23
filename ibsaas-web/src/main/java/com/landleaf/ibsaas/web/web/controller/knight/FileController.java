@@ -31,31 +31,31 @@ public class FileController extends BasicController {
     @Value("${web.picUrl}")
     private String picUrl;
 
-//    /**
-//     * 文件上传
-//     * @param entity
-//     * @return
-//     */
-//    @PostMapping("file/upload")
-//    public Response upload(FileVO entity) {
-//        MultipartFile[] files = entity.getFile();
-//        List<String> imgs = new ArrayList<>();
-//        for (int i = 0; i < files.length; i++) {
-//            LOGGER.info("FileController --->upload file Name :{} ",files[i].getOriginalFilename());
-//            String fileName = files[i].getOriginalFilename();
-//            fileName = UUID.randomUUID().toString().replaceAll("-","")+"-"+fileName;
-//            File dest = new File(picPath +fileName);
-//            try {
-//                files[i].transferTo(dest);
-//                imgs.add(picUrl +fileName);
-//           } catch (Exception e) {
-//                LOGGER.error("文件上传失败：{}",e.getMessage());
-//                return returnValidateError("文件上传失败");
-//            }
-//        }
-//        LOGGER.info("FileController --->upload imgs :{} ", JSONObject.toJSONString(imgs));
-//        return returnSuccess(imgs);
-//    }
+    /**
+     * 文件上传
+     * @param entity
+     * @return
+     */
+    @PostMapping("file/upload")
+    public Response upload(FileVO entity) {
+        MultipartFile[] files = entity.getFile();
+        List<String> imgs = new ArrayList<>();
+        for (int i = 0; i < files.length; i++) {
+            LOGGER.info("FileController --->upload file Name :{} ",files[i].getOriginalFilename());
+            String fileName = files[i].getOriginalFilename();
+            fileName = UUID.randomUUID().toString().replaceAll("-","")+"-"+fileName;
+            File dest = new File(picPath +fileName);
+            try {
+                files[i].transferTo(dest);
+                imgs.add(picUrl +fileName);
+           } catch (Exception e) {
+                LOGGER.error("文件上传失败：{}",e.getMessage());
+                return returnValidateError("文件上传失败");
+            }
+        }
+        LOGGER.info("FileController --->upload imgs :{} ", JSONObject.toJSONString(imgs));
+        return returnSuccess(imgs);
+    }
 
 
 }

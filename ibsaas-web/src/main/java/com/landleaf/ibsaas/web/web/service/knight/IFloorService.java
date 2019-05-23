@@ -9,11 +9,22 @@ import java.util.List;
 public interface IFloorService {
     TFloor addFloorOrUpdate (TFloor tFloor);
 
+    /**
+     * 查询楼层以及楼层门信息
+     * @param id
+     * @return
+     */
     FloorReponseVO getFloorAllById(Long id);
 
     Integer deleteFloor(Long id);
 
     List<TFloor> getFloorListByParentId(Long buildingId);
 
-    RoleFloorDoorsReponseVO getfloorDoorByRoleId(Long floorId, String roleId);
+    /**
+     * 根据角色id查询某一楼层已绑定的门信息
+     * @param floorId
+     * @param roleId
+     * @return
+     */
+    RoleFloorDoorsReponseVO getfloorControlDoorByRoleId(Long floorId, String roleId);
 }

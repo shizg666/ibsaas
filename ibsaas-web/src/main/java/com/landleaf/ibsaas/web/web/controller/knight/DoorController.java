@@ -68,7 +68,7 @@ public class DoorController extends BasicController {
     }
 
     @GetMapping("/v1/door/getDoorControlList")
-    @ApiOperation(value = "获取门位置信息列表<id,name>")
+    @ApiOperation(value = "获取所有门位置信息列表")
     public Response<List<TDoor> > getDoorControlList() {
         List<TDoor> list = iDoorService.getDoorControlList();
         return returnSuccess(list);
@@ -88,7 +88,7 @@ public class DoorController extends BasicController {
         return returnSuccess(floorReponseVO);
     }
     @GetMapping("/v1/door/getDoorAllInfobyControlId/{controlId}")
-    @ApiOperation(value = "根据门禁ID获取所有信息", notes = "")
+    @ApiOperation(value = "根据门禁ID获取该门禁所在楼栋-楼层-门信息", notes = "")
     public Response<BuildingReponseVO> getDoorAllInfobyControlId(@PathVariable @ApiParam(name="controlId",value="门禁id",required=true) Long controlId){
         BuildingReponseVO buildingReponseVO = iDoorService.getDoorAllInfobyControlId(controlId);
         return returnSuccess(buildingReponseVO);

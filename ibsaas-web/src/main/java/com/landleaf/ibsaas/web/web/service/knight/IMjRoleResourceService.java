@@ -13,4 +13,6 @@ import java.util.List;
 public interface IMjRoleResourceService<T> extends IBaseService<T> {
 
     List<MjRoleResource> findRoleResourceByRoleId(String mjRoleId);
+
+    List<MjRoleResource> updateOrAddRoleResourceByRoleId(String mjRoleId,List<Integer> mjDoorids);
 }

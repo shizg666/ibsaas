@@ -8,18 +8,19 @@ import java.util.List;
 @ApiModel(value = "角色楼层门禁信息")
 public class RoleFloorDoorsReponseVO {
     @ApiModelProperty(value="角色id")
-    private Long id;
+    private String roleId;
     @ApiModelProperty(value="楼层图片锦")
     private String img;
     @ApiModelProperty(value="门禁列表")
     private List<RoleDoorsReponseVO> list;
 
-    public Long getId() {
-        return id;
+
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
     public String getImg() {

@@ -22,6 +22,8 @@ public interface TDoorMapper {
 
     List<TDoor> selectByParentId(Long id);
 
+    List<TDoor> selectControlDoorByParentId(Long id);
+
     List<TDoor> getDoorListOrderByfloor();
 
     TDoor selectByContrloId(Long controlId);

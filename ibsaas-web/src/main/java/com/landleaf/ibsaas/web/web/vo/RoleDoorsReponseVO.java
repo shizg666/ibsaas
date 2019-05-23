@@ -12,8 +12,8 @@ public class RoleDoorsReponseVO {
     private String xPos;
     @ApiModelProperty(value="纵坐标")
     private String yPos;
-    @ApiModelProperty(value="是否拥有（0 是 1否）")
-    private Integer acessflag;
+    @ApiModelProperty(value="是否拥有")
+    private Boolean acessflag;
 
 
     public Long getId() {
@@ -48,11 +48,11 @@ public class RoleDoorsReponseVO {
         this.yPos = yPos;
     }
 
-    public Integer getAcessflag() {
+    public Boolean getAcessflag() {
         return acessflag;
     }
 
-    public void setAcessflag(Integer acessflag) {
+    public void setAcessflag(Boolean acessflag) {
         this.acessflag = acessflag;
     }
 }

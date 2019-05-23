@@ -39,9 +39,16 @@
     from t_door
     where parent_id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectControlDoorByParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where parent_id = #{id,jdbcType=BIGINT}
+    and   control_id != 0
+  </select>
   <select id="getDoorListOrderByfloor"  resultMap="BaseResultMap">
     select
-    id, name
+    door.id, door.name
     from t_door door inner join t_floor floor on  door.parent_id = floor.id
    order by floor.floor
   </select>

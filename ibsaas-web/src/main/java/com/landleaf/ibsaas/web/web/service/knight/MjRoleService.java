@@ -5,9 +5,15 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.dao.knight.MjRoleDao;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRole;
+import com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource;
+import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
+import com.landleaf.ibsaas.web.web.vo.MjRoleRequestVO;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
@@ -15,7 +21,8 @@ import java.util.List;
 
 @Service
 public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implements IMjRoleService<MjRole> {
-
+    @Autowired
+    private MjRoleResourceService mjRoleResourceService;
 
     @Override
     public PageInfo<MjRole> getPageInfo(String name, Integer departId, int page, int limit) {
@@ -35,5 +42,18 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
             roles = Lists.newArrayList();
         }
         return new PageInfo(roles);
+    }
+
+    @Override
+    @Transactional
+    public Integer updateMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO) {
+        MjRole mjRole = new MjRole();
+        BeanUtils.copyProperties(mjRoleRequestVO,mjRole);
+        Integer result = updateByPrimaryKeySelective(mjRole);
+        if (result < 0 ){
+            throw new BusinessException("角色修改失败");
+        }
+        List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.updateOrAddRoleResourceByRoleId(mjRoleRequestVO.getId(),mjRoleRequestVO.getList());
+        return mjRoleResourceList.size();
     }
 }
