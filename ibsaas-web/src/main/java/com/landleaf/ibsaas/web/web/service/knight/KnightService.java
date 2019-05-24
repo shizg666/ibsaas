@@ -532,7 +532,9 @@ public class KnightService implements IKnightServeice {
         //解除用户所有权限
         unRegisterUserAllPermission(sysNo);
         //通过角色生成权限
-        registeruserByMjRole(sysNo,roleIds);
+        if(!CollectionUtils.isEmpty(roleIds)){
+            registeruserByMjRole(sysNo,roleIds);
+        }
         //插入用户角色中间表
         int count = mjUserRoleService.userBindRole(sysNo,roleIds);
 

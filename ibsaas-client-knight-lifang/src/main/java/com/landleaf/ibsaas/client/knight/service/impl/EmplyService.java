@@ -41,6 +41,7 @@ public class EmplyService extends AbstractBaseService<EmplyDao, Emply> implement
         if (StringUtil.isNotEmpty(employeeName)) {
             criteria.andLike("employeeName","%"+employeeName+"%");
         }
+        criteria.andCondition("is_delete=",0);
         example.setOrderByClause("sys_no desc");
         List<Emply> emplies = selectByExample(example);
         if (CollectionUtils.isEmpty(emplies)) {
