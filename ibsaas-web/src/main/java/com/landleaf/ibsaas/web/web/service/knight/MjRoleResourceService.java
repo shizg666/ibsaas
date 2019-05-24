@@ -40,5 +40,21 @@ public class MjRoleResourceService extends AbstractBaseService<MjRoleResourceDao
         return mjRoleResourceList;
     }
 
+    @Override
+    public List<MjRoleResource> addBatchRoleResourceByRoleId(String mjRoleId, List<Integer> mjDoorids) {
+//        Integer result = dao.deleteByRoleId(mjRoleId);
+        List<MjRoleResource> mjRoleResourceList = Lists.newArrayList();
+        mjDoorids.forEach(obj->{
+            MjRoleResource mjRoleResource = new MjRoleResource();
+            String id = idGenerator.nextId();
+            mjRoleResource.setId(id);
+            mjRoleResource.setMjRoleId(mjRoleId);
+            mjRoleResource.setMjDoorId(obj);
+            mjRoleResourceList.add(mjRoleResource);
+        });
+        dao.insertBatch(mjRoleResourceList);
+        return mjRoleResourceList;
+    }
+
 
 }

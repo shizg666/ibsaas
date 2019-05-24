@@ -21,5 +21,9 @@ public interface IMjRoleService<T> extends IBaseService<T> {
 
     Integer updateMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO);
 
+    Integer addMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO);
+
+    Integer deleteMjRoleDooorInfo(String roleId);
+
     List<MjRole> getMjRolesByIds(List<String> roleids);
 }

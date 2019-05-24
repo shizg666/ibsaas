@@ -8,12 +8,14 @@ import com.landleaf.ibsaas.common.domain.knight.TBuilding;
 import com.landleaf.ibsaas.common.domain.knight.TDoor;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.common.exception.BusinessException;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.service.knight.IDoorService;
 import com.landleaf.ibsaas.web.web.vo.BuildingReponseVO;
 import com.landleaf.ibsaas.web.web.vo.DoorReponseVO;
 import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,8 @@ public class IDoorServiceImpl implements IDoorService {
     private TFloorMapper tFloorMapper;
     @Autowired
     private TBuildingMapper tBuildingMapper;
+    @Value("${web.picUrl}")
+    private String path;
 
 
     @Override
@@ -52,6 +56,10 @@ public class IDoorServiceImpl implements IDoorService {
 
     @Override
     public Integer bindingDoorControl(Long id, Long controId) {
+        TDoor tDoor = tDoorMapper.selectByContrloId(controId);
+        if (tDoor != null){
+            throw new BusinessException("跟门禁已绑定");
+        }
         Integer result = tDoorMapper.bindingDoorControl(id, controId);
         if (result < 0 ){
             throw new BusinessException("门禁绑定失败");
@@ -79,6 +87,7 @@ public class IDoorServiceImpl implements IDoorService {
         doorReponseVOS.add(doorReponseVO);
         floorReponseVO.setList(doorReponseVOS);
         TFloor tFloor = tFloorMapper.selectByPrimaryKey(tDoor.getParentId());
+        tFloor.setImg(StringUtil.isBlank(tFloor.getImg())?"":path+tFloor.getImg());
         BeanUtils.copyProperties(tFloor,floorReponseVO);
         List<FloorReponseVO> floorReponseVOS = Lists.newArrayList();
         floorReponseVOS.add(floorReponseVO);

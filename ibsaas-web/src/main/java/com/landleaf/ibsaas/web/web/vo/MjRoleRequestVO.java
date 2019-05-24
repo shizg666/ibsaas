@@ -11,16 +11,14 @@ import java.util.List;
 
 @ApiModel(description = "角色权限请求信息")
 public class MjRoleRequestVO {
-    @ApiModelProperty(value = "角色id主键")
+    @ApiModelProperty(value = "角色id主键(修改必传)")
     private String id;
     @ApiModelProperty(value = "角色名称")
     private String name;
     @ApiModelProperty(value = "部门ID", required = true, dataType = "Integer", example = "0")
     private Integer departId;
-    @ApiModelProperty(value = "描述", required = false, dataType = "String")
+    @ApiModelProperty(value = "描述", dataType = "String")
     private String descr;
-    @ApiModelProperty(value = "修改时间")
-    private Date modifyTime;
     @ApiModelProperty(value = "门禁id列表")
     private List<Integer> list;
 
@@ -54,14 +52,6 @@ public class MjRoleRequestVO {
 
     public void setDescr(String descr) {
         this.descr = descr;
-    }
-
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
     }
 
     public List<Integer> getList() {

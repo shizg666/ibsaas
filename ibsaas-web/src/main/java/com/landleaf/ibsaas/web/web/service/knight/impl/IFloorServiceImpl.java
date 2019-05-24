@@ -93,6 +93,9 @@ public class IFloorServiceImpl implements IFloorService {
         List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.findRoleResourceByRoleIds(roleids);
         List<Integer> doorIds=mjRoleResourceList.stream().map(obj -> obj.getMjDoorId()).collect(Collectors.toList());
         TFloor tFloor = tFloorMapper.selectByPrimaryKey(floorId);
+        if (tFloor == null){
+            throw new BusinessException("楼层信息查不存在");
+        }
         roleFloorDoorsReponseVO.setImg(StringUtil.isBlank(tFloor.getImg())?"":path+tFloor.getImg());
         roleFloorDoorsReponseVO.setRoleId(roleId);
         List<TDoor> tDoorList = tDoorMapper.selectControlDoorByParentId(floorId);
