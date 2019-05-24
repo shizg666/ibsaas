@@ -88,7 +88,12 @@ public class IFloorServiceImpl implements IFloorService {
     @Override
     public RoleFloorDoorsReponseVO getfloorControlDoorByRoleId(Long floorId, String roleId) {
         RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = new RoleFloorDoorsReponseVO();
-        List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.findRoleResourceByRoleId(roleId);
+        List<MjRoleResource> mjRoleResourceList;
+        if ( StringUtil.isBlank(roleId) || "0".equals(roleId)){
+            mjRoleResourceList = Lists.newArrayList();
+        }else{
+            mjRoleResourceList = mjRoleResourceService.findRoleResourceByRoleId(roleId);
+        }
         List<Integer> doorIds=mjRoleResourceList.stream().map(obj -> obj.getMjDoorId()).collect(Collectors.toList());
         TFloor tFloor = tFloorMapper.selectByPrimaryKey(floorId);
         if (tFloor == null){

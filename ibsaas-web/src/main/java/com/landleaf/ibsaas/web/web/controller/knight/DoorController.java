@@ -67,7 +67,7 @@ public class DoorController extends BasicController {
     }
 
     @GetMapping("/v1/door/getDoorControlList")
-    @ApiOperation(value = "获取所有门位置信息列表")
+    @ApiOperation(value = "获取所有未绑定门位置信息列表")
     public Response<List<TDoor> > getDoorControlList() {
         List<TDoor> list = iDoorService.getDoorControlList();
         return returnSuccess(list);

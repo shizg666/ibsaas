@@ -30,7 +30,7 @@ public class Response<T> implements Serializable {
     /**
      * 业务异常类异常编码
      */
-    public static final String ERROR_CODE_BUSINESS_EXCEPTION = "20000";
+    public static final String ERROR_CODE_BUSINESS_EXCEPTION = "20001";
 
     /**
      * 未捕获类异常编码

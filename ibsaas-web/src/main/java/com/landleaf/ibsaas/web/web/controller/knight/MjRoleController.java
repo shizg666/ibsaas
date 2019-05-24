@@ -30,7 +30,7 @@ public class MjRoleController extends BasicController {
 
     @GetMapping("/v1/mjRole/getRoleDoorInfo")
     @ApiOperation(value = "查询某一角色在某一楼层所拥有的门禁信息()")
-    public Response<RoleFloorDoorsReponseVO> getfloorDoorByRoleId(@RequestParam(value = "floorId")@ApiParam(name="floorId",value="楼层id",required=true) Long floorId , @RequestParam(value = "roleId") @ApiParam(name="roleId",value="角色id",required=true)String roleId) {
+    public Response<RoleFloorDoorsReponseVO> getfloorDoorByRoleId(@RequestParam(value = "floorId")@ApiParam(name="floorId",value="楼层id",required=true) Long floorId , @RequestParam(value = "roleId",required = false) @ApiParam(name="roleId",value="角色id")String roleId) {
         RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = iFloorService.getfloorControlDoorByRoleId(floorId,roleId);
         return returnSuccess(roleFloorDoorsReponseVO);
     }
@@ -53,6 +53,17 @@ public class MjRoleController extends BasicController {
     public Response addMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
         Integer result = mjRoleService.addMjRoleDooorInfo(mjRoleRequestVO);
         return returnSuccess(result, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
+    }
+
+    @ApiOperation(value = "添加或者修改角色信息", notes = "添加角色信息")
+    @PostMapping(value = "/v1/mjRole/addOrUpdateMjRole")
+    public Response addOrUpdateMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
+        Integer result = mjRoleService.addOrUpdateMjRole(mjRoleRequestVO);
+        if (mjRoleRequestVO.getId() == null || mjRoleRequestVO.getId() ==""){
+            return returnSuccess(result, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
+        }else {
+            return returnSuccess(result, MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE);
+        }
     }
 
     @PostMapping("/v1/deleteMjRole/{id}")

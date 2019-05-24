@@ -87,4 +87,15 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
         mjRoleResourceDao.deleteByRoleId(roleId);
         return result;
     }
+
+    @Override
+    public Integer addOrUpdateMjRole(MjRoleRequestVO mjRoleRequestVO) {
+        Integer result;
+        if (mjRoleRequestVO.getId() == null || mjRoleRequestVO.getId() ==""){
+            result = addMjRoleDooorInfo(mjRoleRequestVO);
+        }else {
+            result = updateMjRoleDooorInfo(mjRoleRequestVO);
+        }
+        return result;
+    }
 }

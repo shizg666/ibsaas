@@ -82,17 +82,26 @@ public class IDoorServiceImpl implements IDoorService {
         FloorReponseVO floorReponseVO = new FloorReponseVO();
         DoorReponseVO doorReponseVO = new DoorReponseVO();
         TDoor tDoor = tDoorMapper.selectByContrloId(controlId);
+        if (tDoor == null){
+            throw new BusinessException("查询不到门信息！");
+        }
         BeanUtils.copyProperties(tDoor,doorReponseVO);
         List<DoorReponseVO> doorReponseVOS = Lists.newArrayList();
         doorReponseVOS.add(doorReponseVO);
         floorReponseVO.setList(doorReponseVOS);
         TFloor tFloor = tFloorMapper.selectByPrimaryKey(tDoor.getParentId());
+        if (tFloor == null){
+            throw new BusinessException("查询不到楼栋信息！");
+        }
         tFloor.setImg(StringUtil.isBlank(tFloor.getImg())?"":path+tFloor.getImg());
         BeanUtils.copyProperties(tFloor,floorReponseVO);
         List<FloorReponseVO> floorReponseVOS = Lists.newArrayList();
         floorReponseVOS.add(floorReponseVO);
         buildingReponseVO.setList(floorReponseVOS);
         TBuilding tBuilding = tBuildingMapper.selectByPrimaryKey(tFloor.getParentId());
+        if (tBuilding == null){
+            throw new BusinessException("查询不到楼栋信息！");
+        }
         BeanUtils.copyProperties(tBuilding,buildingReponseVO);
         return buildingReponseVO;
     }
