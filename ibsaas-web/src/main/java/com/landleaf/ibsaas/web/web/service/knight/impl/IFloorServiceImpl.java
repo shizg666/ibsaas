@@ -120,6 +120,10 @@ public class IFloorServiceImpl implements IFloorService {
     }
 
     public TFloor addFloor(TFloor tFloor) {
+        TFloor tFloor1 = tFloorMapper.selectByFloor(tFloor.getFloor());
+        if (tFloor1 != null){
+            throw new BusinessException("楼层已存在不可重复!");
+        }
         if (StringUtil.isNotEmpty(tFloor.getImg())){
             String imgUrl = tFloor.getImg();
             String[] s = imgUrl.split(path);

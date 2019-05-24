@@ -15,6 +15,8 @@ public interface TFloorMapper {
 
     TFloor selectByPrimaryKey(Long id);
 
+    TFloor selectByFloor(Integer floorId);
+
     List<TFloor> selectByParentIds(@Param("ids") List<Long> ids);
 
     List<TFloor> selectByParentId(Long id);
