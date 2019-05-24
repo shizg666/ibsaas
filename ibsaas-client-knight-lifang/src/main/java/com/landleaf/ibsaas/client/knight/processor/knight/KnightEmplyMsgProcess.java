@@ -7,11 +7,13 @@ import com.landleaf.ibsaas.client.knight.domain.dto.KnightResponse;
 import com.landleaf.ibsaas.client.knight.domain.dto.emply.*;
 import com.landleaf.ibsaas.client.knight.processor.LiFangHttpProvider;
 import com.landleaf.ibsaas.client.knight.service.IEmplyService;
+import com.landleaf.ibsaas.client.knight.service.IEmplyTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,6 +28,8 @@ public class KnightEmplyMsgProcess {
     private LiFangHttpProvider liFangHttpProvider;
     @Autowired
     private IEmplyService emplyService;
+    @Autowired
+    private IEmplyTypeService emplyTypeService;
 
     /**
      * 查询全部人员
@@ -41,6 +45,23 @@ public class KnightEmplyMsgProcess {
         return knightResponse;
     }
 
+    /**
+     * 查询人员类型--通过数据库
+     *
+     * @param requestBody
+     * @return
+     */
+    public KnightResponse queryAllEmplyType(EmplyTypeDTO requestBody) {
+        LOGGER.info("收到【查询人员类型】请求,{}", JSON.toJSONString(requestBody));
+        String param = JSON.toJSONString(requestBody);
+        KnightResponse knightResponse = new KnightResponse();
+        List<EmplyTypeDTO> data= emplyTypeService.queryAllEmplyType();
+        knightResponse.setObj(data);
+        knightResponse.setResult("200");
+        knightResponse.setResultInfo("操作成功");
+        //返回数据
+        return knightResponse;
+    }
     /**
      * 分页查询人员--通过数据库
      *

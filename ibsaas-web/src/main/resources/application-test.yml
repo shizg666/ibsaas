@@ -138,10 +138,10 @@ rocketmq:
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
-    groupName: ibsaas_response
+    groupName: ibsaas_response_test
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
     #门禁;停车
-    topics: knight1-*;parking1-*
+    topics: knight_test-*;parking-*
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10

@@ -16,10 +16,9 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 门禁业务相关操作控制器
@@ -64,7 +63,7 @@ public class KnightController extends BasicController {
     }
 
     @PostMapping("role/mjRoles")
-    @ApiOperation(value = "门禁权限分页查询", notes = "门禁权限分页查询")
+    @ApiOperation(value = "角色分页查询", notes = "角色分页查询")
     public Response mjRoles(@RequestBody WebQueryRoleDTO requestBody) {
         Response result = knightServeice.mjRoles(requestBody.getName(), requestBody.getDepartId(), requestBody.getPage(), requestBody.getLimit());
         return result;
@@ -83,6 +82,13 @@ public class KnightController extends BasicController {
     public Response queryAllDepart() {
         Response result = new Response();
         result = knightServeice.queryAllDepart();
+        return result;
+    }
+    @ApiOperation(value = "查询用户类型", notes = "查询用户类型")
+    @PostMapping("emply/queryAllEmplyType")
+    public Response queryAllEmplyType() {
+        Response result = new Response();
+        result = knightServeice.queryAllEmplyType();
         return result;
     }
 
@@ -171,12 +177,12 @@ public class KnightController extends BasicController {
         return result;
     }
 
-    @PostMapping("emply/bind-role")
+    @PostMapping("emply/{sysNo}/bind-role")
     @ApiOperation(value = "人员绑定角色", notes = "人员绑定角色")
-    public Response bindRole(@RequestBody WebMjUserRoleDTO requestBody) {
+    public Response bindRole(@PathVariable("sysNo")Integer sysNo, @RequestBody List<String> requestBody) {
 
         Response result = new Response();
-        result = knightServeice.bindRole(requestBody);
+        result = knightServeice.bindRole(sysNo,requestBody);
         return result;
     }
 

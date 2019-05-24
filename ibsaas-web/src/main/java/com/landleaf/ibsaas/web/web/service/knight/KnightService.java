@@ -9,6 +9,7 @@ import com.google.common.collect.Sets;
 import com.google.gson.internal.LinkedTreeMap;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
+import com.landleaf.ibsaas.common.domain.knight.TDoor;
 import com.landleaf.ibsaas.common.domain.knight.attendance.AddAttendanceRecordDTO;
 import com.landleaf.ibsaas.common.domain.knight.control.*;
 import com.landleaf.ibsaas.common.domain.knight.depart.AddDepartDTO;
@@ -21,6 +22,7 @@ import com.landleaf.ibsaas.common.domain.knight.role.MjRoleDTO;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource;
 import com.landleaf.ibsaas.common.enums.knight.KnightSubMsgTypeEnum;
 import com.landleaf.ibsaas.common.enums.parking.MsgTypeEnum;
+import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.utils.MessageUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
@@ -35,15 +37,16 @@ import com.landleaf.ibsaas.web.web.dto.knight.depart.WebAddDepartDTO;
 import com.landleaf.ibsaas.web.web.dto.knight.depart.WebDeleteDepartDTO;
 import com.landleaf.ibsaas.web.web.dto.knight.emply.*;
 import com.landleaf.ibsaas.web.web.dto.knight.userrole.WebMjUserRoleDTO;
-import com.landleaf.ibsaas.web.web.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -67,6 +70,11 @@ public class KnightService implements IKnightServeice {
     private IMjRoleService mjRoleService;
     @Autowired
     private IMjUserRoleService mjUserRoleService;
+    @Autowired
+    private IDoorService doorService;
+
+    @Autowired
+    private Executor mjRegisterUserTaskExecutor;
 
 
     @Override
@@ -90,18 +98,36 @@ public class KnightService implements IKnightServeice {
             List<Door> doorList = doorPageInfo.getList();
             if (!CollectionUtils.isEmpty(doorList)) {
                 List<Integer> devicesysIds = doorList.stream().map(i -> i.getDevicesysid()).collect(Collectors.toList());
+                List<Long> doorIds = doorList.stream().map(i -> {
+                    return Long.valueOf(i.getDoorId());
+                }).collect(Collectors.toList());
+                Map<Integer, List<Station>> stationGroup = Maps.newHashMap();
+                Map<Integer, List<TDoor>> doorControllGroup = Maps.newHashMap();
                 try {
                     //设备名称
                     Response<List<Station>> mjDeviceResponse = getMjDeviceByIds(devicesysIds);
                     List<Station> stationList = mjDeviceResponse.getResult();
-                    Map<Integer, List<Station>> stationGroup = stationList.stream().collect(Collectors.groupingBy(Station::getDeviceSysId));
+                    if (!CollectionUtils.isEmpty(stationList)) {
+                        stationGroup = stationList.stream().collect(Collectors.groupingBy(Station::getDeviceSysId));
+                    }
                     //位置名称
-
-
+                    List<TDoor> doorControlls = doorService.getDoorInfoByControlIds(doorIds);
+                    if (!CollectionUtils.isEmpty(doorControlls)) {
+                        doorControllGroup = doorControlls.stream().collect(Collectors.groupingBy(TDoor::getControlId));
+                    }
                     for (Door door : doorList) {
                         List<Station> findStations = stationGroup.get(door.getDevicesysid());
                         if (!CollectionUtils.isEmpty(findStations)) {
                             door.setStationName(findStations.get(0).getStationName());
+                        }
+                        try {
+                            List<TDoor> doors = doorControllGroup.get(door.getDoorId());
+                            if (!CollectionUtils.isEmpty(doors)) {
+                                door.setLocationId(String.valueOf(doors.get(0).getId()));
+                                door.setLocationName(doors.get(0).getName());
+                            }
+                        } catch (Exception e) {
+                            LOGGER.error("获取门禁位置信息异常{}", e.getMessage(), e);
                         }
                     }
                 } catch (Exception e) {
@@ -281,6 +307,21 @@ public class KnightService implements IKnightServeice {
     }
 
     @Override
+    public Response queryAllEmplyType() {
+        Response response = new Response();
+        EmplyTypeDTO sendRequest = new EmplyTypeDTO();
+        response = sendMsgWaitForResult(sendRequest,
+                MsgTypeEnum.KNIGHT.getName(),
+                KnightSubMsgTypeEnum.QUERY_ALL_EMPLYTYPE.getName());
+        if (response != null && response.getResult() != null) {
+            String jsonString = JSON.toJSONString(response.getResult());
+            List<EmplyTypeDTO> emplyTypeDTOS = JSON.parseArray(jsonString, EmplyTypeDTO.class);
+            response.setResult(emplyTypeDTOS);
+        }
+        return response;
+    }
+
+    @Override
     public Response addDepart(WebAddDepartDTO requestBody) {
         Response response = new Response();
         AddDepartDTO sendRequest = new AddDepartDTO();
@@ -326,6 +367,7 @@ public class KnightService implements IKnightServeice {
             } catch (Exception e) {
                 LOGGER.error("获取部门数据异常{}", e.getMessage(), e);
             }
+
             Map<Integer, List<Depart>> finalDepartGroup = departGroup;
             for (Emply emply : list) {
                 List<Depart> departList = finalDepartGroup.get(emply.getDepartId());
@@ -333,8 +375,48 @@ public class KnightService implements IKnightServeice {
                     emply.setDepartName(departList.get(0).getName());
                 }
                 try {
-                    if(emply.getInvalidate()!=null){
+                    List<MjRole> userRoles = mjUserRoleService.getUserRoleBySysNo(emply.getSysNo());
+                    if (!CollectionUtils.isEmpty(userRoles)) {
+                        emply.setRoleIds(userRoles.stream().map(i -> {
+                            return i.getId();
+                        }).collect(Collectors.toList()));
+                        emply.setRoleNames(String.join(",", userRoles.stream().map(i -> {
+                            return i.getName();
+                        }).collect(Collectors.toList())));
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("获取用户角色异常{}", e.getMessage(), e);
+                }
+
+                try {
+                    if (emply.getInvalidate() != null) {
                         emply.setInvalidateStr(DateUtils.convert(emply.getInvalidate()));
+                    }
+                    if(emply.getDeleted()!=null){
+                        switch (emply.getDeleted()){
+                            case 0:
+                                emply.setDeletedStr("否");
+                                break;
+                            case 1:
+                                emply.setDeletedStr("是");
+                                break;
+                            default:
+                                emply.setDeletedStr("否");
+                                break;
+                        }
+                    }
+                    if (emply.getEmployeeSex() != null) {
+                        switch (emply.getEmployeeSex()) {
+                            case 1:
+                                emply.setEmployeeSexStr("男");
+                                break;
+                            case 2:
+                                emply.setEmployeeSexStr("女");
+                                break;
+                            default:
+                                emply.setEmployeeSexStr("未知");
+                                break;
+                        }
                     }
                 } catch (Exception e) {
                     LOGGER.error("失效时间转换异常{}", e.getMessage(), e);
@@ -425,16 +507,36 @@ public class KnightService implements IKnightServeice {
     }
 
     @Override
-    public Response bindRole(WebMjUserRoleDTO requestBody) {
+    public Response bindRole(Integer sysNo, List<String> roleIds) {
         Response response = new Response();
         response.setSuccess(true);
+
+        //解除用户所有权限
+        unRegisterUserAllPermission(sysNo);
+        //通过角色生成权限
+        registeruserByMjRole(sysNo,roleIds);
         //插入用户角色中间表
-        int count = mjUserRoleService.userBindRole(requestBody.getMjUserId(), requestBody.getMjRoleId());
-        //查询所有权限并解除
+        int count = mjUserRoleService.userBindRole(sysNo,roleIds);
+
+
+
+        //通过角色生成权限
+//        mjRegisterUserTaskExecutor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                registeruserByMjRole(sysNo,roleIds);
+//            }
+//        });
+        return response;
+    }
+
+    //解除用户所有权限
+    private void unRegisterUserAllPermission(Integer sysNo) {
+        //解除原有权限
         WebQueryRegisterUserByDbDTO queryRegisterUserByDbDTO = new WebQueryRegisterUserByDbDTO();
         queryRegisterUserByDbDTO.setPage(1);
         queryRegisterUserByDbDTO.setLimit(10000);
-        queryRegisterUserByDbDTO.setSysNo(requestBody.getMjUserId());
+        queryRegisterUserByDbDTO.setSysNo(sysNo);
         Response<PageInfo<MjReguser>> registerUserResponse = queryRegisteruserByDb(queryRegisterUserByDbDTO);
         if (registerUserResponse != null && registerUserResponse.getResult() != null) {
             PageInfo<MjReguser> pageInfo = registerUserResponse.getResult();
@@ -449,8 +551,11 @@ public class KnightService implements IKnightServeice {
                 }
             }
         }
-        //生成权限
-        List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.findRoleResourceByRoleId(requestBody.getMjRoleId());
+    }
+
+    //通过角色生成权限
+    private void registeruserByMjRole(Integer sysNo, List<String> roleIds) {
+        List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.findRoleResourceByRoleIds(roleIds);
 
         Set<Integer> doorIds = Sets.newHashSet();
         if (!CollectionUtils.isEmpty(mjRoleResourceList)) {
@@ -458,19 +563,18 @@ public class KnightService implements IKnightServeice {
                 doorIds.add(mjRoleResource.getMjDoorId());
             }
             for (Integer doorId : doorIds) {
-                WebRegisterUserDTO param = new WebRegisterUserDTO();
-                param.setDoorId(String.valueOf(doorId));
-                param.setEmployeeId(String.valueOf(requestBody.getMjUserId()));
-                Date date = new Date();
-                param.setStartTime(DateUtils.convert(new Date(), "yyyyMMddHH:mm:ss"));
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
-                calendar.set(Calendar.YEAR, 50);
-                param.setEndTime(DateUtils.convert(calendar.getTime(), "yyyyMMddHH:mm:ss"));
-                Response registeruser = registeruser(param);
+                    WebRegisterUserDTO param = new WebRegisterUserDTO();
+                    param.setDoorId(String.valueOf(doorId));
+                    param.setEmployeeId(String.valueOf(sysNo));
+                    Date date = new Date();
+                    param.setStartTime(DateUtils.convert(new Date(), "yyyyMMddHHmmss"));
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(date);
+                    calendar.add(Calendar.YEAR, 50);
+                    param.setEndTime(DateUtils.convert(calendar.getTime(), "yyyyMMddHHmmss"));
+                    Response response = registeruser(param);
             }
         }
-        return response;
     }
 
     @Override
@@ -583,7 +687,6 @@ public class KnightService implements IKnightServeice {
             LOGGER.error(e.getMessage(), e);
         }
         if (result != null && result.getResponse() != null) {
-            try {
                 Object tmpResult = result.getResponse().getResult();
                 if (tmpResult != null) {
 
@@ -597,9 +700,6 @@ public class KnightService implements IKnightServeice {
                         throw new BusinessException((String) knightResponse.get("resultInfo"));
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             return response;
         }
         throw new BusinessException("未获取到数据,稍后再试");

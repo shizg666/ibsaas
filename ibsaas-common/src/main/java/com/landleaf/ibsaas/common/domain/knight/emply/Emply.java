@@ -1,9 +1,12 @@
 package com.landleaf.ibsaas.common.domain.knight.emply;
 
+import com.landleaf.ibsaas.common.domain.knight.role.MjRole;
+import com.landleaf.ibsaas.common.domain.leo.Role;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
+import java.util.List;
 
 @ApiModel(description = "人员")
 public class Emply {
@@ -57,6 +60,48 @@ public class Emply {
     private String adminStr;
     @ApiModelProperty(value = "人员有效期限", name = "人员有效期限", example = "2078-11-17", dataType = "Date")
     private String invalidateStr;
+    @ApiModelProperty(value = "性别", name = "1:男;2:女", example = "男", dataType = "Integer")
+    private String employeeSexStr;
+
+    @ApiModelProperty(value = "角色ID集合", name = "角色", example = "角色", dataType = "List")
+    private List<String> roleIds;
+
+    @ApiModelProperty(value = "角色名称", name = "角色名称", example = "角色名称", dataType = "String")
+    private String roleNames;
+    @ApiModelProperty(value = "是否删除", name = "是否删除", example = "是否删除", dataType = "String")
+    private String deletedStr;
+
+    public String getDeletedStr() {
+        return deletedStr;
+    }
+
+    public void setDeletedStr(String deletedStr) {
+        this.deletedStr = deletedStr;
+    }
+
+    public List<String> getRoleIds() {
+        return roleIds;
+    }
+
+    public void setRoleIds(List<String> roleIds) {
+        this.roleIds = roleIds;
+    }
+
+    public String getRoleNames() {
+        return roleNames;
+    }
+
+    public void setRoleNames(String roleNames) {
+        this.roleNames = roleNames;
+    }
+
+    public String getEmployeeSexStr() {
+        return employeeSexStr;
+    }
+
+    public void setEmployeeSexStr(String employeeSexStr) {
+        this.employeeSexStr = employeeSexStr;
+    }
 
     public Integer getSysNo() {
         return sysNo;

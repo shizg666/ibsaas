@@ -1,6 +1,8 @@
 package com.landleaf.ibsaas.web.web.exception;
 
 
+import com.landleaf.ibsaas.common.exception.BusinessException;
+
 /**
  * @Description: 用户信息操作相关异常
  */

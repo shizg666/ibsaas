@@ -35,11 +35,11 @@ public class KnightControlMsgProcess {
 
 
     /**
-     * 注册人员（人关联门）--未开通(通过接口)
+     * 注册人员（人关联门）
      * @param requestBody
      * @return
      */
-    public KnightResponse registeruserByInterface(RegisterUserDTO requestBody) {
+    public KnightResponse registeruser(RegisterUserDTO requestBody) {
         LOGGER.info("收到【注册人员】请求,{}", JSON.toJSONString(requestBody));
         String param = JSON.toJSONString(requestBody);
         KnightResponse knightResponse = liFangHttpProvider.registeruser(param);
@@ -47,23 +47,7 @@ public class KnightControlMsgProcess {
         return knightResponse;
     }
     /**
-     * 注册人员（人关联门）--通过本地数据库
-     * @param requestBody
-     * @return
-     */
-    public KnightResponse registeruserByDb(RegisterUserByDbDTO requestBody) {
-        LOGGER.info("收到【注册人员】请求,{}", JSON.toJSONString(requestBody));
-        String param = JSON.toJSONString(requestBody);
-        KnightResponse knightResponse = new KnightResponse();
-
-        mjReguerService.registeruser(requestBody);
-        knightResponse.setResult("200");
-        knightResponse.setResultInfo("操作成功");
-        //返回数据
-        return knightResponse;
-    }
-    /**
-     * 解除人员权限--未开通
+     * 解除人员权限
      * @param requestBody
      * @return
      */

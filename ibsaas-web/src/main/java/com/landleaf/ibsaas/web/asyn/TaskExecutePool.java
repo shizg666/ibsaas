@@ -1,5 +1,6 @@
-package com.landleaf.ibsaas.web.tcp.thread;
+package com.landleaf.ibsaas.web.asyn;
 
+import com.landleaf.ibsaas.web.tcp.thread.ServerHandlerThreadConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,19 +12,19 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
 @EnableAsync
-public class ServerHandlerTaskExecutePool {
+public class TaskExecutePool {
 
-    @Autowired
-    private ServerHandlerThreadConfig serverHandlerThreadConfig;
-
+    /**
+     * 业务多线程处理
+     */
     @Bean
-    public Executor tcpServerHandlerExecutor() {
+    public Executor mjRegisterUserTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(serverHandlerThreadConfig.getCorePoolSize());
-        executor.setMaxPoolSize(serverHandlerThreadConfig.getMaxPoolSize());
-        executor.setQueueCapacity(serverHandlerThreadConfig.getQueueCapacity());
-        executor.setKeepAliveSeconds(serverHandlerThreadConfig.getKeepAliveSeconds());
-        executor.setThreadNamePrefix("TCP-SERVER-HANDLER-EXECUTOR");
+        executor.setCorePoolSize(5);
+        executor.setMaxPoolSize(100);
+        executor.setQueueCapacity(1000);
+        executor.setKeepAliveSeconds(100);
+        executor.setThreadNamePrefix("Knight-registerUser-Thread");
 
         // rejection-policy：当pool已经达到max size的时候，如何处理新任务
         // CALLER_RUNS：不在新线程中执行任务，而是由调用者所在的线程来执行
@@ -31,5 +32,4 @@ public class ServerHandlerTaskExecutePool {
         executor.initialize();
         return executor;
     }
-
 }

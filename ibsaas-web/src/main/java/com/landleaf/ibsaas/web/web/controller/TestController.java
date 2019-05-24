@@ -299,8 +299,8 @@ public class TestController {
         kngihtMessage.setMsgName("knight");
         kngihtMessage.setSubMsgName("registeruser");
         RegisterUserDTO requestBody = new RegisterUserDTO();
-        requestBody.setEmployeeId(356);
-        requestBody.setDoorId(55);
+        requestBody.setEmployeeId("357");
+        requestBody.setDoorId("55");
         requestBody.setStartTime("20100301165600");
         requestBody.setEndTime("20100301165600");
         requestBody.setIsSpecial(0);

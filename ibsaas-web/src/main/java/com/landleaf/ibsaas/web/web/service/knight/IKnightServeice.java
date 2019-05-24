@@ -95,7 +95,6 @@ public interface IKnightServeice {
 
     Response unregisteruser(WebUnRegisterUserDTO requestBody);
 
-    Response bindRole(WebMjUserRoleDTO requestBody);
 
     Response queryRegisteruserByDb(WebQueryRegisterUserByDbDTO requestBody);
 
@@ -108,4 +107,14 @@ public interface IKnightServeice {
     Response setAttendanceRecord(WebAddAttendanceRecordDTO requestBody);
 
     Response queryAllDepart();
+
+    Response queryAllEmplyType();
+
+    /**
+     * 用户绑定角色
+     * @param sysNo
+     * @param roleIds
+     * @return
+     */
+    Response bindRole(Integer sysNo, List<String> roleIds);
 }
