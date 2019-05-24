@@ -19,13 +19,13 @@ public interface IMjRoleService<T> extends IBaseService<T> {
 
     PageInfo<MjRole> getPageInfo(String name, Integer departId, int page, int limit);
 
-    Integer updateMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO);
+    MjRole updateMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO);
 
-    Integer addMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO);
+    MjRole addMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO);
 
     Integer deleteMjRoleDooorInfo(String roleId);
 
     List<MjRole> getMjRolesByIds(List<String> roleids);
 
-    Integer addOrUpdateMjRole(MjRoleRequestVO mjRoleRequestVO);
+    MjRole addOrUpdateMjRole(MjRoleRequestVO mjRoleRequestVO);
 }

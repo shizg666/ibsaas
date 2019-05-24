@@ -17,6 +17,8 @@ public class MjRoleRequestVO {
     private String name;
     @ApiModelProperty(value = "部门ID", required = true, dataType = "Integer", example = "0")
     private Integer departId;
+//    @ApiModelProperty(value = "部门ID")
+//    private String departName;
     @ApiModelProperty(value = "描述", dataType = "String")
     private String descr;
     @ApiModelProperty(value = "门禁id列表")
@@ -25,6 +27,7 @@ public class MjRoleRequestVO {
     public String getId() {
         return id;
     }
+
 
     public void setId(String id) {
         this.id = id;

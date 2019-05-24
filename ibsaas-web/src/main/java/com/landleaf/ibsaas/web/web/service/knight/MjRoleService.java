@@ -53,7 +53,7 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
 
     @Override
     @Transactional
-    public Integer updateMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO) {
+    public MjRole updateMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO) {
         MjRole mjRole = new MjRole();
         BeanUtils.copyProperties(mjRoleRequestVO,mjRole);
         Integer result = updateByPrimaryKeySelective(mjRole);
@@ -61,11 +61,11 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
             throw new BusinessException("角色修改失败");
         }
         List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.updateOrAddRoleResourceByRoleId(mjRoleRequestVO.getId(),mjRoleRequestVO.getList());
-        return mjRoleResourceList.size();
+        return mjRole;
     }
 
     @Override
-    public Integer addMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO) {
+    public MjRole addMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO) {
         MjRole mjRole = new MjRole();
         BeanUtils.copyProperties(mjRoleRequestVO,mjRole);
         String id = idGenerator.nextId();
@@ -75,7 +75,7 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
             throw new BusinessException("角色添加失败");
         }
         List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.addBatchRoleResourceByRoleId(mjRole.getId(),mjRoleRequestVO.getList());
-        return mjRoleResourceList.size();
+        return mjRole;
     }
 
     @Override
@@ -103,13 +103,13 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
     }
 
     @Override
-    public Integer addOrUpdateMjRole(MjRoleRequestVO mjRoleRequestVO) {
-        Integer result;
+    public MjRole addOrUpdateMjRole(MjRoleRequestVO mjRoleRequestVO) {
+        MjRole mjRole;
         if (mjRoleRequestVO.getId() == null || mjRoleRequestVO.getId() ==""){
-            result = addMjRoleDooorInfo(mjRoleRequestVO);
+            mjRole = addMjRoleDooorInfo(mjRoleRequestVO);
         }else {
-            result = updateMjRoleDooorInfo(mjRoleRequestVO);
+            mjRole = updateMjRoleDooorInfo(mjRoleRequestVO);
         }
-        return result;
+        return mjRole;
     }
 }
