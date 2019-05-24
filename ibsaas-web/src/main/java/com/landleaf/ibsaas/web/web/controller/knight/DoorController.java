@@ -2,7 +2,6 @@ package com.landleaf.ibsaas.web.web.controller.knight;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.knight.TBuilding;
 import com.landleaf.ibsaas.common.domain.knight.TDoor;
@@ -11,13 +10,13 @@ import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.knight.IBuildingService;
 import com.landleaf.ibsaas.web.web.service.knight.IDoorService;
 import com.landleaf.ibsaas.web.web.service.knight.IFloorService;
-import com.landleaf.ibsaas.web.web.vo.BuildingReponseVO;
-import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
+import com.landleaf.ibsaas.web.web.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -96,23 +95,32 @@ public class DoorController extends BasicController {
 
     @PostMapping("/v1/door/addOrUpdateBuilding")
     @ApiOperation(value = "添加或者修改楼栋信息")
-    public Response<TBuilding> addOrUpdateBuilding(@RequestBody TBuilding tBuilding) {
+    public Response<TBuildingVO> addOrUpdateBuilding(@RequestBody TBuilding tBuilding) {
         log.info("DoorController ----->addOrUpdateBuilding TBuilding:{}", JSONObject.toJSONString(tBuilding));
         TBuilding tBuilding1 = iBuildingService.addBuildingOrUpdate(tBuilding);
-        return returnSuccess(tBuilding1);
+        TBuildingVO tBuildingVO = new TBuildingVO();
+        BeanUtils.copyProperties(tBuilding1,tBuildingVO);
+        tBuildingVO.setKey("building_"+tBuildingVO.getId());
+        return returnSuccess(tBuildingVO);
     }
 
     @PostMapping("/v1/door/addOrUpdateFloor")
     @ApiOperation(value = "添加或者修改楼层信息", notes = "添加或者修改楼层信息")
-    public Response<TFloor> addOrUpdateFloor(@RequestBody TFloor tFloor) {
+    public Response<TFloorVO> addOrUpdateFloor(@RequestBody TFloor tFloor) {
         TFloor tFloor1 = iFloorService.addFloorOrUpdate(tFloor);
-        return returnSuccess(tFloor1);
+        TFloorVO tFloorVO = new TFloorVO();
+        BeanUtils.copyProperties(tFloor1,tFloorVO);
+        tFloorVO.setKey("floor_"+tFloorVO.getId());
+        return returnSuccess(tFloorVO);
     }
 
     @PostMapping("/v1/door/addOrUpdateDoor")
     @ApiOperation(value = "添加或者修改门信息", notes = "添加或者修改楼层信息")
     public Response<TDoor> addOrUpdateDoor(@RequestBody TDoor tDoor) {
         TDoor tDoor1 = iDoorService.addDoorOrUpdate(tDoor);
+//        TDoorVO doorVO = new TDoorVO();
+//        BeanUtils.copyProperties(tDoor1,doorVO);
+//        doorVO.setKey("door_"+doorVO.getId());
         return returnSuccess(tDoor1);
     }
 

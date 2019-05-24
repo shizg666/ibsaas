@@ -17,4 +17,8 @@ public interface IMjRoleService<T> extends IBaseService<T> {
     PageInfo<MjRole> getPageInfo(String name, Integer departId, int page, int limit);
 
     Integer updateMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO);
+
+    Integer addMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO);
+
+    Integer deleteMjRoleDooorInfo(String roleId);
 }

@@ -2,7 +2,6 @@ package com.landleaf.ibsaas.web.web.controller.knight;
 
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRole;
-import com.landleaf.ibsaas.common.domain.leo.Role;
 import com.landleaf.ibsaas.web.web.constant.MessageConstants;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.knight.IFloorService;
@@ -30,7 +29,7 @@ public class MjRoleController extends BasicController {
     private MjRoleService mjRoleService;
 
     @GetMapping("/v1/mjRole/getRoleDoorInfo")
-    @ApiOperation(value = "查询某一角色在某一楼层所拥有的门禁信息")
+    @ApiOperation(value = "查询某一角色在某一楼层所拥有的门禁信息()")
     public Response<RoleFloorDoorsReponseVO> getfloorDoorByRoleId(@RequestParam(value = "floorId")@ApiParam(name="floorId",value="楼层id",required=true) Long floorId , @RequestParam(value = "roleId") @ApiParam(name="roleId",value="角色id",required=true)String roleId) {
         RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = iFloorService.getfloorControlDoorByRoleId(floorId,roleId);
         return returnSuccess(roleFloorDoorsReponseVO);
@@ -43,12 +42,24 @@ public class MjRoleController extends BasicController {
         return returnSuccess(role);
     }
     @ApiOperation(value = "修改角色信息", notes = "修改角色信息")
-    @PostMapping(value = "/v1/mjRole/updateMjRole}")
+    @PostMapping(value = "/v1/mjRole/updateMjRole")
     public Response updateMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
         Integer result = mjRoleService.updateMjRoleDooorInfo(mjRoleRequestVO);
         return returnSuccess(result, MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE);
     }
 
+    @ApiOperation(value = "添加角色信息", notes = "添加角色信息")
+    @PostMapping(value = "/v1/mjRole/addMjRole")
+    public Response addMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
+        Integer result = mjRoleService.addMjRoleDooorInfo(mjRoleRequestVO);
+        return returnSuccess(result, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
+    }
 
+    @PostMapping("/v1/deleteMjRole/{id}")
+    @ApiOperation(value = "根据角色id删除门禁角色", notes = "")
+    public Response deleteMjRole( @PathVariable @ApiParam(name="id",value="角色id",required=true) String id){
+        Integer result = mjRoleService.deleteMjRoleDooorInfo(id);
+        return returnSuccess(result, MessageConstants.COMMON_DELETE_SUCCESS_MESSAGE);
+    }
 
 }

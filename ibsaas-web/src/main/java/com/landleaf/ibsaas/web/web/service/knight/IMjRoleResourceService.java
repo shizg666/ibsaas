@@ -15,4 +15,9 @@ public interface IMjRoleResourceService<T> extends IBaseService<T> {
     List<MjRoleResource> findRoleResourceByRoleId(String mjRoleId);
 
     List<MjRoleResource> updateOrAddRoleResourceByRoleId(String mjRoleId,List<Integer> mjDoorids);
+
+
+    List<MjRoleResource>addBatchRoleResourceByRoleId(String mjRoleId,List<Integer> mjDoorids);
+
+
 }
