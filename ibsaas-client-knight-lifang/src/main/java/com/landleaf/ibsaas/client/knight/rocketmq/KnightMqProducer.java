@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * rocketmq生产者
  */
@@ -34,18 +36,24 @@ public class KnightMqProducer {
     //发送数据
     public void sendMessageForWeb(String sendMsg) {
         String key = RandomUtil.generateNumberString(10);
-        Message msg = new Message(topic, tag, key, sendMsg.getBytes());
+        Message msg = null;
         try {
+            msg = new Message(topic, tag, key, sendMsg.getBytes("utf-8"));
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("发送消息编码格式转换错误{}",e.getMessage(),e);
+        }
+        try {
+            Message finalMsg = msg;
             rocketmqProducer.send(msg, new SendCallback() {
                 @Override
                 public void onSuccess(SendResult sendResult) {
-                    LOGGER.info("发送MQ消息成功【topic】:{};【tag】:{};【消息】:{}", topic, tag, msg.toString());
+                    LOGGER.info("发送MQ消息成功【topic】:{};【tag】:{};【消息】:{}", topic, tag, finalMsg.toString());
                     sendResult.getSendStatus();
                 }
 
                 @Override
                 public void onException(Throwable e) {
-                    LOGGER.error("发送MQ消息失败:【topic】:{};【tag】:{};消息{};异常:{}", topic, tag, msg.toString(), e.getMessage(), e);
+                    LOGGER.error("发送MQ消息失败:【topic】:{};【tag】:{};消息{};异常:{}", topic, tag, finalMsg.toString(), e.getMessage(), e);
                 }
             });
         } catch (MQClientException e) {
