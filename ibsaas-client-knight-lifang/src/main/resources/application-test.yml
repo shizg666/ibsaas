@@ -109,11 +109,11 @@ rocketmq:
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
-    groupName: ibsaas_knight_lifang_lgc_1921681010
+    groupName: ibsaas_knight_lifang_lgc_1921681010_test
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
     #门禁
-    topics: ibsaas_knight_lifang_lgc_1921681010-*
-    topic: ibsaas_knight_lifang_lgc_1921681010
+    topics: ibsaas_knight_lifang_lgc_1921681010_test-*
+    topic: ibsaas_knight_lifang_lgc_1921681010_test
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10
