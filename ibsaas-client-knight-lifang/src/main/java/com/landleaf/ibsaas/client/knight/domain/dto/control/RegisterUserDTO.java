@@ -7,10 +7,10 @@ import io.swagger.annotations.ApiModelProperty;
 public class RegisterUserDTO {
     //ocs人员主键
     @ApiModelProperty(value = "ocs人员主键", example = "355", dataType = "Integer",required = true)
-    private Integer employeeId;
+    private String employeeId;
     //ocs房门主键
     @ApiModelProperty(value = "ocs房门主键", example = "55", dataType = "Integer",required = true)
-    private Integer doorId;
+    private String doorId;
     //权限开始时间
     @ApiModelProperty(value = "权限开始时间",  example = "20100301165600", dataType = "String",required = true)
     private String startTime;
@@ -22,19 +22,19 @@ public class RegisterUserDTO {
     private Integer isSpecial;
 
 
-    public Integer getEmployeeId() {
+    public String getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(Integer employeeId) {
+    public void setEmployeeId(String employeeId) {
         this.employeeId = employeeId;
     }
 
-    public Integer getDoorId() {
+    public String getDoorId() {
         return doorId;
     }
 
-    public void setDoorId(Integer doorId) {
+    public void setDoorId(String doorId) {
         this.doorId = doorId;
     }
 

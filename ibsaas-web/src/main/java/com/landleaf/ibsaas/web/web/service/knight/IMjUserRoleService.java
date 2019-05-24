@@ -1,7 +1,11 @@
 package com.landleaf.ibsaas.web.web.service.knight;
 
 
+import com.landleaf.ibsaas.common.domain.knight.role.MjRole;
+import com.landleaf.ibsaas.common.domain.leo.Role;
 import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
+
+import java.util.List;
 
 /**
  * 门禁用户角色操作
@@ -10,5 +14,13 @@ import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
  */
 public interface IMjUserRoleService<T> extends IBaseService<T> {
 
-    int userBindRole(Integer mjUserId, String mjRoleId);
+    /**
+     * 用户绑定角色
+     * @param mjUserId
+     * @param mjRoleIds
+     * @return
+     */
+    int userBindRole(Integer mjUserId, List<String> mjRoleIds);
+
+    List<MjRole> getUserRoleBySysNo(Integer sysNo);
 }

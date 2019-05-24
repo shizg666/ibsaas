@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.knight.MjUserRoleDao">
+
+
+    <insert id="saveUserRoles">
+        insert into t_mj_user_role(
+        id, mj_role_id, mj_user_id,create_time
+        )
+        values
+        <foreach collection="list" item="userRole" separator=",">
+            (#{userRole.id}, #{userRole.mjRoleId}, #{userRole.mjUserId}, #{userRole.createTime})
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserRoles">
+        DELETE from t_mj_user_role
+        where
+        mj_user_id=#{mjUserId}
+        AND id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+</mapper>

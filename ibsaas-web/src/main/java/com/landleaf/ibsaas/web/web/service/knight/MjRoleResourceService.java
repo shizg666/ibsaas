@@ -7,6 +7,7 @@ import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -16,17 +17,18 @@ public class MjRoleResourceService extends AbstractBaseService<MjRoleResourceDao
     private IdGenerator idGenerator;
 
     @Override
-    public List<MjRoleResource> findRoleResourceByRoleId(String mjRoleId) {
-        MjRoleResource mjRoleResource = new MjRoleResource();
-        mjRoleResource.setMjRoleId(mjRoleId);
-        return select(mjRoleResource);
+    public List<MjRoleResource> findRoleResourceByRoleIds(List<String> mjRoleIds) {
+        Example example = new Example(MjRoleResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andIn("mjRoleId", mjRoleIds);
+        return selectByExample(example);
     }
 
     @Override
     public List<MjRoleResource> updateOrAddRoleResourceByRoleId(String mjRoleId, List<Integer> mjDoorids) {
         Integer result = dao.deleteByRoleId(mjRoleId);
         List<MjRoleResource> mjRoleResourceList = Lists.newArrayList();
-        mjDoorids.forEach(obj->{
+        mjDoorids.forEach(obj -> {
             MjRoleResource mjRoleResource = new MjRoleResource();
             String id = idGenerator.nextId();
             mjRoleResource.setId(id);

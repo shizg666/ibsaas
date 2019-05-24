@@ -7,6 +7,7 @@ import com.landleaf.ibsaas.common.dao.knight.MjRoleDao;
 import com.landleaf.ibsaas.common.dao.knight.MjRoleResourceDao;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRole;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource;
+import com.landleaf.ibsaas.common.domain.leo.Role;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
@@ -86,6 +87,19 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
         }
         mjRoleResourceDao.deleteByRoleId(roleId);
         return result;
+    }
+
+
+    @Override
+    public List<MjRole> getMjRolesByIds(List<String> roleids) {
+
+        Example example = new Example(MjRole.class);
+        Example.Criteria criteria = example.createCriteria();
+        if(!CollectionUtils.isEmpty(roleids)){
+            criteria.andIn("id",roleids);
+        }
+
+        return selectByExample(example);
     }
 
     @Override
