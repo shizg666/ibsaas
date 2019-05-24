@@ -29,6 +29,9 @@ public final class RedisUtil {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(RedisUtil.class);
 
+
+    public static String STRING_KEY_QUERY_ALL_DEPART="string_key_query_all_depart";
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 

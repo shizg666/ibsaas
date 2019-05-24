@@ -12,6 +12,7 @@ import com.landleaf.ibsaas.rocketmq.TopicConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,11 +26,13 @@ public class KnightMqProducer {
     @Autowired
     private DefaultMQProducer rocketmqProducer;
 
+    @Value("${rocketmq.producer.topic}")
+    private String topic;
+    @Value("${rocketmq.producer.tags}")
+    private String tag;
 
     //发送数据
     public void sendMessageForWeb(String sendMsg) {
-        String topic = TopicConstants.TOPIC_KNIGHT;
-        String tag = TagConstants.TAGS_DEFAULT;
         String key = RandomUtil.generateNumberString(10);
         Message msg = new Message(topic, tag, key, sendMsg.getBytes());
         try {
@@ -53,4 +56,5 @@ public class KnightMqProducer {
             LOGGER.error(e.getMessage(), e);
         }
     }
+
 }

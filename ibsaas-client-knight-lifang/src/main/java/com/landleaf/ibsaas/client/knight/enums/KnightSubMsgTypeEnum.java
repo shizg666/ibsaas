@@ -41,6 +41,7 @@ public enum KnightSubMsgTypeEnum {
     GET_MJ_DEVICE_BY_IDS_DB(26, "getMjDeviceByIdsDb", "knightControlMsgProcess", "getMjDeviceByIdsDb", 1, QueryMjDeviceDTO.class),
     GET_MJ_DEVICE_BY_PAGE_DB(27, "getMjDeviceByPageDb", "knightControlMsgProcess", "getMjDeviceByPageDb", 1, QueryMjDeviceDTO.class),
     QUERY_ALL_EMPLYTYPE(27, "queryAllEmplyType", "knightEmplyMsgProcess", "queryAllEmplyType", 1, EmplyTypeDTO.class),
+    QUERY_DOOR_STATUS(28, "queryDoorStatus", "knightControlMsgProcess", "queryDoorStatus", 1, QueryDoorStatusDTO.class),
     ;
 
     /**

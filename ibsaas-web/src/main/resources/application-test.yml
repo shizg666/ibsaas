@@ -25,12 +25,18 @@ spring:
     sentinel:
       master: mymaster
       nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 30
+        max-wait: 30000
+        min-idle: 8
     jedis:
       pool:
         #jedis最大分配对象
         maxTotal: 50
         #jedis最大保存idel状态对象数
-        maxIdle: 8
+        maxIdle: 30
         #jedis池没有对象返回时，最大等待时间
         maxWaitMillis: 10000
         testOnBorrow: true
@@ -138,7 +144,7 @@ rocketmq:
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
-    groupName: ibsaas_response_test
+    groupName: ibsaas_response_test1
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
     #门禁;停车
     topics: knight_test-*;parking-*

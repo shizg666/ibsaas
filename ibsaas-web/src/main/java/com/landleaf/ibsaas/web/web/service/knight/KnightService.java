@@ -23,6 +23,7 @@ import com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource;
 import com.landleaf.ibsaas.common.enums.knight.KnightSubMsgTypeEnum;
 import com.landleaf.ibsaas.common.enums.parking.MsgTypeEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
+import com.landleaf.ibsaas.common.redis.RedisUtil;
 import com.landleaf.ibsaas.common.utils.MessageUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
@@ -75,6 +76,9 @@ public class KnightService implements IKnightServeice {
 
     @Autowired
     private Executor mjRegisterUserTaskExecutor;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
 
     @Override
@@ -242,8 +246,8 @@ public class KnightService implements IKnightServeice {
         if (!CollectionUtils.isEmpty(list)) {
             Map<Integer, List<Depart>> departGroup = Maps.newHashMap();
             try {
-                Response<PageInfo> departResponse = queryDepart(1, 10000);
-                List<Depart> departList = departResponse.getResult().getList();
+                Response<List<Depart>> departResponse = queryAllDepart();
+                List<Depart> departList = departResponse.getResult();
                 departGroup = departList.stream().collect(Collectors.groupingBy(Depart::getDepartId));
             } catch (Exception e) {
                 LOGGER.error("获取部门数据异常{}", e.getMessage(), e);
@@ -295,14 +299,28 @@ public class KnightService implements IKnightServeice {
 
     @Override
     public Response queryAllDepart() {
-        Response response = queryDepart(1, 10000);
-        if (response != null && response.getResult() != null) {
-            String jsonString = JSON.toJSONString(response.getResult());
-            PageInfo<Depart> departPageInfo = JSON.parseObject(jsonString, new TypeReference<PageInfo<Depart>>() {
-            });
-            List<Depart> departList = departPageInfo.getList();
-            response.setResult(departList);
+        String key = RedisUtil.STRING_KEY_QUERY_ALL_DEPART;
+        Object redisData=redisUtil.get(key);
+        List<Depart> departList = Lists.newArrayList();
+        if(redisData==null){
+            Response response = queryDepart(1, 10000);
+            if (response != null && response.getResult() != null) {
+                String jsonString = JSON.toJSONString(response.getResult());
+                PageInfo<Depart> departPageInfo = JSON.parseObject(jsonString, new TypeReference<PageInfo<Depart>>() {
+                });
+                departList = departPageInfo.getList();
+                response.setResult(departList);
+                if(!CollectionUtils.isEmpty(departList)){
+                    redisUtil.set(key,JSON.toJSONString(departList),3600);
+                }
+            }
+            return response;
+        }else {
+            departList= JSON.parseArray((String) redisData,Depart.class);
         }
+        Response response = new Response();
+        response.setSuccess(true);
+        response.setResult(departList);
         return response;
     }
 

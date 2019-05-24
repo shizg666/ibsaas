@@ -25,6 +25,12 @@ spring:
     sentinel:
       master: mymaster
       nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 30
+        max-wait: 30000
+        min-idle: 8
     jedis:
       pool:
         #jedis最大分配对象
@@ -52,6 +58,12 @@ spring:
     static-path-pattern: /static/**
 
 ibsaas:
+  sso:
+    logout:
+      path: /logout
+    excluded:
+#      paths: /parking/**/*
+      paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**,/login/**,/logout,/test/**,/knight/**
   face:
     redirecturl: http://40.73.246.184
   filter:
@@ -119,22 +131,30 @@ id:
     workId: 1
     datacenterId: 1
 
-### xxl-sso
-xxl:
-  sso:
-    server: http://40.73.246.184:8081/sso-server
-    redirecturl: http://40.73.246.184:8885/ibsaas/redirect
-    logout:
-      path: /logout
-    excluded:
-#      paths: /parking/**/*
-      paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**
-    redis:
-      address: redis://40.73.100.153:6378,redis://40.73.100.153:6379,redis://40.73.100.153:6380
-      sentinel:
-        master: mymaster
-        nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
 
+
+#与数据业务子系统交互通过rokcetmq中间件
+rocketmq:
+  producer:
+    enable: true
+    groupName: ibsaas
+    #目前采用双主，集群
+    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    maxMessageSize: 4096
+    sendMsgTimeout: 30000
+    retryTimesWhenSendFailed: 1
+  consumer:
+    enable: true
+    groupName: ibsaas_response
+    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    #门禁;停车
+    topics: knight-*;parking-*
+    consumeThreadMin: 16
+    consumeThreadMax: 32
+    consumeMessageBatchMaxSize: 10
+web:
+  localPath: /home/landleaf2019/images
+  picUrl: http://40.73.246.184:9000/images/
 
 
 
