@@ -17,6 +17,12 @@
     from t_floor
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectByFloor" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_floor
+    where floor = #{floorId,jdbcType=INTEGER}
+  </select>
   <select id="selectByParentIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
