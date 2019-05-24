@@ -41,28 +41,28 @@ public class MjRoleController extends BasicController {
         MjRole role = mjRoleService.selectByPrimaryKey(id);
         return returnSuccess(role);
     }
-    @ApiOperation(value = "修改角色信息", notes = "修改角色信息")
-    @PostMapping(value = "/v1/mjRole/updateMjRole")
-    public Response updateMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
-        Integer result = mjRoleService.updateMjRoleDooorInfo(mjRoleRequestVO);
-        return returnSuccess(result, MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE);
-    }
-
-    @ApiOperation(value = "添加角色信息", notes = "添加角色信息")
-    @PostMapping(value = "/v1/mjRole/addMjRole")
-    public Response addMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
-        Integer result = mjRoleService.addMjRoleDooorInfo(mjRoleRequestVO);
-        return returnSuccess(result, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
-    }
+//    @ApiOperation(value = "修改角色信息", notes = "修改角色信息")
+//    @PostMapping(value = "/v1/mjRole/updateMjRole")
+//    public Response updateMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
+//        Integer result = mjRoleService.updateMjRoleDooorInfo(mjRoleRequestVO);
+//        return returnSuccess(result, MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE);
+//    }
+//
+//    @ApiOperation(value = "添加角色信息", notes = "添加角色信息")
+//    @PostMapping(value = "/v1/mjRole/addMjRole")
+//    public Response addMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
+//        Integer result = mjRoleService.addMjRoleDooorInfo(mjRoleRequestVO);
+//        return returnSuccess(result, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
+//    }
 
     @ApiOperation(value = "添加或者修改角色信息", notes = "添加角色信息")
     @PostMapping(value = "/v1/mjRole/addOrUpdateMjRole")
     public Response addOrUpdateMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
-        Integer result = mjRoleService.addOrUpdateMjRole(mjRoleRequestVO);
+        MjRole mjRole = mjRoleService.addOrUpdateMjRole(mjRoleRequestVO);
         if (mjRoleRequestVO.getId() == null || mjRoleRequestVO.getId() ==""){
-            return returnSuccess(result, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
+            return returnSuccess(mjRole, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
         }else {
-            return returnSuccess(result, MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE);
+            return returnSuccess(mjRole, MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE);
         }
     }
 
