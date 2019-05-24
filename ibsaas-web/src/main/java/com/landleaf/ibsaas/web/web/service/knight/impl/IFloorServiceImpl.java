@@ -92,7 +92,9 @@ public class IFloorServiceImpl implements IFloorService {
         if ( StringUtil.isBlank(roleId) || "0".equals(roleId)){
             mjRoleResourceList = Lists.newArrayList();
         }else{
-            mjRoleResourceList = mjRoleResourceService.findRoleResourceByRoleId(roleId);
+            List<String> list = Lists.newArrayList();
+            list.add(roleId);
+            mjRoleResourceList = mjRoleResourceService.findRoleResourceByRoleIds(list);
         }
         List<Integer> doorIds=mjRoleResourceList.stream().map(obj -> obj.getMjDoorId()).collect(Collectors.toList());
         TFloor tFloor = tFloorMapper.selectByPrimaryKey(floorId);
