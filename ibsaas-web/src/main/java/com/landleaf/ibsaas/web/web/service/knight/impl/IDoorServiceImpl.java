@@ -55,10 +55,13 @@ public class IDoorServiceImpl implements IDoorService {
     }
 
     @Override
+    @Transactional
     public Integer bindingDoorControl(Long id, Long controId) {
         TDoor tDoor = tDoorMapper.selectByContrloId(controId);
         if (tDoor != null){
-            throw new BusinessException("跟门禁已绑定");
+//            throw new BusinessException("跟门禁已绑定");
+            //把之前绑定的清除
+            tDoorMapper.bindingDoorControl(tDoor.getId(), 0L);
         }
         Integer result = tDoorMapper.bindingDoorControl(id, controId);
         if (result < 0 ){
