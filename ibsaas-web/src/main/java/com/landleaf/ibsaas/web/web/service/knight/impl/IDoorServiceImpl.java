@@ -86,7 +86,7 @@ public class IDoorServiceImpl implements IDoorService {
         DoorReponseVO doorReponseVO = new DoorReponseVO();
         TDoor tDoor = tDoorMapper.selectByContrloId(controlId);
         if (tDoor == null){
-            throw new BusinessException("查询不到门信息！");
+            throw new BusinessException("该门禁尚未绑定门位置！");
         }
         BeanUtils.copyProperties(tDoor,doorReponseVO);
         List<DoorReponseVO> doorReponseVOS = Lists.newArrayList();
