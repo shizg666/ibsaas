@@ -225,7 +225,7 @@ public class UsercrdtmService extends AbstractBaseService<UsercrdtmDao, Usercrdt
                 BeanUtils.copyProperties(queryDTO, temp);
                 temp.setCurrentHour(DateUtil.format(date, "HH:mm:ss"));
                 result.add(temp);
-                if (date.before(resetDate)) {
+                if (date.before(resetDate)||date.after(new Date())) {
                     continue;
                 }
                 List<Usercrdtm> inList = usercrdtms.stream().filter(record -> {
@@ -257,6 +257,9 @@ public class UsercrdtmService extends AbstractBaseService<UsercrdtmDao, Usercrdt
             }
         } else {
             for (Date date : todayHourList) {
+                if (date.after(new Date())) {
+                    continue;
+                }
                 UsercrdtmRealCountQueryByHourDTO temp = new UsercrdtmRealCountQueryByHourDTO();
                 BeanUtils.copyProperties(queryDTO, temp);
                 int resultOccupyCount = queryDTO.getOccupyCount();
