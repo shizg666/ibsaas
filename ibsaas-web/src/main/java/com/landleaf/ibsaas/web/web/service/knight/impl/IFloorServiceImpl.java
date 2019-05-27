@@ -120,7 +120,7 @@ public class IFloorServiceImpl implements IFloorService {
     }
 
     public TFloor addFloor(TFloor tFloor) {
-        TFloor tFloor1 = tFloorMapper.selectByFloor(tFloor.getFloor());
+        TFloor tFloor1 = tFloorMapper.selectByFloor(tFloor.getFloor(),tFloor.getParentId());
         if (tFloor1 != null){
             throw new BusinessException("楼层已存在不可重复!");
         }
