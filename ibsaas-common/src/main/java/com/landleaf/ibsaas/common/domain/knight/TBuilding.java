@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 public class TBuilding {
 
     @ApiModelProperty(value="楼栋id（修改毕传）")
-    private Long id;
+    private long id;
     @ApiModelProperty(value="楼栋名称",required = true)
     private String name;
 

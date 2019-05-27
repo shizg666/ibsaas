@@ -50,7 +50,7 @@
     select
     door.id, door.name
     from t_door door inner join t_floor floor on  door.parent_id = floor.id
-    where door.control_id = 0
+    where door.control_id = 0 or door.control_id is null
    order by floor.floor
   </select>
   <select id="selectByContrloId" parameterType="java.lang.Long" resultMap="BaseResultMap">
