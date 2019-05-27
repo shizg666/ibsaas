@@ -23,7 +23,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 
 /**
- * dev分支
+ * hvac分支
  */
 @Configuration
 //自动加载配置信息
