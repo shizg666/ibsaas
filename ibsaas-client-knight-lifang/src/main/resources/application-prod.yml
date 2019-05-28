@@ -7,7 +7,7 @@ server:
 
 spring:
   redis:
-    enable: false
+    enable: ture
     database: 0
     sentinel:
       master: mymaster

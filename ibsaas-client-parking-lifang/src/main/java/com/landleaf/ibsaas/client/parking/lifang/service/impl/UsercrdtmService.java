@@ -224,10 +224,10 @@ public class UsercrdtmService extends AbstractBaseService<UsercrdtmDao, Usercrdt
                 UsercrdtmRealCountQueryByHourDTO temp = new UsercrdtmRealCountQueryByHourDTO();
                 BeanUtils.copyProperties(queryDTO, temp);
                 temp.setCurrentHour(DateUtil.format(date, "HH:mm:ss"));
-                result.add(temp);
                 if (date.before(resetDate)||date.after(new Date())) {
                     continue;
                 }
+                result.add(temp);
                 List<Usercrdtm> inList = usercrdtms.stream().filter(record -> {
                     if (record.getCrdtm().before(date) && record.getInOrOut().intValue() == ChannelTypeEnum.IN.type) {
                         return true;
