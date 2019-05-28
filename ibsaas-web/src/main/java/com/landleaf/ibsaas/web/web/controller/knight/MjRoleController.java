@@ -60,9 +60,9 @@ public class MjRoleController extends BasicController {
     public Response addOrUpdateMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
         String message;
         if (mjRoleRequestVO.getId() == null || mjRoleRequestVO.getId() ==""){
-            message = MessageConstants.COMMON_ADD_SUCCESS_MESSAGE;
+            message ="添加成功！";
         }else {
-            message = MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE;
+            message = "修改成功！";
         }
         MjRole mjRole = mjRoleService.addOrUpdateMjRole(mjRoleRequestVO);
         return returnSuccess(mjRole, message);
