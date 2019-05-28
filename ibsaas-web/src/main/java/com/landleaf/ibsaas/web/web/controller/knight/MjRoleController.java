@@ -58,12 +58,14 @@ public class MjRoleController extends BasicController {
     @ApiOperation(value = "添加或者修改角色信息", notes = "添加角色信息")
     @PostMapping(value = "/v1/mjRole/addOrUpdateMjRole")
     public Response addOrUpdateMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
-        MjRole mjRole = mjRoleService.addOrUpdateMjRole(mjRoleRequestVO);
+        String message;
         if (mjRoleRequestVO.getId() == null || mjRoleRequestVO.getId() ==""){
-            return returnSuccess(mjRole, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
+            message = MessageConstants.COMMON_ADD_SUCCESS_MESSAGE;
         }else {
-            return returnSuccess(mjRole, MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE);
+            message = MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE;
         }
+        MjRole mjRole = mjRoleService.addOrUpdateMjRole(mjRoleRequestVO);
+        return returnSuccess(mjRole, message);
     }
 
     @PostMapping("/v1/deleteMjRole/{id}")
