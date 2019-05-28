@@ -59,6 +59,8 @@ public class LiFangHttpProvider implements InitializingBean {
     public static String SEND_CARD_URL = "/reformer/interface/sendCard";
     //删卡
     public static String DELETE_CARD_URL = "/reformer/interface/deleteCard";
+    //回收卡
+    public static String RECYCLE_CARD_URL = "/reformer/interface/recycleCard";
     /**********************************门禁*****************************************/
     //遥控开门
     public static String OPEN_DOOR_URL = "/reformer/interface/remotecontrol/opendoor";
@@ -483,6 +485,20 @@ public class LiFangHttpProvider implements InitializingBean {
 
     }
 
+
+    public KnightResponse recycleCard(String param) {
+
+        KnightResponse knightResponse = null;
+        try {
+            String data = post(RECYCLE_CARD_URL, param);
+            knightResponse = MessageUtil.getInstance().getGson().fromJson(data, new TypeToken<KnightResponse>() {
+            }.getType());
+        } catch (JsonSyntaxException e) {
+            LOGGER.error(e.getMessage(),e);
+        }
+        return knightResponse;
+    }
+
     public String post(String url, String param) {
         String requestUrl = preUrl + url + "?data={1}";
         LOGGER.info("请求[url]:{},参数:{}", requestUrl, param);
@@ -563,7 +579,6 @@ public class LiFangHttpProvider implements InitializingBean {
         errorCodeMap.put("540000", "消费错误码");
         errorCodeMap.put("540000", "该卡为消费特殊卡");
     }
-
 
 
 }
