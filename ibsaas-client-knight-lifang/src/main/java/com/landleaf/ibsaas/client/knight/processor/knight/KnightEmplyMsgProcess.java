@@ -74,6 +74,7 @@ public class KnightEmplyMsgProcess {
         KnightResponse knightResponse = new KnightResponse();
         PageInfo pageInfo= emplyService.selectEmply(requestBody);
 
+
         knightResponse.setObj(pageInfo);
         knightResponse.setResult("200");
         knightResponse.setResultInfo("操作成功");
@@ -101,10 +102,28 @@ public class KnightEmplyMsgProcess {
      * @param requestBody
      * @return
      */
-    public KnightResponse deleteEmply(DeleteEmplyDTO requestBody) {
+    public KnightResponse deleteEmplyByInterface(DeleteEmplyDTO requestBody) {
         LOGGER.info("收到【删除人员】请求,{}", JSON.toJSONString(requestBody));
         String param = JSON.toJSONString(requestBody);
         KnightResponse knightResponse = liFangHttpProvider.deleteEmply(param);
+        //返回数据
+        return knightResponse;
+    }
+    /**
+     * 删除人员---走数据库自定义流程
+     * 1、若有卡先删除卡，再回收卡
+     * 2、无卡直接删除
+     *
+     * @param requestBody
+     * @return
+     */
+    public KnightResponse deleteEmply(DeleteEmplyDTO requestBody) {
+        LOGGER.info("收到【删除人员】请求,{}", JSON.toJSONString(requestBody));
+        String param = JSON.toJSONString(requestBody);
+        KnightResponse knightResponse = new KnightResponse();
+        int count=emplyService.deleteEmply(Integer.parseInt(requestBody.getSysNo()));
+        knightResponse.setResult("200");
+        knightResponse.setResultInfo("操作成功");
         //返回数据
         return knightResponse;
     }
@@ -137,6 +156,22 @@ public class KnightEmplyMsgProcess {
         map.put("SysNo",requestBody.getSysNo());
         String param = JSON.toJSONString(map);
         KnightResponse knightResponse = liFangHttpProvider.deleteCard(param);
+        //返回数据
+        return knightResponse;
+    }
+    /**
+     * 回收卡
+     *
+     * @param requestBody
+     * @return
+     */
+    public KnightResponse recycleCard(RecycleCardDTO requestBody) {
+        LOGGER.info("收到【回收卡】请求,{}", JSON.toJSONString(requestBody));
+
+        Map<String,Object> map = Maps.newHashMap();
+        map.put("Serial",requestBody.getSerial());
+        String param = JSON.toJSONString(map);
+        KnightResponse knightResponse = liFangHttpProvider.recycleCard(param);
         //返回数据
         return knightResponse;
     }

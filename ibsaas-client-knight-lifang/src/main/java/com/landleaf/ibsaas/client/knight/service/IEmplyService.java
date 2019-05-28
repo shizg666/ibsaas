@@ -13,4 +13,6 @@ public interface IEmplyService<T> extends IBaseService<T> {
 
 
     PageInfo selectEmply(QueryEmplyDTO requestBody);
+
+    int deleteEmply(Integer sysNo);
 }
