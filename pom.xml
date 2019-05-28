@@ -74,6 +74,10 @@
 		<protobuf-java.version>3.7.0-rc1</protobuf-java.version>
 		<protobuf-java-format.version>1.2</protobuf-java-format.version>
 
+		<!--bacnet4j-->
+        <bacnet4j.version>3.2.4-4</bacnet4j.version>
+
+		<hutool.version>4.5.9</hutool.version>
 	</properties>
 
 	<dependencies>
@@ -319,7 +323,60 @@
 			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!--    bacnet4j 协议-->
+		<dependency>
+			<groupId>org.clojars.frozenlock</groupId>
+			<artifactId>bacnet4j</artifactId>
+			<version>${bacnet4j.version}</version>
+		</dependency>
+
+		<!--hutool-->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>${hutool.version}</version>
+		</dependency>
+
+
 	</dependencies>
+
+<!--
+	<profiles>
+		<profile>
+			&lt;!&ndash; 生产环境 &ndash;&gt;
+			<id>prod</id>
+			<properties>
+				<profileActive>prod</profileActive>
+			</properties>
+		</profile>
+		<profile>
+			&lt;!&ndash; 本地开发环境 &ndash;&gt;
+			<id>dev</id>
+			<properties>
+				<profileActive>dev</profileActive>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			&lt;!&ndash; 测试环境 &ndash;&gt;
+			<id>test</id>
+			<properties>
+				<profileActive>test</profileActive>
+			</properties>
+		</profile>
+		<profile>
+			&lt;!&ndash; beta环境 &ndash;&gt;
+			<id>beta</id>
+			<properties>
+				<profileActive>beta</profileActive>
+			</properties>
+		</profile>
+
+	</profiles>
+	-->
 
 	<build>
 		<plugins>

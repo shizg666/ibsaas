@@ -155,4 +155,9 @@ web:
   localPath: D:\ibsaas\images\
   picUrl: http://192.168.13.199:8089/images/
 
+### 个性化配置
+##本地设备id
+bacnet:
+  local:
+    deviceId: 1234
 

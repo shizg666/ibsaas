@@ -4,6 +4,8 @@ import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 import com.landleaf.ibsaas.common.domain.hvac.dto.HvacDeviceDTO;
 import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
 
+import java.util.List;
+
 /**
  * @author Lokiy
  * @date 2019/5/27 15:56
@@ -38,4 +40,15 @@ public interface IHvacDeviceService extends IBaseService<HvacDevice> {
      */
     HvacDevice getById(String id);
 
+
+    /**
+     * 查询所有设备
+     * @return
+     */
+    List<HvacDevice> all();
+
+    /**
+     * 重新加载设备和点位
+     */
+    void reload();
 }

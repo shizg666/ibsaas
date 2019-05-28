@@ -1,0 +1,53 @@
+package com.landleaf.ibsaas.web.web.controller.hvac.device;
+
+import com.landleaf.ibsaas.common.domain.Response;
+import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
+import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
+import com.landleaf.ibsaas.web.web.controller.BasicController;
+import com.landleaf.ibsaas.web.web.service.hvac.ICommonDeviceService;
+import com.landleaf.ibsaas.web.web.service.hvac.IHvacDeviceService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+/**
+ * @author Lokiy
+ * @date 2019/5/28 15:36
+ * @description:
+ */
+@RestController
+@RequestMapping("/common-device")
+@AllArgsConstructor
+@Slf4j
+@Api("设备基础api层")
+public class CommonDeviceController extends BasicController {
+
+    private final ICommonDeviceService iCommonDeviceService;
+
+    private final IHvacDeviceService iHvacDeviceService;
+
+    @GetMapping("/all")
+    @ApiOperation("获取所有的硬件设备")
+    public Response all(){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>CommonDeviceController.all入参为:空");
+        List<HvacDevice> hvacDevices = iHvacDeviceService.all();
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<CommonDeviceController.all出参为:{}",hvacDevices);
+        return returnSuccess(hvacDevices);
+    }
+
+
+    @GetMapping("/current-data/{deviceInstanceNumber}")
+    public Response currentData(@PathVariable("deviceInstanceNumber") Integer deviceInstanceNumber){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>CommonDeviceController.currentData入参为:{}",deviceInstanceNumber);
+        List<? extends BaseDevice> data = iCommonDeviceService.getCurrentData(deviceInstanceNumber);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<CommonDeviceController.currentData出参为:{}",data);
+        return returnSuccess(data);
+    }
+}

@@ -4,5 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao">
 
+    <sql id="hvac_device_base">
+        id, ip, port, device_instance_number AS deviceInstanceNumber, description
+    </sql>
 
+
+    <select id="all" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacDevice">
+        SELECT
+        <include refid="hvac_device_base"/>
+        FROM t_hvac_device WHERE is_active=1
+    </select>
+    <select id="getByDeviceInstanceNumber" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacDevice">
+        SELECT
+        <include refid="hvac_device_base"/>
+        FROM t_hvac_device WHERE is_active=1
+        AND device_instance_number=#{deviceInstanceNumber}
+    </select>
 </mapper>

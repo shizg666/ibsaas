@@ -157,5 +157,10 @@ web:
   picUrl: http://40.73.246.184:9000/images/
 
 
+### 个性化配置
+##本地设备id
+bacnet:
+  local:
+    deviceId: 1234
 
 
