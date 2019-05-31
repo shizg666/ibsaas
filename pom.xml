@@ -8,6 +8,7 @@
 	<modules>
 		<module>ibsaas-client-parking-lifang</module>
 		<module>ibsaas-client-knight-lifang</module>
+		<module>ibsaas-client-hvac</module>
 		<module>ibsaas-web</module>
 		<module>ibsaas-common</module>
 		<module>ibsaas-datasource</module>
