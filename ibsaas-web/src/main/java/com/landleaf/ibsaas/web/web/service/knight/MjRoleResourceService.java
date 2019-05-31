@@ -23,6 +23,13 @@ public class MjRoleResourceService extends AbstractBaseService<MjRoleResourceDao
         criteria.andIn("mjRoleId", mjRoleIds);
         return selectByExample(example);
     }
+    @Override
+    public List<MjRoleResource> findRoleResourceByRoleId(String roleId) {
+        Example example = new Example(MjRoleResource.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("mjRoleId", roleId);
+        return selectByExample(example);
+    }
 
     @Override
     public List<MjRoleResource> updateOrAddRoleResourceByRoleId(String mjRoleId, List<Integer> mjDoorids) {

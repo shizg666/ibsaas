@@ -60,11 +60,14 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
         if (result < 0 ){
             throw new BusinessException("角色修改失败");
         }
-        List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.updateOrAddRoleResourceByRoleId(mjRoleRequestVO.getId(),mjRoleRequestVO.getList());
+        if (mjRoleRequestVO.getList() != null && mjRoleRequestVO.getList().size() > 0){
+           mjRoleResourceService.updateOrAddRoleResourceByRoleId(mjRoleRequestVO.getId(),mjRoleRequestVO.getList());
+        }
         return mjRole;
     }
 
     @Override
+    @Transactional
     public MjRole addMjRoleDooorInfo(MjRoleRequestVO mjRoleRequestVO) {
         MjRole mjRole = new MjRole();
         BeanUtils.copyProperties(mjRoleRequestVO,mjRole);
@@ -74,7 +77,9 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
         if (result < 0 ){
             throw new BusinessException("角色添加失败");
         }
-        List<MjRoleResource> mjRoleResourceList = mjRoleResourceService.addBatchRoleResourceByRoleId(mjRole.getId(),mjRoleRequestVO.getList());
+        if (mjRoleRequestVO.getList() != null && mjRoleRequestVO.getList().size() > 0){
+            mjRoleResourceService.addBatchRoleResourceByRoleId(mjRole.getId(),mjRoleRequestVO.getList());
+        }
         return mjRole;
     }
 

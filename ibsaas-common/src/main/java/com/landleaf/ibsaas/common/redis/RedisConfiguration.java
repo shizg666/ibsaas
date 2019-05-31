@@ -80,6 +80,7 @@ public class RedisConfiguration {
     @Bean
     public JedisSentinelPool jedisSentinelPool(@Qualifier("jedis.pool.config") JedisPoolConfig config,
                                                @Value("${spring.redis.sentinel.master}") String clusterName,
+                                               @Value("${spring.redis.timeout}") String timeout,
                                                @Value("${spring.redis.sentinel.nodes}") String sentinelNodes) {
         LOGGER.info("缓存服务器的主服务名称：" + clusterName + ", 主从服务ip&port:" + sentinelNodes);
         Assert.isTrue(StringUtils.isNotEmpty(clusterName), "主服务名称配置为空");
@@ -87,7 +88,7 @@ public class RedisConfiguration {
 
         Set<String> sentinels = Sets.newHashSet(StringUtils.split(sentinelNodes, ","));
 
-        JedisSentinelPool sentinelJedisPool = new JedisSentinelPool(clusterName, sentinels, config, Protocol.DEFAULT_TIMEOUT);
+        JedisSentinelPool sentinelJedisPool = new JedisSentinelPool(clusterName, sentinels, config, Integer.parseInt(timeout));
 
         return sentinelJedisPool;
     }
