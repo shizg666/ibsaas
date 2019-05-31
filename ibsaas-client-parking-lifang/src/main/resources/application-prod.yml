@@ -6,31 +6,6 @@ server:
       uri-encoding: UTF-8
 
 spring:
-  redis:
-    enable: false
-    database: 0
-    sentinel:
-      master: mymaster
-      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
-    lettuce:
-      pool:
-        max-active: 50
-        max-idle: 30
-        max-wait: 30000
-        min-idle: 8
-    jedis:
-      pool:
-        #jedis最大分配对象
-        maxTotal: 50
-        #jedis最大保存idel状态对象数
-        maxIdle: 8
-        #jedis池没有对象返回时，最大等待时间
-        maxWaitMillis: 10000
-        testOnBorrow: true
-        testOnReturn: true
-        blockWhenExhausted: false
-        #Idle时进行连接扫描
-    timeout: 30000
   freemarker:
     cache: true
     check-template-location: true

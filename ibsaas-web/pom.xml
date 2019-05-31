@@ -30,6 +30,10 @@
             <artifactId>ibsaas-rocketmq</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
     <!-- 不加不能加载mainclass-->

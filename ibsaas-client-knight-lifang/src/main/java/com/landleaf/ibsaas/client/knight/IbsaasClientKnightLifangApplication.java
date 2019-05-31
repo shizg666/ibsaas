@@ -6,6 +6,8 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +26,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 //自动加载配置信息
-@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, SecurityAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, SecurityAutoConfiguration.class,
+        RedisAutoConfiguration.class,
+        RedisRepositoriesAutoConfiguration.class})
 @SpringBootApplication
 @ComponentScan(basePackages = "com.landleaf.ibsaas.*")
 @MapperScan("com.landleaf.ibsaas.**.dao")

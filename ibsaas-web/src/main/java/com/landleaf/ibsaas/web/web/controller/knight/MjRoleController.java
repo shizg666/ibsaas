@@ -1,10 +1,13 @@
 package com.landleaf.ibsaas.web.web.controller.knight;
 
+import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRole;
+import com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource;
 import com.landleaf.ibsaas.web.web.constant.MessageConstants;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.knight.IFloorService;
+import com.landleaf.ibsaas.web.web.service.knight.MjRoleResourceService;
 import com.landleaf.ibsaas.web.web.service.knight.MjRoleService;
 import com.landleaf.ibsaas.web.web.vo.MjRoleRequestVO;
 import com.landleaf.ibsaas.web.web.vo.RoleFloorDoorsReponseVO;
@@ -15,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -27,6 +32,8 @@ public class MjRoleController extends BasicController {
 
     @Autowired
     private MjRoleService mjRoleService;
+    @Autowired
+    private MjRoleResourceService mjRoleResourceService;
 
     @GetMapping("/v1/mjRole/getRoleDoorInfo")
     @ApiOperation(value = "查询某一角色在某一楼层所拥有的门禁信息()")
@@ -40,6 +47,16 @@ public class MjRoleController extends BasicController {
     public Response<MjRole> getMjRoleInfoById(@PathVariable @ApiParam(name="id",value="角色id",required=true) String id) {
         MjRole role = mjRoleService.selectByPrimaryKey(id);
         return returnSuccess(role);
+    }
+    @ApiOperation(value = "根据角色id查询该角色所拥有的所有门禁列表", notes = "")
+    @RequestMapping(value = "/v1/mjRole/getMjRoleDoorListById/{id}", method = RequestMethod.GET)
+    public Response<List<Integer>> getMjRoleDoorListById(@PathVariable @ApiParam(name="id",value="角色id",required=true) String id) {
+        List<MjRoleResource> list = mjRoleResourceService.findRoleResourceByRoleId(id);
+        List<Integer> dataList = Lists.newArrayList();
+        list.forEach(obj->{
+            dataList.add(obj.getMjDoorId());
+        });
+        return returnSuccess(dataList);
     }
 //    @ApiOperation(value = "修改角色信息", notes = "修改角色信息")
 //    @PostMapping(value = "/v1/mjRole/updateMjRole")
@@ -58,12 +75,14 @@ public class MjRoleController extends BasicController {
     @ApiOperation(value = "添加或者修改角色信息", notes = "添加角色信息")
     @PostMapping(value = "/v1/mjRole/addOrUpdateMjRole")
     public Response addOrUpdateMjRole(@RequestBody @ApiParam MjRoleRequestVO mjRoleRequestVO) {
-        MjRole mjRole = mjRoleService.addOrUpdateMjRole(mjRoleRequestVO);
+        String message;
         if (mjRoleRequestVO.getId() == null || mjRoleRequestVO.getId() ==""){
-            return returnSuccess(mjRole, MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
+            message ="添加成功！";
         }else {
-            return returnSuccess(mjRole, MessageConstants.COMMON_UPDATE_SUCCESS_MESSAGE);
+            message = "修改成功！";
         }
+        MjRole mjRole = mjRoleService.addOrUpdateMjRole(mjRoleRequestVO);
+        return returnSuccess(mjRole, message);
     }
 
     @PostMapping("/v1/deleteMjRole/{id}")
