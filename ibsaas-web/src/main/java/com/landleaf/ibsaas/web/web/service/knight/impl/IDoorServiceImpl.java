@@ -13,6 +13,7 @@ import com.landleaf.ibsaas.web.web.service.knight.IDoorService;
 import com.landleaf.ibsaas.web.web.vo.BuildingReponseVO;
 import com.landleaf.ibsaas.web.web.vo.DoorReponseVO;
 import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
+import com.landleaf.ibsaas.web.web.vo.RoleDoorsReponseVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -83,15 +84,15 @@ public class IDoorServiceImpl implements IDoorService {
     public BuildingReponseVO getDoorAllInfobyControlId(Long controlId) {
         BuildingReponseVO buildingReponseVO = new BuildingReponseVO();
         FloorReponseVO floorReponseVO = new FloorReponseVO();
-        DoorReponseVO doorReponseVO = new DoorReponseVO();
+        RoleDoorsReponseVO doorReponseVO = new RoleDoorsReponseVO();
         TDoor tDoor = tDoorMapper.selectByContrloId(controlId);
         if (tDoor == null){
             throw new BusinessException("该门禁尚未绑定门位置！");
         }
         BeanUtils.copyProperties(tDoor,doorReponseVO);
-        List<DoorReponseVO> doorReponseVOS = Lists.newArrayList();
+        List<RoleDoorsReponseVO> doorReponseVOS = Lists.newArrayList();
         doorReponseVOS.add(doorReponseVO);
-        floorReponseVO.setList(doorReponseVOS);
+        floorReponseVO.setDataList(doorReponseVOS);
         TFloor tFloor = tFloorMapper.selectByPrimaryKey(tDoor.getParentId());
         if (tFloor == null){
             throw new BusinessException("查询不到楼栋信息！");

@@ -56,13 +56,14 @@ public class IFloorServiceImpl implements IFloorService {
         tFloor.setImg(StringUtil.isBlank(tFloor.getImg())?"":path+tFloor.getImg());
         BeanUtils.copyProperties(tFloor,floorReponseVO);
         List<TDoor> tDoors = tDoorMapper.selectByParentId(tFloor.getId());
-        List<DoorReponseVO> doorReponseVOS = Lists.newArrayList();
+        List<RoleDoorsReponseVO> doorReponseVOS = Lists.newArrayList();
+
         tDoors.forEach(obj ->{
-            DoorReponseVO doorReponseVO = new DoorReponseVO();
+            RoleDoorsReponseVO doorReponseVO = new RoleDoorsReponseVO();
             BeanUtils.copyProperties(obj,doorReponseVO);
             doorReponseVOS.add(doorReponseVO);
         });
-        floorReponseVO.setList(doorReponseVOS);
+        floorReponseVO.setDataList(doorReponseVOS);
         return floorReponseVO;
     }
 

@@ -30,6 +30,8 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
     private IdGenerator idGenerator;
     @Autowired
     private MjRoleResourceDao mjRoleResourceDao;
+    @Autowired
+    private IKnightServeice iKnightServeice;
 
     @Override
     public PageInfo<MjRole> getPageInfo(String name, Integer departId, int page, int limit) {
@@ -62,6 +64,10 @@ public class MjRoleService extends AbstractBaseService<MjRoleDao, MjRole> implem
         }
         if (mjRoleRequestVO.getList() != null && mjRoleRequestVO.getList().size() > 0){
            mjRoleResourceService.updateOrAddRoleResourceByRoleId(mjRoleRequestVO.getId(),mjRoleRequestVO.getList());
+        }
+        try {
+            iKnightServeice.updatePermissionByRole(mjRoleRequestVO.getId());
+        }catch (Exception e){
         }
         return mjRole;
     }

@@ -6,9 +6,11 @@ import com.landleaf.ibsaas.common.domain.knight.role.MjRole;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource;
 import com.landleaf.ibsaas.web.web.constant.MessageConstants;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
+import com.landleaf.ibsaas.web.web.service.knight.IBuildingService;
 import com.landleaf.ibsaas.web.web.service.knight.IFloorService;
 import com.landleaf.ibsaas.web.web.service.knight.MjRoleResourceService;
 import com.landleaf.ibsaas.web.web.service.knight.MjRoleService;
+import com.landleaf.ibsaas.web.web.vo.BuildingReponseVO;
 import com.landleaf.ibsaas.web.web.vo.MjRoleRequestVO;
 import com.landleaf.ibsaas.web.web.vo.RoleFloorDoorsReponseVO;
 import io.swagger.annotations.Api;
@@ -29,7 +31,8 @@ public class MjRoleController extends BasicController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MjRoleController.class);
     @Autowired
     private IFloorService iFloorService;
-
+    @Autowired
+    private IBuildingService iBuildingService;
     @Autowired
     private MjRoleService mjRoleService;
     @Autowired
@@ -40,6 +43,12 @@ public class MjRoleController extends BasicController {
     public Response<RoleFloorDoorsReponseVO> getfloorDoorByRoleId(@RequestParam(value = "floorId")@ApiParam(name="floorId",value="楼层id",required=true) Long floorId , @RequestParam(value = "roleId",required = false) @ApiParam(name="roleId",value="角色id")String roleId) {
         RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = iFloorService.getfloorControlDoorByRoleId(floorId,roleId);
         return returnSuccess(roleFloorDoorsReponseVO);
+    }
+    @GetMapping("/v1/mjRole/getAllfloorDoorByRoleId/{roleId}")
+    @ApiOperation(value = "查询某一角色所拥有的门禁信息")
+    public Response<List<BuildingReponseVO>> getAllfloorDoorByRoleId(@PathVariable @ApiParam(name="roleId",value="角色id",required=true) String roleId) {
+        List<BuildingReponseVO> buildingReponseVOS = iBuildingService.getBuildingAllInfoByRoleId(roleId);
+        return returnSuccess(buildingReponseVOS);
     }
 
     @ApiOperation(value = "根据角色主健id查询", notes = "根据角色主健id查询")

@@ -13,12 +13,12 @@ public class FloorReponseVO {
 
     @ApiModelProperty(value="楼层名称")
     private String name;
-    @ApiModelProperty(value="楼层图片锦")
+    @ApiModelProperty(value="楼层图片")
     private String img;
     @ApiModelProperty(value="楼栋id")
     private Long parentId;
     @ApiModelProperty(value="门列表")
-    private List<DoorReponseVO> list;
+    private List<RoleDoorsReponseVO> dataList;
 
     public String getKey() {
         return key;
@@ -28,14 +28,13 @@ public class FloorReponseVO {
         this.key = key;
     }
 
-    public List<DoorReponseVO> getList() {
-        return list;
+    public List<RoleDoorsReponseVO> getDataList() {
+        return dataList;
     }
 
-    public void setList(List<DoorReponseVO> list) {
-        this.list = list;
+    public void setDataList(List<RoleDoorsReponseVO> dataList) {
+        this.dataList = dataList;
     }
-
 
     public Long getId() {
         return id;

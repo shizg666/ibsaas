@@ -17,6 +17,11 @@
     from t_floor
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_floor
+  </select>
   <select id="selectByFloor"  resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />

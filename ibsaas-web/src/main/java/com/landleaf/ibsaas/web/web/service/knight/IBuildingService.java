@@ -14,5 +14,7 @@ public interface IBuildingService {
 
     List<BuildingReponseVO> getBuildingAllInfo();
 
+    List<BuildingReponseVO> getBuildingAllInfoByRoleId(String roleId);
+
     List<TBuilding> getBuildingList();
 }
