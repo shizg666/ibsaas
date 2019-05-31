@@ -185,6 +185,14 @@ public class KnightController extends BasicController {
         result = knightServeice.bindRole(sysNo,requestBody);
         return result;
     }
+    @GetMapping("emply/update-permission")
+    @ApiOperation(value = "更新权限", notes = "更新权限")
+    public Response updatePermissionByRole(@RequestParam("roleId")String roleId) {
+
+        Response result = new Response();
+        result = knightServeice.updatePermissionByRole(roleId);
+        return result;
+    }
 
     @PostMapping("reguser/queryRegisteruserByDb")
     @ApiOperation(value = "查询人员权限", notes = "查询人员权限")

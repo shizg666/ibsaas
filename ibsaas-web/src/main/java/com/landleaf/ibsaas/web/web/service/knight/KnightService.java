@@ -550,6 +550,36 @@ public class KnightService implements IKnightServeice {
         return response;
     }
 
+    /**
+     * 更新角色下面所有用户的权限
+     * @param roleId
+     * @return
+     */
+    @Override
+    public Response updatePermissionByRole(String roleId) {
+        Response response = new Response();
+        response.setSuccess(true);
+        //查询角色下面所有用户
+        List<MjUserRole> userRoles = mjUserRoleService.getUserRoleByRoleId(roleId);
+        if(CollectionUtils.isEmpty(userRoles)){
+            return response;
+        }
+        List<Integer> sysNoList = userRoles.stream().map(i -> {
+            return i.getMjUserId();
+        }).collect(Collectors.toList());
+        //通过角色生成权限
+        mjRegisterUserTaskExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                for (Integer sysNo : sysNoList) {
+                    List roleIds = mjUserRoleService.getUserRoleBySysNo(sysNo);
+                    bindRole(sysNo,roleIds);
+                }
+            }
+        });
+        return response;
+    }
+
     //解除用户所有权限
     private void unRegisterUserAllPermission(Integer sysNo) {
         //解除原有权限
