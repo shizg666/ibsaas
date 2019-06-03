@@ -1,13 +1,12 @@
-package com.landleaf.ibsaas.client.hvac.controller.device;
+package com.landleaf.ibsaas.web.web.controller.hvac;
 
-import com.landleaf.ibsaas.client.hvac.controller.Basic2Controller;
-import com.landleaf.ibsaas.client.hvac.service.INewFanService;
 import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.hvac.dto.NewFanDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
 import com.landleaf.ibsaas.common.enums.hvac.newfan.NewFanRunningModeEnum;
-
+import com.landleaf.ibsaas.web.web.controller.BasicController;
+import com.landleaf.ibsaas.web.web.service.hvac.INewFanWebService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -18,24 +17,24 @@ import java.util.List;
 
 /**
  * @author Lokiy
- * @date 2019/5/28 16:10
- * @description: 四效新风控制类
+ * @date 2019/6/3 9:49
+ * @description:
  */
 @RestController
 @RequestMapping("/new-fan")
 @AllArgsConstructor
 @Slf4j
 @Api("四效新风")
-public class NewFanController extends Basic2Controller {
+public class NewFanWebController extends BasicController {
 
-    private final INewFanService iNewFanService;
+    private final INewFanWebService iNewFanWebService;
 
 
     @GetMapping("/overview")
     @ApiOperation("四效新风机总览")
     public Response overview(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.overview入参为:空");
-        List<NewFanVO> newFanVOList = iNewFanService.overview();
+        List<NewFanVO> newFanVOList = iNewFanWebService.overview();
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<NewFanController.overview出参为:{}",newFanVOList);
         return returnSuccess(newFanVOList);
     }
@@ -54,7 +53,7 @@ public class NewFanController extends Basic2Controller {
     @ApiOperation("单个四效新风机当前状态")
     public Response getInfo(@PathVariable("id") String id){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.get入参为:{}", id);
-        NewFanVO newFanVO = iNewFanService.getInfoById(id);
+        NewFanVO newFanVO = iNewFanWebService.getInfoById(id);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<NewFanController.get出参为:{}",newFanVO);
         return returnSuccess(newFanVO);
     }
@@ -62,7 +61,9 @@ public class NewFanController extends Basic2Controller {
     @PutMapping("/operation")
     @ApiOperation("修改四效新风的值")
     public Response operation(@RequestBody NewFanDTO newFanDTO){
-        iNewFanService.update(newFanDTO);
+        iNewFanWebService.update(newFanDTO);
         return returnSuccess();
     }
+
+
 }

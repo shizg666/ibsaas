@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -57,6 +58,17 @@ public class RedisConfiguration {
         redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    /**
+     * 实例化 HashOperations 对象,可以使用 Hash 类型操作
+     *
+     * @param redisTemplate
+     * @return
+     */
+    @Bean
+    public HashOperations<String, String, Object> hashOperations(RedisTemplate<String, Object> redisTemplate) {
+        return redisTemplate.opsForHash();
     }
 
     @Bean(name = "jedis.pool.config")

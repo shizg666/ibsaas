@@ -26,4 +26,17 @@ public interface ICommonDeviceService {
      * @return
      */
     <T extends BaseDevice> T getCurrentInfo(HvacNodeVO hvacNodeVO);
+
+
+    /**
+     * 当前输入入redis库
+     */
+    void currentDataToRedis();
+
+    /**
+     * 写入设备数据
+     * @param t
+     * @param <T>
+     */
+    <T extends BaseDevice> void writeDevice(T t);
 }

@@ -1,11 +1,13 @@
 package com.landleaf.ibsaas.client.hvac.util;
 
 import cn.hutool.core.util.ReflectUtil;
+import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HvacFieldVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 import com.serotonin.bacnet4j.util.PropertyValues;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -46,6 +48,7 @@ public class HvacUtil {
                 }
             }
         });
-
     }
+
+
 }

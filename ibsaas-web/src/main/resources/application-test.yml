@@ -160,4 +160,5 @@ web:
 bacnet:
   local:
     deviceId: 1234
-
+  place:
+    id: lgc

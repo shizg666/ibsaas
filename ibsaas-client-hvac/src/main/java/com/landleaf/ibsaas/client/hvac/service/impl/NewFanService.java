@@ -4,6 +4,7 @@ import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
 import com.landleaf.ibsaas.client.hvac.service.INewFanService;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.NewFan;
+import com.landleaf.ibsaas.common.domain.hvac.dto.NewFanDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
 
@@ -41,6 +42,11 @@ public class NewFanService implements INewFanService {
         NewFan newFan =  iCommonDeviceService.getCurrentInfo(hvacNodeVO);
         BeanUtils.copyProperties(newFan, newFanVO);
         return newFanVO;
+    }
+
+    @Override
+    public void update(NewFanDTO newFanDTO) {
+        iCommonDeviceService.writeDevice(newFanDTO);
     }
 
 

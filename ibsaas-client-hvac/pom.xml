@@ -52,6 +52,11 @@
             <artifactId>ibsaas-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.landleaf.ibsaas</groupId>
+            <artifactId>ibsaas-rocketmq</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!--jackson模块-->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
@@ -63,40 +68,6 @@
 
     </dependencies>
 
-    <profiles>
-        <profile>
-            <!-- 生产环境 -->
-            <id>prod</id>
-            <properties>
-                <profileActive>prod</profileActive>
-            </properties>
-        </profile>
-        <profile>
-            <!-- 本地开发环境 -->
-            <id>dev</id>
-            <properties>
-                <profileActive>dev</profileActive>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <!-- 测试环境 -->
-            <id>test</id>
-            <properties>
-                <profileActive>test</profileActive>
-            </properties>
-        </profile>
-        <profile>
-            <!-- beta环境 -->
-            <id>beta</id>
-            <properties>
-                <profileActive>beta</profileActive>
-            </properties>
-        </profile>
-
-    </profiles>
 
     <build>
         <plugins>
@@ -153,9 +124,9 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>**/*.xml</include>
-                    <include>application.yml</include>
-<!--                    <include>banner.txt</include>-->
-                    <include>application-${profileActive}.yml</include>
+                    <include>**/*.yml</include>
+                    <include>**/*.properties</include>
+                    <include>**/*.*</include>
                 </includes>
                 <excludes>
                     <exclude>generatorConfig.xml</exclude>

@@ -6,6 +6,31 @@ server:
       uri-encoding: UTF-8
 
 spring:
+  redis:
+    enable: true
+    database: 0
+    sentinel:
+      master: mymaster
+      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 30
+        max-wait: 30000
+        min-idle: 8
+    jedis:
+      pool:
+        #jedis最大分配对象
+        maxTotal: 50
+        #jedis最大保存idel状态对象数
+        maxIdle: 30
+        #jedis池没有对象返回时，最大等待时间
+        maxWaitMillis: 10000
+        testOnBorrow: true
+        testOnReturn: true
+        blockWhenExhausted: false
+        #Idle时进行连接扫描
+    timeout: 30000
   freemarker:
     cache: true
     check-template-location: true
@@ -15,9 +40,9 @@ spring:
     templateEncoding: UTF-8
     template-loader-path: classpath:/templates/
     expose-spring-macro-helpers: false
-    static-locations: classpath:/templates/,classpath:/static/
+   # static-locations: classpath:/templates/,classpath:/static/
   mvc:
-    static-path-pattern: /static/**
+    #static-path-pattern: /static/**
 
 ibsaas:
 #  face:
@@ -75,6 +100,28 @@ ibsaas:
 #       spring.datasource.filters: stat
 
 
+rocketmq:
+  producer:
+    enable: true
+    groupName: ibsaas
+    topic: topic_hvac_write
+    tags: tags
+    #目前采用双主，集群
+    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    #消息最大长度 默认1024*4(4M)
+    maxMessageSize: 91920
+    sendMsgTimeout: 30000
+    retryTimesWhenSendFailed: 1
+  consumer:
+    enable: true
+    groupName: topic_hvac_write_test
+    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    #暖通
+    topics: topic_hvac_write-*
+    topic: topic_hvac_write
+    consumeThreadMin: 16
+    consumeThreadMax: 32
+    consumeMessageBatchMaxSize: 10
 
 
 pagehelper:
@@ -94,3 +141,5 @@ id:
 bacnet:
   local:
     deviceId: 1234
+  place:
+    id: lgc

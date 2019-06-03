@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author Lokiy
  * @date 2019/5/24 16:08
@@ -11,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel("四效新风")
-public class NewFan extends BaseDevice {
+public class NewFan extends BaseDevice implements Serializable {
 
     /**
      * 新风温度(单位:℃）

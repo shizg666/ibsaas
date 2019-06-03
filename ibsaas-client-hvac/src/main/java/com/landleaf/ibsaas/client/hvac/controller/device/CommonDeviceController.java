@@ -51,4 +51,10 @@ public class CommonDeviceController extends Basic2Controller {
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<CommonDeviceController.currentData出参为:{}",data);
         return returnSuccess(data);
     }
+
+    @GetMapping("/current-data/redis")
+    public Response currentDataToRedis(){
+        iCommonDeviceService.currentDataToRedis();
+        return returnSuccess();
+    }
 }

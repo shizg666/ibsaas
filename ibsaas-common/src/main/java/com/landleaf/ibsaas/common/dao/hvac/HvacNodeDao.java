@@ -1,8 +1,10 @@
 package com.landleaf.ibsaas.common.dao.hvac;
 
 import com.landleaf.ibsaas.common.domain.hvac.HvacNode;
+import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeFieldVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,4 +29,14 @@ public interface HvacNodeDao extends BaseDao<HvacNode> {
      * @return
      */
     HvacNodeVO getHvacNodeByNodeId(String id);
+
+
+    /**
+     * 根据节点id和字段名 获取点位信息
+     * @param nodeId
+     * @param fieldName
+     * @return
+     */
+    HvacNodeFieldVO getHvacNodeFieldVO(@Param("nodeId") String nodeId, @Param("fieldName") String fieldName);
+
 }

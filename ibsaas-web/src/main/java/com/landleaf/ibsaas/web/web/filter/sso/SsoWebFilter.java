@@ -73,7 +73,7 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
             return;
         }
         //redis写死id
-//        sid = "01eff778-9259-42eb-b74a-1b5565356c6a";
+        sid = "13bf21a7-1346-42ca-bf31-5d202d83517b";
         if (StringUtils.isNotEmpty(sid)) {
             try {
                 sysUser = ssoWebLoginHelper.get(sid);

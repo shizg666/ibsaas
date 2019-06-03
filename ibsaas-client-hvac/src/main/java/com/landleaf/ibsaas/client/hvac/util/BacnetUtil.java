@@ -1,5 +1,8 @@
 package com.landleaf.ibsaas.client.hvac.util;
 
+import com.landleaf.ibsaas.client.hvac.config.BacnetInfoHolder;
+import com.landleaf.ibsaas.client.hvac.config.LocalDeviceConfig;
+import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeFieldVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetActiveEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.serotonin.bacnet4j.LocalDevice;
@@ -10,9 +13,11 @@ import com.serotonin.bacnet4j.service.confirmed.ConfirmedRequestService;
 import com.serotonin.bacnet4j.type.constructed.SequenceOf;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
+import com.serotonin.bacnet4j.type.primitive.Real;
 import com.serotonin.bacnet4j.util.PropertyReferences;
 import com.serotonin.bacnet4j.util.PropertyValues;
 import com.serotonin.bacnet4j.util.RequestUtils;
+import com.serotonin.bacnet4j.util.sero.ByteQueue;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -91,6 +96,25 @@ public class BacnetUtil {
 
         return values;
     }
+
+    /**
+     * 写入远程设备
+     * @param localDevice
+     * @param remoteDevice
+     * @param objectIdentifier
+     * @param value
+     */
+    public static void writePresentValue(LocalDevice localDevice, RemoteDevice remoteDevice, ObjectIdentifier objectIdentifier, String value){
+        try {
+            RequestUtils.writePresentValue(localDevice, remoteDevice, objectIdentifier, new Real(Float.parseFloat(value)));
+        } catch (BACnetException e) {
+            e.printStackTrace();
+            if(!"Timeout waiting for response".equals(e.getMessage())) {
+                throw new BusinessException("写入远程设备数据失败");
+            }
+        }
+    }
+
 
 
     public static String getState(String state){
