@@ -10,11 +10,14 @@ public enum BacnetPremissionEnum {
     /**
      * 4:只读
      * 2:只写
+     * 1:执行
      * 6:可读可写
      */
     READ(4),
 
     WRITE(2),
+
+    EXECUTE(1),
 
     READ_AND_WRITE(6),
 

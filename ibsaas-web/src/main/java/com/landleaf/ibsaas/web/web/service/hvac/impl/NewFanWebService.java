@@ -8,6 +8,7 @@ import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.rocketmq.TopicConstants;
 import com.landleaf.ibsaas.web.rocketmq.WebMqProducer;
+import com.landleaf.ibsaas.web.web.service.hvac.BaseDeviceService;
 import com.landleaf.ibsaas.web.web.service.hvac.INewFanWebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +23,7 @@ import java.util.Map;
  * @description:
  */
 @Service
-public class NewFanWebService implements INewFanWebService {
+public class NewFanWebService extends BaseDeviceService implements INewFanWebService {
 
     @Autowired
     private RedisHandle redisHandle;
@@ -35,7 +36,8 @@ public class NewFanWebService implements INewFanWebService {
 
     @Override
     public List<NewFanVO> overview() {
-        Map<String, Object> map = redisHandle.getMap(placeId);
+        Map<String, Object> map = redisHandle.
+                getMap(placeId);
         Object mapField = map.get(3002);
         return (List<NewFanVO>) mapField;
     }

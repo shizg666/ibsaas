@@ -5,12 +5,14 @@ import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.hvac.dto.NewFanDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
 import com.landleaf.ibsaas.common.enums.hvac.newfan.NewFanRunningModeEnum;
+import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.hvac.INewFanWebService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -61,6 +63,9 @@ public class NewFanWebController extends BasicController {
     @PutMapping("/operation")
     @ApiOperation("修改四效新风的值")
     public Response operation(@RequestBody NewFanDTO newFanDTO){
+        if(StringUtils.isBlank(newFanDTO.getId())){
+            throw new BusinessException("所传更改设备的节点id为空");
+        }
         iNewFanWebService.update(newFanDTO);
         return returnSuccess();
     }
