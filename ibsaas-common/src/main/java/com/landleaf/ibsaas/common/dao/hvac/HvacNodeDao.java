@@ -39,4 +39,11 @@ public interface HvacNodeDao extends BaseDao<HvacNode> {
      */
     HvacNodeFieldVO getHvacNodeFieldVO(@Param("nodeId") String nodeId, @Param("fieldName") String fieldName);
 
+    /**
+     * 根据某项属性查找批量所以节点的该属性 用于批量更改的时候
+     * @param fieldName
+     * @return
+     */
+    List<HvacNodeFieldVO> getHvacNodeFieldVOByFieldName(@Param("fieldName") String fieldName);
+
 }

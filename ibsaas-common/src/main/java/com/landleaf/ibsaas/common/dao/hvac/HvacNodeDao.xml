@@ -58,6 +58,24 @@
         INNER JOIN t_hvac_field thf ON  thp.field_id = thf.id AND thf.is_active=1
         INNER JOIN t_hvac_device thd ON thf.device_id = thd.id AND thd.is_active=1
         WHERE thp.is_active=1
-        AND thp.node_id=#{nodeId} AND thf.field_name=#{fieldName}
+        <if test="nodeId!=null and nodeId!=''">
+            AND thp.node_id=#{nodeId}
+        </if>
+        <if test="fieldName!=null and fieldName!=''">
+            AND thf.field_name=#{fieldName}
+        </if>
+    </select>
+    <select id="getHvacNodeFieldVOByFieldName"
+            resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeFieldVO">
+        SELECT
+        thp.node_id AS nodeId, thf.field_name AS fieldName,	thd.device_instance_number AS deviceInstanceNumber,
+        thp.bacnet_object_type AS bacnetObjectType, thp.instance_number AS instanceNumber, thf.permission
+        FROM t_hvac_point thp
+        INNER JOIN t_hvac_field thf ON  thp.field_id = thf.id AND thf.is_active=1
+        INNER JOIN t_hvac_device thd ON thf.device_id = thd.id AND thd.is_active=1
+        WHERE thp.is_active=1
+        <if test="fieldName!=null and fieldName!=''">
+            AND thf.field_name=#{fieldName}
+        </if>
     </select>
 </mapper>

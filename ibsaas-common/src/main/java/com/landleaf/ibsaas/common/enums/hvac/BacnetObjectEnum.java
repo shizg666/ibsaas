@@ -92,7 +92,7 @@ public enum BacnetObjectEnum {
 
 //    AVERAGING( "Averaging", ObjectType.averaging),
 //
-//    MULTI_STATE_VALUE( "Multi-state Value", ObjectType.multiStateValue),
+    MULTI_STATE_VALUE( 20,"Multi-state Value", ObjectType.multiStateValue),
 //
 //    TREND_LOG( "Trend Log", ObjectType.trendLog),
 //

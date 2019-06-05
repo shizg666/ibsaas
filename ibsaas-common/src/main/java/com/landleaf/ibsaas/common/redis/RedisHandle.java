@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.common.redis;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -26,7 +27,7 @@ public class RedisHandle implements BaseRedisDao<String, Object>{
     private RedisTemplate redisTemplate;
 
     @Autowired
-    public RedisHandle(RedisTemplate redisTemplate) {
+    public RedisHandle(@Qualifier("redisTemplateEx") RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

@@ -1,10 +1,7 @@
 package com.landleaf.ibsaas.client.hvac.rokectmq;
 
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
+
 import com.alibaba.rocketmq.common.message.MessageExt;
-import com.google.gson.reflect.TypeToken;
 import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 import com.landleaf.ibsaas.common.domain.mq.HvacMqMsg;

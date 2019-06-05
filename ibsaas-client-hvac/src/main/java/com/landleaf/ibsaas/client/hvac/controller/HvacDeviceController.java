@@ -60,10 +60,5 @@ public class HvacDeviceController extends Basic2Controller{
     }
 
 
-    @GetMapping("/reload")
-    @ApiOperation("重新加载设备和点位")
-    public Response reload(){
-        iHvacDeviceService.reload();
-        return returnSuccess();
-    }
+
 }

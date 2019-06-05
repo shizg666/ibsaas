@@ -22,6 +22,7 @@ import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.serotonin.bacnet4j.RemoteDevice;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 import com.serotonin.bacnet4j.util.PropertyValues;
+import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,15 @@ public class CommonDeviceService implements ICommonDeviceService {
 
     @Value("${bacnet.place.id}")
     private String placeId;
+
+    @Autowired
+    private BacnetInfoHolder bacnetInfoHolder;
+
+
+    @Override
+    public void reload() {
+        bacnetInfoHolder.reload();
+    }
 
     @Override
     public List<? extends BaseDevice> getCurrentData(Integer deviceInstanceNumber) {
@@ -96,7 +106,8 @@ public class CommonDeviceService implements ICommonDeviceService {
         remoteDeviceMap.forEachEntry(remoteDeviceMap.mappingCount(),entry -> {
             List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
             if(CollectionUtils.isNotEmpty(currentData)) {
-                redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
+                Integer key = entry.getKey();
+                redisHandle.addMap(placeId, String.valueOf(key), currentData);
             }
 
         });
@@ -135,6 +146,9 @@ public class CommonDeviceService implements ICommonDeviceService {
                 if(value != null && !"".equals(value)){
                     //不为空
                     String name = field.getName();
+                    if("id".equals(field.getName())){
+                        continue;
+                    }
                     writeField(id, name, value);
                 }
             } catch (IllegalAccessException e) {
@@ -153,10 +167,35 @@ public class CommonDeviceService implements ICommonDeviceService {
      */
     public boolean writeField(String id, String fieldName, String value){
         HvacNodeFieldVO hvacNodeFieldVO = hvacNodeDao.getHvacNodeFieldVO(id, fieldName);
+        if(exWriteLogic( id, fieldName, value)){
+            //符合额外操作的  直接返回
+            return true;
+        }
         BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
                 BacnetInfoHolder.REMOTE_DEVICE_MAP.get(hvacNodeFieldVO.getDeviceInstanceNumber()),
                 new ObjectIdentifier(BacnetObjectEnum.getObjectType(hvacNodeFieldVO.getBacnetObjectType()),hvacNodeFieldVO.getInstanceNumber()),
                 value);
         return true;
     }
+
+
+    public boolean exWriteLogic(String id, String fieldName, String value){
+        if("runningMode".equals(fieldName)){
+            //新风机运行模式  特殊处理
+            List<HvacNodeFieldVO> hnfs = hvacNodeDao.getHvacNodeFieldVOByFieldName(fieldName);
+            hnfs.forEach( hnf -> BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
+                    BacnetInfoHolder.REMOTE_DEVICE_MAP.get(hnf.getDeviceInstanceNumber()),
+                    new ObjectIdentifier(BacnetObjectEnum.getObjectType(hnf.getBacnetObjectType()),hnf.getInstanceNumber()),
+                    value));
+            return true;
+        }
+
+        if("humOnOff".equals(fieldName)){
+            //新风机 加湿阀  特殊处理
+        }
+
+        return false;
+    }
+
+
 }

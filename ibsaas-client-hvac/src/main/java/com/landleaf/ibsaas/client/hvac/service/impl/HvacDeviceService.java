@@ -28,7 +28,7 @@ public class HvacDeviceService extends AbstractBaseService<HvacDeviceDao, HvacDe
 
     private final DaoAdapter<HvacDevice> daoAdapter;
 
-    private final BacnetInfoHolder bacnetInfoHolder;
+
 
     @Override
     public HvacDevice addHvacDevice(HvacDeviceDTO hvacDeviceDTO) {
@@ -65,8 +65,5 @@ public class HvacDeviceService extends AbstractBaseService<HvacDeviceDao, HvacDe
         return hvacDeviceDao.all();
     }
 
-    @Override
-    public void reload() {
-        bacnetInfoHolder.reload();
-    }
+
 }

@@ -34,6 +34,13 @@ public class CommonDeviceController extends Basic2Controller {
 
     private final IHvacDeviceService iHvacDeviceService;
 
+    @GetMapping("/reload")
+    @ApiOperation("重新加载设备和点位")
+    public Response reload(){
+        iCommonDeviceService.reload();
+        return returnSuccess();
+    }
+
     @GetMapping("/all")
     @ApiOperation("获取所有的硬件设备")
     public Response all(){

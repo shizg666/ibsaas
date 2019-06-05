@@ -12,6 +12,12 @@ import java.util.List;
  */
 public interface ICommonDeviceService {
 
+
+    /**
+     * 重新加载设备和点位
+     */
+    void reload();
+
     /**
      * 统一获取固定设备当前所有节点的值
      * @param deviceInstanceNumber

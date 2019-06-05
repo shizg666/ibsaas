@@ -47,8 +47,5 @@ public interface IHvacDeviceService extends IBaseService<HvacDevice> {
      */
     List<HvacDevice> all();
 
-    /**
-     * 重新加载设备和点位
-     */
-    void reload();
+
 }

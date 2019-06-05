@@ -10,6 +10,7 @@ import com.landleaf.ibsaas.rocketmq.TopicConstants;
 import com.landleaf.ibsaas.web.rocketmq.WebMqProducer;
 import com.landleaf.ibsaas.web.web.service.hvac.BaseDeviceService;
 import com.landleaf.ibsaas.web.web.service.hvac.INewFanWebService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.Map;
  * @description:
  */
 @Service
+@Slf4j
 public class NewFanWebService extends BaseDeviceService implements INewFanWebService {
 
     @Autowired
@@ -36,10 +38,7 @@ public class NewFanWebService extends BaseDeviceService implements INewFanWebSer
 
     @Override
     public List<NewFanVO> overview() {
-        Map<String, Object> map = redisHandle.
-                getMap(placeId);
-        Object mapField = map.get(3002);
-        return (List<NewFanVO>) mapField;
+        return redisHandle.getMapField(placeId, "3002");
     }
 
     @Override
@@ -55,6 +54,7 @@ public class NewFanWebService extends BaseDeviceService implements INewFanWebSer
 
     @Override
     public void update(NewFanDTO newFanDTO) {
+        checkWritePermission(newFanDTO);
         HvacMqMsg msg = new HvacMqMsg(NewFanDTO.class.getName(), JSONUtil.toJsonStr(newFanDTO));
         webMqProducer.sendMessage(JSONUtil.toJsonStr(msg),
                 TopicConstants.TOPIC_HVAC_WRITE,

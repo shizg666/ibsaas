@@ -34,10 +34,8 @@ public class IbsaasWebApplicationTests {
 
     @Test
     public void redisOp(){
-        redisHandle.addMap("lgc", "abc", "aaa");
-        redisHandle.addMap("lgc", "123", "bbb");
-        redisHandle.addMap("lgc", String.valueOf(new Integer(3002)), new ArrayList<String>(){{add("1");add("2");add("3");}});
-        redisHandle.addMap("lgc", String.valueOf(new Integer(789)), "ddd");
+        //这里进去是string
+        redisHandle.addMap("lcc", "456", "bbb");
 
 
 
