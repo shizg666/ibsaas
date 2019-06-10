@@ -4,17 +4,25 @@ import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
 import com.landleaf.ibsaas.client.hvac.service.IHvacFieldService;
 import com.landleaf.ibsaas.client.hvac.service.IHvacNodeService;
 import com.landleaf.ibsaas.client.hvac.service.IHvacPointService;
+import com.landleaf.ibsaas.client.hvac.util.DaoAdapter;
 import com.landleaf.ibsaas.client.hvac.util.IdGeneratorEx;
 import com.landleaf.ibsaas.common.constant.IbsaasConstant;
+import com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacFieldDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacPointDao;
+import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 import com.landleaf.ibsaas.common.domain.hvac.HvacField;
 import com.landleaf.ibsaas.common.domain.hvac.HvacNode;
 import com.landleaf.ibsaas.common.domain.hvac.HvacPoint;
+import com.landleaf.ibsaas.common.enums.hvac.BacnetPremissionEnum;
+import com.landleaf.ibsaas.common.enums.hvac.HvacFloorEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
+import com.serotonin.bacnet4j.LocalDevice;
+import com.serotonin.bacnet4j.npdu.ip.IpNetwork;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,6 +33,10 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class IbsaasClientHvacApplicationTests {
+
+
+    @Autowired
+    private HvacDeviceDao hvacDeviceDao;
 
     @Autowired
     private HvacFieldDao hvacFieldDao;
@@ -53,14 +65,150 @@ public class IbsaasClientHvacApplicationTests {
     @Autowired
     private ICommonDeviceService iCommonDeviceService;
 
+    @Autowired
+    private DaoAdapter daoAdapter;
+
     @Test
     public void contextLoads() {
 
     }
 
 
+    /**
+     * 新增设备
+     */
     @Test
-    public void fillIds(){
+    public void insertDevice(){
+        HvacDevice hd = new HvacDevice();
+        hd.setIp("192.168.10.212");
+        hd.setPort(IpNetwork.DEFAULT_PORT);
+        hd.setDeviceInstanceNumber(30032);
+        hd.setDescription("风机盘管(3F-4F)");
+        daoAdapter.consummateAddOperation(hd);
+        hvacDeviceDao.insertSelective(hd);
+    }
+
+    /**
+     * 插入设备字段
+     */
+    @Test
+    public void insertField(){
+        List<HvacField> list = new ArrayList<HvacField>(){{
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcComState",
+                    "风机盘管通信状态",
+                    BacnetPremissionEnum.READ.getPermission()));
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcWaterValveState",
+                    "风机盘管水阀状态",
+                    BacnetPremissionEnum.READ.getPermission()));
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcBackTemp",
+                    "风机盘管回风温度(室内温度)",
+                    BacnetPremissionEnum.READ.getPermission()));
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcOnOff",
+                    "风机盘管开关机",
+                    BacnetPremissionEnum.READ_AND_WRITE.getPermission()));
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcRunningMode",
+                    "风机盘管运行模式",
+                    BacnetPremissionEnum.READ_AND_WRITE.getPermission()));
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcTempSetting",
+                    "风机盘管温度设定",
+                    BacnetPremissionEnum.READ_AND_WRITE.getPermission()));
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcMachMode",
+                    "风机盘管风机模式",
+                    BacnetPremissionEnum.READ_AND_WRITE.getPermission()));
+
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcHighSpeed",
+                    "风机盘管高速",
+                    BacnetPremissionEnum.READ.getPermission()));
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcMediumSpeed",
+                    "风机盘管中速",
+                    BacnetPremissionEnum.READ.getPermission()));
+            add(getHvacField(
+                    "244072419042660352" ,
+                    "fcLowSpeed",
+                    "风机盘管低速",
+                    BacnetPremissionEnum.READ.getPermission()));
+
+
+
+        }};
+        list.forEach(hf -> hvacFieldDao.insertSelective(hf));
+    }
+
+    private HvacField getHvacField(String deviceId, String fieldName, String fieldDescription, Integer permission){
+        HvacField hf = new HvacField();
+        hf.setDeviceId(deviceId);
+        hf.setFieldName(fieldName);
+        hf.setFieldDescription(fieldDescription);
+        hf.setPermission(permission);
+        daoAdapter.consummateAddOperation(hf);
+        return hf;
+    }
+
+
+    @Test
+    public void insertNode(){
+
+//        for (int i = 1; i <= 37; i++) {
+//            HvacNode hd = getHvacNode("244072419042660352",
+//                    i+"#",
+//                    HvacFloorEnum.A_4_F.getFloor());
+//            hvacNodeDao.insertSelective(hd);
+//        }
+
+        HvacNode hd = getHvacNode("240563253330186240",
+                                  "2#",
+                                   HvacFloorEnum.A_1_F.getFloor());
+        hvacNodeDao.insertSelective(hd);
+    }
+
+    private HvacNode getHvacNode( String deviceId, String nodeName, Integer floor){
+        HvacNode hd = new HvacNode();
+        hd.setDeviceId(deviceId);
+        hd.setNodeName(nodeName);
+        hd.setFloor(floor);
+        daoAdapter.consummateAddOperation(hd);
+        return hd;
+    }
+
+
+
+    @Test
+    public void updateBatch(){
+//        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointDaoByNodeIdOrFieldId( "240563253330186240", null, null);
+        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointLmt( 100);
+        hvacPoints.forEach(hp -> {
+            HvacPoint temp = new HvacPoint();
+            BeanUtils.copyProperties(hp, temp);
+            daoAdapter.consummateAddOperation(temp);
+            hvacPointDao.insertSelective(temp);
+            hvacPointDao.delete(hp);
+        });
+//        System.out.println(hvacPoints);
+    }
+
+
+
+
+    @Test
+    public void currentDataToRedis(){
         iCommonDeviceService.currentDataToRedis();
     }
 
@@ -98,7 +246,6 @@ public class IbsaasClientHvacApplicationTests {
             hvacFieldDao.insertSelective(hf);
         }
     }
-
 
     private void fillHvacPoint(){
         List<HvacPoint> hvacPoints = iHvacPointService.selectAll();

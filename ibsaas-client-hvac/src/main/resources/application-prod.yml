@@ -123,6 +123,9 @@ rocketmq:
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
 
 pagehelper:
   helperDialect: mysql

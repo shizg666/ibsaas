@@ -17,8 +17,8 @@ spring:
       pool:
         max-active: 50
         max-idle: 30
-        max-wait: 30000
         min-idle: 8
+        max-wait: 3000
     jedis:
       pool:
         #jedis最大分配对象
@@ -124,6 +124,9 @@ rocketmq:
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
 
 pagehelper:
   helperDialect: mysql

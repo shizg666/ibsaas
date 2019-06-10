@@ -63,6 +63,7 @@ public class NewFanWebController extends BasicController {
     @PutMapping("/operation")
     @ApiOperation("修改四效新风的值")
     public Response operation(@RequestBody NewFanDTO newFanDTO){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.operation入参为:{}", newFanDTO);
         if(StringUtils.isBlank(newFanDTO.getId())){
             throw new BusinessException("所传更改设备的节点id为空");
         }

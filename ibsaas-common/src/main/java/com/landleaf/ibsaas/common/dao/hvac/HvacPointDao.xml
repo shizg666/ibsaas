@@ -5,4 +5,24 @@
 <mapper namespace="com.landleaf.ibsaas.common.dao.hvac.HvacPointDao">
 
 
+    <select id="getHvacPointDaoByNodeIdOrFieldId"
+            resultType="com.landleaf.ibsaas.common.domain.hvac.HvacPoint">
+        SELECT thp.* FROM t_hvac_point thp
+        LEFT JOIN t_hvac_node thn ON thn.id=thp.node_id AND thn.is_active=1
+        WHERE thp.is_active=1
+        <if test="deviceId!=null and deviceId!=''">
+            AND thn.device_id=#{deviceId}
+        </if>
+        <if test="nodeId!=null and nodeId!=''">
+            AND thp.node_id=#{nodeId}
+        </if>
+        <if test="fieldId!=null and nodeId!=''">
+            AND thp.field_id=#{fieldId}
+        </if>
+    </select>
+    <select id="getHvacPointLmt" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacPoint">
+        SELECT * FROM t_hvac_point
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
 </mapper>

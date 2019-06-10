@@ -156,6 +156,12 @@ public class NewFan extends BaseDevice implements Serializable {
     private String humOnOff;
 
     /**
+     * 加湿湿度值
+     */
+    @ApiModelProperty("加湿湿度值")
+    private String humSetting;
+
+    /**
      * 清空滤网计时(1:清空 0:检测中)
      * emptyFilterScreenTiming
      */

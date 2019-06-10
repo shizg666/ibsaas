@@ -7,16 +7,14 @@ import com.landleaf.ibsaas.client.hvac.config.LocalDeviceConfig;
 import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
 import com.landleaf.ibsaas.client.hvac.util.BacnetUtil;
 import com.landleaf.ibsaas.client.hvac.util.HvacUtil;
+import com.landleaf.ibsaas.common.constant.HvacConstant;
 import com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 
-import com.landleaf.ibsaas.common.domain.hvac.vo.HvacFieldVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeFieldVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO;
+import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 
-import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.serotonin.bacnet4j.RemoteDevice;
@@ -35,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.landleaf.ibsaas.common.constant.HvacConstant.*;
 
 
 /**
@@ -106,8 +106,7 @@ public class CommonDeviceService implements ICommonDeviceService {
         remoteDeviceMap.forEachEntry(remoteDeviceMap.mappingCount(),entry -> {
             List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
             if(CollectionUtils.isNotEmpty(currentData)) {
-                Integer key = entry.getKey();
-                redisHandle.addMap(placeId, String.valueOf(key), currentData);
+                redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
             }
 
         });
@@ -126,8 +125,15 @@ public class CommonDeviceService implements ICommonDeviceService {
 
     private BaseDevice getByDeviceId(Integer deviceInstanceNumber){
         switch (deviceInstanceNumber) {
-            case 3002:
+            case NEW_FAN_PORT:
                 return new NewFanVO();
+            case FAN_COIL_PORT_1:
+            case FAN_COIL_PORT_2:
+                return new FanCoilVO();
+            case WEATHER_STATION_PORT:
+                return new WeatherStationVO();
+            case HYDRAULIC_MODULE_PORT :
+                return new HydraulicModuleVO();
             default:
                 return new BaseDevice();
         }
