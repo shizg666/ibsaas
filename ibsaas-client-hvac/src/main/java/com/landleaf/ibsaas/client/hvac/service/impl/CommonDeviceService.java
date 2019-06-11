@@ -134,6 +134,10 @@ public class CommonDeviceService implements ICommonDeviceService {
                 return new WeatherStationVO();
             case HYDRAULIC_MODULE_PORT :
                 return new HydraulicModuleVO();
+            case WATER_METER_PORT:
+                return new WaterMeterVO();
+            case ELECTRIC_METER_PORT:
+                return new ElectricMeterVO();
             default:
                 return new BaseDevice();
         }

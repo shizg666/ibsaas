@@ -31,7 +31,7 @@ public class HydraulicModuleWebController extends BasicController {
 
 
     @GetMapping("/overview")
-    @ApiOperation("四效新风机总览")
+    @ApiOperation("水力模块总览")
     public Response overview(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>HydraulicModuleWebController.overview入参为:空");
         List<HydraulicModuleVO> hydraulicModuleVOList = iHydraulicModuleWebService.overview();
@@ -41,7 +41,7 @@ public class HydraulicModuleWebController extends BasicController {
 
 
     @GetMapping("/info/{id}")
-    @ApiOperation("单个四效新风机当前状态")
+    @ApiOperation("单个水力模块当前状态")
     public Response getInfo(@PathVariable("id") String id){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>HydraulicModuleWebController.get入参为:{}", id);
         HydraulicModuleVO hydraulicModuleVO = iHydraulicModuleWebService.getInfoById(id);
@@ -50,7 +50,7 @@ public class HydraulicModuleWebController extends BasicController {
     }
 
     @PutMapping("/operation")
-    @ApiOperation("修改四效新风的值")
+    @ApiOperation("修改水力模块的值")
     public Response operation(@RequestBody HydraulicModuleVO hydraulicModuleVO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.operation入参为:{}", hydraulicModuleVO);
         if(StringUtils.isBlank(hydraulicModuleVO.getId())){

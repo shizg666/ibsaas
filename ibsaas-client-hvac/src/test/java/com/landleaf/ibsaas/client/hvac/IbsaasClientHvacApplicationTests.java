@@ -95,55 +95,14 @@ public class IbsaasClientHvacApplicationTests {
     public void insertField(){
         List<HvacField> list = new ArrayList<HvacField>(){{
             add(getHvacField(
-                    "244072419042660352" ,
-                    "fcComState",
-                    "风机盘管通信状态",
+                    "240563083381182464" ,
+                    "emComState",
+                    "电表通信状态",
                     BacnetPremissionEnum.READ.getPermission()));
             add(getHvacField(
-                    "244072419042660352" ,
-                    "fcWaterValveState",
-                    "风机盘管水阀状态",
-                    BacnetPremissionEnum.READ.getPermission()));
-            add(getHvacField(
-                    "244072419042660352" ,
-                    "fcBackTemp",
-                    "风机盘管回风温度(室内温度)",
-                    BacnetPremissionEnum.READ.getPermission()));
-            add(getHvacField(
-                    "244072419042660352" ,
-                    "fcOnOff",
-                    "风机盘管开关机",
-                    BacnetPremissionEnum.READ_AND_WRITE.getPermission()));
-            add(getHvacField(
-                    "244072419042660352" ,
-                    "fcRunningMode",
-                    "风机盘管运行模式",
-                    BacnetPremissionEnum.READ_AND_WRITE.getPermission()));
-            add(getHvacField(
-                    "244072419042660352" ,
-                    "fcTempSetting",
-                    "风机盘管温度设定",
-                    BacnetPremissionEnum.READ_AND_WRITE.getPermission()));
-            add(getHvacField(
-                    "244072419042660352" ,
-                    "fcMachMode",
-                    "风机盘管风机模式",
-                    BacnetPremissionEnum.READ_AND_WRITE.getPermission()));
-
-            add(getHvacField(
-                    "244072419042660352" ,
-                    "fcHighSpeed",
-                    "风机盘管高速",
-                    BacnetPremissionEnum.READ.getPermission()));
-            add(getHvacField(
-                    "244072419042660352" ,
-                    "fcMediumSpeed",
-                    "风机盘管中速",
-                    BacnetPremissionEnum.READ.getPermission()));
-            add(getHvacField(
-                    "244072419042660352" ,
-                    "fcLowSpeed",
-                    "风机盘管低速",
+                    "240563083381182464" ,
+                    "emReading",
+                    "电表读数",
                     BacnetPremissionEnum.READ.getPermission()));
 
 
@@ -166,17 +125,17 @@ public class IbsaasClientHvacApplicationTests {
     @Test
     public void insertNode(){
 
-//        for (int i = 1; i <= 37; i++) {
-//            HvacNode hd = getHvacNode("244072419042660352",
-//                    i+"#",
-//                    HvacFloorEnum.A_4_F.getFloor());
-//            hvacNodeDao.insertSelective(hd);
-//        }
+        for (int i = 1; i <= 27; i++) {
+            HvacNode hd = getHvacNode("240563083381182464",
+                    i+"##",
+                    HvacFloorEnum.A_1_F.getFloor());
+            hvacNodeDao.insertSelective(hd);
+        }
 
-        HvacNode hd = getHvacNode("240563253330186240",
-                                  "2#",
-                                   HvacFloorEnum.A_1_F.getFloor());
-        hvacNodeDao.insertSelective(hd);
+//        HvacNode hd = getHvacNode("240563007812407296",
+//                                  "2#",
+//                                   HvacFloorEnum.A_1_F.getFloor());
+//        hvacNodeDao.insertSelective(hd);
     }
 
     private HvacNode getHvacNode( String deviceId, String nodeName, Integer floor){
