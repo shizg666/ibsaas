@@ -12,6 +12,7 @@ import com.landleaf.ibsaas.web.web.service.energy.IEnergyEquipNodeService;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyEquipService;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyEquipVerifyService;
 import com.landleaf.ibsaas.web.web.util.WebDaoAdapter;
+
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
