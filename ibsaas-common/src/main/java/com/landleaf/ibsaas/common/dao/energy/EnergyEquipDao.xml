@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao">
+
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_energy_equip
+    </select>
+    <select id="selectUnique" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyEquip">
+        SELECT id FROM t_energy_equip
+        WHERE equip_no=#{equipNo}
+        OR equip_name=#{equipName}
+    </select>
+</mapper>

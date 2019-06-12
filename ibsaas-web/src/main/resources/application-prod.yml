@@ -118,6 +118,9 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
 
 pagehelper:
   helperDialect: mysql
