@@ -6,12 +6,16 @@ import com.landleaf.ibsaas.common.dao.knight.TFloorMapper;
 import com.landleaf.ibsaas.common.domain.knight.TBuilding;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.common.exception.BusinessException;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.service.knight.IBuildingService;
+import com.landleaf.ibsaas.web.web.service.knight.IFloorService;
 import com.landleaf.ibsaas.web.web.vo.BuildingReponseVO;
 import com.landleaf.ibsaas.web.web.vo.FloorReponseVO;
+import com.landleaf.ibsaas.web.web.vo.RoleFloorDoorsReponseVO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +25,14 @@ import java.util.stream.Collectors;
 @Service
 public class IBuildingServiceImpl implements IBuildingService {
 
+    @Value("${web.picUrl}")
+    private String path;
     @Autowired
     private TBuildingMapper tBuildingMapper;
     @Autowired
     private TFloorMapper tFloorMapper;
+    @Autowired
+    private IFloorService iFloorService;
 
 
 
@@ -80,6 +88,51 @@ public class IBuildingServiceImpl implements IBuildingService {
             floorReponseVOS.add(floorReponseVO);
         });
         Map<Long,List<FloorReponseVO>> dataMapArea=floorReponseVOS.stream().collect(Collectors.groupingBy(FloorReponseVO::getParentId));
+        buildingReponseVOArrayList.forEach(obj->{
+            obj.setList(dataMapArea.get(obj.getId()));
+        });
+        return buildingReponseVOArrayList;
+    }
+
+    @Override
+    public List<BuildingReponseVO> getBuildingAllInfoByRoleId(String roleId) {
+        List<BuildingReponseVO> buildingReponseVOArrayList = Lists.newArrayList();
+        List<TBuilding> tBuildingList =  tBuildingMapper.getAllBuilding();
+        if (tBuildingList == null || tBuildingList.size() <= 0 ){
+            return buildingReponseVOArrayList;
+        }
+        List<Long> buildingIds = Lists.newArrayList();
+        tBuildingList.forEach(obj ->{
+            BuildingReponseVO buildingReponseVO = new BuildingReponseVO();
+            BeanUtils.copyProperties(obj,buildingReponseVO);
+            buildingReponseVO.setKey("building_"+ String.valueOf(buildingReponseVO.getId()));
+            buildingIds.add(obj.getId());
+            buildingReponseVOArrayList.add(buildingReponseVO);
+        });
+        List<TFloor> tFloors = tFloorMapper.selectByParentIds(buildingIds);
+        if ( tFloors.size() == 0 ){
+            return buildingReponseVOArrayList;
+        }
+        List<Long> floorIds = Lists.newArrayList();
+        List<FloorReponseVO> floorReponseVOS = Lists.newArrayList();
+        tFloors.forEach(obj ->{
+            FloorReponseVO floorReponseVO = new FloorReponseVO();
+            BeanUtils.copyProperties(obj,floorReponseVO);
+            floorReponseVO.setKey("floor_"+ String.valueOf(floorReponseVO.getId()));
+            floorReponseVO.setImg(StringUtil.isBlank(floorReponseVO.getImg())?"":path+floorReponseVO.getImg());
+            floorIds.add(obj.getId());
+            floorReponseVOS.add(floorReponseVO);
+        });
+        Map<Long,List<FloorReponseVO>> dataMapArea=floorReponseVOS.stream().collect(Collectors.groupingBy(FloorReponseVO::getParentId));
+
+        for (Map.Entry<Long, List<FloorReponseVO>> entry : dataMapArea.entrySet()) {
+//            RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = new RoleFloorDoorsReponseVO();
+            List<FloorReponseVO> floors = entry.getValue();
+            floors.forEach(obj->{
+                RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = iFloorService.getfloorControlDoorByRoleId(obj.getId(),roleId);
+                obj.setDataList(roleFloorDoorsReponseVO.getList());
+            });
+        }
         buildingReponseVOArrayList.forEach(obj->{
             obj.setList(dataMapArea.get(obj.getId()));
         });
