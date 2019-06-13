@@ -73,6 +73,19 @@ public class MjUserRoleService extends AbstractBaseService<MjUserRoleDao, MjUser
         return result;
     }
 
+    @Override
+    public List<MjUserRole> getUserRoleByRoleId(String roleId) {
+        List<MjUserRole> result = Lists.newArrayList();
+        MjUserRole queryParam = new MjUserRole();
+        queryParam.setMjRoleId(roleId);
+        List<MjUserRole> queryResult = select(queryParam);
+
+        if(!CollectionUtils.isEmpty(queryResult)){
+            result.addAll(queryResult);
+        }
+        return result;
+    }
+
     private MjUserRole findUserRole(Integer mjUserId, String mjRoleId) {
         MjUserRole queryParam = new MjUserRole();
         queryParam.setMjUserId(mjUserId);

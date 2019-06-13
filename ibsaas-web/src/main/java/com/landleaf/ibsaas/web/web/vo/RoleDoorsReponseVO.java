@@ -6,6 +6,10 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "角色门禁信息")
 public class RoleDoorsReponseVO {
     private Long id;
+    @ApiModelProperty(value="门名称")
+    private String name;
+    @ApiModelProperty(value="楼层id")
+    private Long parentId;
     @ApiModelProperty(value="门禁id")
     private Integer controlId;
     @ApiModelProperty(value="横坐标")
@@ -15,6 +19,22 @@ public class RoleDoorsReponseVO {
     @ApiModelProperty(value="是否拥有")
     private Boolean acessflag;
 
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
 
     public Long getId() {
         return id;

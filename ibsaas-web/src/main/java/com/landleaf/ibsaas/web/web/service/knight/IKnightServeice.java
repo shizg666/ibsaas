@@ -117,4 +117,6 @@ public interface IKnightServeice {
      * @return
      */
     Response bindRole(Integer sysNo, List<String> roleIds);
+
+    Response updatePermissionByRole(String roleId);
 }
