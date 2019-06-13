@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.web.web.service.hvac;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HydraulicModuleVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -16,6 +17,12 @@ public interface IHydraulicModuleWebService {
      * @return
      */
     List<HydraulicModuleVO> overview();
+
+    /**
+     * 水力模块楼层总览
+     * @return
+     */
+    Map<String, Map<String, HydraulicModuleVO>> totalOverview();
 
     /**
      * 查询单个信息

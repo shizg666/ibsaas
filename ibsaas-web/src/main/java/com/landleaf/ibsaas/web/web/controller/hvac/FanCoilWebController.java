@@ -4,6 +4,7 @@ import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.hvac.dto.FanCoilDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
+import com.landleaf.ibsaas.common.enums.hvac.fancoil.*;
 import com.landleaf.ibsaas.common.enums.hvac.newfan.NewFanRunningModeEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
@@ -16,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -36,20 +38,12 @@ public class FanCoilWebController extends BasicController {
     @ApiOperation("风机盘管总览")
     public Response overview(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>FanCoilWebController.overview入参为:空");
-        List<FanCoilVO> fanCoilVOList = iFanCoilWebService.overview();
+//        List<FanCoilVO> fanCoilVOList = iFanCoilWebService.overview();
+        Map<String, Map<String, FanCoilVO>> fanCoilVOList = iFanCoilWebService.totalOverView();
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.overview出参为:{}",fanCoilVOList);
         return returnSuccess(fanCoilVOList);
     }
 
-
-    @GetMapping("/running-modes")
-    @ApiOperation("获取运行模式下拉菜单")
-    public Response runningModes(){
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>FanCoilWebController.runningModes入参为:空");
-        List<ChoiceButton> choiceButtons = NewFanRunningModeEnum.getChoiceButtons();
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.runningModes出参为:{}",choiceButtons);
-        return returnSuccess(choiceButtons);
-    }
 
     @GetMapping("/info/{id}")
     @ApiOperation("单个风机盘管当前状态")
@@ -69,5 +63,52 @@ public class FanCoilWebController extends BasicController {
         }
         iFanCoilWebService.update(fanCoilDTO);
         return returnSuccess();
+    }
+
+
+    @GetMapping("/on-off")
+    @ApiOperation("风盘开关机状态")
+    public Response onOff(){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>FanCoilWebController.onOff入参为:空");
+        List<ChoiceButton> choiceButtons = FanCoilOnOffEnum.getChoiceButtons();
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.onOffs出参为:{}",choiceButtons);
+        return returnSuccess(choiceButtons);
+    }
+
+
+    @GetMapping("/running-modes-1")
+    @ApiOperation("1楼风盘运行模式")
+    public Response runningModesEx(){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>FanCoilWebController.runningModesEx入参为:空");
+        List<ChoiceButton> choiceButtons = FanCoilRunningModeExEnum.getChoiceButtons();
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.runningModesEx出参为:{}",choiceButtons);
+        return returnSuccess(choiceButtons);
+    }
+
+    @GetMapping("/running-modes")
+    @ApiOperation("2-4楼风盘运行模式")
+    public Response runningModes(){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>FanCoilWebController.runningModes入参为:空");
+        List<ChoiceButton> choiceButtons = FanCoilRunningModeEnum.getChoiceButtons();
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.runningModes出参为:{}",choiceButtons);
+        return returnSuccess(choiceButtons);
+    }
+
+    @GetMapping("/mach-modes-1")
+    @ApiOperation("1楼风盘风机模式")
+    public Response machModesEx(){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>FanCoilWebController.machModesEx入参为:空");
+        List<ChoiceButton> choiceButtons = FanCoilMachModeExEnum.getChoiceButtons();
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.machModesEx出参为:{}",choiceButtons);
+        return returnSuccess(choiceButtons);
+    }
+
+    @GetMapping("/mach-modes")
+    @ApiOperation("2-4楼风盘风机模式")
+    public Response machModes(){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>FanCoilWebController.machModes入参为:空");
+        List<ChoiceButton> choiceButtons = FanCoilMachModeEnum.getChoiceButtons();
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.machModes出参为:{}",choiceButtons);
+        return returnSuccess(choiceButtons);
     }
 }

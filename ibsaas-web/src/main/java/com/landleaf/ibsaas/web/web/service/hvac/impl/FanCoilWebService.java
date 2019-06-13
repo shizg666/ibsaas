@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Lokiy
@@ -53,19 +54,21 @@ public class FanCoilWebService extends BaseDeviceService implements IFanCoilWebS
         return fanCoilVOList;
     }
 
+    @Override
     public Map<String, Map<String, FanCoilVO>> totalOverView(){
         //查找所有的风机节点
         List<HvacNode> hvacNodes = hvacNodeDao.getHvacNodes(new ArrayList<Integer>(){{
             add(HvacConstant.FAN_COIL_PORT_1);
             add(HvacConstant.FAN_COIL_PORT_2);
         }});
-
+        Map<String, HvacNode> map = hvacNodes.stream().collect(Collectors.toMap(HvacNode::getId, hn -> hn));
+        //风机归类
         Map<String, Map<String, FanCoilVO>> result = new HashMap<>(8);
         List<FanCoilVO> overview = overview();
         overview.forEach(fc -> {
-
-
-
+            HvacNode temp = map.get(fc.getId());
+            result.computeIfAbsent(String.valueOf(temp.getFloor()), k -> new HashMap<>(64));
+            result.get(String.valueOf(temp.getFloor())).put(temp.getNodeName(), fc);
         });
         return result;
     }

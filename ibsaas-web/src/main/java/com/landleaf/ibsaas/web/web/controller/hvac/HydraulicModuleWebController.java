@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -34,7 +35,8 @@ public class HydraulicModuleWebController extends BasicController {
     @ApiOperation("水力模块总览")
     public Response overview(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>HydraulicModuleWebController.overview入参为:空");
-        List<HydraulicModuleVO> hydraulicModuleVOList = iHydraulicModuleWebService.overview();
+//        List<HydraulicModuleVO> hydraulicModuleVOList = iHydraulicModuleWebService.overview();
+        Map<String, Map<String, HydraulicModuleVO>> hydraulicModuleVOList = iHydraulicModuleWebService.totalOverview();
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<HydraulicModuleWebController.overview出参为:{}",hydraulicModuleVOList);
         return returnSuccess(hydraulicModuleVOList);
     }

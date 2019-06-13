@@ -51,5 +51,5 @@ public interface HvacNodeDao extends BaseDao<HvacNode> {
      * @param deviceInstanceNumbers
      * @return
      */
-    List<HvacNode> getHvacNodes(List<Integer> deviceInstanceNumbers);
+    List<HvacNode> getHvacNodes(@Param("deviceInstanceNumbers") List<Integer> deviceInstanceNumbers);
 }

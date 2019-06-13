@@ -4,6 +4,7 @@ import com.landleaf.ibsaas.common.domain.hvac.dto.FanCoilDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -17,6 +18,13 @@ public interface IFanCoilWebService {
      * @return
      */
     List<FanCoilVO> overview();
+
+
+    /**
+     * 格式总览
+     * @return
+     */
+    Map<String, Map<String, FanCoilVO>> totalOverView();
 
     /**
      * 查看单个风机盘管的值

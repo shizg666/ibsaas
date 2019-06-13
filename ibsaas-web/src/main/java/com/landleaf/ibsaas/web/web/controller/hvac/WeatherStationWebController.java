@@ -34,8 +34,9 @@ public class WeatherStationWebController extends BasicController {
     public Response overview(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>WeatherStationWebController.overview入参为:空");
         List<WeatherStationVO> weatherStationVOList = iWeatherStationWebService.overview();
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<WeatherStationWebController.overview出参为:{}",weatherStationVOList);
-        return returnSuccess(weatherStationVOList);
+        WeatherStationVO weatherStationVO = weatherStationVOList.get(0);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<WeatherStationWebController.overview出参为:{}",weatherStationVO);
+        return returnSuccess(weatherStationVO);
     }
 
 
