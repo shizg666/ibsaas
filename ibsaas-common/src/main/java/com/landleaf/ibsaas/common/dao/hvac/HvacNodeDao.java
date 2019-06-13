@@ -46,4 +46,10 @@ public interface HvacNodeDao extends BaseDao<HvacNode> {
      */
     List<HvacNodeFieldVO> getHvacNodeFieldVOByFieldName(@Param("fieldName") String fieldName);
 
+    /**
+     * 根据设备点位获取 所有节点信息
+     * @param deviceInstanceNumbers
+     * @return
+     */
+    List<HvacNode> getHvacNodes(List<Integer> deviceInstanceNumbers);
 }

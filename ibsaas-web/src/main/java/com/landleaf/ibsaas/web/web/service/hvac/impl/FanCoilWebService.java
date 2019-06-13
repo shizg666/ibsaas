@@ -2,6 +2,8 @@ package com.landleaf.ibsaas.web.web.service.hvac.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.landleaf.ibsaas.common.constant.HvacConstant;
+import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
+import com.landleaf.ibsaas.common.domain.hvac.HvacNode;
 import com.landleaf.ibsaas.common.domain.hvac.dto.FanCoilDTO;
 import com.landleaf.ibsaas.common.domain.hvac.dto.NewFanDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
@@ -17,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -34,6 +39,9 @@ public class FanCoilWebService extends BaseDeviceService implements IFanCoilWebS
     @Autowired
     private WebMqProducer webMqProducer;
 
+    @Autowired
+    private HvacNodeDao hvacNodeDao;
+
     @Value("${bacnet.place.id}")
     private String placeId;
 
@@ -44,6 +52,24 @@ public class FanCoilWebService extends BaseDeviceService implements IFanCoilWebS
         fanCoilVOList.addAll(fanCoilVOList2);
         return fanCoilVOList;
     }
+
+    public Map<String, Map<String, FanCoilVO>> totalOverView(){
+        //查找所有的风机节点
+        List<HvacNode> hvacNodes = hvacNodeDao.getHvacNodes(new ArrayList<Integer>(){{
+            add(HvacConstant.FAN_COIL_PORT_1);
+            add(HvacConstant.FAN_COIL_PORT_2);
+        }});
+
+        Map<String, Map<String, FanCoilVO>> result = new HashMap<>(8);
+        List<FanCoilVO> overview = overview();
+        overview.forEach(fc -> {
+
+
+
+        });
+        return result;
+    }
+
 
     @Override
     public FanCoilVO getInfoById(String id) {

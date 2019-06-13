@@ -152,7 +152,7 @@ public class IbsaasClientHvacApplicationTests {
     @Test
     public void updateBatch(){
 //        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointDaoByNodeIdOrFieldId( "240563253330186240", null, null);
-        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointLmt( 100);
+        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointLmt( 300);
         hvacPoints.forEach(hp -> {
             HvacPoint temp = new HvacPoint();
             BeanUtils.copyProperties(hp, temp);

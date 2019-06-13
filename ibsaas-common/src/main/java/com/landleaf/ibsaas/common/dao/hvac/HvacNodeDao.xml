@@ -30,6 +30,13 @@
         thp.instance_number
     </sql>
 
+    <sql id="hvac_node_base">
+        thn.id,
+        thn.device_id,
+        thn.node_name,
+        thn.floor
+    </sql>
+
     <select id="getHvacNodeByDeviceId" resultMap="hvacNodeVOResultMap">
         SELECT
         <include refid="hvacNodeVOSql"/>
@@ -77,5 +84,19 @@
         <if test="fieldName!=null and fieldName!=''">
             AND thf.field_name=#{fieldName}
         </if>
+    </select>
+    <select id="getHvacNodes" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacNode">
+        SELECT
+        <include refid="hvac_node_base"/>
+        FROM t_hvac_node thn
+        LEFT JOIN t_hvac_device thd ON thn.device_id=thd.id AND thd.is_active=1
+        WHERE thn.is_active=1
+        <if test="deviceInstanceNumbers!=null and deviceInstanceNumbers.size>0">
+            AND thd.device_instance_number IN
+            <foreach collection="deviceInstanceNumbers" index="index" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+
     </select>
 </mapper>
