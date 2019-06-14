@@ -1,6 +1,7 @@
 package com.landleaf.ibsaas.common.dao.energy;
 
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquip;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +24,11 @@ public interface EnergyEquipDao extends BaseDao<EnergyEquip> {
      * @return
      */
     EnergyEquip selectUnique(@Param("equipName") String equipName, @Param("equipNo") String equipNo);
+
+    /**
+     * 根据id获取设备详情
+     * @param id
+     * @return
+     */
+    EnergyEquipVO getenergyEquipVO(String id);
 }

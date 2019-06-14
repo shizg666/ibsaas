@@ -23,7 +23,7 @@ public class EnergyEquipVerify extends BasicEntity {
     private String equipId;
 
     @ApiModelProperty("校验时间")
-    private Date verifyDate;
+    private Date verifyTime;
 
     @ApiModelProperty("校验值")
     private BigDecimal verifyValue;

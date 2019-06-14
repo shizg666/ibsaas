@@ -21,6 +21,7 @@ public class HvacNodeVO implements Serializable {
      */
     @ApiModelProperty("远程设备节点id")
     private String id;
+    private String nodeId;
 
     /**
      * 设备id

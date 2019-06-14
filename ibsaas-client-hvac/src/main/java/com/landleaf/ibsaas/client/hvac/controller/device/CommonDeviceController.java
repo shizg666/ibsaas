@@ -2,6 +2,8 @@ package com.landleaf.ibsaas.client.hvac.controller.device;
 
 import com.landleaf.ibsaas.client.hvac.controller.Basic2Controller;
 import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
+import com.landleaf.ibsaas.client.hvac.service.IEnergyDataElectricService;
+import com.landleaf.ibsaas.client.hvac.service.IEnergyDataWaterService;
 import com.landleaf.ibsaas.client.hvac.service.IHvacDeviceService;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +36,10 @@ public class CommonDeviceController extends Basic2Controller {
     private final ICommonDeviceService iCommonDeviceService;
 
     private final IHvacDeviceService iHvacDeviceService;
+
+    private final IEnergyDataElectricService iEnergyDataElectricService;
+
+    private final IEnergyDataWaterService iEnergyDataWaterService;
 
     @GetMapping("/reload")
     @ApiOperation("重新加载设备和点位")
@@ -62,6 +69,14 @@ public class CommonDeviceController extends Basic2Controller {
     @GetMapping("/current-data/redis")
     public Response currentDataToRedis(){
         iCommonDeviceService.currentDataToRedis();
+        return returnSuccess();
+    }
+
+    @GetMapping("/data-record")
+    public Response dataRecord(){
+        Date now = new Date();
+        iEnergyDataElectricService.dataRecord(now);
+        iEnergyDataWaterService.dataRecord(now);
         return returnSuccess();
     }
 }

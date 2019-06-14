@@ -4,6 +4,40 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao">
 
+    <resultMap id="energyEquipVOResultMap" type="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO">
+        <id column="id" property="id"/>
+        <result column="equip_no" property="equipNo"/>
+        <result column="equip_name" property="equipName"/>
+        <result column="equip_type" property="equipType"/>
+        <result column="equip_floor" property="equipFloor"/>
+        <result column="equip_area" property="equipArea"/>
+        <result column="equip_classification" property="equipClassification"/>
+        <result column="comment" property="comment"/>
+        <result column="verify_time" property="verifyTime"/>
+        <result column="verify_value" property="verifyValue"/>
+        <collection property="nodes" ofType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
+            <result column="nodeId" property="nodeId"/>
+            <result column="node_name" property="nodeName"/>
+            <result column="floor" property="floor"/>
+        </collection>
+    </resultMap>
+
+
+    <sql id="energyEquipVOSql">
+        tee.id,
+        tee.equip_no,
+        tee.equip_name,
+        tee.equip_type,
+        tee.equip_floor,
+        tee.equip_area,
+        tee.equip_classification,
+        tee.comment,
+        teev.verify_time,
+        teev.verify_value,
+        thn.id AS nodeId,
+        thn.node_name,
+        thn.floor
+    </sql>
 
     <select id="count" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM t_energy_equip
@@ -12,5 +46,15 @@
         SELECT id FROM t_energy_equip
         WHERE equip_no=#{equipNo}
         OR equip_name=#{equipName}
+    </select>
+    <select id="getenergyEquipVO" resultMap="energyEquipVOResultMap">
+        SELECT
+        <include refid="energyEquipVOSql"/>
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_equip_verify teev ON tee.id=teev.equip_id AND teev.is_active=1 AND teev.enable_flag=1
+        LEFT JOIN t_energy_equip_node teen ON tee.id=teen.equip_id AND teen.is_active=1
+        LEFT JOIN t_hvac_node thn ON teen.node_id=thn.id AND thn.is_active=1
+        WHERE tee.is_active=1
+        AND tee.id=#{id}
     </select>
 </mapper>

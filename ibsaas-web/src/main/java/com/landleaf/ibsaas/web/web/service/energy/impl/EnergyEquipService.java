@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.common.domain.energy.EnergyEquipNode;
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquipVerify;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyEquipDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO;
+import com.landleaf.ibsaas.common.domain.energy.vo.NodeChoiceVO;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyEquipNodeService;
@@ -80,7 +81,7 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         //存储设备校验值
         EnergyEquipVerify energyEquipVerify = new EnergyEquipVerify();
         energyEquipVerify.setEquipId(energyEquip.getId());
-        energyEquipVerify.setVerifyDate(energyEquipDTO.getVerifyTime() == null ? new Date():energyEquipDTO.getVerifyTime());
+        energyEquipVerify.setVerifyTime(energyEquipDTO.getVerifyTime() == null ? new Date():energyEquipDTO.getVerifyTime());
         energyEquipVerify.setVerifyValue(energyEquipDTO.getVerifyValue() == null? BigDecimal.ZERO:energyEquipDTO.getVerifyValue());
         energyEquipVerify.setVerifyComment(energyEquipDTO.getVerifyComment());
         webDaoAdapterVerify.consummateAddOperation(energyEquipVerify);
@@ -92,7 +93,18 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
 
     @Override
     public EnergyEquipVO getEnergyEquipById(String id) {
-        // TODO
+        return energyEquipDao.getenergyEquipVO(id);
+    }
+
+    @Override
+    public EnergyEquipVO updateEnergyEquipById(EnergyEquipDTO energyEquipDTO) {
+
+
+        return null;
+    }
+
+    @Override
+    public NodeChoiceVO nodes() {
         return null;
     }
 
