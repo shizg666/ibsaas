@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.client.hvac.service.impl;
 
 import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
 import com.landleaf.ibsaas.client.hvac.service.INewFanService;
+import com.landleaf.ibsaas.common.constant.HvacConstant;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.NewFan;
 import com.landleaf.ibsaas.common.domain.hvac.dto.NewFanDTO;
@@ -32,7 +33,7 @@ public class NewFanService implements INewFanService {
     @Override
     public List<NewFanVO> overview() {
 
-        return (List<NewFanVO>) iCommonDeviceService.getCurrentData(3002);
+        return (List<NewFanVO>) iCommonDeviceService.getCurrentData(HvacConstant.NEW_FAN_PORT);
     }
 
     @Override

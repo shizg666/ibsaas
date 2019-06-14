@@ -1,25 +1,24 @@
-package com.landleaf.ibsaas.common.enums.hvac.fancoil;
+package com.landleaf.ibsaas.common.enums.hvac.hydraulicmodule;
 
 import com.landleaf.ibsaas.common.domain.ChoiceButton;
+import com.landleaf.ibsaas.common.enums.hvac.fancoil.FanCoilRunningModeExEnum;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Lokiy
- * @date 2019/6/13 17:52
+ * @date 2019/6/14 11:04
  * @description:
  */
-public enum  FanCoilRunningModeEnum {
+public enum  HydraulicModuleRunningModeEnum {
 
     /**
      * 运行模式
      */
     CLOD_MODE(1, "制冷"),
     HOT_MODE(2, "制热"),
-    WIND_MODE(3, "送风"),
-    AUTO_MODE(4, "自动模式"),
-//    AUTO_HOT_MODE(5, "自动制热"),
+    AUTO_MODE(3, "自动"),
 
     ;
 
@@ -27,7 +26,7 @@ public enum  FanCoilRunningModeEnum {
 
     private String description;
 
-    FanCoilRunningModeEnum(Integer state, String description) {
+    HydraulicModuleRunningModeEnum(Integer state, String description) {
         this.state = state;
         this.description = description;
     }
@@ -51,9 +50,12 @@ public enum  FanCoilRunningModeEnum {
 
     public static List<ChoiceButton> getChoiceButtons() {
         List<ChoiceButton> choiceButtons = new ArrayList<>();
-        for (FanCoilRunningModeEnum en:values()){
+        for (HydraulicModuleRunningModeEnum en:values()){
             choiceButtons.add(new ChoiceButton(String.valueOf(en.state), en.description));
         }
         return choiceButtons;
     }
+
+
+
 }

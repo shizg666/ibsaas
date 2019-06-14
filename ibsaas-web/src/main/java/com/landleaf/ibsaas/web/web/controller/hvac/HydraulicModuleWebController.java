@@ -1,8 +1,11 @@
 package com.landleaf.ibsaas.web.web.controller.hvac;
 
+import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HydraulicModuleVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
+import com.landleaf.ibsaas.common.enums.hvac.fancoil.FanCoilRunningModeExEnum;
+import com.landleaf.ibsaas.common.enums.hvac.hydraulicmodule.HydraulicModuleRunningModeEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.hvac.IHydraulicModuleWebService;
@@ -60,5 +63,14 @@ public class HydraulicModuleWebController extends BasicController {
         }
         iHydraulicModuleWebService.update(hydraulicModuleVO);
         return returnSuccess();
+    }
+
+    @GetMapping("/running-modes")
+    @ApiOperation("水力模块运行模式")
+    public Response runningModes(){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>HydraulicModuleWebController.runningModes入参为:空");
+        List<ChoiceButton> choiceButtons = HydraulicModuleRunningModeEnum.getChoiceButtons();
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<HydraulicModuleWebController.runningModes出参为:{}",choiceButtons);
+        return returnSuccess(choiceButtons);
     }
 }

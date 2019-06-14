@@ -103,13 +103,26 @@ public class CommonDeviceService implements ICommonDeviceService {
     @Override
     public void currentDataToRedis(){
         ConcurrentHashMap<Integer, RemoteDevice> remoteDeviceMap = BacnetInfoHolder.REMOTE_DEVICE_MAP;
-        remoteDeviceMap.forEachEntry(remoteDeviceMap.mappingCount(),entry -> {
+        //转成collection开启并行处理流   平均处理时间在500ms
+        remoteDeviceMap.entrySet().parallelStream().forEach( entry -> {
             List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
             if(CollectionUtils.isNotEmpty(currentData)) {
                 redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
             }
-
         });
+
+
+        //map并行流处理  平均处理时间在1.3s
+//        remoteDeviceMap.forEachEntry(remoteDeviceMap.mappingCount(),entry -> {
+//
+//            List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
+//            if(CollectionUtils.isNotEmpty(currentData)) {
+//                redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
+//            }
+//
+//        });
+
+        //普通循环 平均处理时间在1.6s
 //        remoteDeviceMap.forEach( (k, v) -> {
 //            List<? extends BaseDevice> currentData = getCurrentData(k);
 //            if(CollectionUtils.isNotEmpty(currentData)) {
@@ -123,6 +136,11 @@ public class CommonDeviceService implements ICommonDeviceService {
     }
 
 
+    /**
+     * 存入的设备
+     * @param deviceInstanceNumber
+     * @return
+     */
     private BaseDevice getByDeviceId(Integer deviceInstanceNumber){
         switch (deviceInstanceNumber) {
             case NEW_FAN_PORT:
@@ -176,11 +194,11 @@ public class CommonDeviceService implements ICommonDeviceService {
      * @return
      */
     public boolean writeField(String id, String fieldName, String value){
-        HvacNodeFieldVO hvacNodeFieldVO = hvacNodeDao.getHvacNodeFieldVO(id, fieldName);
         if(exWriteLogic( id, fieldName, value)){
             //符合额外操作的  直接返回
             return true;
         }
+        HvacNodeFieldVO hvacNodeFieldVO = hvacNodeDao.getHvacNodeFieldVO(id, fieldName);
         BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
                 BacnetInfoHolder.REMOTE_DEVICE_MAP.get(hvacNodeFieldVO.getDeviceInstanceNumber()),
                 new ObjectIdentifier(BacnetObjectEnum.getObjectType(hvacNodeFieldVO.getBacnetObjectType()),hvacNodeFieldVO.getInstanceNumber()),
@@ -190,6 +208,9 @@ public class CommonDeviceService implements ICommonDeviceService {
 
 
     public boolean exWriteLogic(String id, String fieldName, String value){
+        //这里应该是根据id查找到具体是某个设备，再根据设备的fieldName进行特殊处理
+
+        //新风机特殊逻辑
         if("runningMode".equals(fieldName)){
             //新风机运行模式  特殊处理
             List<HvacNodeFieldVO> hnfs = hvacNodeDao.getHvacNodeFieldVOByFieldName(fieldName);
@@ -202,6 +223,20 @@ public class CommonDeviceService implements ICommonDeviceService {
 
         if("humOnOff".equals(fieldName)){
             //新风机 加湿阀  特殊处理
+        }
+
+
+        //水力模块/毛细管特殊逻辑
+        if("hmMachRunningMode".equals(fieldName)||"hmPdewRunningMode".equals(fieldName)){
+            List<HvacNodeFieldVO> hnfs = hvacNodeDao.getHvacNodeFieldVOList(id, new ArrayList<String>() {{
+                add("hmMachRunningMode");
+                add("hmPdewRunningMode");
+            }});
+            hnfs.forEach( hnf -> BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
+                    BacnetInfoHolder.REMOTE_DEVICE_MAP.get(hnf.getDeviceInstanceNumber()),
+                    new ObjectIdentifier(BacnetObjectEnum.getObjectType(hnf.getBacnetObjectType()),hnf.getInstanceNumber()),
+                    value));
+            return true;
         }
 
         return false;
