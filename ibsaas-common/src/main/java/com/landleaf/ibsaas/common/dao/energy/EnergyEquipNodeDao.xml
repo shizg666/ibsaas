@@ -5,4 +5,12 @@
 <mapper namespace="com.landleaf.ibsaas.common.dao.energy.EnergyEquipNodeDao">
 
 
+    <update id="updateUnActiveByEquipId">
+        UPDATE t_energy_equip_node
+        SET is_active=0,
+        modify_time=#{now},
+        modify_user_code=#{userCode}
+        WHERE is_active=1
+        AND equip_id=#{equipId}
+    </update>
 </mapper>

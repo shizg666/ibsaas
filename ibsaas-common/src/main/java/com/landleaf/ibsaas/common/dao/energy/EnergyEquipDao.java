@@ -1,9 +1,13 @@
 package com.landleaf.ibsaas.common.dao.energy;
 
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquip;
+import com.landleaf.ibsaas.common.domain.energy.dto.EnergyEquipSearchDTO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipSearchVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author Lokiy
@@ -11,6 +15,14 @@ import org.apache.ibatis.annotations.Param;
  * @description:
  */
 public interface EnergyEquipDao extends BaseDao<EnergyEquip> {
+
+
+    /**
+     * 获取当前所有设备
+     * @return
+     */
+    List<EnergyEquipVO> allWithNodeIds();
+
     /**
      * 获取设备数量
      * @return
@@ -30,5 +42,12 @@ public interface EnergyEquipDao extends BaseDao<EnergyEquip> {
      * @param id
      * @return
      */
-    EnergyEquipVO getenergyEquipVO(String id);
+    EnergyEquipVO getEnergyEquipVO(String id);
+
+    /**
+     * 分页查询
+     * @param energyEquipSearchDTO
+     * @return
+     */
+    List<EnergyEquipSearchVO> getEnergyEquipSearchVO(EnergyEquipSearchDTO energyEquipSearchDTO);
 }

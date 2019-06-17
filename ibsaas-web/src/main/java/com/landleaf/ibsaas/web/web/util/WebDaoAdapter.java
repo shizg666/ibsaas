@@ -61,6 +61,10 @@ public class WebDaoAdapter<T extends BasicEntity> {
     }
 
 
+    public String getUserCode(){
+        return StringUtils.isBlank(UserContext.getCurrentUser().getUserCode())?"test":UserContext.getCurrentUser().getUserCode();
+    }
+
     /**
      * 跑批更新id为long
      * @param t

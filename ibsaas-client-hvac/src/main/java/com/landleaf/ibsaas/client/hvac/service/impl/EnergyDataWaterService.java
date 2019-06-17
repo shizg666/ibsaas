@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,10 +39,11 @@ public class EnergyDataWaterService extends AbstractBaseService<EnergyDataWaterD
     private EnergyDataWaterDao energyDataWaterDao;
 
     @Override
-    public void dataRecord(Date date) {
+    public List<EnergyDataWater> dataRecord(Date date) {
         List<WaterMeterVO> waterMeterVOList = (List<WaterMeterVO>) iCommonDeviceService.getCurrentData(HvacConstant.WATER_METER_PORT);
         List<EnergyDataWater> energyDataWaters = energyDataWaterDao.getRecentlyData();
         Map<String, BigDecimal> map = energyDataWaters.stream().collect(Collectors.toMap(EnergyDataWater::getNodeId, EnergyDataWater::getWaterDataValue));
+        List<EnergyDataWater> result = new ArrayList<>();
         waterMeterVOList.forEach( wm -> {
             EnergyDataWater record = new EnergyDataWater();
             record.setNodeId(wm.getId());
@@ -55,7 +57,8 @@ public class EnergyDataWaterService extends AbstractBaseService<EnergyDataWaterD
 
             daoAdapter.consummateAddOperation(record);
             save(record);
-
+            result.add(record);
         });
+        return result;
     }
 }

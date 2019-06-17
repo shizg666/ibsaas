@@ -23,6 +23,16 @@
     </resultMap>
 
 
+
+    <resultMap id="equipWithNodes" type="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO">
+        <id column="id" property="id"/>
+        <collection property="nodes" ofType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
+            <result column="node_id" property="nodeId"/>
+        </collection>
+    </resultMap>
+
+
+
     <sql id="energyEquipVOSql">
         tee.id,
         tee.equip_no,
@@ -39,6 +49,11 @@
         thn.floor
     </sql>
 
+    <sql id="equipWithNodesSql">
+        tee.id,
+        teen.node_id
+    </sql>
+
     <select id="count" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM t_energy_equip
     </select>
@@ -47,7 +62,7 @@
         WHERE equip_no=#{equipNo}
         OR equip_name=#{equipName}
     </select>
-    <select id="getenergyEquipVO" resultMap="energyEquipVOResultMap">
+    <select id="getEnergyEquipVO" resultMap="energyEquipVOResultMap">
         SELECT
         <include refid="energyEquipVOSql"/>
         FROM t_energy_equip tee
@@ -56,5 +71,51 @@
         LEFT JOIN t_hvac_node thn ON teen.node_id=thn.id AND thn.is_active=1
         WHERE tee.is_active=1
         AND tee.id=#{id}
+    </select>
+    <select id="getEnergyEquipSearchVO"
+            resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipSearchVO">
+        SELECT
+        tee.id,
+        tee.equip_name,
+        tee.equip_no,
+        tee.equip_type,
+        tcs_1.setting_value AS equipTypeStr,
+        tee.equip_floor,
+        tcs_2.setting_value AS equipFloorStr,
+        tee.equip_area,
+        tcs_3.setting_value AS equipAreaStr,
+        tee.equip_classification,
+        tcs_4.setting_value AS equipClassificationStr,
+        teev.verify_time,
+        teev.verify_value
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_equip_verify teev ON tee.id=teev.equip_id AND teev.is_active=1 AND teev.enable_flag=1
+        LEFT JOIN t_config_setting tcs_1 ON tee.equip_type=tcs_1.setting_code AND tcs_1.setting_type='equip_type' AND tcs_1.is_active=1
+        LEFT JOIN t_config_setting tcs_2 ON tee.equip_floor=tcs_2.setting_code AND tcs_2.setting_type='equip_floor' AND tcs_2.is_active=1
+        LEFT JOIN t_config_setting tcs_3 ON tee.equip_area=tcs_3.setting_code AND tcs_3.setting_type='equip_area' AND tcs_3.is_active=1
+        LEFT JOIN t_config_setting tcs_4 ON tee.equip_classification=tcs_4.setting_code AND tcs_4.setting_type='equip_classification' AND tcs_4.is_active=1
+        WHERE tee.is_active=1
+        <if test="equipName!=null and equipName!=''">
+            AND LOCATE(#{equipName},tee.equip_name)
+        </if>
+        <if test="equipType!=null and equipType!=''">
+            AND tcs_1.setting_code=#{equipType}
+        </if>
+        <if test="equipFloor!=null and equipFloor!=''">
+            AND tcs_2.setting_code=#{equipFloor}
+        </if>
+        <if test="equipArea!=null and equipArea!=''">
+            AND tcs_3.setting_code=#{equipArea}
+        </if>
+        <if test="equipClassification!=null and equipClassification!=''">
+            AND tcs_4.setting_code=#{equipClassification}
+        </if>
+    </select>
+    <select id="allWithNodeIds" resultMap="equipWithNodes">
+        SELECT
+        <include refid="equipWithNodesSql"/>
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_equip_node teen ON tee.id=teen.equip_id AND teen.is_active=1
+        WHERE tee.is_active=1
     </select>
 </mapper>

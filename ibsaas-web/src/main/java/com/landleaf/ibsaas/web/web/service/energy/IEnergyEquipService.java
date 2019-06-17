@@ -1,7 +1,10 @@
 package com.landleaf.ibsaas.web.web.service.energy;
 
+import com.github.pagehelper.PageInfo;
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquip;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyEquipDTO;
+import com.landleaf.ibsaas.common.domain.energy.dto.EnergyEquipSearchDTO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipSearchVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.NodeChoiceVO;
 import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
@@ -38,4 +41,18 @@ public interface IEnergyEquipService extends IBaseService<EnergyEquip> {
      * @return
      */
     NodeChoiceVO nodes();
+
+    /**
+     * 更新校验信息
+     * @param energyEquipDTO
+     * @return
+     */
+    boolean updateEnergyEquipVerifyById(EnergyEquipDTO energyEquipDTO);
+
+    /**
+     * 根据条件查询
+     * @param energyEquipSearchDTO
+     * @return
+     */
+    PageInfo<EnergyEquipSearchVO> list(EnergyEquipSearchDTO energyEquipSearchDTO);
 }

@@ -1,15 +1,15 @@
 package com.landleaf.ibsaas.web;
 
 
-import com.landleaf.ibsaas.common.redis.RedisHandle;
-import com.landleaf.ibsaas.common.redis.RedisUtil;
+import com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -22,10 +22,8 @@ import java.util.ArrayList;
 public class IbsaasWebApplicationTests {
 
     @Autowired
-    private RedisHandle redisHandle;
+    private EnergyEquipDao energyEquipDao;
 
-    @Autowired
-    private RedisUtil redisUtil;
 
     @Test
     public void contextLoads() {
@@ -33,12 +31,8 @@ public class IbsaasWebApplicationTests {
 
 
     @Test
-    public void redisOp(){
-        //这里进去是string
-        redisHandle.addMap("lcc", "456", "bbb");
-
-
-
-
+    public void aa(){
+        List<EnergyEquipVO> energyEquipVOS = energyEquipDao.allWithNodeIds();
+        System.out.println(energyEquipVOS);
     }
 }

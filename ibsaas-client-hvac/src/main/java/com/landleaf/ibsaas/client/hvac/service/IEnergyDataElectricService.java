@@ -4,6 +4,7 @@ import com.landleaf.ibsaas.common.domain.energy.EnergyDataElectric;
 import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -17,5 +18,5 @@ public interface IEnergyDataElectricService extends IBaseService<EnergyDataElect
      * 电表数值记录
      * @param date
      */
-    void dataRecord(Date date);
+    List<EnergyDataElectric> dataRecord(Date date);
 }

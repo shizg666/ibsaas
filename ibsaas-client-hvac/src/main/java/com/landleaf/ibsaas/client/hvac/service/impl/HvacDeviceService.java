@@ -1,6 +1,5 @@
 package com.landleaf.ibsaas.client.hvac.service.impl;
 
-import com.landleaf.ibsaas.client.hvac.config.BacnetInfoHolder;
 import com.landleaf.ibsaas.client.hvac.service.IHvacDeviceService;
 import com.landleaf.ibsaas.client.hvac.util.DaoAdapter;
 import com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao;

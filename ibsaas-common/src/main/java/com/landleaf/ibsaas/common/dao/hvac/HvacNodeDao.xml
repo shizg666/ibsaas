@@ -119,5 +119,15 @@
         </if>
 
     </select>
+    <select id="getHvacNodeByInstanceNumber" resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
+        SELECT
+        <include refid="hvac_node_base"/>
+        FROM t_hvac_node thn
+        LEFT JOIN t_hvac_device thd ON thn.device_id=thd.id AND thd.is_active=1
+        WHERE thn.is_active=1
+        <if test="deviceInstanceNumber!=null">
+            AND thd.device_instance_number=#{deviceInstanceNumber}
+        </if>
+    </select>
 
 </mapper>

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +36,10 @@ public class EnergyDataElectricService extends AbstractBaseService<EnergyDataEle
     private EnergyDataElectricDao energyDataElectricDao;
 
     @Override
-    public void dataRecord(Date date){
+    public List<EnergyDataElectric> dataRecord(Date date){
         List<ElectricMeterVO> electricMeterVOList = (List<ElectricMeterVO>) iCommonDeviceService.getCurrentData(HvacConstant.ELECTRIC_METER_PORT);
         List<EnergyDataElectric> energyDataElectrics = energyDataElectricDao.getRecentlyData();
+        List<EnergyDataElectric> result = new ArrayList<>();
         Map<String, BigDecimal> map = energyDataElectrics.stream().collect(Collectors.toMap(EnergyDataElectric::getNodeId, EnergyDataElectric::getElectricDataValue));
         electricMeterVOList.forEach( em -> {
             EnergyDataElectric record = new EnergyDataElectric();
@@ -52,8 +54,9 @@ public class EnergyDataElectricService extends AbstractBaseService<EnergyDataEle
 
             daoAdapter.consummateAddOperation(record);
             save(record);
-
+            result.add(record);
         });
 
+        return result;
     }
 }
