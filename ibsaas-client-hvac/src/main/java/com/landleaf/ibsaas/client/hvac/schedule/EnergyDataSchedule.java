@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.client.hvac.schedule;
 import com.landleaf.ibsaas.client.hvac.service.IEnergyDataElectricService;
 import com.landleaf.ibsaas.client.hvac.service.IEnergyDataWaterService;
 import com.landleaf.ibsaas.client.hvac.service.IEnergyEquipDataService;
+import com.landleaf.ibsaas.common.constant.IbsaasConstant;
 import com.landleaf.ibsaas.common.domain.energy.EnergyDataElectric;
 import com.landleaf.ibsaas.common.domain.energy.EnergyDataWater;
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquipData;
@@ -36,7 +37,9 @@ public class EnergyDataSchedule {
 
     @Scheduled(cron = "0 0 * * * *")
     public void toDatabase(){
-        Date now = new Date();
+        //系统调用产生的秒数误差
+        Date now = new Date(System.currentTimeMillis()/IbsaasConstant.SECOND_OFFSET*IbsaasConstant.SECOND_OFFSET);
+
         log.info("电表水表数据入库------------------------------>时间为:{}", now);
         List<EnergyDataElectric> energyDataElectrics = iEnergyDataElectricService.dataRecord(now);
         List<EnergyDataWater> energyDataWaters = iEnergyDataWaterService.dataRecord(now);

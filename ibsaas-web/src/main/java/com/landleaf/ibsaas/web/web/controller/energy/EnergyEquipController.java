@@ -57,6 +57,17 @@ public class EnergyEquipController extends BasicController {
     }
 
 
+    @PostMapping("/data-list")
+    @ApiOperation("能耗设备抄表数据查询")
+    public Response dataList(@RequestBody EnergyEquipSearchDTO energyEquipSearchDTO){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyEquipController.dataList入参为:{}", energyEquipSearchDTO);
+        PageInfo<EnergyEquipSearchVO> pageInfo = iEnergyEquipService.dataList(energyEquipSearchDTO);
+        BasePageVO<EnergyEquipSearchVO> result = new BasePageVO<>(pageInfo.getList(), pageInfo.getTotal());
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyEquipController.dataList出参为:{}", result);
+        return returnSuccess(result);
+    }
+
+
     @PostMapping
     @ApiOperation("添加能耗设备")
     public Response save(@RequestBody @ApiParam @Valid EnergyEquipDTO energyEquipDTO){

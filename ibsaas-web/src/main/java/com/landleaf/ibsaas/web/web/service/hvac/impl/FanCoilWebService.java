@@ -88,7 +88,7 @@ public class FanCoilWebService extends BaseDeviceService implements IFanCoilWebS
     @Override
     public void update(FanCoilDTO fanCoilDTO) {
         checkWritePermission(fanCoilDTO);
-        HvacMqMsg msg = new HvacMqMsg(NewFanDTO.class.getName(), JSONUtil.toJsonStr(fanCoilDTO));
+        HvacMqMsg msg = new HvacMqMsg(FanCoilDTO.class.getName(), JSONUtil.toJsonStr(fanCoilDTO));
         webMqProducer.sendMessage(JSONUtil.toJsonStr(msg),
                 TopicConstants.TOPIC_HVAC_WRITE,
                 TagConstants.TAGS_DEFAULT);

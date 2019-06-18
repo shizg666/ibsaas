@@ -44,4 +44,9 @@
         AND setting_type=#{type}
         AND setting_code=#{code}
     </select>
+    <select id="getCongfigSettingLmt" resultType="com.landleaf.ibsaas.common.domain.energy.ConfigSetting">
+        SELECT * FROM t_config_setting
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
 </mapper>

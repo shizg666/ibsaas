@@ -50,4 +50,13 @@ public interface EnergyEquipDao extends BaseDao<EnergyEquip> {
      * @return
      */
     List<EnergyEquipSearchVO> getEnergyEquipSearchVO(EnergyEquipSearchDTO energyEquipSearchDTO);
+
+
+
+    /**
+     * 抄表数据分页查询
+     * @param energyEquipSearchDTO
+     * @return
+     */
+    List<EnergyEquipSearchVO> getDataEnergyEquipSearchVO(EnergyEquipSearchDTO energyEquipSearchDTO);
 }

@@ -5,6 +5,7 @@ import com.landleaf.ibsaas.common.constant.HvacConstant;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.HvacNode;
 import com.landleaf.ibsaas.common.domain.hvac.HydraulicModule;
+import com.landleaf.ibsaas.common.domain.hvac.dto.HydraulicModuleDTO;
 import com.landleaf.ibsaas.common.domain.hvac.dto.NewFanDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HydraulicModuleVO;
@@ -82,9 +83,9 @@ public class HydraulicModuleWebService extends BaseDeviceService implements IHyd
     }
 
     @Override
-    public void update(HydraulicModuleVO hydraulicModuleVO) {
-        checkWritePermission(hydraulicModuleVO);
-        HvacMqMsg msg = new HvacMqMsg(NewFanDTO.class.getName(), JSONUtil.toJsonStr(hydraulicModuleVO));
+    public void update(HydraulicModuleDTO hydraulicModuleDTO) {
+        checkWritePermission(hydraulicModuleDTO);
+        HvacMqMsg msg = new HvacMqMsg(HydraulicModuleDTO.class.getName(), JSONUtil.toJsonStr(hydraulicModuleDTO));
         webMqProducer.sendMessage(JSONUtil.toJsonStr(msg),
                 TopicConstants.TOPIC_HVAC_WRITE,
                 TagConstants.TAGS_DEFAULT);

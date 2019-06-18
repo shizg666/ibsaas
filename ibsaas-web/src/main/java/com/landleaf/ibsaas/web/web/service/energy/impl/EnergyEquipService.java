@@ -84,6 +84,13 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         return new PageInfo<>(energyEquipSearchVOList);
     }
 
+    @Override
+    public PageInfo<EnergyEquipSearchVO> dataList(EnergyEquipSearchDTO energyEquipSearchDTO) {
+        PageHelper.startPage(energyEquipSearchDTO.getPage(), energyEquipSearchDTO.getLimit());
+        List<EnergyEquipSearchVO> energyEquipSearchVOList = energyEquipDao.getDataEnergyEquipSearchVO(energyEquipSearchDTO);
+        return new PageInfo<>(energyEquipSearchVOList);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public EnergyEquipVO addEnergyEquip(EnergyEquipDTO energyEquipDTO) {

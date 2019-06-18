@@ -35,4 +35,11 @@ public interface ConfigSettingDao extends BaseDao<ConfigSetting> {
      * @return
      */
     ConfigSettingVO getByTypeAndCode(@Param("type") String type, @Param("code") String code);
+
+    /**
+     * 查询前几  跑批用
+     * @param maxId
+     * @return
+     */
+    List<ConfigSetting> getCongfigSettingLmt(@Param("maxId") Integer maxId);
 }

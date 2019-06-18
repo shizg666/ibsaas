@@ -17,5 +17,11 @@ public class IbsaasConstant {
     public final static Integer DEFAULT_ENERGY_EQUIP_DATA_TYPE = 1;
 
 
+    /**
+     * 秒数误差
+     */
+    public final static int SECOND_OFFSET = 60000;
+
+
 
 }

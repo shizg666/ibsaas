@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.web.web.controller.hvac;
 
 import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import com.landleaf.ibsaas.common.domain.Response;
+import com.landleaf.ibsaas.common.domain.hvac.dto.HydraulicModuleDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HydraulicModuleVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
 import com.landleaf.ibsaas.common.enums.hvac.fancoil.FanCoilRunningModeExEnum;
@@ -56,12 +57,12 @@ public class HydraulicModuleWebController extends BasicController {
 
     @PutMapping("/operation")
     @ApiOperation("修改水力模块的值")
-    public Response operation(@RequestBody HydraulicModuleVO hydraulicModuleVO){
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.operation入参为:{}", hydraulicModuleVO);
-        if(StringUtils.isBlank(hydraulicModuleVO.getId())){
+    public Response operation(@RequestBody HydraulicModuleDTO hydraulicModuleDTO){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.operation入参为:{}", hydraulicModuleDTO);
+        if(StringUtils.isBlank(hydraulicModuleDTO.getId())){
             throw new BusinessException("所传更改设备的节点id为空");
         }
-        iHydraulicModuleWebService.update(hydraulicModuleVO);
+        iHydraulicModuleWebService.update(hydraulicModuleDTO);
         return returnSuccess();
     }
 

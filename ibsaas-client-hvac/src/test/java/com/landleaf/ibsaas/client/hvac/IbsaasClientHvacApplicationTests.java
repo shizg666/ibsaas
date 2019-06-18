@@ -7,10 +7,12 @@ import com.landleaf.ibsaas.client.hvac.service.IHvacPointService;
 import com.landleaf.ibsaas.client.hvac.util.DaoAdapter;
 import com.landleaf.ibsaas.client.hvac.util.IdGeneratorEx;
 import com.landleaf.ibsaas.common.constant.IbsaasConstant;
+import com.landleaf.ibsaas.common.dao.energy.ConfigSettingDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacFieldDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacPointDao;
+import com.landleaf.ibsaas.common.domain.energy.ConfigSetting;
 import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 import com.landleaf.ibsaas.common.domain.hvac.HvacField;
 import com.landleaf.ibsaas.common.domain.hvac.HvacNode;
@@ -64,6 +66,9 @@ public class IbsaasClientHvacApplicationTests {
 
     @Autowired
     private ICommonDeviceService iCommonDeviceService;
+
+    @Autowired
+    private ConfigSettingDao configSettingDao;
 
     @Autowired
     private DaoAdapter daoAdapter;
@@ -152,14 +157,24 @@ public class IbsaasClientHvacApplicationTests {
     @Test
     public void updateBatch(){
 //        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointDaoByNodeIdOrFieldId( "240563253330186240", null, null);
-        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointLmt( 300);
-        hvacPoints.forEach(hp -> {
-            HvacPoint temp = new HvacPoint();
+//        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointLmt( 300);
+//        hvacPoints.forEach(hp -> {
+//            HvacPoint temp = new HvacPoint();
+//            BeanUtils.copyProperties(hp, temp);
+//            daoAdapter.consummateAddOperation(temp);
+//            hvacPointDao.insertSelective(temp);
+//            hvacPointDao.delete(hp);
+//        });
+        List<ConfigSetting> configSettings = configSettingDao.getCongfigSettingLmt( 300);
+        configSettings.forEach(hp -> {
+            ConfigSetting temp = new ConfigSetting();
             BeanUtils.copyProperties(hp, temp);
             daoAdapter.consummateAddOperation(temp);
-            hvacPointDao.insertSelective(temp);
-            hvacPointDao.delete(hp);
+            configSettingDao.insertSelective(temp);
+            configSettingDao.delete(hp);
         });
+
+
 //        System.out.println(hvacPoints);
     }
 

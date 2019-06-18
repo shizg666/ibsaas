@@ -52,4 +52,14 @@ public class EnergyEquipSearchVO implements Serializable {
     @ApiModelProperty("初始化校验值")
     private BigDecimal verifyValue;
 
+
+    /**
+     * 以下为抄表数据
+     */
+
+    @ApiModelProperty("抄表时间")
+    private Date dataTime;
+    @ApiModelProperty("抄表数值")
+    private BigDecimal dataValue;
+
 }

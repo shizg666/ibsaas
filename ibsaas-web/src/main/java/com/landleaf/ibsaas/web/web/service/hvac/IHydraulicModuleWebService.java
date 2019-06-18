@@ -1,5 +1,6 @@
 package com.landleaf.ibsaas.web.web.service.hvac;
 
+import com.landleaf.ibsaas.common.domain.hvac.dto.HydraulicModuleDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HydraulicModuleVO;
 
 import java.util.List;
@@ -34,7 +35,7 @@ public interface IHydraulicModuleWebService {
 
     /**
      * 修改某个水力模块的
-     * @param hydraulicModuleVO
+     * @param hydraulicModuleDTO
      */
-    void update(HydraulicModuleVO hydraulicModuleVO);
+    void update(HydraulicModuleDTO hydraulicModuleDTO);
 }

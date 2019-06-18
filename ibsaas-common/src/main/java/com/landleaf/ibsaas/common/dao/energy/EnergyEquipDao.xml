@@ -54,6 +54,14 @@
         teen.node_id
     </sql>
 
+    <select id="allWithNodeIds" resultMap="equipWithNodes">
+        SELECT
+        <include refid="equipWithNodesSql"/>
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_equip_node teen ON tee.id=teen.equip_id AND teen.is_active=1
+        WHERE tee.is_active=1
+    </select>
+
     <select id="count" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM t_energy_equip
     </select>
@@ -111,11 +119,48 @@
             AND tcs_4.setting_code=#{equipClassification}
         </if>
     </select>
-    <select id="allWithNodeIds" resultMap="equipWithNodes">
+
+    <select id="getDataEnergyEquipSearchVO"
+            resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipSearchVO">
         SELECT
-        <include refid="equipWithNodesSql"/>
+        tee.id,
+        tee.equip_name,
+        tee.equip_no,
+        tee.equip_type,
+        tcs_1.setting_value AS equipTypeStr,
+        tee.equip_floor,
+        tcs_2.setting_value AS equipFloorStr,
+        tee.equip_area,
+        tcs_3.setting_value AS equipAreaStr,
+        tee.equip_classification,
+        tcs_4.setting_value AS equipClassificationStr,
+        teed.data_time,
+        teed.data_value
         FROM t_energy_equip tee
-        LEFT JOIN t_energy_equip_node teen ON tee.id=teen.equip_id AND teen.is_active=1
+        LEFT JOIN t_energy_equip_data teed ON tee.id=teed.equip_id AND teed.is_active=1
+        LEFT JOIN t_config_setting tcs_1 ON tee.equip_type=tcs_1.setting_code AND tcs_1.setting_type='equip_type' AND tcs_1.is_active=1
+        LEFT JOIN t_config_setting tcs_2 ON tee.equip_floor=tcs_2.setting_code AND tcs_2.setting_type='equip_floor' AND tcs_2.is_active=1
+        LEFT JOIN t_config_setting tcs_3 ON tee.equip_area=tcs_3.setting_code AND tcs_3.setting_type='equip_area' AND tcs_3.is_active=1
+        LEFT JOIN t_config_setting tcs_4 ON tee.equip_classification=tcs_4.setting_code AND tcs_4.setting_type='equip_classification' AND tcs_4.is_active=1
         WHERE tee.is_active=1
+        <if test="equipName!=null and equipName!=''">
+            AND LOCATE(#{equipName},tee.equip_name)
+        </if>
+        <if test="equipType!=null and equipType!=''">
+            AND tcs_1.setting_code=#{equipType}
+        </if>
+        <if test="equipFloor!=null and equipFloor!=''">
+            AND tcs_2.setting_code=#{equipFloor}
+        </if>
+        <if test="equipArea!=null and equipArea!=''">
+            AND tcs_3.setting_code=#{equipArea}
+        </if>
+        <if test="equipClassification!=null and equipClassification!=''">
+            AND tcs_4.setting_code=#{equipClassification}
+        </if>
+        <if test="dataTime!=null">
+            AND teed.data_time=#{dataTime}
+        </if>
+        ORDER BY teed.data_time DESC
     </select>
 </mapper>
