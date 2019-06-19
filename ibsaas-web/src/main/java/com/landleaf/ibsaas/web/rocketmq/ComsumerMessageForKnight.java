@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 门禁客户端返回数据消费处理
  */
-@MQConsumeService(topic = TopicConstants.TOPIC_KNIGHT_TEST, tags = {TagConstants.TAGS_DEFAULT})
+@MQConsumeService(topic = TopicConstants.TOPIC_KNIGHT, tags = {TagConstants.TAGS_DEFAULT})
 @Component
 public class ComsumerMessageForKnight extends AbstractMQMsgProcessor {
 
