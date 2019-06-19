@@ -2,7 +2,7 @@ package com.landleaf.ibsaas.client.hvac.schedule;
 
 import com.landleaf.ibsaas.client.hvac.service.IEnergyDataElectricService;
 import com.landleaf.ibsaas.client.hvac.service.IEnergyDataWaterService;
-import com.landleaf.ibsaas.client.hvac.service.IEnergyEquipDataService;
+import com.landleaf.ibsaas.client.hvac.service.IEnergyEquipDataCliService;
 import com.landleaf.ibsaas.common.constant.IbsaasConstant;
 import com.landleaf.ibsaas.common.domain.energy.EnergyDataElectric;
 import com.landleaf.ibsaas.common.domain.energy.EnergyDataWater;
@@ -33,7 +33,7 @@ public class EnergyDataSchedule {
     private IEnergyDataWaterService iEnergyDataWaterService;
 
     @Autowired
-    private IEnergyEquipDataService iEnergyEquipDataService;
+    private IEnergyEquipDataCliService iEnergyEquipDataService;
 
     @Scheduled(cron = "0 0 * * * *")
     public void toDatabase(){

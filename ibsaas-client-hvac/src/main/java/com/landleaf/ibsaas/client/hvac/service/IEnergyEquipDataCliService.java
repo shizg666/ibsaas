@@ -13,7 +13,7 @@ import java.util.List;
  * @date 2019/6/14 17:37
  * @description:
  */
-public interface IEnergyEquipDataService extends IBaseService<EnergyEquipData> {
+public interface IEnergyEquipDataCliService extends IBaseService<EnergyEquipData> {
     /**
      * 根据水电表的入库情况获取设备的能耗
      * @param now

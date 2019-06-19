@@ -3,9 +3,7 @@ package com.landleaf.ibsaas.client.hvac.controller.device;
 import com.landleaf.ibsaas.client.hvac.controller.Basic2Controller;
 import com.landleaf.ibsaas.client.hvac.service.*;
 import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.common.domain.energy.EnergyDataElectric;
 import com.landleaf.ibsaas.common.domain.energy.EnergyDataWater;
-import com.landleaf.ibsaas.common.domain.energy.EnergyEquipData;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 
@@ -41,7 +39,7 @@ public class CommonDeviceController extends Basic2Controller {
 
     private final IEnergyDataWaterService iEnergyDataWaterService;
 
-    private final IEnergyEquipDataService iEnergyEquipDataService;
+    private final IEnergyEquipDataCliService iEnergyEquipDataService;
 
     @GetMapping("/reload")
     @ApiOperation("重新加载设备和点位")

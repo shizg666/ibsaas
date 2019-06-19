@@ -18,7 +18,6 @@ import com.landleaf.ibsaas.common.domain.hvac.HvacPoint;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetPremissionEnum;
 import com.landleaf.ibsaas.common.enums.hvac.HvacFloorEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
-import com.serotonin.bacnet4j.LocalDevice;
 import com.serotonin.bacnet4j.npdu.ip.IpNetwork;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -235,7 +234,7 @@ public class IbsaasClientHvacApplicationTests {
     }
 
     @Autowired
-    private IEnergyEquipDataService iEnergyEquipDataService;
+    private IEnergyEquipDataCliService iEnergyEquipDataService;
 
     @Test
     public void aa(){

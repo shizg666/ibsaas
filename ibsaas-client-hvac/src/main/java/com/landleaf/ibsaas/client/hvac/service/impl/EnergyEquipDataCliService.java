@@ -1,13 +1,11 @@
 package com.landleaf.ibsaas.client.hvac.service.impl;
 
-import com.landleaf.ibsaas.client.hvac.service.IEnergyEquipDataService;
+import com.landleaf.ibsaas.client.hvac.service.IEnergyEquipDataCliService;
 import com.landleaf.ibsaas.client.hvac.util.DaoAdapter;
-import com.landleaf.ibsaas.common.constant.IbsaasConstant;
 import com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao;
 import com.landleaf.ibsaas.common.dao.energy.EnergyEquipDataDao;
 import com.landleaf.ibsaas.common.domain.energy.EnergyDataElectric;
 import com.landleaf.ibsaas.common.domain.energy.EnergyDataWater;
-import com.landleaf.ibsaas.common.domain.energy.EnergyEquip;
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquipData;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyDataValueDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO;
@@ -31,7 +29,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class EnergyEquipDataService extends AbstractBaseService<EnergyEquipDataDao, EnergyEquipData> implements IEnergyEquipDataService {
+public class EnergyEquipDataCliService extends AbstractBaseService<EnergyEquipDataDao, EnergyEquipData> implements IEnergyEquipDataCliService {
 
     @Autowired
     private EnergyEquipDao energyEquipDao;
