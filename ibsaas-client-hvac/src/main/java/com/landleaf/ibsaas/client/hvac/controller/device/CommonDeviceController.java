@@ -77,9 +77,9 @@ public class CommonDeviceController extends Basic2Controller {
     @GetMapping("/data-record")
     public Response dataRecord(){
         Date now = new Date();
-        List<EnergyDataElectric> energyDataElectrics = iEnergyDataElectricService.dataRecord(now);
+//        List<EnergyDataElectric> energyDataElectrics = iEnergyDataElectricService.dataRecord(now);
         List<EnergyDataWater> energyDataWaters = iEnergyDataWaterService.dataRecord(now);
-        List<EnergyEquipData> energyEquipData = iEnergyEquipDataService.dateRecord(now, energyDataElectrics, energyDataWaters);
-        return returnSuccess(energyEquipData);
+//        List<EnergyEquipData> energyEquipData = iEnergyEquipDataService.dateRecord(now, energyDataElectrics, energyDataWaters);
+        return returnSuccess(null);
     }
 }

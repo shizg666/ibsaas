@@ -56,7 +56,7 @@ public class EnergyDataWaterService extends AbstractBaseService<EnergyDataWaterD
             record.setWaterDataIncreaseValue(recentlyValue == null?BigDecimal.ZERO : waterDataValue.subtract(recentlyValue));
 
             daoAdapter.consummateAddOperation(record);
-            save(record);
+            saveSelective(record);
             result.add(record);
         });
         return result;

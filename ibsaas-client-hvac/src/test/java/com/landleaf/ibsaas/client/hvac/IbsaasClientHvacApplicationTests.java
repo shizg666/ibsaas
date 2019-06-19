@@ -1,9 +1,6 @@
 package com.landleaf.ibsaas.client.hvac;
 
-import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
-import com.landleaf.ibsaas.client.hvac.service.IHvacFieldService;
-import com.landleaf.ibsaas.client.hvac.service.IHvacNodeService;
-import com.landleaf.ibsaas.client.hvac.service.IHvacPointService;
+import com.landleaf.ibsaas.client.hvac.service.*;
 import com.landleaf.ibsaas.client.hvac.util.DaoAdapter;
 import com.landleaf.ibsaas.client.hvac.util.IdGeneratorEx;
 import com.landleaf.ibsaas.common.constant.IbsaasConstant;
@@ -13,6 +10,7 @@ import com.landleaf.ibsaas.common.dao.hvac.HvacFieldDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacPointDao;
 import com.landleaf.ibsaas.common.domain.energy.ConfigSetting;
+import com.landleaf.ibsaas.common.domain.energy.EnergyEquipData;
 import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 import com.landleaf.ibsaas.common.domain.hvac.HvacField;
 import com.landleaf.ibsaas.common.domain.hvac.HvacNode;
@@ -29,7 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -232,6 +232,26 @@ public class IbsaasClientHvacApplicationTests {
             hp.setActive(IbsaasConstant.ACTIVE);
             hvacPointDao.insertSelective(hp);
         }
+    }
+
+    @Autowired
+    private IEnergyEquipDataService iEnergyEquipDataService;
+
+    @Test
+    public void aa(){
+        Date now = new Date();
+        EnergyEquipData insert = new EnergyEquipData();
+        insert.setEquipId("31231231231");
+        insert.setId("31231312312312");
+        insert.setDataType(1);
+        insert.setDataTime(now);
+        insert.setDataIncreaseValue(BigDecimal.ZERO);
+        insert.setDataValue(BigDecimal.ZERO);
+        insert.setActive(1);
+        insert.setCreateTime(now);
+        insert.setModifyTime(now);
+
+        iEnergyEquipDataService.saveSelective(insert);
     }
 
 }

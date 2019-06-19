@@ -63,37 +63,37 @@ ibsaas:
       enable: true
       defaultDatasourceName: master
       datasourceList:
-        - name: master
-          url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8
-          username: root
-          password: Landleaf@2019
-          driverClassName: com.mysql.jdbc.Driver
-          maxActive: 50
-          initialSize: 5
-          validationQuery: select 'x'
-          testWhileIdle: true
-          testOnBorrow: false
-          testOnReturn: false
-          poolPreparedStatements: true
-          maxOpenPreparedStatements: 20
-        #       maxWait: 60000
-        #       minIdle: 1
-        #       timeBetweenEvictionRunsMillis: 60000
-        #       minEvictableIdleTimeMillis: 300000
-        #       spring.datasource.filters: stat
-        - name: slave
-          url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8
-          username: root
-          password: Landleaf@2019
-          driverClassName: com.mysql.jdbc.Driver
-          maxActive: 50
-          initialSize: 5
-          validationQuery: select 'x'
-          testWhileIdle: true
-          testOnBorrow: false
-          testOnReturn: false
-          poolPreparedStatements: true
-          maxOpenPreparedStatements: 20
+      - name: master
+        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8
+        username: root
+        password: Landleaf@2019
+        driverClassName: com.mysql.jdbc.Driver
+        maxActive: 50
+        initialSize: 5
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
+      #       maxWait: 60000
+      #       minIdle: 1
+      #       timeBetweenEvictionRunsMillis: 60000
+      #       minEvictableIdleTimeMillis: 300000
+      #       spring.datasource.filters: stat
+      - name: slave
+        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8
+        username: root
+        password: Landleaf@2019
+        driverClassName: com.mysql.jdbc.Driver
+        maxActive: 50
+        initialSize: 5
+        validationQuery: select 'x'
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        poolPreparedStatements: true
+        maxOpenPreparedStatements: 20
 #       maxWait: 60000
 #       minIdle: 1
 #       timeBetweenEvictionRunsMillis: 60000
