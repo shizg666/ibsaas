@@ -20,6 +20,9 @@ public class EnergyEquipSearchVO implements Serializable {
     @ApiModelProperty("设备id")
     private String id;
 
+    @ApiModelProperty("设备绑定节点id")
+    private String nodeId;
+
     @ApiModelProperty("设备名称")
     private String equipName;
 
@@ -58,8 +61,17 @@ public class EnergyEquipSearchVO implements Serializable {
      */
 
     @ApiModelProperty("抄表时间")
-    private Date dataTime;
+    private Date energyDataTime;
     @ApiModelProperty("抄表数值")
-    private BigDecimal dataValue;
+    private BigDecimal energyDataValue;
+
+
+    /**
+     * 以下为实时表显
+     */
+    @ApiModelProperty("实时表显")
+    private BigDecimal currentDataValue;
+    @ApiModelProperty("实际能耗")
+    private BigDecimal actualDataValue;
 
 }

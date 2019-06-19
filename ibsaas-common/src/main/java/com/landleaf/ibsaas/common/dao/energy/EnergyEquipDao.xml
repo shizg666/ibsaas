@@ -6,6 +6,7 @@
 
     <resultMap id="energyEquipVOResultMap" type="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO">
         <id column="id" property="id"/>
+        <result column="node_id" property="nodeId"/>
         <result column="equip_no" property="equipNo"/>
         <result column="equip_name" property="equipName"/>
         <result column="equip_type" property="equipType"/>
@@ -15,26 +16,19 @@
         <result column="comment" property="comment"/>
         <result column="verify_time" property="verifyTime"/>
         <result column="verify_value" property="verifyValue"/>
-        <collection property="nodes" ofType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
-            <result column="nodeId" property="nodeId"/>
-            <result column="node_name" property="nodeName"/>
-            <result column="floor" property="floor"/>
-        </collection>
+        <association property="node" javaType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO" resultMap="nodeMap"/>
     </resultMap>
 
-
-
-    <resultMap id="equipWithNodes" type="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO">
-        <id column="id" property="id"/>
-        <collection property="nodes" ofType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
-            <result column="node_id" property="nodeId"/>
-        </collection>
+    <resultMap id="nodeMap" type="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO" >
+        <result column="node_id" property="nodeId" />
+        <result column="node_name" property="nodeName"  />
+        <result column="floor" property="floor"  />
     </resultMap>
-
 
 
     <sql id="energyEquipVOSql">
         tee.id,
+        tee.node_id,
         tee.equip_no,
         tee.equip_name,
         tee.equip_type,
@@ -44,23 +38,9 @@
         tee.comment,
         teev.verify_time,
         teev.verify_value,
-        thn.id AS nodeId,
         thn.node_name,
         thn.floor
     </sql>
-
-    <sql id="equipWithNodesSql">
-        tee.id,
-        teen.node_id
-    </sql>
-
-    <select id="allWithNodeIds" resultMap="equipWithNodes">
-        SELECT
-        <include refid="equipWithNodesSql"/>
-        FROM t_energy_equip tee
-        LEFT JOIN t_energy_equip_node teen ON tee.id=teen.equip_id AND teen.is_active=1
-        WHERE tee.is_active=1
-    </select>
 
     <select id="count" resultType="java.lang.Integer">
         SELECT COUNT(1) FROM t_energy_equip
@@ -75,8 +55,7 @@
         <include refid="energyEquipVOSql"/>
         FROM t_energy_equip tee
         LEFT JOIN t_energy_equip_verify teev ON tee.id=teev.equip_id AND teev.is_active=1 AND teev.enable_flag=1
-        LEFT JOIN t_energy_equip_node teen ON tee.id=teen.equip_id AND teen.is_active=1
-        LEFT JOIN t_hvac_node thn ON teen.node_id=thn.id AND thn.is_active=1
+        LEFT JOIN t_hvac_node thn ON tee.node_id=thn.id AND thn.is_active=1
         WHERE tee.is_active=1
         AND tee.id=#{id}
     </select>
@@ -84,6 +63,7 @@
             resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipSearchVO">
         SELECT
         tee.id,
+        tee.node_id,
         tee.equip_name,
         tee.equip_no,
         tee.equip_type,
@@ -134,10 +114,10 @@
         tcs_3.setting_value AS equipAreaStr,
         tee.equip_classification,
         tcs_4.setting_value AS equipClassificationStr,
-        teed.data_time,
-        teed.data_value
+        ted.energy_data_time,
+        ted.energy_data_value
         FROM t_energy_equip tee
-        LEFT JOIN t_energy_equip_data teed ON tee.id=teed.equip_id AND teed.is_active=1
+        LEFT JOIN t_energy_data ted ON tee.node_id=ted.node_id AND ted.is_active=1 AND ted.energy_data_source=1
         LEFT JOIN t_config_setting tcs_1 ON tee.equip_type=tcs_1.setting_code AND tcs_1.setting_type='equip_type' AND tcs_1.is_active=1
         LEFT JOIN t_config_setting tcs_2 ON tee.equip_floor=tcs_2.setting_code AND tcs_2.setting_type='equip_floor' AND tcs_2.is_active=1
         LEFT JOIN t_config_setting tcs_3 ON tee.equip_area=tcs_3.setting_code AND tcs_3.setting_type='equip_area' AND tcs_3.is_active=1
@@ -158,9 +138,9 @@
         <if test="equipClassification!=null and equipClassification!=''">
             AND tcs_4.setting_code=#{equipClassification}
         </if>
-        <if test="dataTime!=null">
-            AND teed.data_time=#{dataTime}
+        <if test="energyDataTime!=null">
+            AND ted.energy_data_time=#{energyDataTime}
         </if>
-        ORDER BY teed.data_time DESC
+        ORDER BY ted.energy_data_time DESC
     </select>
 </mapper>

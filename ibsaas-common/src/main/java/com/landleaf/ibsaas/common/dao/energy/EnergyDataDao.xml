@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.energy.EnergyDataDao">
+
+
+    <select id="getRecentlyEnergyData" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyData">
+        SELECT
+        ted.node_id,
+        ted.energy_data_time,
+        ted.energy_data_date,
+        ted.energy_data_month,
+        ted.energy_data_year,
+        ted.energy_data_value,
+        ted.energy_data_increase_value,
+        ted.energy_data_type,
+        ted.energy_data_source
+        FROM
+        t_energy_data ted,
+        (SELECT node_id, MAX(energy_data_time) AS energy_data_time FROM t_energy_data WHERE is_active=1 AND energy_data_source=1 AND energy_data_type=#{energyType} GROUP BY node_id) t
+        WHERE ted.is_active=1
+        AND ted.energy_data_source=1
+        AND ted.energy_data_type=#{energyType}
+        AND ted.node_id=t.node_id
+        AND ted.energy_data_time=t.energy_data_time
+    </select>
+</mapper>

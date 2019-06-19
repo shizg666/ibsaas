@@ -21,9 +21,6 @@ import java.util.List;
 @ApiModel("能耗设备")
 public class EnergyEquipDTO extends EnergyEquip implements Serializable {
 
-    @ApiModelProperty("绑定的节点id")
-    private List<String> nodeIds;
-
     @ApiModelProperty("校验时间")
     private Date verifyTime;
 

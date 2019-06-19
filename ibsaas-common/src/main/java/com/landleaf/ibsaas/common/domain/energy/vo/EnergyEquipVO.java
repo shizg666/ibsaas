@@ -28,6 +28,6 @@ public class EnergyEquipVO extends EnergyEquip implements Serializable {
     private BigDecimal verifyValue;
 
     @ApiModelProperty("绑定的节点")
-    private List<HvacNodeVO> nodes;
+    private HvacNodeVO node;
 
 }

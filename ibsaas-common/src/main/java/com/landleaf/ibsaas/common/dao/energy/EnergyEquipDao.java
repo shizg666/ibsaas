@@ -16,13 +16,6 @@ import java.util.List;
  */
 public interface EnergyEquipDao extends BaseDao<EnergyEquip> {
 
-
-    /**
-     * 获取当前所有设备
-     * @return
-     */
-    List<EnergyEquipVO> allWithNodeIds();
-
     /**
      * 获取设备数量
      * @return

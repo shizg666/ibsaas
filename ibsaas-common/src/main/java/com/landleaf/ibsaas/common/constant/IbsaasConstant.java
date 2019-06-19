@@ -18,6 +18,12 @@ public class IbsaasConstant {
 
 
     /**
+     * 默认定时任务刷取
+     */
+    public final static Integer ENERGY_DATA_SOURCE_1 = 1;
+
+
+    /**
      * 秒数误差
      */
     public final static int SECOND_OFFSET = 60000;

@@ -5,36 +5,36 @@ import com.github.pagehelper.PageInfo;
 import com.landleaf.ibsaas.common.constant.HvacConstant;
 import com.landleaf.ibsaas.common.constant.IbsaasConstant;
 import com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao;
-import com.landleaf.ibsaas.common.dao.energy.EnergyEquipNodeDao;
 import com.landleaf.ibsaas.common.dao.energy.EnergyEquipVerifyDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquip;
-import com.landleaf.ibsaas.common.domain.energy.EnergyEquipNode;
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquipVerify;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyEquipDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyEquipSearchDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipSearchVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.NodeChoiceVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO;
+import com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO;
+import com.landleaf.ibsaas.common.domain.hvac.vo.WaterMeterVO;
 import com.landleaf.ibsaas.common.exception.BusinessException;
+import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
-import com.landleaf.ibsaas.web.web.service.energy.IEnergyEquipNodeService;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyEquipService;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyEquipVerifyService;
 import com.landleaf.ibsaas.web.web.util.WebDaoAdapter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -58,19 +58,18 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
     private EnergyEquipVerifyDao energyEquipVerifyDao;
 
     @Autowired
-    private IEnergyEquipNodeService iEnergyEquipNodeService;
-    @Autowired
-    private EnergyEquipNodeDao energyEquipNodeDao;
-
-    @Autowired
     private HvacNodeDao hvacNodeDao;
 
     @Autowired
     private WebDaoAdapter<EnergyEquip> webDaoAdapter;
     @Autowired
-    private WebDaoAdapter<EnergyEquipNode> webDaoAdapterNode;
-    @Autowired
     private WebDaoAdapter<EnergyEquipVerify> webDaoAdapterVerify;
+
+    @Autowired
+    private RedisHandle redisHandle;
+
+    @Value("${bacnet.place.id}")
+    private String placeId;
 
     @Override
     public EnergyEquipVO getEnergyEquipById(String id) {
@@ -91,6 +90,26 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         return new PageInfo<>(energyEquipSearchVOList);
     }
 
+    @Override
+    public PageInfo<EnergyEquipSearchVO> currentDataList(EnergyEquipSearchDTO energyEquipSearchDTO) {
+        //查询分页设备
+        PageHelper.startPage(energyEquipSearchDTO.getPage(), energyEquipSearchDTO.getLimit());
+        List<EnergyEquipSearchVO> energyEquipSearchVOList = energyEquipDao.getEnergyEquipSearchVO(energyEquipSearchDTO);
+        //从redis获取电水表数据
+        List<WaterMeterVO> waterMeterVOList = redisHandle.getMapField(placeId, String.valueOf(HvacConstant.WATER_METER_PORT));
+        List<ElectricMeterVO> electricMeterVOList = redisHandle.getMapField(placeId, String.valueOf(HvacConstant.ELECTRIC_METER_PORT));
+        Map<String, BigDecimal> map = waterMeterVOList.stream().collect(Collectors.toMap(WaterMeterVO::getId, wm -> new BigDecimal(wm.getWmReading())));
+        Map<String, BigDecimal> temp = electricMeterVOList.stream().collect(Collectors.toMap(ElectricMeterVO::getId, em -> new BigDecimal(em.getEmReading())));
+        map.putAll(temp);
+        //计算赋值
+        energyEquipSearchVOList.forEach( e -> {
+            BigDecimal currentDataValue = map.get(e.getNodeId());
+            e.setCurrentDataValue(currentDataValue);
+            e.setActualDataValue(currentDataValue.subtract(e.getVerifyValue()));
+        });
+        return new PageInfo<>(energyEquipSearchVOList);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public EnergyEquipVO addEnergyEquip(EnergyEquipDTO energyEquipDTO) {
@@ -107,14 +126,6 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
             }
             save(energyEquip);
         }
-        //存储设备和节点的绑定关系
-        energyEquipDTO.getNodeIds().forEach( nodeId -> {
-            EnergyEquipNode energyEquipNode = new EnergyEquipNode();
-            energyEquipNode.setEquipId(energyEquip.getId());
-            energyEquipNode.setNodeId(nodeId);
-            webDaoAdapterNode.consummateAddOperation(energyEquipNode);
-            iEnergyEquipNodeService.save(energyEquipNode);
-        });
         //存储设备校验值
         EnergyEquipVerify newEnergyEquipVerify = getNewEnergyEquipVerify(energyEquipDTO, energyEquip.getId());
         iEnergyEquipVerifyService.save(newEnergyEquipVerify);
@@ -143,22 +154,6 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
             EnergyEquipVerify newEnergyEquipVerify = getNewEnergyEquipVerify(energyEquipDTO, energyEquipDTO.getId());
             iEnergyEquipVerifyService.save(newEnergyEquipVerify);
         }
-        List<String> newNodeIds = energyEquipDTO.getNodeIds();
-        List<String> oldNodeIds = old.getNodes().stream().map(HvacNodeVO::getNodeId).collect(Collectors.toList());
-        if(!CollectionUtils.containsAll(newNodeIds, oldNodeIds)){
-            //如果绑定的节点信息有所变化时
-            //删除老的绑定节点数据
-            int updates = energyEquipNodeDao.updateUnActiveByEquipId(energyEquipDTO.getId(), webDaoAdapter.getUserCode(), now);
-            //更新新的节点数据
-            //存储设备和节点的绑定关系
-            newNodeIds.forEach( nodeId -> {
-                EnergyEquipNode energyEquipNode = new EnergyEquipNode();
-                energyEquipNode.setEquipId(energyEquip.getId());
-                energyEquipNode.setNodeId(nodeId);
-                webDaoAdapterNode.consummateAddOperation(energyEquipNode);
-                iEnergyEquipNodeService.save(energyEquipNode);
-            });
-        }
         return getEnergyEquipById(energyEquip.getId());
     }
 
@@ -179,7 +174,7 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
                 || !old.getVerifyValue().equals(energyEquipDTO.getVerifyValue())){
             energyEquipVerifyDao.updateUnEnableByEquipId(energyEquipDTO.getId(), webDaoAdapter.getUserCode(), now);
             EnergyEquipVerify newEnergyEquipVerify = getNewEnergyEquipVerify(energyEquipDTO, energyEquipDTO.getId());
-            iEnergyEquipVerifyService.save(newEnergyEquipVerify);
+            iEnergyEquipVerifyService.saveSelective(newEnergyEquipVerify);
         }
         return false;
     }

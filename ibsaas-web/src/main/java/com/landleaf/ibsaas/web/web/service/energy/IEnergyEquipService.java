@@ -62,4 +62,11 @@ public interface IEnergyEquipService extends IBaseService<EnergyEquip> {
      * @return
      */
     PageInfo<EnergyEquipSearchVO> dataList(EnergyEquipSearchDTO energyEquipSearchDTO);
+
+    /**
+     * 实时表显数据查询
+     * @param energyEquipSearchDTO
+     * @return
+     */
+    PageInfo<EnergyEquipSearchVO> currentDataList(EnergyEquipSearchDTO energyEquipSearchDTO);
 }

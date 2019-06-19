@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * @author Lokiy
@@ -16,8 +17,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 @Table(name = "t_energy_equip")
 @ApiModel("能耗设备")
-public class EnergyEquip extends BasicEntity {
+public class EnergyEquip extends BasicEntity implements Serializable {
 
+    @ApiModelProperty("设备对应的水电表节点id")
+    private String nodeId;
 
     @ApiModelProperty("设备编号")
     private String equipNo;

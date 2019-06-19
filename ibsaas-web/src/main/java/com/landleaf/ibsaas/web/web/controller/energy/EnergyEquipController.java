@@ -60,13 +60,22 @@ public class EnergyEquipController extends BasicController {
     @PostMapping("/data-list")
     @ApiOperation("能耗设备抄表数据查询")
     public Response dataList(@RequestBody EnergyEquipSearchDTO energyEquipSearchDTO){
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyEquipController.dataList入参为:{}", energyEquipSearchDTO);
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyEquipController.dataList 入参为:{}", energyEquipSearchDTO);
         PageInfo<EnergyEquipSearchVO> pageInfo = iEnergyEquipService.dataList(energyEquipSearchDTO);
         BasePageVO<EnergyEquipSearchVO> result = new BasePageVO<>(pageInfo.getList(), pageInfo.getTotal());
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyEquipController.dataList出参为:{}", result);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyEquipController.dataList 出参为:{}", result);
         return returnSuccess(result);
     }
 
+    @PostMapping("/current-data-list")
+    @ApiOperation("能耗设备实时表显")
+    public Response currentDataList(@RequestBody EnergyEquipSearchDTO energyEquipSearchDTO){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyEquipController.currentDataList 入参为:{}", energyEquipSearchDTO);
+        PageInfo<EnergyEquipSearchVO> pageInfo = iEnergyEquipService.currentDataList(energyEquipSearchDTO);
+        BasePageVO<EnergyEquipSearchVO> result = new BasePageVO<>(pageInfo.getList(), pageInfo.getTotal());
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyEquipController.currentDataList 出参为:{}", result);
+        return returnSuccess(result);
+    }
 
     @PostMapping
     @ApiOperation("添加能耗设备")

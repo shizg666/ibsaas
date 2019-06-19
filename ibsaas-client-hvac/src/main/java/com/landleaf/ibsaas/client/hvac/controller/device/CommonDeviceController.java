@@ -3,7 +3,7 @@ package com.landleaf.ibsaas.client.hvac.controller.device;
 import com.landleaf.ibsaas.client.hvac.controller.Basic2Controller;
 import com.landleaf.ibsaas.client.hvac.service.*;
 import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.common.domain.energy.EnergyDataWater;
+import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 
@@ -35,11 +35,8 @@ public class CommonDeviceController extends Basic2Controller {
 
     private final IHvacDeviceService iHvacDeviceService;
 
-    private final IEnergyDataElectricService iEnergyDataElectricService;
+    private final IEnergyDataService iEnergyDataService;
 
-    private final IEnergyDataWaterService iEnergyDataWaterService;
-
-    private final IEnergyEquipDataCliService iEnergyEquipDataService;
 
     @GetMapping("/reload")
     @ApiOperation("重新加载设备和点位")
@@ -75,9 +72,7 @@ public class CommonDeviceController extends Basic2Controller {
     @GetMapping("/data-record")
     public Response dataRecord(){
         Date now = new Date();
-//        List<EnergyDataElectric> energyDataElectrics = iEnergyDataElectricService.dataRecord(now);
-        List<EnergyDataWater> energyDataWaters = iEnergyDataWaterService.dataRecord(now);
-//        List<EnergyEquipData> energyEquipData = iEnergyEquipDataService.dateRecord(now, energyDataElectrics, energyDataWaters);
-        return returnSuccess(null);
+        List<EnergyData> energyData = iEnergyDataService.dataRecord(now);
+        return returnSuccess(energyData);
     }
 }

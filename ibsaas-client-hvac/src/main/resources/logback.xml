@@ -27,7 +27,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="com.landleaf.ibsaas.common.dao" level="DEBUG" />
+    <logger name="com.landleaf.ibsaas.common.dao" level="INFO" />
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

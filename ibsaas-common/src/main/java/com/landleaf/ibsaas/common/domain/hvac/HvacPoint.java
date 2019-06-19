@@ -20,6 +20,14 @@ import javax.persistence.Table;
 @ApiModel("远程设备点位")
 public class HvacPoint extends BasicEntity {
 
+
+    /**
+     * 远程设备id
+     */
+    @ApiModelProperty("远程设备id")
+    @Column(name = "device_id")
+    private String deviceId;
+
     /**
      * 节点id
      */
