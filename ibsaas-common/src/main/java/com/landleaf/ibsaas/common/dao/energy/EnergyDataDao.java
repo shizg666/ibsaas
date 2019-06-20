@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.common.dao.energy;
 import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 
@@ -24,7 +25,7 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
 
     /**
      * 能耗总览-折线图
-     * 
+     *
      * @param energyReportDTO
      * @return
      */
@@ -35,7 +36,8 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @param queryVO
      * @return
      */
-    List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportDTO queryVO);
+    List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportQueryVO queryVO);
 
-    List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportDTO queryVO);
+
+    List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportQueryVO queryVO);
 }
