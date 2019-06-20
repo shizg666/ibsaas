@@ -1,0 +1,52 @@
+package com.landleaf.ibsaas.common.enums.energy;
+
+
+import com.landleaf.ibsaas.common.enums.BaseEnum;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 查询维度类型
+ */
+public enum DimensionTypeEnum implements BaseEnum {
+    YEAR(1, "year", "年"),
+    MONTH(2, "month", "月"),
+    DAY(3, "day", "日"),
+    HOUR(4, "hour", "时");
+
+    public final int type;
+    public String code;
+    public String name;
+
+    DimensionTypeEnum(int type, String code, String name) {
+        this.type = type;
+        this.code = code;
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public int getType() {
+        return this.type;
+    }
+
+
+    private static Map<Integer, DimensionTypeEnum> map = new HashMap<Integer, DimensionTypeEnum>();
+    ;
+
+    static {
+        for (DimensionTypeEnum enumObj : DimensionTypeEnum.values()) {
+            map.put(enumObj.getType(), enumObj);
+        }
+    }
+
+    public static DimensionTypeEnum getInstByType(int type) {
+        return map.get(type);
+    }
+
+}
