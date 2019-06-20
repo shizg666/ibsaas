@@ -25,5 +25,8 @@ public class EnergyReportQueryVO implements Serializable {
     @ApiModelProperty("查询值")
     private Integer queryValue;
 
+    //时间维度 code 跟数据库的字段一致方便拼接sql "energy_data_"+dateCode
+    private String dateCode;
+
 
 }

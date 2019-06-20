@@ -1,6 +1,7 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.handler.data;
 
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class EnergyGraphicsDataProvider {
      * @param requestBody
      * @return
      */
-    public  List<EnergyReportResponseVO> timeLineChart(EnergyReportDTO requestBody) {
+    public  List<EnergyReportResponseVO> timeLineChart(EnergyReportQueryVO requestBody) {
 
         List<EnergyReportResponseVO> energyReporyInfolist = energyReportService.getEnergyReporyInfolist(requestBody);
 
