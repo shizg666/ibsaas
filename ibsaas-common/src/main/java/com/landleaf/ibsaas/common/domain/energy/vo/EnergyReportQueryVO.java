@@ -37,4 +37,7 @@ public class EnergyReportQueryVO implements Serializable {
         this.queryType = queryType;
         this.queryValue = queryValue;
     }
+
+    public EnergyReportQueryVO() {
+    }
 }
