@@ -26,9 +26,9 @@ public class EnergyReportDTO implements Serializable {
     @ApiModelProperty("能耗类型 1-水 2-电")
     private Integer equipType = 2;
 
-    @ApiModelProperty("设备所属区域 0-默认 ")
+    @ApiModelProperty("设备所属区域 ")
     private Integer equipArea;
-    @ApiModelProperty("设备所属分类 0-默认")
+    @ApiModelProperty("设备所属分类")
     private Integer equipClassification;
 
 
