@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
-import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.common.utils.date.DateUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import org.slf4j.Logger;
@@ -21,7 +20,7 @@ public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataPr
 
     public EnergyReportQueryVO reportQueryVO;
 
-    public Map<String, List<EnergyReportResponseVO>> orginData = Maps.newHashMap();
+    public Map<String, Object> orginData = Maps.newHashMap();
 
     public void buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
         reportQueryVO = new EnergyReportQueryVO(dateType, startTime, endTime, equipType, queryType, queryValue);

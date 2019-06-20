@@ -10,5 +10,5 @@ import java.util.concurrent.Future;
 public interface IEnergyFutureService {
 
     @Async
-    Future<List<EnergyReportResponseVO>> handlerMsg(EnergyGraphicsEnum energyGraphicsEnum, Object requestBody);
+    Future<Object> handlerMsg(EnergyGraphicsEnum energyGraphicsEnum, Object requestBody);
 }

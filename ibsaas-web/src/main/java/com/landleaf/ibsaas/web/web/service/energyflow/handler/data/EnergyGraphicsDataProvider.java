@@ -104,17 +104,17 @@ public class EnergyGraphicsDataProvider extends AbstractEnergyGraphicsDataProvid
 
 
     public void getOrginData(){
-        Map<String ,List<EnergyReportResponseVO>> orginData = Maps.newHashMap();
+        Map<String ,Object> orginData = Maps.newHashMap();
         LOGGER.info("*************************获取原始数据*****************************");
         long getDateStartTime = System.currentTimeMillis();
         Map<String, Future> futureMap = Maps.newHashMap();
         for (EnergyGraphicsEnum enumObj : EnergyGraphicsEnum.values()) {
-            Future<List<EnergyReportResponseVO>> future = energyFutureService.handlerMsg(enumObj, this.reportQueryVO);
+            Future<Object> future = energyFutureService.handlerMsg(enumObj, this.reportQueryVO);
             futureMap.put(enumObj.getCode(),future);
         }
         futureMap.forEach((i,v)->{
             try {
-                List<EnergyReportResponseVO> o = (List<EnergyReportResponseVO>) v.get();
+                Object o =  v.get();
                 orginData.put(i,o);
             } catch (InterruptedException e) {
                 e.printStackTrace();

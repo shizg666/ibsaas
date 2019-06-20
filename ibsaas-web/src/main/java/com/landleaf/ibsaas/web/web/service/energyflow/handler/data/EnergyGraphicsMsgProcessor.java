@@ -24,7 +24,7 @@ public class EnergyGraphicsMsgProcessor {
     /**
      * 利用反射指向具体处理类
      */
-    public List<EnergyReportResponseVO> process(EnergyGraphicsEnum energyGraphicsEnum, Object requestBody) {
+    public Object process(EnergyGraphicsEnum energyGraphicsEnum, Object requestBody) {
 
         try {
             Object bean = null;
@@ -44,7 +44,7 @@ public class EnergyGraphicsMsgProcessor {
             }
             method = bean.getClass().getMethod(energyGraphicsEnum.getMethodName(), new Class[]{energyGraphicsEnum.getParamName()});
             Object responseData = ReflectionUtils.invokeMethod(method, bean, params);
-            return (List<EnergyReportResponseVO>) responseData;
+            return responseData;
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
             return null;
