@@ -11,6 +11,8 @@ public class EnergyReportResponseVO {
     private String timeValue;
     @ApiModelProperty("能耗")
     private String energyValue;
+    @ApiModelProperty("能耗所属分类")
+    private Integer equipClassification;
 
     public String getTimeValue() {
         return timeValue;
@@ -28,4 +30,11 @@ public class EnergyReportResponseVO {
         this.energyValue = energyValue;
     }
 
+    public Integer getEquipClassification() {
+        return equipClassification;
+    }
+
+    public void setEquipClassification(Integer equipClassification) {
+        this.equipClassification = equipClassification;
+    }
 }
