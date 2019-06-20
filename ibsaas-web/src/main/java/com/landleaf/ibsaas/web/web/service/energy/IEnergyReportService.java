@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.web.web.service.energy;
 
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
+import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
@@ -20,49 +21,49 @@ public interface IEnergyReportService {
      * @param energyReportDTO
      * @return
      */
-    HlVl overviewLineChart(EnergyReportDTO energyReportDTO);
+    HlVl overviewLineChart(EnergyReportExDTO energyReportDTO);
 
     /**
      * 能耗总览-柱状图
      * @param energyReportDTO
      * @return
      */
-    HlVl overviewHistogram(EnergyReportDTO energyReportDTO);
+    HlVl overviewHistogram(EnergyReportExDTO energyReportDTO);
 
     /**
      * 能耗总览-节能效果
      * @param energyReportDTO
      * @return
      */
-    HlVl overviewSavingEffect(EnergyReportDTO energyReportDTO);
+    HlVl overviewSavingEffect(EnergyReportExDTO energyReportDTO);
 
     /**
      * 能耗总览-能耗排行TOP5项
      * @param energyReportDTO
      * @return
      */
-    HlVl overviewRankingClassification(EnergyReportDTO energyReportDTO);
+    HlVl overviewRankingClassification(EnergyReportExDTO energyReportDTO);
 
     /**
      * 能耗总览-能耗排行TOP3区
      * @param energyReportDTO
      * @return
      */
-    HlVl overviewRankingArea(EnergyReportDTO energyReportDTO);
+    HlVl overviewRankingArea(EnergyReportExDTO energyReportDTO);
 
     /**
      * 能耗总览-同比
      * @param energyReportDTO
      * @return
      */
-    HlVl overviewYoy(EnergyReportDTO energyReportDTO);
+    String overviewYoy(EnergyReportExDTO energyReportDTO);
 
     /**
      * 能耗总览-环比
      * @param energyReportDTO
      * @return
      */
-    HlVl overviewQoq(EnergyReportDTO energyReportDTO);
+    String overviewQoq(EnergyReportExDTO energyReportDTO);
 
     /**
      * 能耗总览-累计能耗

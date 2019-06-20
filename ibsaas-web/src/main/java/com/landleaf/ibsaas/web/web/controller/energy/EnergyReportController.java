@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.web.web.controller.energy;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
+import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
@@ -32,7 +33,7 @@ public class EnergyReportController extends BasicController {
      */
     @PostMapping("/overview/line-chart")
     @ApiOperation("能耗总览-折线图")
-    public Response overviewLineChart(@RequestBody EnergyReportDTO energyReportDTO){
+    public Response overviewLineChart(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewLineChart 入参为:{}", energyReportDTO);
         HlVl result = iEnergyReportService.overviewLineChart(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewLineChart 出参为:{}", result);
@@ -41,7 +42,7 @@ public class EnergyReportController extends BasicController {
 
     @PostMapping("/overview/histogram")
     @ApiOperation("能耗总览-柱状图")
-    public Response overviewHistogram(@RequestBody EnergyReportDTO energyReportDTO){
+    public Response overviewHistogram(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewHistogram 入参为:{}", energyReportDTO);
         HlVl result = iEnergyReportService.overviewHistogram(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewHistogram 出参为:{}", result);
@@ -51,7 +52,7 @@ public class EnergyReportController extends BasicController {
 
     @PostMapping("/overview/saving-effect")
     @ApiOperation("能耗总览-节能效果")
-    public Response overviewSavingEffect(@RequestBody EnergyReportDTO energyReportDTO){
+    public Response overviewSavingEffect(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewSavingEffect 入参为:{}", energyReportDTO);
         HlVl result = iEnergyReportService.overviewSavingEffect(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewSavingEffect 出参为:{}", result);
@@ -61,7 +62,7 @@ public class EnergyReportController extends BasicController {
 
     @PostMapping("/overview/ranking/classification")
     @ApiOperation("能耗总览-能耗排行TOP5项")
-    public Response overviewRankingClassification(@RequestBody EnergyReportDTO energyReportDTO){
+    public Response overviewRankingClassification(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewRankingClassification 入参为:{}", energyReportDTO);
         HlVl result = iEnergyReportService.overviewRankingClassification(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewRankingClassification 出参为:{}", result);
@@ -70,7 +71,7 @@ public class EnergyReportController extends BasicController {
 
     @PostMapping("/overview/ranking/area")
     @ApiOperation("能耗总览-能耗排行TOP3区")
-    public Response overviewRankingArea(@RequestBody EnergyReportDTO energyReportDTO){
+    public Response overviewRankingArea(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewRankingArea 入参为:{}", energyReportDTO);
         HlVl result = iEnergyReportService.overviewRankingArea(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewRankingArea 出参为:{}", result);
@@ -80,9 +81,9 @@ public class EnergyReportController extends BasicController {
 
     @PostMapping("/overview/yoy")
     @ApiOperation("能耗总览-同比")
-    public Response overviewYoy(@RequestBody EnergyReportDTO energyReportDTO){
+    public Response overviewYoy(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewYoy 入参为:{}", energyReportDTO);
-        HlVl result = iEnergyReportService.overviewYoy(energyReportDTO);
+        String result = iEnergyReportService.overviewYoy(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewYoy 出参为:{}", result);
         return returnSuccess(result);
     }
@@ -90,9 +91,9 @@ public class EnergyReportController extends BasicController {
 
     @PostMapping("/overview/qoq")
     @ApiOperation("能耗总览-环比")
-    public Response overviewQoq(@RequestBody EnergyReportDTO energyReportDTO){
+    public Response overviewQoq(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewQoq 入参为:{}", energyReportDTO);
-        HlVl result = iEnergyReportService.overviewQoq(energyReportDTO);
+        String result = iEnergyReportService.overviewQoq(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewQoq 出参为:{}", result);
         return returnSuccess(result);
     }

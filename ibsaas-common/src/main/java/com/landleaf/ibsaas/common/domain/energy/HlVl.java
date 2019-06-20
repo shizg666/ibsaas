@@ -2,7 +2,9 @@ package com.landleaf.ibsaas.common.domain.energy;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -13,6 +15,8 @@ import java.util.List;
  */
 @Data
 @ApiModel("横纵坐标返回对象")
+@AllArgsConstructor
+@NoArgsConstructor
 public class HlVl {
 
     @ApiModelProperty("横坐标")
