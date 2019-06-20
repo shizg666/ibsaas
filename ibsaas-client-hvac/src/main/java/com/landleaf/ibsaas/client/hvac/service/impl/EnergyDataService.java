@@ -61,7 +61,7 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             record.setNodeId(em.getId());
             record.setEnergyDataTime(date);
             record.setEnergyDataDate(date);
-            record.setEnergyDataMonth(CalendarUtil.month(date));
+            record.setEnergyDataMonth(CalendarUtil.getYearAndMonth(date));
             record.setEnergyDataYear(CalendarUtil.year(date));
 
             BigDecimal electricDataValue = new BigDecimal(em.getEmReading());
@@ -91,7 +91,7 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             record.setNodeId(wm.getId());
             record.setEnergyDataTime(date);
             record.setEnergyDataDate(date);
-            record.setEnergyDataMonth(CalendarUtil.month(date));
+            record.setEnergyDataMonth(CalendarUtil.getYearAndMonth(date));
             record.setEnergyDataYear(CalendarUtil.year(date));
 
             BigDecimal electricDataValue = new BigDecimal(wm.getWmReading());

@@ -25,4 +25,7 @@
         AND ted.node_id=t.node_id
         AND ted.energy_data_time=t.energy_data_time
     </select>
+    <select id="overviewLineChart" resultType="com.landleaf.ibsaas.common.domain.energy.HlVl">
+
+    </select>
 </mapper>

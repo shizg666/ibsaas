@@ -40,4 +40,26 @@ public class CalendarUtil {
     public static int month(Date date){
         return calendar(date).get(Calendar.MONTH) + 1;
     }
+
+
+    /**
+     * 获取年月字符串
+     * @param year
+     * @param month
+     * @return
+     */
+    public static String getYearAndMonth(int year, int month){
+        return year + "-" + (month > 9? month : "0" + month);
+    }
+
+    /**
+     * 获取年月字符串
+     * @param date
+     * @return
+     */
+    public static String getYearAndMonth(Date date){
+        int year = year(date);
+        int month = month(date);
+        return year + "-" + (month > 9? month : "0" + month);
+    }
 }

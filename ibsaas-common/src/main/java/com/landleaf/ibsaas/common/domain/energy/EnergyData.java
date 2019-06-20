@@ -31,7 +31,7 @@ public class EnergyData extends BasicEntity implements Serializable {
     private Date energyDataDate;
 
     @ApiModelProperty("表数据月份")
-    private Integer energyDataMonth;
+    private String energyDataMonth;
 
     @ApiModelProperty("表数据年份")
     private Integer energyDataYear;

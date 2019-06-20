@@ -1,6 +1,8 @@
 package com.landleaf.ibsaas.common.dao.energy;
 
 import com.landleaf.ibsaas.common.domain.energy.EnergyData;
+import com.landleaf.ibsaas.common.domain.energy.HlVl;
+import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 
 import java.util.List;
@@ -18,4 +20,12 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @return
      */
     List<EnergyData> getRecentlyEnergyData(Integer energyType);
+
+    /**
+     * 能耗总览-折线图
+     * 
+     * @param energyReportDTO
+     * @return
+     */
+    HlVl overviewLineChart(EnergyReportDTO energyReportDTO);
 }
