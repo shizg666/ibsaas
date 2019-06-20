@@ -8,6 +8,7 @@ import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
+import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,28 +121,24 @@ public class EnergyReportService implements IEnergyReportService {
     }
 
     @Override
-    public List<EnergyReportResponseVO> getEnergyReporyInfolist(EnergyReportDTO queryVO) {
+    public List<EnergyReportResponseVO> getEnergyReporyInfolist(EnergyReportQueryVO queryVO) {
         List<EnergyReportResponseVO> responseVOS = Lists.newArrayList();
         DimensionTypeEnum dimensionTypeEnum = DimensionTypeEnum.getInstByType(queryVO.getDateType());
         String columValue = dimensionTypeEnum.code;
-        queryVO.setDateTypeValue(columValue);
-        if (queryVO.getEquipArea() == null){
-            responseVOS = getEnergyReporyInfoByArea(queryVO);
-        }else {
+        queryVO.setDateCode(columValue);
+        if (QueryTypeEnum.TYPE.getType() == queryVO.getQueryType()){
             responseVOS = getEnergyReporyInfoByType(queryVO);
+        }else {
+            responseVOS = getEnergyReporyInfoByArea(queryVO);
         }
         return responseVOS;
     }
 
-    private List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportDTO queryVO) {
+    private List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportQueryVO queryVO) {
         return energyDataDao.getEnergyReporyInfoByType(queryVO);
     }
-    private List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportDTO queryVO) {
+    private List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportQueryVO queryVO) {
         return energyDataDao.getEnergyReporyInfoByType(queryVO);
     }
 
-
-    public List<Integer> getEnergyIDlist(EnergyReportDTO queryVO) {
-        return energyDataDao.getEnergyReporyInfoByType(queryVO);
-    }
 }

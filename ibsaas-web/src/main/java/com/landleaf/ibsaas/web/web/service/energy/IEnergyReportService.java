@@ -148,5 +148,5 @@ public interface IEnergyReportService {
      * @param queryVO
      * @return Report
      */
-    List<EnergyReportResponseVO> getEnergyReporyInfolist(EnergyReportDTO queryVO);
+    List<EnergyReportResponseVO> getEnergyReporyInfolist(EnergyReportQueryVO queryVO);
 }
