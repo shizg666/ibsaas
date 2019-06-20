@@ -3,6 +3,10 @@ package com.landleaf.ibsaas.web.web.service.energy;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
+
+import java.util.List;
 
 /**
  * @author Lokiy
@@ -137,4 +141,12 @@ public interface IEnergyReportService {
      * @return
      */
     HlVl classificationQoq(EnergyReportDTO energyReportDTO);
+
+
+    /**
+     * 分项分区域报表统计
+     * @param queryVO
+     * @return Report
+     */
+    List<EnergyReportResponseVO> getEnergyReporyInfolist(EnergyReportDTO queryVO);
 }

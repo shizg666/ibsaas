@@ -1,13 +1,18 @@
 package com.landleaf.ibsaas.web.web.service.energy.impl;
 
+import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.dao.energy.EnergyDataDao;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Lokiy
@@ -110,6 +115,25 @@ public class EnergyReportService implements IEnergyReportService {
 
     @Override
     public HlVl classificationQoq(EnergyReportDTO energyReportDTO) {
+        return null;
+    }
+
+    @Override
+    public List<EnergyReportResponseVO> getEnergyReporyInfolist(EnergyReportDTO queryVO) {
+        List<EnergyReportResponseVO> responseVOS = Lists.newArrayList();
+        if (queryVO.getEquipArea() == null){
+            responseVOS = getEnergyReporyInfoByArea(queryVO);
+        }else {
+            responseVOS = getEnergyReporyInfoByType(queryVO);
+        }
+        return responseVOS;
+    }
+
+    private List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportDTO queryVO) {
+        return null;
+    }
+    private List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportDTO queryVO) {
+
         return null;
     }
 }

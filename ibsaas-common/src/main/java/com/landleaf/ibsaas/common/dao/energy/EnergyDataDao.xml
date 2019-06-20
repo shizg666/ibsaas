@@ -28,4 +28,12 @@
     <select id="overviewLineChart" resultType="com.landleaf.ibsaas.common.domain.energy.HlVl">
 
     </select>
+
+    <select id="getEnergyReporyInfoByType" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
+
+    </select>
+
+    <select id="getEnergyReporyInfoByArea" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
+
+    </select>
 </mapper>
