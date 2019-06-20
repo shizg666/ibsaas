@@ -11,8 +11,10 @@ public class EnergyReportResponseVO {
     private String timeValue;
     @ApiModelProperty("能耗")
     private String energyValue;
-    @ApiModelProperty("能耗所属分类")
-    private Integer equipClassification;
+    @ApiModelProperty("类型值")
+    private Integer typeValue;
+    @ApiModelProperty("查询类型")
+    private Integer queryType;
 
     public String getTimeValue() {
         return timeValue;
@@ -30,11 +32,19 @@ public class EnergyReportResponseVO {
         this.energyValue = energyValue;
     }
 
-    public Integer getEquipClassification() {
-        return equipClassification;
+    public Integer getTypeValue() {
+        return typeValue;
     }
 
-    public void setEquipClassification(Integer equipClassification) {
-        this.equipClassification = equipClassification;
+    public void setTypeValue(Integer typeValue) {
+        this.typeValue = typeValue;
+    }
+
+    public Integer getQueryType() {
+        return queryType;
+    }
+
+    public void setQueryType(Integer queryType) {
+        this.queryType = queryType;
     }
 }
