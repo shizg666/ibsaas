@@ -33,4 +33,16 @@ public class EnergyReportDTO implements Serializable {
 
     private String dateTypeValue;
 
+
+    public EnergyReportDTO() {
+    }
+
+    public EnergyReportDTO(Integer dateType, String startTime, String endTime, Integer equipType, Integer equipArea, Integer equipClassification) {
+        this.dateType = dateType;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.equipType = equipType;
+        this.equipArea = equipArea;
+        this.equipClassification = equipClassification;
+    }
 }

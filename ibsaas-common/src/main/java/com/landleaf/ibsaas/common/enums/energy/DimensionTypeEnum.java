@@ -25,6 +25,18 @@ public enum DimensionTypeEnum implements BaseEnum {
         this.name = name;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String getName() {
         return this.name;

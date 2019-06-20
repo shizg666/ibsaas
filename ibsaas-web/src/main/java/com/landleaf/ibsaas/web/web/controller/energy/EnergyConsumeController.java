@@ -1,7 +1,7 @@
 package com.landleaf.ibsaas.web.web.controller.energy;
 
 import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.common.service.energy.IEnergyConsumeService;
+import com.landleaf.ibsaas.web.web.service.energy.IEnergyConsumeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,16 +28,17 @@ public class EnergyConsumeController {
 
     @GetMapping("/flow")
     @ApiOperation("分区/分项能耗")
-    public Response energyFlow(@ApiParam(value = "数据类型（电:1;水:2）", required = false) @RequestParam(value = "dataType", required = false, defaultValue = "2") Integer dataType,
+    public Response energyFlow(@ApiParam(value = "数据类型（电:1;水:2）", required = false) @RequestParam(value = "equipType", required = false, defaultValue = "2") Integer equipType,
                                @ApiParam(value = "起始时间 （格式：yyyy-MM-dd HH:mm:ss）", required = true) @RequestParam("startTime") String startTime,
                                @ApiParam(value = "截止时间 （格式：yyyy-MM-dd HH:mm:ss）", required = true) @RequestParam("endTime") String endTime,
-                               @ApiParam(value = "查询类型 （分区:1;分项:2）", required = true) @RequestParam("queryType") Integer queryType,
-                               @ApiParam(value = "查询类型值 （1F/照明）", required = false) @RequestParam("queryTypeValue") String queryTypeValue,
-                               @ApiParam(value = "维度 （年:1;月:2;日:3;时:4）", required = true) @RequestParam("dimensionType") Integer dimensionType) {
-        LOGGER.info("曲线操作接口请求参数：==》%s", String.format("查询类型：%s;查询类型值:%s;数据类型:%s;维度:%s;起止时间：%s--%s", queryType, queryTypeValue,
-                dataType, dimensionType, startTime, endTime));
+                               @ApiParam(value = "所属区域", required = false) @RequestParam("equipArea") Integer equipArea,
+                               @ApiParam(value = "所属类型", required = false) @RequestParam("equipClassification") Integer equipClassification,
+                               @ApiParam(value = "维度 （年:4;月:3;日:2;时:1）", required = true) @RequestParam("dateType") Integer dateType) {
+        LOGGER.info("曲线操作接口请求参数：==》%s", String.format("所属区域：%s;所属类型:%s;数据类型:%s;维度:%s;起止时间：%s--%s", equipArea, equipClassification,
+                equipType, dateType, startTime, endTime));
 
-        Map<String,Map<String,List<String>>> queryResult=energyConsumeService.energyFlow(queryType,queryTypeValue,dimensionType,dataType,startTime,endTime);
+        Map<String, Map<String, List<String>>> queryResult=energyConsumeService.energyFlow(equipArea,equipClassification,dateType,equipType,startTime,endTime);
+
 
         return null;
     }
