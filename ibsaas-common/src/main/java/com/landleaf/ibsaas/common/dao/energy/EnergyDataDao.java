@@ -1,13 +1,10 @@
 package com.landleaf.ibsaas.common.dao.energy;
 
-import com.landleaf.ibsaas.common.domain.energy.ConfigSetting;
 import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
-import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -38,7 +35,7 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @param queryVO
      * @return
      */
-    List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportQueryVO queryVO);
+    List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportDTO queryVO);
 
-    List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportQueryVO queryVO);
+    List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportDTO queryVO);
 }
