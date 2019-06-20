@@ -10,10 +10,10 @@ import java.util.Map;
  * 查询维度类型
  */
 public enum DimensionTypeEnum implements BaseEnum {
-    YEAR(1, "year", "年"),
-    MONTH(2, "month", "月"),
-    DAY(3, "day", "日"),
-    HOUR(4, "hour", "时");
+    YEAR(4, "year", "年"),
+    MONTH(3, "month", "月"),
+    DAY(2, "day", "日"),
+    HOUR(1, "hour", "时");
 
     public final int type;
     public String code;
