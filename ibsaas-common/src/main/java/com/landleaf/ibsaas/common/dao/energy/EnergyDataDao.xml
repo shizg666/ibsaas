@@ -29,11 +29,41 @@
 
     </select>
 
-    <select id="getEnergyReporyInfoByType" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
-
+    <select id="getEnergyReporyInfoByType" parameterType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
+        select sum(d.energy_data_increase_value) as energyValue, d.energy_data_${dateCode} as timeValue
+        <if test="queryValue == null or queryValue == ''">
+            ,equip_classification as typeValue
+        </if>
+        from t_energy_data d INNER JOIN t_energy_equip e  on d.node_id = e.node_id
+        where d.energy_data_time &gt;= #{startTime} and d.energy_data_time &lt;= #{endTime}
+        <if test="energyType != null and energyType != ''">
+            and  e.equip_type = #{energyType}
+        </if>
+        <if test="queryValue != null and queryValue != ''">
+            and  e.equip_classification = #{queryValue}
+        </if>
+        group by energy_data_${dateCode}
+        <if test="queryValue == null or queryValue == ''">
+            ,e.equip_classification
+        </if>
     </select>
 
-    <select id="getEnergyReporyInfoByArea" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
-
+    <select id="getEnergyReporyInfoByArea"  parameterType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
+        select sum(d.energy_data_increase_value) as energyValue, d.energy_data_date as timeValue
+        <if test="queryValue == null or queryValue == ''">
+            ,equip_area as typeValue
+        </if>
+        from t_energy_data d INNER JOIN t_energy_equip e  on d.node_id = e.node_id
+        where d.energy_data_time &gt;= #{startTime} and d.energy_data_time &lt;= #{endTime}
+        <if test="energyType != null and energyType != ''">
+            and  e.equip_type = #{energyType}
+        </if>
+        <if test="queryValue != null and queryValue != ''">
+            and  e.equip_area = #{queryValue}
+        </if>
+        group by energy_data_${dateCode}
+        <if test="queryValue == null or queryValue == ''">
+            ,e.equip_area
+        </if>
     </select>
 </mapper>

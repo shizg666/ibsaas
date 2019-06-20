@@ -1,7 +1,7 @@
 package com.landleaf.ibsaas.web.web.controller.energy;
 
 import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.web.web.service.energy.IEnergyConsumeService;
+import com.landleaf.ibsaas.web.web.service.energyflow.IEnergyConsumeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.web;
 
 import com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.web.web.service.energy.impl.EnergyReportService;
@@ -38,12 +39,12 @@ public class IbsaasWebApplicationTests {
     @Test
     public void aa(){
 
-        EnergyReportDTO queryVO = new EnergyReportDTO();
+        EnergyReportQueryVO queryVO = new EnergyReportQueryVO();
         queryVO.setStartTime("2019-06-10 20:00:00");
         queryVO.setEndTime("2019-06-22 20:00:00");
-        queryVO.setDateType(DimensionTypeEnum.DAY.type);
+        queryVO.setDateType(DimensionTypeEnum.HOUR.type);
 //        queryVO.setEquipClassification(0);
-        queryVO.setEquipType(1);
+        queryVO.setQueryType(2);
         Long start = System.currentTimeMillis();
         List<EnergyReportResponseVO> energyReportResponseVOS =  energyReportService.getEnergyReporyInfolist(queryVO);
         Long end = System.currentTimeMillis();
