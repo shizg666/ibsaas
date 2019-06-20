@@ -1,10 +1,12 @@
 package com.landleaf.ibsaas.web.web.service.energy.impl;
 
+import com.landleaf.ibsaas.common.dao.energy.EnergyDataDao;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,12 +19,13 @@ import org.springframework.stereotype.Service;
 public class EnergyReportService implements IEnergyReportService {
 
 
-
+    @Autowired
+    private EnergyDataDao energyDataDao;
 
 
     @Override
     public HlVl overviewLineChart(EnergyReportDTO energyReportDTO) {
-        return null;
+        return energyDataDao.overviewLineChart(energyReportDTO);
     }
 
     @Override

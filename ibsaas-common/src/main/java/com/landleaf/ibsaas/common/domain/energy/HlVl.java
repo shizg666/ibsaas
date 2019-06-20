@@ -16,8 +16,8 @@ import java.util.List;
 public class HlVl {
 
     @ApiModelProperty("横坐标")
-    private List<?> x;
+    private List<?> xs;
 
     @ApiModelProperty("纵坐标")
-    private List<?> y;
+    private List<?> ys;
 }
