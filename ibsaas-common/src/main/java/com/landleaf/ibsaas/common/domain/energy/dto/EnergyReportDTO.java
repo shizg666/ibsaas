@@ -20,9 +20,9 @@ public class EnergyReportDTO implements Serializable {
     @ApiModelProperty("时间维度 1-时 2-日 3-月 4-年")
     private Integer dateType = 1;
     @ApiModelProperty("时间段开始时间")
-    private Date startTime;
+    private String startTime;
     @ApiModelProperty("时间段结束时间")
-    private Date endTime;
+    private String endTime;
     @ApiModelProperty("能耗类型 1-水 2-电")
     private Integer equipType = 2;
 
@@ -31,5 +31,6 @@ public class EnergyReportDTO implements Serializable {
     @ApiModelProperty("设备所属分类")
     private Integer equipClassification;
 
+    private String dateTypeValue;
 
 }
