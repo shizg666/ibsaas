@@ -133,6 +133,7 @@ public class EnergyReportService implements IEnergyReportService {
         return energyDataDao.getEnergyReporyInfoByType(queryVO);
     }
     private List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportDTO queryVO) {
+        if ()
         return energyDataDao.getEnergyReporyInfoByType(queryVO);
     }
 }

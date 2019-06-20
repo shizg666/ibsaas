@@ -12,8 +12,8 @@ import java.util.Map;
 public enum DimensionTypeEnum implements BaseEnum {
     YEAR(4, "year", "年"),
     MONTH(3, "month", "月"),
-    DAY(2, "day", "日"),
-    HOUR(1, "hour", "时");
+    DAY(2, "date", "日"),
+    HOUR(1, "time", "时");
 
     public final int type;
     public String code;
