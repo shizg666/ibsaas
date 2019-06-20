@@ -26,18 +26,32 @@ public class EnergyConsumeController {
     @Autowired
     private IEnergyConsumeService energyConsumeService;
 
-    @GetMapping("/flow")
-    @ApiOperation("分区/分项能耗")
-    public Response energyFlow(@ApiParam(value = "数据类型（电:1;水:2）", required = false) @RequestParam(value = "equipType", required = false, defaultValue = "2") Integer equipType,
+    @GetMapping("/flow-area")
+    @ApiOperation("分区能耗")
+    public Response energyAreaFlow(@ApiParam(value = "数据类型（电:1;水:2）", required = false) @RequestParam(value = "equipType", required = false, defaultValue = "2") Integer equipType,
                                @ApiParam(value = "起始时间 （格式：yyyy-MM-dd HH:mm:ss）", required = true) @RequestParam("startTime") String startTime,
                                @ApiParam(value = "截止时间 （格式：yyyy-MM-dd HH:mm:ss）", required = true) @RequestParam("endTime") String endTime,
                                @ApiParam(value = "所属区域", required = false) @RequestParam("equipArea") Integer equipArea,
-                               @ApiParam(value = "所属类型", required = false) @RequestParam("equipClassification") Integer equipClassification,
                                @ApiParam(value = "维度 （年:4;月:3;日:2;时:1）", required = true) @RequestParam("dateType") Integer dateType) {
-        LOGGER.info("曲线操作接口请求参数：==》%s", String.format("所属区域：%s;所属类型:%s;数据类型:%s;维度:%s;起止时间：%s--%s", equipArea, equipClassification,
+        LOGGER.info("分区曲线操作接口请求参数：==》%s", String.format("所属区域：%s;数据类型:%s;维度:%s;起止时间：%s--%s", equipArea,
                 equipType, dateType, startTime, endTime));
 
-        Map<String, Map<String, List<String>>> queryResult=energyConsumeService.energyFlow(equipArea,equipClassification,dateType,equipType,startTime,endTime);
+        Map<String, Map<String, List<String>>> queryResult=energyConsumeService.energyFlow(1,equipArea,dateType,equipType,startTime,endTime);
+
+
+        return null;
+    }
+    @GetMapping("/flow-classification")
+    @ApiOperation("分项能耗")
+    public Response energyClassificationFlow(@ApiParam(value = "数据类型（电:1;水:2）", required = false) @RequestParam(value = "equipType", required = false, defaultValue = "2") Integer equipType,
+                               @ApiParam(value = "起始时间 （格式：yyyy-MM-dd HH:mm:ss）", required = true) @RequestParam("startTime") String startTime,
+                               @ApiParam(value = "截止时间 （格式：yyyy-MM-dd HH:mm:ss）", required = true) @RequestParam("endTime") String endTime,
+                               @ApiParam(value = "所属类型", required = false) @RequestParam("equipClassification") Integer equipClassification,
+                               @ApiParam(value = "维度 （年:4;月:3;日:2;时:1）", required = true) @RequestParam("dateType") Integer dateType) {
+        LOGGER.info("分项曲线操作接口请求参数：==》%s", String.format("所属类型:%s;数据类型:%s;维度:%s;起止时间：%s--%s", equipClassification,
+                equipType, dateType, startTime, endTime));
+
+        Map<String, Map<String, List<String>>> queryResult=energyConsumeService.energyFlow(2,equipClassification,dateType,equipType,startTime,endTime);
 
 
         return null;

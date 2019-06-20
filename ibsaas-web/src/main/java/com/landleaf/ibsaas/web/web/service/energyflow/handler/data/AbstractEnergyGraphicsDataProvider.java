@@ -23,8 +23,8 @@ public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataPr
 
     public Map<String, List<EnergyReportResponseVO>> orginData = Maps.newHashMap();
 
-    public void buildParam(Integer equipArea, Integer equipClassification, Integer dateType, Integer equipType, String startTime, String endTime) {
-        reportQueryVO = new EnergyReportQueryVO(dateType, startTime, endTime, equipType, 1, equipArea);
+    public void buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
+        reportQueryVO = new EnergyReportQueryVO(dateType, startTime, endTime, equipType, queryType, queryValue);
         this.convertimeByDateType(reportQueryVO);
     }
 

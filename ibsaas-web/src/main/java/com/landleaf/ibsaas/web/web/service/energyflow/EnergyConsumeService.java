@@ -16,10 +16,10 @@ public class EnergyConsumeService implements IEnergyConsumeService {
     private IEnergyGraphicsDataProvider energyGraphicsDataProvider;
 
     @Override
-    public Map<String, Map<String, List<String>>> energyFlow(Integer equipArea, Integer equipClassification, Integer dateType, Integer equipType, String startTime, String endTime) {
+    public Map<String, Map<String, List<String>>> energyFlow(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
         Map<String, Map<String, List<String>>> result = Maps.newHashMap();
 
-
+        energyGraphicsDataProvider.buildParam(queryType, queryValue, dateType, equipType, startTime, endTime);
         energyGraphicsDataProvider.getOrginData();
 
         return result;

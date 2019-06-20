@@ -14,6 +14,6 @@ public interface IEnergyGraphicsDataProvider {
     void getOrginData();
 
 
-    public void buildParam(Integer equipArea, Integer equipClassification, Integer dateType, Integer equipType, String startTime, String endTime);
+    public void buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime);
 
 }
