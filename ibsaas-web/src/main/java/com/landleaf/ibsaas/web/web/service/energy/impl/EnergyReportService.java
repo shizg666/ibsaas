@@ -3,18 +3,30 @@ package com.landleaf.ibsaas.web.web.service.energy.impl;
 import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.dao.energy.EnergyDataDao;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
+import com.landleaf.ibsaas.common.domain.energy.HlVlBO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
+import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
+import com.landleaf.ibsaas.common.domain.energy.report.ProportionalData;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
+import com.landleaf.ibsaas.common.utils.calculate.CalculateUtil;
+import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
+import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Lokiy
@@ -25,50 +37,200 @@ import java.util.List;
 @Slf4j
 public class EnergyReportService implements IEnergyReportService {
 
+    private static final String EQUIP_CLASSIFICATION = "equip_classification";
+
+    private static final String EQUIP_AREA = "equip_area";
+
+    private static final BigDecimal BIGDECIMAL_100 = new BigDecimal(100);
 
     @Autowired
     private EnergyDataDao energyDataDao;
 
 
     @Override
-    public HlVl overviewLineChart(EnergyReportDTO energyReportDTO) {
-        return energyDataDao.overviewLineChart(energyReportDTO);
+    public HlVl overviewLineChart(EnergyReportExDTO energyReportDTO) {
+        List<HlVlBO> hlVlBOList = energyDataDao.overviewLineChart(energyReportDTO);
+        return getHlVl(hlVlBOList);
     }
 
     @Override
-    public HlVl overviewHistogram(EnergyReportDTO energyReportDTO) {
+    public HlVl overviewHistogram(EnergyReportExDTO energyReportDTO) {
+        //现值
+        List<HlVlBO> hlVlBOS = energyDataDao.overviewLineChart(energyReportDTO);
+        //往前挪一个维度
+        EnergyReportExDTO query = offsetEnergyReportDTO(energyReportDTO);
+        Map<String, String> map = new HashMap<>(64);
+        if(query!=energyReportDTO){
+            //选择的不是年份  年份没有对比
+            List<HlVlBO> tempList = energyDataDao.overviewLineChart(query);
+            Map<String, String> tempMap = tempList.stream().collect(Collectors.toMap(
+                    HlVlBO::getX,
+                    HlVlBO::getY));
+            map.putAll(tempMap);
+        }
+
+        List<String> xs = new ArrayList<>(); List<ProportionalData> ys = new ArrayList<>();
+        hlVlBOS.forEach( h -> {
+            xs.add(h.getX());
+            //todo
+//            ys.add(new ProportionalData(h.getY(), map.get(Ca)));
+        });
+
+        return new HlVl(xs, ys);
+    }
+
+
+
+    @Override
+    public HlVl overviewSavingEffect(EnergyReportExDTO energyReportDTO) {
+        //todo
         return null;
     }
 
     @Override
-    public HlVl overviewSavingEffect(EnergyReportDTO energyReportDTO) {
-        return null;
+    public HlVl overviewRankingClassification(EnergyReportExDTO energyReportDTO) {
+        List<HlVlBO> hlVlBOList = energyDataDao.getEnergyRanking(
+                energyReportDTO.getStartTime(),
+                energyReportDTO.getEndTime(),
+                energyReportDTO.getEquipType(),
+                EQUIP_CLASSIFICATION,
+                5);
+        return getHlVl(hlVlBOList);
     }
 
     @Override
-    public HlVl overviewRankingClassification(EnergyReportDTO energyReportDTO) {
-        return null;
+    public HlVl overviewRankingArea(EnergyReportExDTO energyReportDTO) {
+        List<HlVlBO> hlVlBOList = energyDataDao.getEnergyRanking(
+                energyReportDTO.getStartTime(),
+                energyReportDTO.getEndTime(),
+                energyReportDTO.getEquipType(),
+                EQUIP_AREA,
+                5);
+        return getHlVl(hlVlBOList);
     }
 
     @Override
-    public HlVl overviewRankingArea(EnergyReportDTO energyReportDTO) {
-        return null;
+    public String overviewYoy(EnergyReportExDTO energyReportDTO) {
+        BigDecimal curValue = energyDataDao.getEnergyByDate(energyReportDTO);
+        EnergyReportExDTO query = offsetEnergyReportDTO(energyReportDTO);
+        BigDecimal prevValue = BigDecimal.ZERO;
+        if(query!=energyReportDTO){
+            //维度不是年
+            prevValue = energyDataDao.getEnergyByDate(query);
+        }
+        return getProportion(prevValue, curValue);
     }
 
     @Override
-    public HlVl overviewYoy(EnergyReportDTO energyReportDTO) {
-        return null;
+    public String overviewQoq(EnergyReportExDTO energyReportDTO) {
+        BigDecimal curValue = energyDataDao.getEnergyByDate(energyReportDTO);
+        EnergyReportExDTO query = offsetParallelEnergyReportDTO(energyReportDTO);
+        BigDecimal prevValue = BigDecimal.ZERO;
+        prevValue = energyDataDao.getEnergyByDate(query);
+        return getProportion(prevValue, curValue);
     }
 
-    @Override
-    public HlVl overviewQoq(EnergyReportDTO energyReportDTO) {
-        return null;
+    /**
+     * 根据现值 和 上值 求得比例
+     * @param prevValue
+     * @param curValue
+     * @return
+     */
+    private String getProportion(BigDecimal prevValue, BigDecimal curValue){
+        BigDecimal subtract = curValue.subtract(prevValue);
+        BigDecimal divide = BigDecimal.ZERO.compareTo(prevValue) == 0 ? BigDecimal.ONE : subtract.divide(prevValue);
+        BigDecimal percent = divide.multiply(BIGDECIMAL_100).setScale(2);
+        return percent.toString();
     }
+
 
     @Override
     public EnergyOverviewTotalVO overviewTotal() {
+        //todo
         return null;
     }
+
+    /**
+     * 根据查询结果变更返回值
+     * @param hlVlBOList
+     * @return
+     */
+    private HlVl getHlVl(List<HlVlBO> hlVlBOList) {
+        List<String> xs = new ArrayList<>(), ys = new ArrayList<>();
+        hlVlBOList.forEach( h -> {
+            xs.add(h.getX());
+            ys.add(h.getY());
+        });
+        return new HlVl(xs, ys);
+    }
+
+    /**
+     * 根据所选维度 变更更查询范围
+     * @param energyReportDTO
+     */
+    private EnergyReportExDTO offsetEnergyReportDTO(EnergyReportExDTO energyReportDTO){
+        EnergyReportExDTO query = new EnergyReportExDTO();
+        BeanUtils.copyProperties(energyReportDTO, query);
+        if(DimensionTypeEnum.HOUR.getType() == energyReportDTO.getDateType()){
+            query.setStartTime(CalendarUtil.prevDay(query.getStartTime()));
+            query.setEndTime(CalendarUtil.prevDay(query.getEndTime()));
+        }
+        if(DimensionTypeEnum.DAY.getType() == energyReportDTO.getDateType()){
+            query.setStartTime(CalendarUtil.prevMonth(query.getStartTime()));
+            query.setEndTime(CalendarUtil.prevMonth(query.getEndTime()));
+        }
+        if(DimensionTypeEnum.MONTH.getType() == energyReportDTO.getDateType()){
+            query.setStartTime(CalendarUtil.prevYear(query.getStartTime()));
+            query.setEndTime(CalendarUtil.prevYear(query.getEndTime()));
+        }
+        if(DimensionTypeEnum.YEAR.getType() == energyReportDTO.getDateType()){
+            return energyReportDTO;
+        }
+        return query;
+    }
+
+    /**
+     * 根据所选维度 往前推查询范围
+     * @param energyReportDTO
+     */
+    private EnergyReportExDTO offsetParallelEnergyReportDTO(EnergyReportExDTO energyReportDTO){
+        EnergyReportExDTO query = new EnergyReportExDTO();
+        BeanUtils.copyProperties(energyReportDTO, query);
+        if(DimensionTypeEnum.HOUR.getType() == energyReportDTO.getDateType()){
+            Duration duration = Duration.between(
+                    CalendarUtil.date2LocalDateTime(query.getStartTime()),
+                    CalendarUtil.date2LocalDateTime(query.getEndTime()));
+            long hours = duration.toHours();
+            query.setStartTime(CalendarUtil.offsetDate(query.getStartTime(), -hours, ChronoUnit.HOURS));
+            query.setEndTime(CalendarUtil.offsetDate(query.getEndTime(), -hours, ChronoUnit.HOURS));
+        }
+        if(DimensionTypeEnum.DAY.getType() == energyReportDTO.getDateType()){
+            Period period = Period.between(
+                    CalendarUtil.date2LocalDate(query.getStartTime()),
+                    CalendarUtil.date2LocalDate(query.getEndTime()));
+            int days = period.getDays();
+            query.setStartTime(CalendarUtil.offsetDate(query.getStartTime(), -days, ChronoUnit.DAYS));
+            query.setEndTime(CalendarUtil.offsetDate(query.getEndTime(), -days, ChronoUnit.DAYS));
+        }
+        if(DimensionTypeEnum.MONTH.getType() == energyReportDTO.getDateType()){
+            Period period = Period.between(
+                    CalendarUtil.date2LocalDate(query.getStartTime()),
+                    CalendarUtil.date2LocalDate(query.getEndTime()));
+            int months = period.getMonths();
+            query.setStartTime(CalendarUtil.offsetDate(query.getStartTime(), -months, ChronoUnit.MONTHS));
+            query.setEndTime(CalendarUtil.offsetDate(query.getEndTime(), -months, ChronoUnit.MONTHS));
+        }
+        if(DimensionTypeEnum.YEAR.getType() == energyReportDTO.getDateType()){
+            Period period = Period.between(
+                    CalendarUtil.date2LocalDate(query.getStartTime()),
+                    CalendarUtil.date2LocalDate(query.getEndTime()));
+            int years = period.getYears();
+            query.setStartTime(CalendarUtil.offsetDate(query.getStartTime(), -years, ChronoUnit.YEARS));
+            query.setEndTime(CalendarUtil.offsetDate(query.getEndTime(), -years, ChronoUnit.YEARS));
+        }
+        return query;
+    }
+
 
     @Override
     public HlVl areaLineChart(EnergyReportDTO energyReportDTO) {
