@@ -68,6 +68,12 @@ public class EnergyRingRationChartProcessor extends AbstractEnergyChartProcessor
         queryTypeGroup.forEach((String i, List<ConfigSettingVO> v) -> {
             List<EnergyReportResponseVO> currentResponseVOS = currentGroup.get(i);
             List<EnergyReportResponseVO> compareTargetResponseVOS = compareTargetGroup.get(i);
+            if(CollectionUtils.isEmpty(currentResponseVOS)){
+                currentResponseVOS=Lists.newArrayList();
+            }
+            if(CollectionUtils.isEmpty(compareTargetResponseVOS)){
+                compareTargetResponseVOS=Lists.newArrayList();
+            }
             String settingValue = null;
             try {
                 settingValue = v.get(0).getSettingValue();

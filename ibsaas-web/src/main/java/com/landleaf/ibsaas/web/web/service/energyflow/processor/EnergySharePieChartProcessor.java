@@ -36,7 +36,7 @@ public class EnergySharePieChartProcessor extends AbstractEnergyChartProcessor {
      */
     public Map<String, String> getData(EnergyReportQueryVO requestBody) {
         Map<String, String> result = Maps.newHashMap();
-        //分区或者分项分组
+        //分区或者分项分组2
         Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType());
         //获取原始数据
         long getDBStartTime = System.currentTimeMillis();
@@ -64,12 +64,17 @@ public class EnergySharePieChartProcessor extends AbstractEnergyChartProcessor {
                 settingValue = queryTypeGroup.get(key).get(0).getSettingValue();
             } catch (Exception e) {
                 LOGGER.error("分项不存在",e);
+
+
             }
             if(!StringUtils.isEmpty(settingValue)){
                 if (i == keys.size() - 1) {
                     result.put(settingValue, String.valueOf(remain));
                 }
                 List<EnergyReportResponseVO> currentResponseVOS = currentGroup.get(key);
+                if(CollectionUtils.isEmpty(currentResponseVOS)){
+                    currentResponseVOS=Lists.newArrayList();
+                }
                 double currestSum = 0d;
                 currestSum = currentResponseVOS.stream().mapToDouble(i1 -> {
                     return Double.parseDouble(i1.getEnergyValue());
