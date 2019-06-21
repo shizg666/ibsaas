@@ -8,6 +8,7 @@ import com.landleaf.ibsaas.web.web.service.energyflow.handler.data.asyn.IEnergyF
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -19,8 +20,8 @@ public class EnergyGraphicsDataProvider extends AbstractEnergyGraphicsDataProvid
     private IEnergyFutureService energyFutureService;
 
     @Override
-    public Map<String, Object> getEnergyFlowData(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
-        buildParam(queryType, queryValue, dateType, equipType, startTime, endTime);
+    public Map<String, Object> getEnergyFlowData(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime,List<EnergyGraphicsEnum> chartTypes) {
+        buildParam(queryType, queryValue, dateType, equipType, startTime, endTime,chartTypes);
         getEnergyFlowData();
         return this.data;
     }
@@ -30,7 +31,7 @@ public class EnergyGraphicsDataProvider extends AbstractEnergyGraphicsDataProvid
         LOGGER.info("*************************逐个获取图表数据*****************************");
         long getDateStartTime = System.currentTimeMillis();
         Map<String, Future> futureMap = Maps.newHashMap();
-        for (EnergyGraphicsEnum enumObj : EnergyGraphicsEnum.values()) {
+        for (EnergyGraphicsEnum enumObj : this.chartTypes) {
             Future<Object> future = energyFutureService.handlerMsg(enumObj, this.reportQueryVO);
             futureMap.put(enumObj.getCode(),future);
         }

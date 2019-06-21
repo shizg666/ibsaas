@@ -1,13 +1,16 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.handler.data;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
+import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataProvider {
@@ -19,13 +22,16 @@ public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataPr
 
     public Map<String, Object> data = Maps.newHashMap();
 
-    public void buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
+    public List<EnergyGraphicsEnum> chartTypes = Lists.newArrayList();
+
+    public void buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime,List<EnergyGraphicsEnum> chartTypes) {
         reportQueryVO = new EnergyReportQueryVO(dateType, startTime, endTime, equipType, queryType, queryValue);
+        this.chartTypes.addAll(chartTypes);
         this.convertimeByDateType(reportQueryVO);
     }
 
     @Override
-    public Map<String, Object> getEnergyFlowData(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
+    public Map<String, Object> getEnergyFlowData(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime,List<EnergyGraphicsEnum> chartTypes) {
         return null;
     }
 
