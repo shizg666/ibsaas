@@ -12,7 +12,7 @@ public class EnergyReportResponseVO {
     @ApiModelProperty("能耗")
     private String energyValue;
     @ApiModelProperty("类型值")
-    private Integer typeValue;
+    private String typeValue;
     @ApiModelProperty("查询类型")
     private Integer queryType;
 
@@ -32,11 +32,11 @@ public class EnergyReportResponseVO {
         this.energyValue = energyValue;
     }
 
-    public Integer getTypeValue() {
+    public String getTypeValue() {
         return typeValue;
     }
 
-    public void setTypeValue(Integer typeValue) {
+    public void setTypeValue(String typeValue) {
         this.typeValue = typeValue;
     }
 
