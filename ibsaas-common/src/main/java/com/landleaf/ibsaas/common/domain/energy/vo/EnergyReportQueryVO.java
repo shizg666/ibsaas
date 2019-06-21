@@ -29,4 +29,15 @@ public class EnergyReportQueryVO implements Serializable {
     private String dateCode;
 
 
+    public EnergyReportQueryVO(Integer dateType, String startTime, String endTime, Integer energyType, Integer queryType, Integer queryValue) {
+        this.dateType = dateType;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.energyType = energyType;
+        this.queryType = queryType;
+        this.queryValue = queryValue;
+    }
+
+    public EnergyReportQueryVO() {
+    }
 }

@@ -49,4 +49,6 @@ public interface IConfigSettingService extends IBaseService<ConfigSetting> {
      * @return
      */
     List<ChoiceButton> getChoiceButtons(String type);
+
+    List<ConfigSettingVO> selectList();
 }

@@ -607,7 +607,7 @@ public class DateUtils {
 		tempStart.setTime(date);
 		tempStart.set(Calendar.HOUR_OF_DAY, 0);
 		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.SECOND, 0);
 		tempStart.set(Calendar.MILLISECOND, 0);
 		tempStart.set(Calendar.DAY_OF_MONTH,1);
 		tempStart.set(Calendar.MONTH,0);
@@ -671,7 +671,7 @@ public class DateUtils {
 		tempStart.setTime(date);
 		tempStart.set(Calendar.HOUR_OF_DAY, 0);
 		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.SECOND, 0);
 		tempStart.set(Calendar.MILLISECOND, 0);
 		tempStart.set(Calendar.DAY_OF_MONTH,1);
 		return tempStart.getTime();
@@ -702,7 +702,7 @@ public class DateUtils {
 		tempStart.setTime(date);
 		tempStart.set(Calendar.HOUR_OF_DAY, 0);
 		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.SECOND, 0);
 		tempStart.set(Calendar.MILLISECOND, 0);
 		return tempStart.getTime();
 	}
@@ -729,6 +729,17 @@ public class DateUtils {
 		return tempStart.getTime();
 	}
 	/**
+	 * 获取当前时间去年同期时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getDateBeforeYear(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.add(Calendar.DAY_OF_YEAR,-1);
+		return tempStart.getTime();
+	}
+	/**
 	 * 获取当时的起始时间
 	 * @param date
 	 * @return
@@ -737,7 +748,7 @@ public class DateUtils {
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(date);
 		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.SECOND, 0);
 		tempStart.set(Calendar.MILLISECOND, 0);
 		return tempStart.getTime();
 	}

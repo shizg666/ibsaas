@@ -1,5 +1,6 @@
 package com.landleaf.ibsaas.web.web.service.energy.impl;
 
+import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.dao.energy.ConfigSettingDao;
 import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import com.landleaf.ibsaas.common.domain.energy.ConfigSetting;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,6 +76,18 @@ public class ConfigSettingService extends AbstractBaseService<ConfigSettingDao, 
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ConfigSettingVO> selectList() {
+        List<ConfigSetting> configSettings = selectAll();
+        if(!CollectionUtils.isEmpty(configSettings)){
+            return configSettings.stream().map(i->{
+                ConfigSettingVO configSettingVO = new ConfigSettingVO();
+                BeanUtils.copyProperties(i,configSettingVO);
+                return configSettingVO;
+            }).collect(Collectors.toList());
+        }
+        return Lists.newArrayList();
+    }
 
 
     /**
