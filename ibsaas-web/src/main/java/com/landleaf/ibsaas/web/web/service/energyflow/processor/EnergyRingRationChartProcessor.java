@@ -89,7 +89,8 @@ public class EnergyRingRationChartProcessor extends AbstractEnergyChartProcessor
                 compareTargetSum = compareTargetResponseVOS.stream().mapToDouble(i1 -> {
                     return Double.parseDouble(i1.getEnergyValue());
                 }).sum();
-                String value = new BigDecimal((currestSum - compareTargetSum) / compareTargetSum==0?1:compareTargetSum).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
+                double  fenmu =compareTargetSum>0?compareTargetSum:1;
+                String value = new BigDecimal((currestSum - compareTargetSum) / fenmu).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
                 result.put(settingValue, value);
             }
         });
