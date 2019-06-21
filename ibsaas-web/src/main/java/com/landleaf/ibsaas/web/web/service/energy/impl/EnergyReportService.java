@@ -1,15 +1,22 @@
 package com.landleaf.ibsaas.web.web.service.energy.impl;
 
 import com.google.common.collect.Lists;
+import com.landleaf.ibsaas.common.dao.energy.ConfigSettingDao;
 import com.landleaf.ibsaas.common.dao.energy.EnergyDataDao;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.HlVlBO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
+import com.landleaf.ibsaas.common.domain.energy.report.EnergySavingEffectVO;
 import com.landleaf.ibsaas.common.domain.energy.report.ProportionalData;
+import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
+import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
+import com.landleaf.ibsaas.common.enums.energy.EnergyTypeEnum;
+import com.landleaf.ibsaas.common.utils.calculate.CalculateUtil;
+import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
@@ -20,8 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.Period;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,10 +48,18 @@ public class EnergyReportService implements IEnergyReportService {
 
     private static final String EQUIP_AREA = "equip_area";
 
+    private static final String BUILDING_ACREAGE = "building_acreage";
+
+    private static final String CHINESE_STANDARD_ENERGY_CONSUMPTION = "chinese_standard_energy_consumption";
+
+    private static final String LGC = "lgc";
+
     private static final BigDecimal BIGDECIMAL_100 = new BigDecimal(100);
 
     @Autowired
     private EnergyDataDao energyDataDao;
+    @Autowired
+    private ConfigSettingDao configSettingDao;
 
 
     @Override
@@ -73,8 +87,8 @@ public class EnergyReportService implements IEnergyReportService {
         List<String> xs = new ArrayList<>(); List<ProportionalData> ys = new ArrayList<>();
         hlVlBOS.forEach( h -> {
             xs.add(h.getX());
-            //todo
-//            ys.add(new ProportionalData(h.getY(), map.get(Ca)));
+            String upPrevX = getUpPrevX(h.getX(), energyReportDTO.getDateType());
+            ys.add(new ProportionalData(map.get(upPrevX), h.getY()));
         });
 
         return new HlVl(xs, ys);
@@ -83,7 +97,33 @@ public class EnergyReportService implements IEnergyReportService {
 
 
     @Override
-    public HlVl overviewSavingEffect(EnergyReportExDTO energyReportDTO) {
+    public EnergySavingEffectVO overviewSavingEffect(EnergyReportExDTO energyReportDTO) {
+
+        BigDecimal curConsumption = energyDataDao.getEnergyByYear(energyReportDTO.getEquipType(), LocalDateTime.now().getYear());
+
+        ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(BUILDING_ACREAGE, LGC);
+        BigDecimal lgcAcreage = new BigDecimal(lgcAcreageConfig.getSettingValue());
+        BigDecimal standardConsumption = BigDecimal.ZERO;
+        ConfigSettingVO standardConsumptionConfig = configSettingDao.getByTypeAndCode(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()));
+
+        if(EnergyTypeEnum.ENERGY_WATER.getEnergyType().equals(energyReportDTO.getEquipType())){
+            //水能耗
+
+        }
+        if(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType().equals(energyReportDTO.getEquipType())){
+            //电能耗
+
+
+        }
+
+
+
+        //todo
+        return new EnergySavingEffectVO();
+    }
+
+    @Override
+    public HlVl overviewSavingEffectLineChart(EnergyReportExDTO energyReportDTO) {
         //todo
         return null;
     }
@@ -106,7 +146,7 @@ public class EnergyReportService implements IEnergyReportService {
                 energyReportDTO.getEndTime(),
                 energyReportDTO.getEquipType(),
                 EQUIP_AREA,
-                5);
+                3);
         return getHlVl(hlVlBOList);
     }
 
@@ -126,8 +166,7 @@ public class EnergyReportService implements IEnergyReportService {
     public String overviewQoq(EnergyReportExDTO energyReportDTO) {
         BigDecimal curValue = energyDataDao.getEnergyByDate(energyReportDTO);
         EnergyReportExDTO query = offsetParallelEnergyReportDTO(energyReportDTO);
-        BigDecimal prevValue = BigDecimal.ZERO;
-        prevValue = energyDataDao.getEnergyByDate(query);
+        BigDecimal prevValue = energyDataDao.getEnergyByDate(query);
         return getProportion(prevValue, curValue);
     }
 
@@ -146,10 +185,69 @@ public class EnergyReportService implements IEnergyReportService {
 
 
     @Override
-    public EnergyOverviewTotalVO overviewTotal() {
-        //todo
+    public EnergyOverviewTotalVO overviewTotal(EnergyReportExDTO energyReportDTO) {
+        LocalDate now = LocalDate.now();
+        //构建当天的查询开始日期喝结束日期
+        energyReportDTO.setStartTime(CalendarUtil.localDate2Date(now));
+        energyReportDTO.setEndTime(CalendarUtil.localDate2Date(now.plusDays(1)));
+        BigDecimal dayEnergy = energyDataDao.getEnergyByDate(energyReportDTO);
+        //当周的开始和下周的开始
+        LocalDate weekFirstDay = now.with(DayOfWeek.MONDAY);
+        energyReportDTO.setStartTime(CalendarUtil.localDate2Date(weekFirstDay));
+        energyReportDTO.setEndTime(CalendarUtil.localDate2Date(weekFirstDay.plusDays(7)));
+        BigDecimal weekEnergy = energyDataDao.getEnergyByDate(energyReportDTO);
+        //当月的第一天
+        LocalDate monthFirstDay = LocalDate.of(now.getYear(), now.getMonth(), 1);
+        energyReportDTO.setStartTime(CalendarUtil.localDate2Date(monthFirstDay));
+        energyReportDTO.setEndTime(CalendarUtil.localDate2Date(monthFirstDay.plusMonths(1)));
+        BigDecimal monthEnergy = energyDataDao.getEnergyByDate(energyReportDTO);
+        //当年的第一天
+        LocalDate yearFirstDay = LocalDate.of(now.getYear(), 1, 1);
+        energyReportDTO.setStartTime(CalendarUtil.localDate2Date(yearFirstDay));
+        energyReportDTO.setEndTime(CalendarUtil.localDate2Date(yearFirstDay.plusYears(1)));
+        BigDecimal yearEnergy = energyDataDao.getEnergyByDate(energyReportDTO);
+        //建筑面积
+        ConfigSettingVO configSetting = configSettingDao.getByTypeAndCode(BUILDING_ACREAGE, LGC);
+        BigDecimal buildingAcreage = new BigDecimal(configSetting.getSettingValue());
+
+        return new EnergyOverviewTotalVO(
+                buildingAcreage,
+                dayEnergy,
+                weekEnergy,
+                monthEnergy,
+                yearEnergy,
+                yearEnergy.divide(buildingAcreage).setScale(2));
+    }
+
+
+    /**
+     * 根据给定的时间x 上升维度后提前一个方位 获取的值
+     * @param x
+     * @param dateType
+     * @return
+     */
+    private String getUpPrevX(String x, Integer dateType){
+        if(DimensionTypeEnum.HOUR.getType() == dateType){
+            return CalendarUtil.date2Str(
+                    CalendarUtil.prevDay(
+                            CalendarUtil.str2Date(x)));
+        }
+        if(DimensionTypeEnum.DAY.getType() == dateType){
+            return CalendarUtil.date2StrPattern(
+                    CalendarUtil.prevMonth(
+                            CalendarUtil.str2DatePattern(x, CalendarUtil.YYYY_MM_DD)), CalendarUtil.YYYY_MM_DD);
+        }
+        if(DimensionTypeEnum.MONTH.getType() == dateType){
+            return CalendarUtil.date2StrPattern(
+                    CalendarUtil.prevYear(
+                            CalendarUtil.str2DatePattern(x, CalendarUtil.YYYY_MM)), CalendarUtil.YYYY_MM);
+        }
+        if(DimensionTypeEnum.YEAR.getType() == dateType){
+
+        }
         return null;
     }
+
 
     /**
      * 根据查询结果变更返回值
@@ -198,34 +296,22 @@ public class EnergyReportService implements IEnergyReportService {
         EnergyReportExDTO query = new EnergyReportExDTO();
         BeanUtils.copyProperties(energyReportDTO, query);
         if(DimensionTypeEnum.HOUR.getType() == energyReportDTO.getDateType()){
-            Duration duration = Duration.between(
-                    CalendarUtil.date2LocalDateTime(query.getStartTime()),
-                    CalendarUtil.date2LocalDateTime(query.getEndTime()));
-            long hours = duration.toHours();
+            long hours = CalendarUtil.diff(query.getStartTime(), query.getEndTime(), ChronoUnit.HOURS);
             query.setStartTime(CalendarUtil.offsetDate(query.getStartTime(), -hours, ChronoUnit.HOURS));
             query.setEndTime(CalendarUtil.offsetDate(query.getEndTime(), -hours, ChronoUnit.HOURS));
         }
         if(DimensionTypeEnum.DAY.getType() == energyReportDTO.getDateType()){
-            Period period = Period.between(
-                    CalendarUtil.date2LocalDate(query.getStartTime()),
-                    CalendarUtil.date2LocalDate(query.getEndTime()));
-            int days = period.getDays();
+            long days = CalendarUtil.diff(query.getStartTime(), query.getEndTime(), ChronoUnit.DAYS);
             query.setStartTime(CalendarUtil.offsetDate(query.getStartTime(), -days, ChronoUnit.DAYS));
             query.setEndTime(CalendarUtil.offsetDate(query.getEndTime(), -days, ChronoUnit.DAYS));
         }
         if(DimensionTypeEnum.MONTH.getType() == energyReportDTO.getDateType()){
-            Period period = Period.between(
-                    CalendarUtil.date2LocalDate(query.getStartTime()),
-                    CalendarUtil.date2LocalDate(query.getEndTime()));
-            int months = period.getMonths();
+            long months = CalendarUtil.diff(query.getStartTime(), query.getEndTime(), ChronoUnit.MONTHS);
             query.setStartTime(CalendarUtil.offsetDate(query.getStartTime(), -months, ChronoUnit.MONTHS));
             query.setEndTime(CalendarUtil.offsetDate(query.getEndTime(), -months, ChronoUnit.MONTHS));
         }
         if(DimensionTypeEnum.YEAR.getType() == energyReportDTO.getDateType()){
-            Period period = Period.between(
-                    CalendarUtil.date2LocalDate(query.getStartTime()),
-                    CalendarUtil.date2LocalDate(query.getEndTime()));
-            int years = period.getYears();
+            long years = CalendarUtil.diff(query.getStartTime(), query.getEndTime(), ChronoUnit.YEARS);
             query.setStartTime(CalendarUtil.offsetDate(query.getStartTime(), -years, ChronoUnit.YEARS));
             query.setEndTime(CalendarUtil.offsetDate(query.getEndTime(), -years, ChronoUnit.YEARS));
         }

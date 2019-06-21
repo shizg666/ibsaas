@@ -67,5 +67,12 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
 
     List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportQueryVO queryVO);
 
-
+    /**
+     * 按类型和年统计能耗
+     * @param equipType
+     * @param year
+     * @return
+     */
+    BigDecimal getEnergyByYear(@Param("equipType") Integer equipType,
+                               @Param("year") Integer year);
 }

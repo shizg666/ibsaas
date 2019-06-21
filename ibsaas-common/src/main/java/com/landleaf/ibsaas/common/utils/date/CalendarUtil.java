@@ -1,9 +1,6 @@
 package com.landleaf.ibsaas.common.utils.date;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
@@ -20,6 +17,51 @@ public class CalendarUtil {
 
     public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
+    public static final String YYYY_MM_DD = "yyyy-MM-dd";
+
+    public static final String HH_MM_SS = "HH:mm:ss";
+
+    public static final String YYYY_MM = "yyyy-MM";
+
+
+    /**
+     * 根据表达式 str转date
+     * @param dateStr
+     * @param pattern
+     * @return
+     */
+    public static Date str2DatePattern(String dateStr, String pattern){
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
+        if(YYYY_MM_DD_HH_MM_SS.equals(pattern)){
+            LocalDateTime localDateTime = LocalDateTime.parse(dateStr, df);
+            return localDateTime2Date(localDateTime);
+        }
+        if(YYYY_MM_DD.equals(pattern)){
+            LocalDate localDateTime = LocalDate.parse(dateStr, df);
+            return localDate2Date(localDateTime);
+        }
+        if(YYYY_MM.equals(pattern)){
+            dateStr = dateStr + "-01";
+            df = DateTimeFormatter.ofPattern(YYYY_MM_DD);
+            LocalDate localDateTime = LocalDate.parse(dateStr, df);
+            return localDate2Date(localDateTime);
+        }
+        if(HH_MM_SS.equals(pattern)){
+            LocalTime localDateTime = LocalTime.parse(dateStr, df);
+            return localTime2Date(localDateTime);
+        }
+        return null;
+    }
+
+    /**
+     * 根据表达式 date转str
+     * @param date
+     * @return
+     */
+    public static String date2StrPattern(Date date, String pattern){
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
+        return df.format(date2LocalDateTime(date));
+    }
 
     /**
      * date转str
@@ -84,6 +126,31 @@ public class CalendarUtil {
         Instant instant = localDate.atStartOfDay().atZone(zoneId).toInstant();
         return Date.from(instant);
     }
+
+
+    /**
+     * date转localTime
+     * @param date
+     * @return
+     */
+    public static LocalTime date2LocalTime(Date date){
+        return date2LocalDateTime(date).toLocalTime();
+    }
+
+    /**
+     * localTime转date
+     * @param localTime
+     * @return
+     */
+    public static Date localTime2Date(LocalTime localTime){
+        LocalDate localDate = LocalDate.now();
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+        ZoneId zoneId = ZoneId.systemDefault();
+        Instant instant = localDateTime.atZone(zoneId).toInstant();
+        return Date.from(instant);
+    }
+
+
 
 
     /**
@@ -229,6 +296,34 @@ public class CalendarUtil {
      */
     public static Date nextYear(Date date){
         return offsetDate(date, 1, ChronoUnit.YEARS);
+    }
+
+
+    /**
+     * 两日期之间的不同维度差值
+     * @param sDate 之前的时间
+     * @param bDate 后的时间
+     * @param chronoUnit
+     * @return
+     */
+    public static long diff(Date sDate, Date bDate, ChronoUnit chronoUnit){
+       switch (chronoUnit){
+           case SECONDS:
+               return ChronoUnit.SECONDS.between(date2LocalDateTime(sDate), date2LocalDateTime(bDate));
+           case MINUTES:
+               return ChronoUnit.MINUTES.between(date2LocalDateTime(sDate), date2LocalDateTime(bDate));
+           case HOURS:
+               return ChronoUnit.HOURS.between(date2LocalDateTime(sDate), date2LocalDateTime(bDate));
+           case DAYS:
+               return ChronoUnit.DAYS.between(date2LocalDate(sDate), date2LocalDate(bDate));
+           case MONTHS:
+               return ChronoUnit.MONTHS.between(date2LocalDate(sDate), date2LocalDate(bDate));
+           case YEARS:
+               return ChronoUnit.YEARS.between(date2LocalDate(sDate), date2LocalDate(bDate));
+
+               default:
+                   return 0;
+       }
     }
 
 }

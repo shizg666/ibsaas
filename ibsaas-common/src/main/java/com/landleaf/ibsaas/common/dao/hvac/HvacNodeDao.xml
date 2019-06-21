@@ -83,7 +83,7 @@
         <if test="nodeId!=null and nodeId!=''">
             AND thp.node_id=#{nodeId}
         </if>
-        <if test="fieldNames!=null and fieldName.size>0">
+        <if test="fieldNames!=null and fieldNames.size>0">
             AND thf.field_name IN
             <foreach collection="fieldNames" index="index" item="item" open="(" close=")" separator=",">
                 #{item}

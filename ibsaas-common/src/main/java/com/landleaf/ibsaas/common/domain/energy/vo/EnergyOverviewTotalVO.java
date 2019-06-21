@@ -2,7 +2,9 @@ package com.landleaf.ibsaas.common.domain.energy.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,6 +16,8 @@ import java.math.BigDecimal;
  */
 @Data
 @ApiModel("累计能耗")
+@AllArgsConstructor
+@NoArgsConstructor
 public class EnergyOverviewTotalVO implements Serializable {
 
     @ApiModelProperty("建筑面积")

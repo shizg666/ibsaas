@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.web.web.service.energy;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
+import com.landleaf.ibsaas.common.domain.energy.report.EnergySavingEffectVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
@@ -35,7 +36,16 @@ public interface IEnergyReportService {
      * @param energyReportDTO
      * @return
      */
-    HlVl overviewSavingEffect(EnergyReportExDTO energyReportDTO);
+    EnergySavingEffectVO overviewSavingEffect(EnergyReportExDTO energyReportDTO);
+
+
+    /**
+     * 能耗总览-节能效果折线图
+     * @param energyReportDTO
+     * @return
+     */
+    HlVl overviewSavingEffectLineChart(EnergyReportExDTO energyReportDTO);
+
 
     /**
      * 能耗总览-能耗排行TOP5项
@@ -67,9 +77,10 @@ public interface IEnergyReportService {
 
     /**
      * 能耗总览-累计能耗
+     * @param energyReportDTO
      * @return
      */
-    EnergyOverviewTotalVO overviewTotal();
+    EnergyOverviewTotalVO overviewTotal(EnergyReportExDTO energyReportDTO);
 
 
     /**
