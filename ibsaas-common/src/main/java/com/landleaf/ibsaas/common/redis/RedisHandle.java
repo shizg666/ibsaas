@@ -1,5 +1,6 @@
 package com.landleaf.ibsaas.common.redis;
 
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -472,6 +473,10 @@ public class RedisHandle implements BaseRedisDao<String, Object>{
 
     @Override
     public void addMap(String key, Map<String, Object> map) {
+        redisTemplate.boundHashOps(key).putAll(map);
+    }
+
+    public void addMapList(String key, Map map) {
         redisTemplate.boundHashOps(key).putAll(map);
     }
 
