@@ -43,7 +43,7 @@ public class EnergyHistogramChartProcessor extends AbstractEnergyChartProcessor 
             energyReporyInfolist= Lists.newArrayList();
         }
 
-        Map<Integer, List<EnergyReportResponseVO>> group = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
+        Map<String, List<EnergyReportResponseVO>> group = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         List<String> dateList = getDateList(requestBody);
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
         group.forEach((i, v) -> {
