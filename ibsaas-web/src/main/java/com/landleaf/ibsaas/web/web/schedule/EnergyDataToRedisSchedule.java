@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EnergyDataToRedisSchedule {
 
-
     @Autowired
     private IEnergyReportService iEnergyReportService;
     @Autowired
@@ -54,10 +53,8 @@ public class EnergyDataToRedisSchedule {
         c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), lastMonthMaxDay, 23, 59, 59);
         //按格式输出
         String endTime = sdf.format(c.getTime()); //上月最后一天
-        System.out.println(endTime);
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-01  00:00:00");
         String startTime = sdf2.format(c.getTime()); //上月第一天
-        System.out.println(startTime);
         log.info("电表水表数据定时缓存开始时间：{},结束时间为: {}:", startTime,endTime);
 
         EnergyReportQueryVO queryVO = new EnergyReportQueryVO();
