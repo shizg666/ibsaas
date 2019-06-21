@@ -5,6 +5,8 @@ import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
 import com.landleaf.ibsaas.web.web.service.energy.IConfigSettingService;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import com.landleaf.ibsaas.web.web.service.energyflow.handler.data.asyn.IEnergyFutureService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.concurrent.Future;
 @Service
 public class EnergyGraphicsDataProvider extends AbstractEnergyGraphicsDataProvider {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnergyGraphicsDataProvider.class);
     @Autowired
     private IEnergyFutureService energyFutureService;
 
@@ -36,14 +39,15 @@ public class EnergyGraphicsDataProvider extends AbstractEnergyGraphicsDataProvid
             futureMap.put(enumObj.getCode(),future);
         }
         futureMap.forEach((i,v)->{
+            Object o = null;
             try {
-                Object o =  v.get();
-                data.put(i,o);
+                 o =  v.get();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(),e);
             } catch (ExecutionException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(),e);
             }
+            data.put(i,o);
         });
         LOGGER.info("*************************共计耗时:{}毫秒*****************************",(System.currentTimeMillis()-getDateStartTime));
         this.data= data;

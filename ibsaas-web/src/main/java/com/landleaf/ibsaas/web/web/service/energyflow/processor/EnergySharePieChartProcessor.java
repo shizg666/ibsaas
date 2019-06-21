@@ -1,12 +1,15 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.processor;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -42,7 +45,9 @@ public class EnergySharePieChartProcessor extends AbstractEnergyChartProcessor {
         //本期数据
         List<EnergyReportResponseVO> energyReporyInfolist = energyReportService.getEnergyReporyInfolist(requestBody);
         LOGGER.info("获取能耗饼图数据耗时{}毫秒", System.currentTimeMillis() - getDBStartTime);
-
+        if(CollectionUtils.isEmpty(energyReporyInfolist)){
+            energyReporyInfolist= Lists.newArrayList();
+        }
         double sum = 0d;
         double remain = 100;
         sum = energyReporyInfolist.stream().mapToDouble(i1 -> {
@@ -54,20 +59,26 @@ public class EnergySharePieChartProcessor extends AbstractEnergyChartProcessor {
         Set<String> keys = queryTypeGroup.keySet();
         int i = 0;
         for (String key : keys) {
-            String settingCodeName = queryTypeGroup.get(key).get(0).getSettingCodeName();
-
-            if (i == keys.size() - 1) {
-                result.put(settingCodeName, String.valueOf(remain));
+            String settingValue = null;
+            try {
+                settingValue = queryTypeGroup.get(key).get(0).getSettingValue();
+            } catch (Exception e) {
+                LOGGER.error("分项不存在",e);
             }
-            List<EnergyReportResponseVO> currentResponseVOS = currentGroup.get(key);
-            double currestSum = 0d;
-            currestSum = currentResponseVOS.stream().mapToDouble(i1 -> {
-                return Double.parseDouble(i1.getEnergyValue());
-            }).sum();
+            if(!StringUtils.isEmpty(settingValue)){
+                if (i == keys.size() - 1) {
+                    result.put(settingValue, String.valueOf(remain));
+                }
+                List<EnergyReportResponseVO> currentResponseVOS = currentGroup.get(key);
+                double currestSum = 0d;
+                currestSum = currentResponseVOS.stream().mapToDouble(i1 -> {
+                    return Double.parseDouble(i1.getEnergyValue());
+                }).sum();
 
-            String value = new BigDecimal(currestSum / sum).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
-            remain = remain - Double.parseDouble(value);
-            result.put(settingCodeName, value);
+                String value = new BigDecimal(currestSum / sum).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
+                remain = remain - Double.parseDouble(value);
+                result.put(settingValue, value);
+            }
             i++;
         }
         return result;
