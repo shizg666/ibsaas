@@ -11,10 +11,8 @@ import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
-import com.landleaf.ibsaas.common.utils.calculate.CalculateUtil;
-import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
-import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
+import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +23,10 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -294,6 +295,12 @@ public class EnergyReportService implements IEnergyReportService {
         }else {
             //分区统计
             responseVOS = getEnergyReporyInfoByArea(queryVO);
+        }
+        if (DimensionTypeEnum.HOUR.getType() == queryVO.getDateType()){
+            responseVOS.forEach(o->{
+                String str = o.getTimeValue();
+                o.setTimeValue(str.substring(0,str.lastIndexOf(":")));
+            });
         }
         return responseVOS;
     }
