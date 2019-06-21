@@ -38,41 +38,50 @@ public class EnergyTimeLineChartProcessor extends AbstractEnergyChartProcessor {
         long getDBStartTime = System.currentTimeMillis();
         List<EnergyReportResponseVO> energyReporyInfolist = energyReportService.getEnergyReporyInfolist(requestBody);
         LOGGER.info("获取能耗时间拆线图耗时{}毫秒", System.currentTimeMillis() - getDBStartTime);
-
+        if(CollectionUtils.isEmpty(energyReporyInfolist)){
+            energyReporyInfolist= Lists.newArrayList();
+        }
         Map<Integer, List<EnergyReportResponseVO>> group = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         List<String> dateList = getDateList(requestBody);
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
         group.forEach((i, v) -> {
             Map<String, List<String>> dataMap = Maps.newHashMap();
             List<TimeLineChartResponseDTO> tmpList = Lists.newArrayList();
-            String settingCodeName = finalQueryTypeGroup.get(i).get(0).getSettingCodeName();
-            for (String date : dateList) {
-                TimeLineChartResponseDTO temp = new TimeLineChartResponseDTO();
-                String x = date;
-                String y = "0";
-                List<EnergyReportResponseVO> filterList = v.stream().filter(i2 -> {
-                    if (StringUtils.equals(date, i2.getTimeValue())) {
-                        return true;
-                    }
-                    return false;
-                }).collect(Collectors.toList());
-                if (!CollectionUtils.isEmpty(filterList)) {
+            String settingValue = null;
+            try {
+                settingValue = finalQueryTypeGroup.get(i).get(0).getSettingValue();
+            } catch (Exception e) {
+                LOGGER.error("分项不存在",e);
+            }
+            if(!StringUtils.isEmpty(settingValue)){
+                for (String date : dateList) {
+                    TimeLineChartResponseDTO temp = new TimeLineChartResponseDTO();
+                    String x = date;
+                    String y = "0";
+                    List<EnergyReportResponseVO> filterList = v.stream().filter(i2 -> {
+                        if (StringUtils.equals(date, i2.getTimeValue())) {
+                            return true;
+                        }
+                        return false;
+                    }).collect(Collectors.toList());
+                    if (!CollectionUtils.isEmpty(filterList)) {
 //                    filterList.sort((o1, o2) -> o1.getTypeValue() - o2.getTypeValue());
-                    y = filterList.get(0).getEnergyValue();
+                        y = filterList.get(0).getEnergyValue();
+                    }
+                    temp.setX(x);
+                    temp.setY(y);
+                    tmpList.add(temp);
                 }
-                temp.setX(x);
-                temp.setY(y);
-                tmpList.add(temp);
+                List<String> xList = Lists.newArrayList();
+                List<String> yList = Lists.newArrayList();
+                if (!CollectionUtils.isEmpty(tmpList)) {
+                    xList = tmpList.stream().map(TimeLineChartResponseDTO::getX).collect(Collectors.toList());
+                    yList = tmpList.stream().map(TimeLineChartResponseDTO::getY).collect(Collectors.toList());
+                }
+                dataMap.put("x", xList);
+                dataMap.put("y", yList);
+                result.put(settingValue, dataMap);
             }
-            List<String> xList = Lists.newArrayList();
-            List<String> yList = Lists.newArrayList();
-            if (!CollectionUtils.isEmpty(tmpList)) {
-                xList = tmpList.stream().map(TimeLineChartResponseDTO::getX).collect(Collectors.toList());
-                yList = tmpList.stream().map(TimeLineChartResponseDTO::getY).collect(Collectors.toList());
-            }
-            dataMap.put("x", xList);
-            dataMap.put("y", yList);
-            result.put(settingCodeName, dataMap);
         });
 
         return result;

@@ -56,7 +56,11 @@ public class EnergyGraphicsDataProcessor {
         }
     }
 
-
+    /**
+     * 根据查询类型找到相应分区或者分项字典值
+     * @param queryType
+     * @return
+     */
     public Map<String, List<ConfigSettingVO>> getQueryTypeGroup(Integer queryType) {
         List<ConfigSettingVO> classificationList = configSettingRedis.getConfigSettingVOByType("equip_classification");
         List<ConfigSettingVO> areaList = configSettingRedis.getConfigSettingVOByType("equip_area");

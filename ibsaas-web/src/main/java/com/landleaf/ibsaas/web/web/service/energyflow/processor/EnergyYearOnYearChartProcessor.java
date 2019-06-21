@@ -1,14 +1,18 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.processor;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -47,7 +51,12 @@ public class EnergyYearOnYearChartProcessor extends AbstractEnergyChartProcessor
         //比较数据
         List<EnergyReportResponseVO> compareTargetInfolist = energyReportService.getEnergyReporyInfolist(targetBody);
         LOGGER.info("获取能耗同比图数据耗时{}毫秒", System.currentTimeMillis() - getDBStartTime);
-
+        if(CollectionUtils.isEmpty(energyReporyInfolist)){
+            energyReporyInfolist= Lists.newArrayList();
+        }
+        if(CollectionUtils.isEmpty(compareTargetInfolist)){
+            compareTargetInfolist= Lists.newArrayList();
+        }
         //计算 ：该时间段相比去年同一时间段的和值比较
         /**
          * 同比增长速度=
@@ -61,17 +70,24 @@ public class EnergyYearOnYearChartProcessor extends AbstractEnergyChartProcessor
         queryTypeGroup.forEach((String i, List<ConfigSettingVO> v) -> {
             List<EnergyReportResponseVO> currentResponseVOS = currentGroup.get(i);
             List<EnergyReportResponseVO> compareTargetResponseVOS = compareTargetGroup.get(i);
-            String settingCodeName = v.get(0).getSettingCodeName();
-            double currestSum = 0d;
-            double compareTargetSum = 0d;
-            currestSum = currentResponseVOS.stream().mapToDouble(i1 -> {
-                return Double.parseDouble(i1.getEnergyValue());
-            }).sum();
-            compareTargetSum = compareTargetResponseVOS.stream().mapToDouble(i1 -> {
-                return Double.parseDouble(i1.getEnergyValue());
-            }).sum();
-            String value = new BigDecimal((currestSum - compareTargetSum) / compareTargetSum).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
-            result.put(settingCodeName, value);
+            String settingValue = null;
+            try {
+                settingValue = v.get(0).getSettingValue();
+            } catch (Exception e) {
+                LOGGER.error("分项不存在",e);
+            }
+            if(!StringUtils.isEmpty(settingValue)){
+                double currestSum = 0d;
+                double compareTargetSum = 0d;
+                currestSum = currentResponseVOS.stream().mapToDouble(i1 -> {
+                    return Double.parseDouble(i1.getEnergyValue());
+                }).sum();
+                compareTargetSum = compareTargetResponseVOS.stream().mapToDouble(i1 -> {
+                    return Double.parseDouble(i1.getEnergyValue());
+                }).sum();
+                String value = new BigDecimal((currestSum - compareTargetSum) / compareTargetSum==0?1:compareTargetSum).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
+                result.put(settingValue, value);
+            }
         });
         return result;
 
