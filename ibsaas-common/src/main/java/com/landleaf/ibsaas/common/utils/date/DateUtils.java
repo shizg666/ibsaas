@@ -607,7 +607,7 @@ public class DateUtils {
 		tempStart.setTime(date);
 		tempStart.set(Calendar.HOUR_OF_DAY, 0);
 		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.SECOND, 0);
 		tempStart.set(Calendar.MILLISECOND, 0);
 		tempStart.set(Calendar.DAY_OF_MONTH,1);
 		tempStart.set(Calendar.MONTH,0);
@@ -621,13 +621,12 @@ public class DateUtils {
 	public static Date getEndDateForYear(Date date){
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(date);
-		tempStart.set(Calendar.HOUR_OF_DAY, 0);
-		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
-		tempStart.set(Calendar.MILLISECOND, 0);
-		tempStart.set(Calendar.DAY_OF_MONTH,1);
-		tempStart.set(Calendar.MONTH,0);
-		tempStart.add(Calendar.YEAR,1);
+		tempStart.set(Calendar.HOUR_OF_DAY, tempStart.getActualMaximum(Calendar.HOUR_OF_DAY));
+		tempStart.set(Calendar.MINUTE, tempStart.getActualMaximum(Calendar.MINUTE));
+		tempStart.set(Calendar.SECOND, tempStart.getActualMaximum(Calendar.SECOND));
+		tempStart.set(Calendar.MILLISECOND, tempStart.getActualMaximum(Calendar.MILLISECOND));
+		tempStart.set(Calendar.DAY_OF_MONTH,tempStart.getActualMaximum(Calendar.DAY_OF_MONTH));
+		tempStart.set(Calendar.MONTH,tempStart.getActualMaximum(Calendar.MONTH));
 		return tempStart.getTime();
 	}
 	/**
@@ -671,7 +670,7 @@ public class DateUtils {
 		tempStart.setTime(date);
 		tempStart.set(Calendar.HOUR_OF_DAY, 0);
 		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
+		tempStart.set(Calendar.SECOND, 0);
 		tempStart.set(Calendar.MILLISECOND, 0);
 		tempStart.set(Calendar.DAY_OF_MONTH,1);
 		return tempStart.getTime();
@@ -684,12 +683,11 @@ public class DateUtils {
 	public static Date getEndDateForMonth(Date date){
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(date);
-		tempStart.set(Calendar.HOUR_OF_DAY, 0);
-		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
-		tempStart.set(Calendar.MILLISECOND, 0);
-		tempStart.set(Calendar.DAY_OF_MONTH,1);
-		tempStart.add(Calendar.MONTH,1);
+		tempStart.set(Calendar.HOUR_OF_DAY, tempStart.getActualMaximum(Calendar.HOUR_OF_DAY));
+		tempStart.set(Calendar.MINUTE, tempStart.getActualMaximum(Calendar.MINUTE));
+		tempStart.set(Calendar.SECOND, tempStart.getActualMaximum(Calendar.SECOND));
+		tempStart.set(Calendar.MILLISECOND, tempStart.getActualMaximum(Calendar.MILLISECOND));
+		tempStart.set(Calendar.DAY_OF_MONTH,tempStart.getActualMaximum(Calendar.DAY_OF_MONTH));
 		return tempStart.getTime();
 	}
 	/**
@@ -760,10 +758,9 @@ public class DateUtils {
 	public static Date getEndDateForHour(Date date){
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(date);
-		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
-		tempStart.set(Calendar.MILLISECOND, 0);
-		tempStart.add(Calendar.HOUR,1);
+		tempStart.set(Calendar.MINUTE, tempStart.getActualMaximum(Calendar.MINUTE));
+		tempStart.set(Calendar.SECOND, tempStart.getActualMaximum(Calendar.SECOND));
+		tempStart.set(Calendar.MILLISECOND, tempStart.getActualMaximum(Calendar.MILLISECOND));
 		return tempStart.getTime();
 	}
 	/**
@@ -774,11 +771,10 @@ public class DateUtils {
 	public static Date getEndDateForDay(Date date){
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(date);
-		tempStart.set(Calendar.HOUR_OF_DAY, 0);
-		tempStart.set(Calendar.MINUTE, 0);
-		tempStart.set(Calendar.SECOND, 1);
-		tempStart.set(Calendar.MILLISECOND, 0);
-		tempStart.add(Calendar.HOUR,24);
+		tempStart.set(Calendar.HOUR_OF_DAY, tempStart.getActualMaximum(Calendar.HOUR_OF_DAY));
+		tempStart.set(Calendar.MINUTE, tempStart.getActualMaximum(Calendar.MINUTE));
+		tempStart.set(Calendar.SECOND, tempStart.getActualMaximum(Calendar.SECOND));
+		tempStart.set(Calendar.MILLISECOND, tempStart.getActualMaximum(Calendar.MILLISECOND));
 		return tempStart.getTime();
 	}
 
@@ -951,7 +947,7 @@ public class DateUtils {
 
 	public static void main(String[] args) {
 
-        List<Date> monthList = getHourList("2018-5-21 00:59:59", "2018-5-21 23:59:59");
+        List<Date> monthList = getHourList("2018-5-21 00:59:59", "2018-5-21 21:19:59");
         System.out.println(monthList);
     }
 

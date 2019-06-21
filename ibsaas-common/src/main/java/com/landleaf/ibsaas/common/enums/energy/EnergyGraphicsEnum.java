@@ -14,7 +14,7 @@ import java.util.Map;
 public enum EnergyGraphicsEnum implements BaseEnum {
     TIME_LINE_CHART(1, "time_line_chart","energyTimeLineChartProcessor","getData",EnergyReportQueryVO.class, "时间折线图"),
     HISTOGRAM_CHART(2, "histogram_chart", "energyHistogramChartProcessor","getData",EnergyReportQueryVO.class,"柱状图"),
-    SHARE_PIE_CHART(3, "share_pie_chart", "EnergySharePieChartProcessor","getData",EnergyReportQueryVO.class,"占比饼图"),
+    SHARE_PIE_CHART(3, "share_pie_chart", "energySharePieChartProcessor","getData",EnergyReportQueryVO.class,"占比饼图"),
     YEAR_ON_YEAR_CHART(4, "year_on_year_chart", "energyYearOnYearChartProcessor","getData",EnergyReportQueryVO.class,"同比图"),
     RING_RATIO_CHART(5, "ring_ratio_chart","energyRingRationChartProcessor", "getData",EnergyReportQueryVO.class,"环比图"),;
     public final int type;
