@@ -49,7 +49,7 @@ public class EnergySharePieChartProcessor extends AbstractEnergyChartProcessor {
             return Double.parseDouble(i1.getEnergyValue());
         }).sum();
 
-        Map<Integer, List<EnergyReportResponseVO>> currentGroup = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getQueryType));
+        Map<Integer, List<EnergyReportResponseVO>> currentGroup = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
         Set<String> keys = queryTypeGroup.keySet();
         int i = 0;

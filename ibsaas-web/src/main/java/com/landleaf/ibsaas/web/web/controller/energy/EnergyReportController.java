@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
+import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import com.landleaf.ibsaas.web.web.service.energyflow.IEnergyConsumeService;
@@ -123,7 +124,7 @@ public class EnergyReportController extends BasicController {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.areaLineChart 入参为:{}", energyReportDTO);
 
 
-        Object result = energyConsumeService.energyFlowForOne(1, energyReportDTO.getEquipArea(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.AREA.type, energyReportDTO.getEquipArea(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.TIME_LINE_CHART);
 
@@ -136,7 +137,7 @@ public class EnergyReportController extends BasicController {
     public Response areaHistogram(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.areaHistogram 入参为:{}", energyReportDTO);
 
-        Object result = energyConsumeService.energyFlowForOne(1, energyReportDTO.getEquipArea(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.AREA.type, energyReportDTO.getEquipArea(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.HISTOGRAM_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.areaHistogram 出参为:{}", result);
@@ -147,7 +148,7 @@ public class EnergyReportController extends BasicController {
     @ApiOperation("区域能耗-饼图")
     public Response areaPieChart(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.areaPieChart 入参为:{}", energyReportDTO);
-        Object result = energyConsumeService.energyFlowForOne(1, energyReportDTO.getEquipArea(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.AREA.type, energyReportDTO.getEquipArea(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.SHARE_PIE_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.areaPieChart 出参为:{}", result);
@@ -159,7 +160,7 @@ public class EnergyReportController extends BasicController {
     public Response areaYoy(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.areaYoy 入参为:{}", energyReportDTO);
 
-        Object result = energyConsumeService.energyFlowForOne(1, energyReportDTO.getEquipArea(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.AREA.type, energyReportDTO.getEquipArea(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.YEAR_ON_YEAR_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.areaYoy 出参为:{}", result);
@@ -172,7 +173,7 @@ public class EnergyReportController extends BasicController {
     public Response areaQoq(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.areaQoq 入参为:{}", energyReportDTO);
 
-        Object result = energyConsumeService.energyFlowForOne(1, energyReportDTO.getEquipArea(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.AREA.type, energyReportDTO.getEquipArea(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.RING_RATIO_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.areaQoq 出参为:{}", result);
@@ -189,7 +190,7 @@ public class EnergyReportController extends BasicController {
     public Response classificationLineChart(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.classificationLineChart 入参为:{}", energyReportDTO);
 
-        Object result = energyConsumeService.energyFlowForOne(2, energyReportDTO.getEquipClassification(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.TYPE.type, energyReportDTO.getEquipClassification(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.TIME_LINE_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.classificationLineChart 出参为:{}", result);
@@ -201,7 +202,7 @@ public class EnergyReportController extends BasicController {
     public Response classificationHistogram(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.classificationHistogram 入参为:{}", energyReportDTO);
 
-        Object result = energyConsumeService.energyFlowForOne(2, energyReportDTO.getEquipClassification(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.TYPE.type, energyReportDTO.getEquipClassification(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.HISTOGRAM_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.classificationHistogram 出参为:{}", result);
@@ -213,7 +214,7 @@ public class EnergyReportController extends BasicController {
     public Response classificationPieChart(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.classificationPieChart 入参为:{}", energyReportDTO);
 
-        Object result = energyConsumeService.energyFlowForOne(2, energyReportDTO.getEquipClassification(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.TYPE.type, energyReportDTO.getEquipClassification(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.SHARE_PIE_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.classificationPieChart 出参为:{}", result);
@@ -225,7 +226,7 @@ public class EnergyReportController extends BasicController {
     public Response classificationYoy(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.classificationYoy 入参为:{}", energyReportDTO);
 
-        Object result = energyConsumeService.energyFlowForOne(2, energyReportDTO.getEquipClassification(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.TYPE.type, energyReportDTO.getEquipClassification(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.YEAR_ON_YEAR_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.classificationYoy 出参为:{}", result);
@@ -237,7 +238,7 @@ public class EnergyReportController extends BasicController {
     @ApiOperation("分项能耗-环比")
     public Response classificationQoq(@RequestBody EnergyReportDTO energyReportDTO) {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.classificationQoq 入参为:{}", energyReportDTO);
-        Object result = energyConsumeService.energyFlowForOne(2, energyReportDTO.getEquipClassification(),
+        Object result = energyConsumeService.energyFlowForOne(QueryTypeEnum.TYPE.type, energyReportDTO.getEquipClassification(),
                 energyReportDTO.getDateType(), energyReportDTO.getEquipType(), energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(), EnergyGraphicsEnum.RING_RATIO_CHART);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.classificationQoq 出参为:{}", result);

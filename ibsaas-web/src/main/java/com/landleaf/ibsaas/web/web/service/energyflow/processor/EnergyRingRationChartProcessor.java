@@ -54,8 +54,8 @@ public class EnergyRingRationChartProcessor extends AbstractEnergyChartProcessor
          * 环比增长率=（本期数-上期数）/上期数
          */
 
-        Map<Integer, List<EnergyReportResponseVO>> currentGroup = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getQueryType));
-        Map<Integer, List<EnergyReportResponseVO>> compareTargetGroup = compareTargetInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getQueryType));
+        Map<Integer, List<EnergyReportResponseVO>> currentGroup = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
+        Map<Integer, List<EnergyReportResponseVO>> compareTargetGroup = compareTargetInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
         queryTypeGroup.forEach((String i, List<ConfigSettingVO> v) -> {
             List<EnergyReportResponseVO> currentResponseVOS = currentGroup.get(i);

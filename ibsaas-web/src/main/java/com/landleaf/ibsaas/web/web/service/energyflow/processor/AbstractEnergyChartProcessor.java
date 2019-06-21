@@ -27,7 +27,7 @@ public class AbstractEnergyChartProcessor  {
                 //时
                 dateList = DateUtils.getHourList(startTime, endTime);
                 for (Date date : dateList) {
-                    result.add(DateUtil.format(date, "yyyy-MM-dd HH"));
+                    result.add(DateUtil.format(date, "yyyy-MM-dd HH:mm"));
                 }
                 break;
             case 2:
