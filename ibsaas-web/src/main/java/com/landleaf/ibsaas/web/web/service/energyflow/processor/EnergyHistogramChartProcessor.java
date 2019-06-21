@@ -46,21 +46,25 @@ public class EnergyHistogramChartProcessor extends AbstractEnergyChartProcessor 
         Map<String, List<EnergyReportResponseVO>> group = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         List<String> dateList = getDateList(requestBody);
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
-        group.forEach((i, v) -> {
+        queryTypeGroup.forEach((i, v) -> {
             Map<String, List<String>> dataMap = Maps.newHashMap();
             List<TimeLineChartResponseDTO> tmpList = Lists.newArrayList();
             String settingValue = null;
             try {
-                settingValue = finalQueryTypeGroup.get(i).get(0).getSettingValue();
+                settingValue = v.get(0).getSettingValue();
             } catch (Exception e) {
                 LOGGER.error("分项不存在",e);
+            }
+            List<EnergyReportResponseVO> currentResponseVOS = group.get(i);
+            if(CollectionUtils.isEmpty(currentResponseVOS)){
+                currentResponseVOS=Lists.newArrayList();
             }
             if(!StringUtils.isEmpty(settingValue)){
                 for (String date : dateList) {
                     TimeLineChartResponseDTO temp = new TimeLineChartResponseDTO();
                     String x = date;
                     String y = "0";
-                    List<EnergyReportResponseVO> filterList = v.stream().filter(i2 -> {
+                    List<EnergyReportResponseVO> filterList = currentResponseVOS.stream().filter(i2 -> {
                         if (StringUtils.equals(date, i2.getTimeValue())) {
                             return true;
                         }
