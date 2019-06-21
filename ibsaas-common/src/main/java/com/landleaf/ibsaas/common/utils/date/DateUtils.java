@@ -729,6 +729,17 @@ public class DateUtils {
 		return tempStart.getTime();
 	}
 	/**
+	 * 获取当前时间去年同期时间
+	 * @param date
+	 * @return
+	 */
+	public static Date getDateBeforeYear(Date date){
+		Calendar tempStart = Calendar.getInstance();
+		tempStart.setTime(date);
+		tempStart.add(Calendar.DAY_OF_YEAR,-1);
+		return tempStart.getTime();
+	}
+	/**
 	 * 获取当时的起始时间
 	 * @param date
 	 * @return

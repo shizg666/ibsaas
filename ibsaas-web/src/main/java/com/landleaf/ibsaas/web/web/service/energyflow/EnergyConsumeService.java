@@ -19,9 +19,8 @@ public class EnergyConsumeService implements IEnergyConsumeService {
     public Map<String, Map<String, List<String>>> energyFlow(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
         Map<String, Map<String, List<String>>> result = Maps.newHashMap();
 
-        energyGraphicsDataProvider.buildParam(queryType, queryValue, dateType, equipType, startTime, endTime);
-        energyGraphicsDataProvider.getOrginData();
 
+        Map<String,Object> data=energyGraphicsDataProvider.getEnergyFlowData(queryType, queryValue, dateType, equipType, startTime, endTime);
         return result;
     }
 }

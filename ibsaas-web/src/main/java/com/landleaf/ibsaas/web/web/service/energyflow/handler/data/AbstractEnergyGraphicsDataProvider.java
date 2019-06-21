@@ -1,16 +1,13 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.handler.data;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
-import com.landleaf.ibsaas.common.utils.date.DateUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataProvider {
@@ -20,11 +17,16 @@ public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataPr
 
     public EnergyReportQueryVO reportQueryVO;
 
-    public Map<String, Object> orginData = Maps.newHashMap();
+    public Map<String, Object> data = Maps.newHashMap();
 
     public void buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
         reportQueryVO = new EnergyReportQueryVO(dateType, startTime, endTime, equipType, queryType, queryValue);
         this.convertimeByDateType(reportQueryVO);
+    }
+
+    @Override
+    public Map<String, Object> getEnergyFlowData(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
+        return null;
     }
 
     /**
@@ -61,51 +63,6 @@ public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataPr
         }
         requestBody.setStartTime(startTime);
         requestBody.setEndTime(endTime);
-    }
-
-    public List<String> getDateList(EnergyReportQueryVO requestBody) {
-        List<String> result = Lists.newArrayList();
-        String startTime = requestBody.getStartTime();
-        String endTime = requestBody.getEndTime();
-        Integer dateType = requestBody.getDateType();
-        List<Date> dateList = Lists.newArrayList();
-        //根据维度生成
-        switch (dateType) {
-            case 1:
-                //时
-                dateList = DateUtils.getHourList(startTime, endTime);
-                for (Date date : dateList) {
-                    result.add(DateUtil.format(date, "yyyy-MM-dd HH"));
-                }
-                break;
-            case 2:
-                //日
-                dateList = DateUtils.getDayList(startTime, endTime);
-                for (Date date : dateList) {
-                    result.add(DateUtil.format(date, "yyyy-MM-dd"));
-                }
-                break;
-            case 3:
-                //月
-                dateList = DateUtils.getMonthList(startTime, endTime);
-                for (Date date : dateList) {
-                    result.add(DateUtil.format(date, "yyyy-MM"));
-                }
-                break;
-            case 4:
-                //年
-                dateList = DateUtils.getYearList(startTime, endTime);
-                for (Date date : dateList) {
-                    result.add(DateUtil.format(date, "yyyy"));
-                }
-                break;
-        }
-        return result;
-    }
-
-    @Override
-    public void getOrginData() {
-
     }
 
 

@@ -31,6 +31,8 @@ public final class RedisUtil {
 
 
     public static String STRING_KEY_QUERY_ALL_DEPART="string_key_query_all_depart";
+    //
+    public static String T_CONFIG_SETTING="t_config_setting";
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

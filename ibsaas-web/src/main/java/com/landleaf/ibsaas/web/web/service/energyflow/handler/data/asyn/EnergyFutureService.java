@@ -1,7 +1,7 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.handler.data.asyn;
 
 import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
-import com.landleaf.ibsaas.web.web.service.energyflow.handler.data.EnergyGraphicsMsgProcessor;
+import com.landleaf.ibsaas.web.web.service.energyflow.processor.EnergyGraphicsDataProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class EnergyFutureService implements IEnergyFutureService {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(EnergyFutureService.class);
     @Autowired
-    private EnergyGraphicsMsgProcessor energyGraphicsMsgProcessor;
+    private EnergyGraphicsDataProcessor energyGraphicsDataProcessor;
 
     /**
      * 异步处理消息
@@ -26,7 +26,7 @@ public class EnergyFutureService implements IEnergyFutureService {
         Future<Object> future = null;
         try {
             //处理消息
-            Object result = energyGraphicsMsgProcessor.process(energyGraphicsEnum, requestBody);
+            Object result = energyGraphicsDataProcessor.process(energyGraphicsEnum, requestBody);
             future = (Future<Object>) new AsyncResult<Object>(result);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
