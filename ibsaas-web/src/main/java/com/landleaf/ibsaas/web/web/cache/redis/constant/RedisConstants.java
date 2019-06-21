@@ -34,4 +34,20 @@ public class RedisConstants implements Serializable {
      * 未指定失效时间的TTL缓存，给定一个默认失效时间10分钟
      */
     public static final int TTL_DEFAULT_EXPIRED_TIME = 10 * 60;
+    /**
+     * 水表-分项-key
+     */
+    public static final String ENERGY_WATER_DATA_TYPE = "energy_water_data_type";
+    /**
+     * 水表-分区-key
+     */
+    public static final String ENERGY_WATER_DATA_AREA = "energy_water_data_area";
+    /**
+     * 电表-分项-key
+     */
+    public static final String ENERGY_ELECTRICITY_DATA_TYPE = "energy_electricity_type";
+    /**
+     * 电表-分区-key
+     */
+    public static final String ENERGY_ELECTRICITY_DATA_AREA = "energy_electricity_area";
 }

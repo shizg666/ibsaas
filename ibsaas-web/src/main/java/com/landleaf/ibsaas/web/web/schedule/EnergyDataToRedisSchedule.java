@@ -7,6 +7,7 @@ import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.enums.energy.EnergyTypeEnum;
 import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
+import com.landleaf.ibsaas.web.web.cache.redis.constant.RedisConstants;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,7 @@ import java.util.stream.Collectors;
 @EnableScheduling
 @Slf4j
 public class EnergyDataToRedisSchedule {
-    private static final String ENERGY_WATER_DATA_TYPE = "energy_water_data_type";
-    private static final String ENERGY_WATER_DATA_AREA = "energy_water_data_area";
-    private static final String ENERGY_ELECTRICITY_DATA_TYPE = "energy_electricity_type";
-    private static final String ENERGY_ELECTRICITY_DATA_AREA = "energy_electricity_area";
+
 
     @Autowired
     private IEnergyReportService iEnergyReportService;
@@ -107,13 +105,13 @@ public class EnergyDataToRedisSchedule {
             dataAreaE.put(key,map2);
         });
         //水分项
-        redisHandle.addMapList(ENERGY_WATER_DATA_TYPE,dataTypeW);
+        redisHandle.addMapList(RedisConstants.ENERGY_WATER_DATA_TYPE,dataTypeW);
         //水分区
-        redisHandle.addMapList(ENERGY_WATER_DATA_AREA,dataAreaW);
-        //电分项
-        redisHandle.addMapList(ENERGY_ELECTRICITY_DATA_AREA,dataAreaE);
+        redisHandle.addMapList(RedisConstants.ENERGY_WATER_DATA_AREA,dataAreaW);
         //电分区
-        redisHandle.addMapList(ENERGY_ELECTRICITY_DATA_TYPE,dataTypeE);
+        redisHandle.addMapList(RedisConstants.ENERGY_ELECTRICITY_DATA_AREA,dataAreaE);
+        //电分项
+        redisHandle.addMapList(RedisConstants.ENERGY_ELECTRICITY_DATA_TYPE,dataTypeE);
         Long end = System.currentTimeMillis();
         long t = end - start;
         log.info("定时任务数据保存结束------------------------------>时间为{}毫秒", t);
