@@ -32,7 +32,7 @@
     <select id="getEnergyReporyInfoByType" parameterType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
         select sum(d.energy_data_increase_value) as energyValue, d.energy_data_${dateCode} as timeValue
         <if test="queryValue == null or queryValue == ''">
-            ,equip_classification as typeValue
+            ,e.equip_classification as typeValue
         </if>
         from t_energy_data d INNER JOIN t_energy_equip e  on d.node_id = e.node_id
         where d.energy_data_time &gt;= #{startTime} and d.energy_data_time &lt;= #{endTime}
@@ -49,9 +49,9 @@
     </select>
 
     <select id="getEnergyReporyInfoByArea"  parameterType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
-        select sum(d.energy_data_increase_value) as energyValue, d.energy_data_date as timeValue
+        select sum(d.energy_data_increase_value) as energyValue, d.energy_data_${dateCode} as timeValue
         <if test="queryValue == null or queryValue == ''">
-            ,equip_area as typeValue
+            ,e.equip_area as typeValue
         </if>
         from t_energy_data d INNER JOIN t_energy_equip e  on d.node_id = e.node_id
         where d.energy_data_time &gt;= #{startTime} and d.energy_data_time &lt;= #{endTime}
