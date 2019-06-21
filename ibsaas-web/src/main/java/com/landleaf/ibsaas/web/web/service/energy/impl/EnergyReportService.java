@@ -289,15 +289,17 @@ public class EnergyReportService implements IEnergyReportService {
         String columValue = dimensionTypeEnum.code;
         queryVO.setDateCode(columValue);
         if (QueryTypeEnum.TYPE.getType() == queryVO.getQueryType()){
+            //分项统计
             responseVOS = getEnergyReporyInfoByType(queryVO);
         }else {
+            //分区统计
             responseVOS = getEnergyReporyInfoByArea(queryVO);
         }
         return responseVOS;
     }
 
     private List<EnergyReportResponseVO> getEnergyReporyInfoByArea(EnergyReportQueryVO queryVO) {
-        return energyDataDao.getEnergyReporyInfoByType(queryVO);
+        return energyDataDao.getEnergyReporyInfoByArea(queryVO);
     }
     private List<EnergyReportResponseVO> getEnergyReporyInfoByType(EnergyReportQueryVO queryVO) {
         return energyDataDao.getEnergyReporyInfoByType(queryVO);
