@@ -63,7 +63,7 @@ ibsaas:
       path: /logout
     excluded:
 #      paths: /parking/**/*
-      paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**,/login/**,/logout,/test/**,/knight/**
+      paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**,/login/**,/logout,/test/**,/knight/**,/energy-report/**
   face:
     redirecturl: http://127.0.0.1:8080
   filter:

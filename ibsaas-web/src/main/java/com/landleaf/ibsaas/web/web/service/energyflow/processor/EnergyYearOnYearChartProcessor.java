@@ -54,8 +54,8 @@ public class EnergyYearOnYearChartProcessor extends AbstractEnergyChartProcessor
          (本期数-去年同期数)/去年同期数
          */
 
-        Map<Integer, List<EnergyReportResponseVO>> currentGroup = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getQueryType));
-        Map<Integer, List<EnergyReportResponseVO>> compareTargetGroup = compareTargetInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getQueryType));
+        Map<Integer, List<EnergyReportResponseVO>> currentGroup = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
+        Map<Integer, List<EnergyReportResponseVO>> compareTargetGroup = compareTargetInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         List<String> dateList = getDateList(requestBody);
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
         queryTypeGroup.forEach((String i, List<ConfigSettingVO> v) -> {

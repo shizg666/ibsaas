@@ -39,7 +39,7 @@ public class EnergyHistogramChartProcessor extends AbstractEnergyChartProcessor 
         List<EnergyReportResponseVO> energyReporyInfolist = energyReportService.getEnergyReporyInfolist(requestBody);
         LOGGER.info("获取能耗柱状图数据耗时{}毫秒", System.currentTimeMillis() - getDBStartTime);
 
-        Map<Integer, List<EnergyReportResponseVO>> group = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getQueryType));
+        Map<Integer, List<EnergyReportResponseVO>> group = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         List<String> dateList = getDateList(requestBody);
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
         group.forEach((i, v) -> {
