@@ -63,7 +63,7 @@ public class EnergyHistogramChartProcessor extends AbstractEnergyChartProcessor 
                 for (String date : dateList) {
                     TimeLineChartResponseDTO temp = new TimeLineChartResponseDTO();
                     String x = date;
-                    String y = "0";
+                    String y = "0.00";
                     List<EnergyReportResponseVO> filterList = currentResponseVOS.stream().filter(i2 -> {
                         if (StringUtils.equals(date, i2.getTimeValue())) {
                             return true;
