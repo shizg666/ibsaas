@@ -17,6 +17,7 @@
         <id property="leaf" column="is_leaf" jdbcType="INTEGER" />
         <id property="belongSystem" column="belong_system" jdbcType="VARCHAR" />
         <id property="icon" column="icon" jdbcType="VARCHAR" />
+        <id property="meta" column="icon" jdbcType="VARCHAR" />
         <id property="versionNo" column="version_no" jdbcType="VARCHAR" />
         <id property="active" column="is_active" jdbcType="INTEGER" />
         <id property="createTime" column="create_time" jdbcType="TIMESTAMP" />
@@ -28,7 +29,7 @@
     <select id="listRoleResources" parameterType="com.landleaf.ibsaas.common.domain.leo.RoleResource" resultMap="resourceResultMap">
         select b.id, b.resource_code, b.resource_name, b.resource_level, b.entry_uri, b.component_path, b.parent_code,
         b.display_order,  b.resource_type, b.is_leaf, b.belong_system, b.icon, b.version_no, b.is_active,
-        b.create_time, b.create_user_code, b.modify_time, b.modify_user_code
+        b.create_time, b.create_user_code, b.modify_time, b.modify_user_code,b.meta
         from t_base_role_resource a
         join t_base_resource b on a.resource_code = b.resource_code and a.belong_system = b.belong_system
         where a.role_code = #{roleCode, jdbcType=VARCHAR}
