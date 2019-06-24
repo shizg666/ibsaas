@@ -49,6 +49,9 @@ public class EnergyEquipSearchVO implements Serializable {
     @ApiModelProperty("设备所属分类")
     private String equipClassificationStr;
 
+    @ApiModelProperty("备注")
+    private String comment;
+
     @ApiModelProperty("初始化校验时间")
     private Date verifyTime;
 

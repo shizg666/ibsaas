@@ -4,7 +4,9 @@ package com.landleaf.ibsaas.web.web.vo;
 import com.alibaba.druid.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author wyl
@@ -67,7 +69,7 @@ public class TreeNodeVO implements Serializable, Comparable<TreeNodeVO> {
     /**
      * 页面需要使用的额外信息
      */
-    private Meta meta;
+    private String meta;
 
     /**
      * 子节点
@@ -170,11 +172,11 @@ public class TreeNodeVO implements Serializable, Comparable<TreeNodeVO> {
         this.id = id;
     }
 
-    public Meta getMeta() {
+    public String getMeta() {
         return meta;
     }
 
-    public void setMeta(Meta meta) {
+    public void setMeta(String meta) {
         this.meta = meta;
     }
 
@@ -202,42 +204,4 @@ public class TreeNodeVO implements Serializable, Comparable<TreeNodeVO> {
         }
     }
 
-    /**
-     * 向当前界面添加可使用按钮对应的权限地址
-     *
-     * @param accessUrl
-     * @author wyl
-     * @date 2017年09月12日23:41:17
-     */
-    public void addAvailableButton(String accessUrl) {
-        if (this.meta == null) {
-            this.meta = new Meta();
-        }
-        if (meta.getAvailableButtons() == null) {
-            meta.setAvailableButtons(new HashSet<>());
-        }
-        meta.getAvailableButtons().add(accessUrl);
-    }
-
-    /**
-     * 页面需要使用的额外信息实体
-     *
-     * @author wyl
-     * @date 2017年09月12日23:11:50
-     */
-    private class Meta {
-
-        /**
-         * 可用按钮列表，存放可用按钮的地址值
-         */
-        private Set<String> availableButtons;
-
-        public Set<String> getAvailableButtons() {
-            return availableButtons;
-        }
-
-        public void setAvailableButtons(Set<String> availableButtons) {
-            this.availableButtons = availableButtons;
-        }
-    }
 }

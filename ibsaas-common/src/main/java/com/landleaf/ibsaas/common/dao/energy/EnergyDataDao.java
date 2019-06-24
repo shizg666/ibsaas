@@ -4,6 +4,7 @@ import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.energy.HlVlBO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
+import com.landleaf.ibsaas.common.domain.energy.report.TimeEnergyData;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
@@ -75,4 +76,13 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      */
     BigDecimal getEnergyByYear(@Param("equipType") Integer equipType,
                                @Param("year") Integer year);
+
+
+    /**
+     * 根据时间获取能耗
+     * @param equipType
+     * @return
+     */
+    List<TimeEnergyData> getEnergyDateByTime( Integer equipType);
+
 }

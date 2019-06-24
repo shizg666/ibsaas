@@ -61,7 +61,7 @@ public class EnergyReportController extends BasicController {
     @ApiOperation("能耗总览-节能效果")
     public Response overviewSavingEffect(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewSavingEffect 入参为:{}", energyReportDTO);
-        HlVl result = iEnergyReportService.overviewSavingEffect(energyReportDTO);
+        EnergySavingEffectVO result = iEnergyReportService.overviewSavingEffect(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewSavingEffect 出参为:{}", result);
         return returnSuccess(result);
     }

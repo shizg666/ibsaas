@@ -368,10 +368,7 @@ public class ResourceService implements IResourceService {
                 if (StringUtils.equals(parentResource.getResourceCode(), resource.getParentCode())) {
                     TreeNodeVO node = convertResource2TreeNode(resource);
                     parentNode.addChild(node);
-                    //如果当前的类型为按钮，则将此权限地址添加到父节点的meta中
-                    if (resource.getResourceType() == 3) {
-                        parentNode.addAvailableButton(resource.getEntryUri());
-                    }
+
                     //同时递归设置下层
                     setChildren(tree, resources, resource, node);
                 }
@@ -392,6 +389,7 @@ public class ResourceService implements IResourceService {
         node.setDisplayOrder(resource.getDisplayOrder());
         node.setNodeType(resource.getResourceType());
         node.setId(resource.getResourceCode());
+        node.setMeta(resource.getMeta());
         return node;
     }
 

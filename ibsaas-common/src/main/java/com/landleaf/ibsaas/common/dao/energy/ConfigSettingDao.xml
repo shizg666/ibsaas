@@ -49,4 +49,15 @@
         WHERE is_active=1
         AND id &lt; #{maxId}
     </select>
+    <select id="getStandardConsumption" resultType="java.lang.String">
+        SELECT
+        setting_value
+        FROM t_config_setting
+        WHERE is_active=1
+        AND setting_type=#{settingType}
+        AND setting_code=#{equipType}
+        AND YEAR(STR_TO_DATE(character1,'%Y-%m-%d')) = #{year}
+        ORDER BY STR_TO_DATE(character1,'%Y-%m-%d') DESC
+        LIMIT 1
+    </select>
 </mapper>

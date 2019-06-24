@@ -26,6 +26,8 @@ public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataPr
 
     public void buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime,List<EnergyGraphicsEnum> chartTypes) {
         reportQueryVO = new EnergyReportQueryVO(dateType, startTime, endTime, equipType, queryType, queryValue);
+        this.chartTypes.clear();
+        this.data.clear();
         this.chartTypes.addAll(chartTypes);
         this.convertimeByDateType(reportQueryVO);
     }

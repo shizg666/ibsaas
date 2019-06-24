@@ -99,6 +99,8 @@ public class Resource extends BasicEntity {
     @ApiModelProperty(value = "图标路径", required = false, dataType = "String", example = "systemSetting")
     private String icon;
 
+    private String meta;
+
     @Override
     public boolean equals(Object object) {
         if (!(object instanceof Resource)) {
@@ -221,5 +223,13 @@ public class Resource extends BasicEntity {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getMeta() {
+        return meta;
+    }
+
+    public void setMeta(String meta) {
+        this.meta = meta;
     }
 }

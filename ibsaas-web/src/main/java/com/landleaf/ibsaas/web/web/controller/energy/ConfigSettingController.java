@@ -100,7 +100,7 @@ public class ConfigSettingController extends BasicController {
     }
 
     @GetMapping("choice-button/equip-area")
-    @ApiOperation("设备区域下拉菜单")
+    @ApiOperation("设备所属区域下拉菜单")
     public Response equipArea(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>ConfigSettingController.equipArea入参为:空");
         List<ChoiceButton> choiceButtons = iConfigSettingService.getChoiceButtons("equip_area");
@@ -109,7 +109,7 @@ public class ConfigSettingController extends BasicController {
     }
 
     @GetMapping("choice-button/equip-classification")
-    @ApiOperation("设备类型下拉菜单")
+    @ApiOperation("设备所属分项下拉菜单")
     public Response equipClassification(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>ConfigSettingController.equipClassification入参为:空");
         List<ChoiceButton> choiceButtons = iConfigSettingService.getChoiceButtons("equip_classification");

@@ -74,6 +74,7 @@
         tcs_3.setting_value AS equipAreaStr,
         tee.equip_classification,
         tcs_4.setting_value AS equipClassificationStr,
+        tee.comment,
         teev.verify_time,
         teev.verify_value
         FROM t_energy_equip tee
@@ -114,6 +115,7 @@
         tcs_3.setting_value AS equipAreaStr,
         tee.equip_classification,
         tcs_4.setting_value AS equipClassificationStr,
+        tee.comment,
         ted.energy_data_time,
         ted.energy_data_value
         FROM t_energy_equip tee
