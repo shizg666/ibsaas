@@ -74,7 +74,7 @@
 
     <select id="getEnergyReporyInfoByType" parameterType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
         select sum(d.energy_data_increase_value) as energyValue, d.energy_data_${dateCode} as timeValue
-        <if test="queryValue == null or queryValue == ''">
+        <if test="queryValue != null or queryValue != ''">
             ,e.equip_classification as typeValue
         </if>
         from t_energy_data d INNER JOIN t_energy_equip e  on d.node_id = e.node_id
@@ -93,7 +93,7 @@
 
     <select id="getEnergyReporyInfoByArea"  parameterType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
         select sum(d.energy_data_increase_value) as energyValue, d.energy_data_${dateCode} as timeValue
-        <if test="queryValue == null or queryValue == ''">
+        <if test="queryValue != null and queryValue != ''">
             ,e.equip_area as typeValue
         </if>
         from t_energy_data d INNER JOIN t_energy_equip e  on d.node_id = e.node_id
