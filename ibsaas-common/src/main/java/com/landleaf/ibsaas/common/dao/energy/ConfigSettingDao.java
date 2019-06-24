@@ -42,4 +42,15 @@ public interface ConfigSettingDao extends BaseDao<ConfigSetting> {
      * @return
      */
     List<ConfigSetting> getCongfigSettingLmt(@Param("maxId") Integer maxId);
+
+    /**
+     * 根据年获取能耗标准
+     * @param settingType
+     * @param equipType
+     * @param year
+     * @return
+     */
+    String getStandardConsumption(@Param("settingType") String settingType,
+                                  @Param("equipType") String equipType,
+                                  @Param("year") Integer year);
 }

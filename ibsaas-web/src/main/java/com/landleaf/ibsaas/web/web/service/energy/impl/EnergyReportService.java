@@ -9,6 +9,7 @@ import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
 import com.landleaf.ibsaas.common.domain.energy.report.EnergySavingEffectVO;
 import com.landleaf.ibsaas.common.domain.energy.report.ProportionalData;
+import com.landleaf.ibsaas.common.domain.energy.report.TimeEnergyData;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
@@ -54,7 +55,11 @@ public class EnergyReportService implements IEnergyReportService {
 
     private static final String LGC = "lgc";
 
+    private static final String PEOPLE_ATTENDANCE = "people_attendance";
+
     private static final BigDecimal BIGDECIMAL_100 = new BigDecimal(100);
+
+    private static final BigDecimal DAY_OF_YEAR = new BigDecimal(365);
 
     @Autowired
     private EnergyDataDao energyDataDao;
@@ -98,32 +103,47 @@ public class EnergyReportService implements IEnergyReportService {
 
     @Override
     public EnergySavingEffectVO overviewSavingEffect(EnergyReportExDTO energyReportDTO) {
-
-        BigDecimal curConsumption = energyDataDao.getEnergyByYear(energyReportDTO.getEquipType(), LocalDateTime.now().getYear());
-
-        ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(BUILDING_ACREAGE, LGC);
-        BigDecimal lgcAcreage = new BigDecimal(lgcAcreageConfig.getSettingValue());
-        BigDecimal standardConsumption = BigDecimal.ZERO;
-        ConfigSettingVO standardConsumptionConfig = configSettingDao.getByTypeAndCode(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()));
-
+        LocalDateTime now = LocalDateTime.now();
+        //当年能耗
+        BigDecimal curConsumption = energyDataDao.getEnergyByYear(energyReportDTO.getEquipType(), now.getYear());
+        BigDecimal dayOfYear = new BigDecimal(now.getDayOfYear());
+        //根据类型获取能耗标准
+        String standardConsumptionStr = configSettingDao.getStandardConsumption(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()), now.getYear());
+        BigDecimal standardConsumption = new BigDecimal(standardConsumptionStr);
+        BigDecimal staConsumption = null,savingConsumption = null;
+        String savingPercent = null;
         if(EnergyTypeEnum.ENERGY_WATER.getEnergyType().equals(energyReportDTO.getEquipType())){
             //水能耗
+            ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(LGC, PEOPLE_ATTENDANCE);
+            BigDecimal peopleAttendance = new BigDecimal(lgcAcreageConfig.getSettingValue());
+            //国标到现在的能耗
+            staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption);
+            //节能数
+            savingConsumption = curConsumption.subtract(staConsumption);
+            //节能率
+            savingPercent = savingConsumption.divide(staConsumption).multiply(BIGDECIMAL_100).setScale(2).toString();
 
         }
         if(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType().equals(energyReportDTO.getEquipType())){
             //电能耗
-
-
+            //建筑面积
+            ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(BUILDING_ACREAGE, LGC);
+            BigDecimal lgcAcreage = new BigDecimal(lgcAcreageConfig.getSettingValue());
+            //国标每天到现在的能耗
+            staConsumption = lgcAcreage.multiply(standardConsumption).divide(DAY_OF_YEAR).multiply(dayOfYear);
+            //节能数
+            savingConsumption = curConsumption.subtract(staConsumption);
+            //节能率
+            savingPercent = savingConsumption.divide(staConsumption).multiply(BIGDECIMAL_100).setScale(2).toString();
         }
-
-
-
-        //todo
-        return new EnergySavingEffectVO();
+        return new EnergySavingEffectVO(staConsumption, savingPercent, savingConsumption);
     }
 
     @Override
     public HlVl overviewSavingEffectLineChart(EnergyReportExDTO energyReportDTO) {
+        List<TimeEnergyData> timeEnergyData = energyDataDao.getEnergyDateByTime(energyReportDTO.getEquipType());
+
+
         //todo
         return null;
     }

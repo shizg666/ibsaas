@@ -163,4 +163,17 @@
             AND energy_data_year=#{year}
         </if>
     </select>
+    <select id="getEnergyDateByTime"
+            resultType="com.landleaf.ibsaas.common.domain.energy.report.TimeEnergyData">
+        SELECT
+        energy_data_year AS time,
+        SUM(energy_data_increase_value) AS energyData
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        <if test="equipType!=null">
+            AND energy_data_type=#{equipType}
+        </if>
+        GROUP BY energy_data_year
+    </select>
 </mapper>
