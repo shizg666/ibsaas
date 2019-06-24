@@ -784,6 +784,8 @@ public class DateUtils {
 	 * @return
 	 */
 	public static List<Date> getYearList(String startTime, String endTime) {
+        Date startDate = DateUtil.parseDate(startTime);
+        Date endDate = DateUtil.parseDate(endTime);
 		List<Date> result = new ArrayList<Date>();
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(DateUtil.parseDate(startTime));
@@ -799,7 +801,9 @@ public class DateUtils {
 		tempStart.set(Calendar.DAY_OF_MONTH, 1);
 		tempStart.set(Calendar.MONTH, 0);
 		tempStart.add(Calendar.YEAR, 1);
-
+        if(startDate.getYear()==endDate.getYear()){
+            return result;
+        }
 		while (tempStart.before(tempEnd)&&(tempEnd.get(Calendar.YEAR) - tempStart.get(Calendar.YEAR))>=1) {
 			result.add(tempStart.getTime());
 			tempStart.add(Calendar.YEAR, 1);
