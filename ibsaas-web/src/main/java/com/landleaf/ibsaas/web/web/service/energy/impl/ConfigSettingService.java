@@ -78,7 +78,7 @@ public class ConfigSettingService extends AbstractBaseService<ConfigSettingDao, 
 
     @Override
     public List<ConfigSettingVO> selectList() {
-        List<ConfigSetting> configSettings = selectAll();
+        List<ConfigSetting> configSettings=configSettingDao.selectList();
         if(!CollectionUtils.isEmpty(configSettings)){
             return configSettings.stream().map(i->{
                 ConfigSettingVO configSettingVO = new ConfigSettingVO();

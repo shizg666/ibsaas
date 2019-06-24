@@ -53,4 +53,6 @@ public interface ConfigSettingDao extends BaseDao<ConfigSetting> {
     String getStandardConsumption(@Param("settingType") String settingType,
                                   @Param("equipType") String equipType,
                                   @Param("year") Integer year);
+
+    List<ConfigSetting> selectList();
 }
