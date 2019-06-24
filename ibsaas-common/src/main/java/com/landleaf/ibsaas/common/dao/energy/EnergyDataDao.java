@@ -2,9 +2,8 @@ package com.landleaf.ibsaas.common.dao.energy;
 
 import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.energy.HlVlBO;
-import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
-import com.landleaf.ibsaas.common.domain.energy.report.TimeEnergyData;
+import com.landleaf.ibsaas.common.domain.energy.report.IntervalData;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
@@ -83,6 +82,6 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @param equipType
      * @return
      */
-    List<TimeEnergyData> getEnergyDateByTime( Integer equipType);
+    List<IntervalData> getEnergyDateByTime(Integer equipType);
 
 }

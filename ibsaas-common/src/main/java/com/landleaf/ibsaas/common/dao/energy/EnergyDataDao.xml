@@ -165,10 +165,10 @@
         </if>
     </select>
     <select id="getEnergyDateByTime"
-            resultType="com.landleaf.ibsaas.common.domain.energy.report.TimeEnergyData">
+            resultType="com.landleaf.ibsaas.common.domain.energy.report.IntervalData">
         SELECT
-        energy_data_year AS time,
-        SUM(energy_data_increase_value) AS energyData
+        energy_data_year AS timeInterval,
+        SUM(energy_data_increase_value) AS intervalValue
         FROM t_energy_data
         WHERE is_active=1
         AND energy_data_source=1

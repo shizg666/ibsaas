@@ -12,12 +12,12 @@ import java.math.BigDecimal;
  * @description:
  */
 @Data
-@ApiModel("时间能耗数据")
-public class TimeEnergyData {
+@ApiModel("间隔数据")
+public class IntervalData {
 
-    @ApiModelProperty("时间区间")
-    private String time;
+    @ApiModelProperty("时间值")
+    private String timeInterval;
 
-    @ApiModelProperty("时间内的能耗")
-    private BigDecimal energyData;
+    @ApiModelProperty("时间内的数据")
+    private BigDecimal intervalValue;
 }
