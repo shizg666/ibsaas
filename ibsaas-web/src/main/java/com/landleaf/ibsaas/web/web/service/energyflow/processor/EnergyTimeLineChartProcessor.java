@@ -44,7 +44,11 @@ public class EnergyTimeLineChartProcessor extends AbstractEnergyChartProcessor {
         Map<String, List<EnergyReportResponseVO>> group = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         List<String> dateList = getDateList(requestBody);
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
+        Integer queryValue = requestBody.getQueryValue();
         queryTypeGroup.forEach((i, v) -> {
+            if (queryValue != null && !StringUtils.equals(i, String.valueOf(queryValue))) {
+                return;
+            }
             Map<String, List<String>> dataMap = Maps.newHashMap();
             List<TimeLineChartResponseDTO> tmpList = Lists.newArrayList();
             String settingValue = null;

@@ -67,7 +67,11 @@ public class EnergyYearOnYearChartProcessor extends AbstractEnergyChartProcessor
         Map<String, List<EnergyReportResponseVO>> compareTargetGroup = compareTargetInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         List<String> dateList = getDateList(requestBody);
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
+        Integer queryValue = requestBody.getQueryValue();
         queryTypeGroup.forEach((String i, List<ConfigSettingVO> v) -> {
+            if (queryValue != null && !com.alibaba.druid.util.StringUtils.equals(i, String.valueOf(queryValue))) {
+                return;
+            }
             List<EnergyReportResponseVO> currentResponseVOS = currentGroup.get(i);
             List<EnergyReportResponseVO> compareTargetResponseVOS = compareTargetGroup.get(i);
             if(CollectionUtils.isEmpty(currentResponseVOS)){

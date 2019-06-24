@@ -829,7 +829,9 @@ public class DateUtils {
 		tempStart.add(Calendar.MONTH, 1);
 
 
-		while (tempStart.before(tempEnd)&&(tempEnd.get(Calendar.MONTH) - tempStart.get(Calendar.MONTH))>=1) {
+		while (tempStart.before(tempEnd)&&
+				((tempEnd.get(Calendar.YEAR) - tempStart.get(Calendar.YEAR))>=1)||
+				(tempEnd.get(Calendar.MONTH) - tempStart.get(Calendar.MONTH))>=1) {
 			result.add(tempStart.getTime());
 			tempStart.add(Calendar.MONTH, 1);
 		}

@@ -39,27 +39,32 @@ public class EnergyHistogramChartProcessor extends AbstractEnergyChartProcessor 
         List<EnergyReportResponseVO> energyReporyInfolist = energyReportService.getEnergyReporyInfolist(requestBody);
         LOGGER.info("获取能耗柱状图数据耗时{}毫秒", System.currentTimeMillis() - getDBStartTime);
 
-        if(CollectionUtils.isEmpty(energyReporyInfolist)){
-            energyReporyInfolist= Lists.newArrayList();
+        if (CollectionUtils.isEmpty(energyReporyInfolist)) {
+            energyReporyInfolist = Lists.newArrayList();
         }
 
         Map<String, List<EnergyReportResponseVO>> group = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         List<String> dateList = getDateList(requestBody);
-        Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
+        Integer queryValue = requestBody.getQueryValue();
+
+
         queryTypeGroup.forEach((i, v) -> {
+            if (queryValue != null && !StringUtils.equals(i, String.valueOf(queryValue))) {
+                return;
+            }
             Map<String, List<String>> dataMap = Maps.newHashMap();
             List<TimeLineChartResponseDTO> tmpList = Lists.newArrayList();
             String settingValue = null;
             try {
                 settingValue = v.get(0).getSettingValue();
             } catch (Exception e) {
-                LOGGER.error("分项不存在",e);
+                LOGGER.error("分项不存在", e);
             }
             List<EnergyReportResponseVO> currentResponseVOS = group.get(i);
-            if(CollectionUtils.isEmpty(currentResponseVOS)){
-                currentResponseVOS=Lists.newArrayList();
+            if (CollectionUtils.isEmpty(currentResponseVOS)) {
+                currentResponseVOS = Lists.newArrayList();
             }
-            if(!StringUtils.isEmpty(settingValue)){
+            if (!StringUtils.isEmpty(settingValue)) {
                 for (String date : dateList) {
                     TimeLineChartResponseDTO temp = new TimeLineChartResponseDTO();
                     String x = date;
