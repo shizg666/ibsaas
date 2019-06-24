@@ -813,13 +813,15 @@ public class DateUtils {
 	 * @return
 	 */
 	public static  List<Date> getMonthList(String startTime, String endTime) {
+		Date startDate = DateUtil.parseDate(startTime);
+		Date endDate = DateUtil.parseDate(endTime);
 		List<Date> result = new ArrayList<Date>();
 		Calendar tempStart = Calendar.getInstance();
-		tempStart.setTime(DateUtil.parseDate(startTime));
+		tempStart.setTime(startDate);
 		result.add(tempStart.getTime());
 
 		Calendar tempEnd = Calendar.getInstance();
-		tempEnd.setTime(DateUtil.parseDate(endTime));
+		tempEnd.setTime(endDate);
 
 		tempStart.set(Calendar.HOUR_OF_DAY, 0);
 		tempStart.set(Calendar.MINUTE, 0);
@@ -828,7 +830,9 @@ public class DateUtils {
 		tempStart.set(Calendar.DAY_OF_MONTH,1);
 		tempStart.add(Calendar.MONTH, 1);
 
-
+		if(startDate.getYear()==endDate.getYear()&&startDate.getMonth()==endDate.getMonth()){
+			return result;
+		}
 		while (tempStart.before(tempEnd)&&
 				((tempEnd.get(Calendar.YEAR) - tempStart.get(Calendar.YEAR))>=1)||
 				(tempEnd.get(Calendar.MONTH) - tempStart.get(Calendar.MONTH))>=1) {
