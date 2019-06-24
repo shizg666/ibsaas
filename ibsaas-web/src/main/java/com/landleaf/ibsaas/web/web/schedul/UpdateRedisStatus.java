@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.common.redis.RedisUtil;
 import com.landleaf.ibsaas.web.web.service.energy.IConfigSettingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-public class UpdateRedisStatus {
+public class UpdateRedisStatus implements InitializingBean{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdateRedisStatus.class);
     @Autowired
@@ -46,5 +47,10 @@ public class UpdateRedisStatus {
         }
 
 
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        updateConfigSettingStatus();
     }
 }

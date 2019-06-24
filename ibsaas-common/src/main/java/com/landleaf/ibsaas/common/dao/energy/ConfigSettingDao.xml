@@ -60,4 +60,9 @@
         ORDER BY STR_TO_DATE(character1,'%Y-%m-%d') DESC
         LIMIT 1
     </select>
+
+    <select id="selectList" resultType="com.landleaf.ibsaas.common.domain.energy.ConfigSetting">
+        SELECT * FROM t_config_setting
+        WHERE is_active=1
+    </select>
 </mapper>
