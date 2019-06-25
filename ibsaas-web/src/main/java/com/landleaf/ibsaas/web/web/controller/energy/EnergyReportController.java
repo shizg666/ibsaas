@@ -10,6 +10,7 @@ import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
 import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
+import com.landleaf.ibsaas.web.web.service.energy.impl.EnergyAsynService;
 import com.landleaf.ibsaas.web.web.service.energyflow.IEnergyConsumeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -34,6 +37,19 @@ public class EnergyReportController extends BasicController {
 
     @Autowired
     private IEnergyConsumeService energyConsumeService;
+
+    @Autowired
+    private EnergyAsynService energyAsynService;
+
+
+    @PostMapping("/overview/all")
+    @ApiOperation("能耗总览-全部")
+    public Response all(@RequestBody EnergyReportExDTO energyReportDTO) {
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.all 入参为:{}", energyReportDTO);
+        Map<String, Object> result = energyAsynService.asynExecuteService(energyReportDTO);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.all 出参为:{}", result);
+        return returnSuccess(result);
+    }
 
     /**
      * 能源总览栏
@@ -78,7 +94,7 @@ public class EnergyReportController extends BasicController {
 
 
 
-    @PostMapping("/overview/ranking/classification")
+    @PostMapping("/overview/ranking/classification-ranking")
     @ApiOperation("能耗总览-能耗排行TOP5项")
     public Response overviewRankingClassification(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewRankingClassification 入参为:{}", energyReportDTO);
@@ -87,7 +103,7 @@ public class EnergyReportController extends BasicController {
         return returnSuccess(result);
     }
 
-    @PostMapping("/overview/ranking/area")
+    @PostMapping("/overview/ranking/area-ranking")
     @ApiOperation("能耗总览-能耗排行TOP3区")
     public Response overviewRankingArea(@RequestBody EnergyReportExDTO energyReportDTO){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewRankingArea 入参为:{}", energyReportDTO);

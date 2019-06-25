@@ -53,4 +53,16 @@ public class TaskExecutePool {
                 new LinkedBlockingQueue<>(WORKQUEUE), namedThreadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
         return pool;
     }
+
+    @Bean("serviceTaskExecutor")
+    public ThreadPoolTaskExecutor serviceTaskExecutor(){
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(10);
+        taskExecutor.setMaxPoolSize(20);
+        taskExecutor.setQueueCapacity(200);
+        taskExecutor.setKeepAliveSeconds(60);
+        taskExecutor.setThreadNamePrefix("service-executor-thread-%d");
+        taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        return taskExecutor;
+    }
 }

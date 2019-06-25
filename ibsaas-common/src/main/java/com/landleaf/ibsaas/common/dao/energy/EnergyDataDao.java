@@ -25,7 +25,7 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @param energyType
      * @return
      */
-    List<EnergyData> getRecentlyEnergyData(Integer energyType);
+    List<EnergyData> getRecentlyEnergyData(@Param("energyType") Integer energyType);
 
     /**
      * 能耗总览-折线图
@@ -82,6 +82,6 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @param equipType
      * @return
      */
-    List<IntervalData> getEnergyDateByTime(Integer equipType);
+    List<IntervalData> getEnergyDateByTime(@Param("equipType") Integer equipType);
 
 }
