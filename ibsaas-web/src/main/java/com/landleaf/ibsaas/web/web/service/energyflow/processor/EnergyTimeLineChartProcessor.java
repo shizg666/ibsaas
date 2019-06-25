@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.web.web.service.energyflow.processor;
 import com.alibaba.druid.util.StringUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
@@ -30,8 +31,9 @@ public class EnergyTimeLineChartProcessor extends AbstractEnergyChartProcessor {
      * @param requestBody
      * @return
      */
-    public Map<String, Map<String, List<String>>> getData(EnergyReportQueryVO requestBody) {
-        Map<String, Map<String, List<String>>> result = Maps.newHashMap();
+    public HlVl getData(EnergyReportQueryVO requestBody) {
+        HlVl result =new HlVl();
+        Map<String, Map<String, List<String>>> tmpResult = Maps.newHashMap();
         //分区或者分项分组
         Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType());
         //获取原始数据
@@ -88,10 +90,24 @@ public class EnergyTimeLineChartProcessor extends AbstractEnergyChartProcessor {
                 }
                 dataMap.put("x", xList);
                 dataMap.put("y", yList);
-                result.put(settingValue, dataMap);
+                tmpResult.put(settingValue, dataMap);
             }
 
         });
+
+        if(tmpResult!=null&&tmpResult.size()>0){
+            List<Object> xs = Lists.newArrayList();
+            List<Map<String,Object>> ys = Lists.newArrayList();
+            tmpResult.forEach((i,v)->{
+                Map<String,Object> data = Maps.newHashMap();
+                data.put(i,v.get("y"));
+                xs.clear();
+                xs.addAll(v.get("x"));
+                ys.add(data);
+            });
+            result.setXs(xs);
+            result.setYs(ys);
+        }
 
         return result;
 

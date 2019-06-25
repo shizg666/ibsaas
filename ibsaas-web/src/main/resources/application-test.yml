@@ -28,7 +28,7 @@ spring:
     lettuce:
       pool:
         max-active: 50
-        max-idle: 30
+        max-idle: 8
         max-wait: 30000
         min-idle: 8
     jedis:
