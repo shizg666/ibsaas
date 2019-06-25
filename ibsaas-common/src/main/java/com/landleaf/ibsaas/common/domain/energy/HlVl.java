@@ -23,5 +23,5 @@ public class HlVl {
     private List<?> xs;
 
     @ApiModelProperty("纵坐标")
-    private List<?> ys;
+    private Object ys;
 }
