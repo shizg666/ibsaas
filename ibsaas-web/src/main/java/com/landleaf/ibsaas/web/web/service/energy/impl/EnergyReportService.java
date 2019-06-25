@@ -10,6 +10,7 @@ import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
 import com.landleaf.ibsaas.common.domain.energy.report.EnergySavingEffectVO;
 import com.landleaf.ibsaas.common.domain.energy.report.ProportionalData;
 import com.landleaf.ibsaas.common.domain.energy.report.IntervalData;
+import com.landleaf.ibsaas.common.domain.energy.report.ProportionalDataList;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
@@ -86,13 +87,18 @@ public class EnergyReportService implements IEnergyReportService {
             map.putAll(tempMap);
         }
 
-        List<String> xs = new ArrayList<>(); List<ProportionalData> ys = new ArrayList<>();
+        List<String> xs = new ArrayList<>();
+        List<String> comp = new ArrayList<>();
+        List<String> current = new ArrayList<>();
+//        List<ProportionalData> ys = new ArrayList<>();
         hlVlBOS.forEach( h -> {
             xs.add(h.getX());
             String upPrevX = getUpPrevX(h.getX(), energyReportDTO.getDateType());
-            ys.add(new ProportionalData(map.get(upPrevX), h.getY()));
+            comp.add(map.get(upPrevX));
+            current.add(h.getY());
+//            ys.add(new ProportionalData(map.get(upPrevX), h.getY()));
         });
-
+        ProportionalDataList ys = new ProportionalDataList(comp, current);
         return new HlVl(xs, ys);
     }
 
@@ -143,7 +149,10 @@ public class EnergyReportService implements IEnergyReportService {
         List<IntervalData> standardData = configSettingDao.getIntervalStandardConsumption(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()));
         Map<String, BigDecimal> standardMap = standardData.stream().collect(Collectors.toMap(IntervalData::getTimeInterval, IntervalData::getIntervalValue));
         BigDecimal dayOfYear = new BigDecimal(now.getDayOfYear());
-        List<String> xs = new ArrayList<>(); List<ProportionalData> ys = new ArrayList<>();
+        List<String> xs = new ArrayList<>();
+        List<String> comp = new ArrayList<>();
+        List<String> current = new ArrayList<>();
+//        List<ProportionalData> ys = new ArrayList<>();
         if(EnergyTypeEnum.ENERGY_WATER.getEnergyType().equals(energyReportDTO.getEquipType())){
             //水能耗
             ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(LGC, PEOPLE_ATTENDANCE);
@@ -155,13 +164,20 @@ public class EnergyReportService implements IEnergyReportService {
                     BigDecimal standardConsumption = standardMap.get(ed.getTimeInterval());
                     //国标到现在的能耗
                     BigDecimal staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption);
-                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), staConsumption.toString()));
+                    comp.add(standardMap.get(ed.getTimeInterval()).toString());
+                    current.add(staConsumption.toString());
+
+//                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), staConsumption.toString()));
 
                 }else {
                     BigDecimal consumption = ed.getIntervalValue().multiply(DAY_OF_YEAR).multiply(peopleAttendance);
-                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), consumption.toString()));
+
+                    comp.add(standardMap.get(ed.getTimeInterval()).toString());
+                    current.add(consumption.toString());
+//                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), consumption.toString()));
                 }
             });
+
         }
         if(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType().equals(energyReportDTO.getEquipType())){
             //电能耗
@@ -174,17 +190,24 @@ public class EnergyReportService implements IEnergyReportService {
                     BigDecimal standardConsumption = standardMap.get(ed.getTimeInterval());
                     //国标每天到现在的能耗
                     BigDecimal staConsumption = lgcAcreage.multiply(standardConsumption).divide(DAY_OF_YEAR, 2, BigDecimal.ROUND_HALF_UP).multiply(dayOfYear);
-                    ys.add(new ProportionalData(staConsumption.toString(), ed.getIntervalValue().toString()));
+                    comp.add(staConsumption.toString());
+                    current.add(ed.getIntervalValue().toString());
+
+//                    ys.add(new ProportionalData(staConsumption.toString(), ed.getIntervalValue().toString()));
                 }else {
                     BigDecimal consumption = ed.getIntervalValue().divide(lgcAcreage, 2, BigDecimal.ROUND_HALF_UP);
-                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), consumption.toString()));
+
+                    comp.add(standardMap.get(ed.getTimeInterval()).toString());
+                    current.add(consumption.toString());
+
+//                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), consumption.toString()));
                 }
             });
 
 
 
         }
-
+        ProportionalDataList ys = new ProportionalDataList(comp, current);
         return new HlVl(xs, ys);
     }
 
