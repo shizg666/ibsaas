@@ -67,7 +67,8 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             BigDecimal electricDataValue = new BigDecimal(em.getEmReading());
             record.setEnergyDataValue(electricDataValue);
             BigDecimal recentlyValue = map.get(em.getId());
-            record.setEnergyDataIncreaseValue(recentlyValue == null?BigDecimal.ZERO : electricDataValue.subtract(recentlyValue));
+            BigDecimal increaseValue = recentlyValue == null ? BigDecimal.ZERO : electricDataValue.subtract(recentlyValue);
+            record.setEnergyDataIncreaseValue(increaseValue.compareTo(BigDecimal.ZERO)<0 ? BigDecimal.ZERO: increaseValue);
 
             record.setEnergyDataType(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType());
             record.setEnergyDataSource(IbsaasConstant.ENERGY_DATA_SOURCE_1);
@@ -97,7 +98,8 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             BigDecimal electricDataValue = new BigDecimal(wm.getWmReading());
             record.setEnergyDataValue(electricDataValue);
             BigDecimal recentlyValue = map.get(wm.getId());
-            record.setEnergyDataIncreaseValue(recentlyValue == null?BigDecimal.ZERO : electricDataValue.subtract(recentlyValue));
+            BigDecimal increaseValue = recentlyValue == null ? BigDecimal.ZERO : electricDataValue.subtract(recentlyValue);
+            record.setEnergyDataIncreaseValue(increaseValue.compareTo(BigDecimal.ZERO)<0 ? BigDecimal.ZERO: increaseValue);
 
             record.setEnergyDataType(EnergyTypeEnum.ENERGY_WATER.getEnergyType());
             record.setEnergyDataSource(IbsaasConstant.ENERGY_DATA_SOURCE_1);

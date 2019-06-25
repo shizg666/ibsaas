@@ -46,9 +46,15 @@
         FROM t_energy_data
         WHERE is_active=1
         AND energy_data_source=1
-        <if test="equipType!=null">
-            AND energy_data_type=#{equipType}
-        </if>
+        <choose>
+            <when test="equipType == 1">
+                AND energy_data_type=#{equipType}
+                AND node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
         <if test="startTime!=null and endTime!=null">
             AND energy_data_time &gt; #{startTime} AND energy_data_time &lt;= #{endTime}
         </if>
@@ -128,11 +134,17 @@
         AND tcs.setting_type=#{energyConfigSetting} AND tcs.is_active=1
         WHERE ted.is_active=1
         AND ted.energy_data_source=1
-        <if test="equipType!=null">
-            AND energy_data_type=#{equipType}
-        </if>
+        <choose>
+            <when test="equipType == 1">
+                AND ted.energy_data_type=#{equipType}
+                AND ted.node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND ted.energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
         <if test="startTime!=null and endTime!=null">
-            AND energy_data_time &gt; #{startTime} AND energy_data_time &lt;= #{endTime}
+            AND ted.energy_data_time &gt; #{startTime} AND energy_data_time &lt;= #{endTime}
         </if>
         GROUP BY tcs.setting_value
         ORDER BY SUM(ted.energy_data_increase_value) DESC
@@ -144,9 +156,15 @@
         FROM t_energy_data
         WHERE is_active=1
         AND energy_data_source=1
-        <if test="equipType!=null">
-            AND energy_data_type=#{equipType}
-        </if>
+        <choose>
+            <when test="equipType == 1">
+                AND energy_data_type=#{equipType}
+                AND node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
         <if test="startTime!=null and endTime!=null">
             AND energy_data_time &gt; #{startTime} AND energy_data_time &lt;= #{endTime}
         </if>
@@ -157,24 +175,36 @@
         FROM t_energy_data
         WHERE is_active=1
         AND energy_data_source=1
-        <if test="equipType!=null">
-            AND energy_data_type=#{equipType}
-        </if>
+        <choose>
+            <when test="equipType == 1">
+                AND energy_data_type=#{equipType}
+                AND node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
         <if test="year!=null and year!=null">
             AND energy_data_year=#{year}
         </if>
     </select>
     <select id="getEnergyDateByTime"
-            resultType="com.landleaf.ibsaas.common.domain.energy.report.TimeEnergyData">
+            resultType="com.landleaf.ibsaas.common.domain.energy.report.IntervalData">
         SELECT
-        energy_data_year AS time,
-        SUM(energy_data_increase_value) AS energyData
+        energy_data_year AS timeInterval,
+        SUM(energy_data_increase_value) AS intervalValue
         FROM t_energy_data
         WHERE is_active=1
         AND energy_data_source=1
-        <if test="equipType!=null">
-            AND energy_data_type=#{equipType}
-        </if>
+        <choose>
+            <when test="equipType == 1">
+                AND energy_data_type=#{equipType}
+                AND node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
         GROUP BY energy_data_year
     </select>
 </mapper>

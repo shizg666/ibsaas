@@ -65,4 +65,23 @@
         SELECT * FROM t_config_setting
         WHERE is_active=1
     </select>
+    <select id="getIntervalStandardConsumption"
+            resultType="com.landleaf.ibsaas.common.domain.energy.report.IntervalData">
+        SELECT
+        t.timeInterval,
+        cs.setting_value AS intervalValue
+        FROM t_config_setting cs,
+        (SELECT
+        YEAR(STR_TO_DATE(character1,'%Y-%m-%d'))  AS timeInterval,
+        MAX(STR_TO_DATE(character1,'%Y-%m-%d')) AS curDate
+        FROM t_config_setting
+        WHERE is_active=1
+        AND setting_type=#{chineseStandardEnergyConsumption}
+        AND setting_code=#{equipType}
+        GROUP BY YEAR(STR_TO_DATE(character1,'%Y-%m-%d'))) t
+        WHERE cs.is_active=1
+        AND cs.setting_type=#{chineseStandardEnergyConsumption}
+        AND cs.setting_code=#{equipType}
+        AND t.curDate=STR_TO_DATE(cs.character1,'%Y-%m-%d')
+    </select>
 </mapper>

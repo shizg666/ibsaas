@@ -9,18 +9,15 @@ import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
 import com.landleaf.ibsaas.common.domain.energy.report.EnergySavingEffectVO;
 import com.landleaf.ibsaas.common.domain.energy.report.ProportionalData;
-import com.landleaf.ibsaas.common.domain.energy.report.TimeEnergyData;
+import com.landleaf.ibsaas.common.domain.energy.report.IntervalData;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.enums.energy.EnergyTypeEnum;
-import com.landleaf.ibsaas.common.utils.calculate.CalculateUtil;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
-import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
-import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -121,7 +118,7 @@ public class EnergyReportService implements IEnergyReportService {
             //节能数
             savingConsumption = curConsumption.subtract(staConsumption);
             //节能率
-            savingPercent = savingConsumption.divide(staConsumption).multiply(BIGDECIMAL_100).setScale(2).toString();
+            savingPercent = savingConsumption.divide(staConsumption, 4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).toString();
 
         }
         if(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType().equals(energyReportDTO.getEquipType())){
@@ -130,22 +127,65 @@ public class EnergyReportService implements IEnergyReportService {
             ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(BUILDING_ACREAGE, LGC);
             BigDecimal lgcAcreage = new BigDecimal(lgcAcreageConfig.getSettingValue());
             //国标每天到现在的能耗
-            staConsumption = lgcAcreage.multiply(standardConsumption).divide(DAY_OF_YEAR).multiply(dayOfYear);
+            staConsumption = lgcAcreage.multiply(standardConsumption).divide(DAY_OF_YEAR,2, BigDecimal.ROUND_HALF_UP).multiply(dayOfYear);
             //节能数
             savingConsumption = curConsumption.subtract(staConsumption);
             //节能率
-            savingPercent = savingConsumption.divide(staConsumption).multiply(BIGDECIMAL_100).setScale(2).toString();
+            savingPercent = savingConsumption.divide(staConsumption,4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).toString();
         }
         return new EnergySavingEffectVO(staConsumption, savingPercent, savingConsumption);
     }
 
     @Override
     public HlVl overviewSavingEffectLineChart(EnergyReportExDTO energyReportDTO) {
-        List<TimeEnergyData> timeEnergyData = energyDataDao.getEnergyDateByTime(energyReportDTO.getEquipType());
+        LocalDateTime now = LocalDateTime.now();
+        List<IntervalData> energyData = energyDataDao.getEnergyDateByTime(energyReportDTO.getEquipType());
+        List<IntervalData> standardData = configSettingDao.getIntervalStandardConsumption(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()));
+        Map<String, BigDecimal> standardMap = standardData.stream().collect(Collectors.toMap(IntervalData::getTimeInterval, IntervalData::getIntervalValue));
+        BigDecimal dayOfYear = new BigDecimal(now.getDayOfYear());
+        List<String> xs = new ArrayList<>(); List<ProportionalData> ys = new ArrayList<>();
+        if(EnergyTypeEnum.ENERGY_WATER.getEnergyType().equals(energyReportDTO.getEquipType())){
+            //水能耗
+            ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(LGC, PEOPLE_ATTENDANCE);
+            BigDecimal peopleAttendance = new BigDecimal(lgcAcreageConfig.getSettingValue());
+            energyData.forEach( ed -> {
+                xs.add(ed.getTimeInterval());
+
+                if(now.getYear() == Integer.valueOf(ed.getTimeInterval())){
+                    BigDecimal standardConsumption = standardMap.get(ed.getTimeInterval());
+                    //国标到现在的能耗
+                    BigDecimal staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption);
+                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), staConsumption.toString()));
+
+                }else {
+                    BigDecimal consumption = ed.getIntervalValue().multiply(DAY_OF_YEAR).multiply(peopleAttendance);
+                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), consumption.toString()));
+                }
+            });
+        }
+        if(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType().equals(energyReportDTO.getEquipType())){
+            //电能耗
+            //建筑面积
+            ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(BUILDING_ACREAGE, LGC);
+            BigDecimal lgcAcreage = new BigDecimal(lgcAcreageConfig.getSettingValue());
+            energyData.forEach( ed -> {
+                xs.add(ed.getTimeInterval());
+                if(now.getYear() == Integer.valueOf(ed.getTimeInterval())){
+                    BigDecimal standardConsumption = standardMap.get(ed.getTimeInterval());
+                    //国标每天到现在的能耗
+                    BigDecimal staConsumption = lgcAcreage.multiply(standardConsumption).divide(DAY_OF_YEAR, 2, BigDecimal.ROUND_HALF_UP).multiply(dayOfYear);
+                    ys.add(new ProportionalData(staConsumption.toString(), ed.getIntervalValue().toString()));
+                }else {
+                    BigDecimal consumption = ed.getIntervalValue().divide(lgcAcreage, 2, BigDecimal.ROUND_HALF_UP);
+                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), consumption.toString()));
+                }
+            });
 
 
-        //todo
-        return null;
+
+        }
+
+        return new HlVl(xs, ys);
     }
 
     @Override
@@ -198,8 +238,8 @@ public class EnergyReportService implements IEnergyReportService {
      */
     private String getProportion(BigDecimal prevValue, BigDecimal curValue){
         BigDecimal subtract = curValue.subtract(prevValue);
-        BigDecimal divide = BigDecimal.ZERO.compareTo(prevValue) == 0 ? BigDecimal.ONE : subtract.divide(prevValue);
-        BigDecimal percent = divide.multiply(BIGDECIMAL_100).setScale(2);
+        BigDecimal divide = BigDecimal.ZERO.compareTo(prevValue) == 0 ? BigDecimal.ONE : subtract.divide(prevValue, 4, BigDecimal.ROUND_HALF_UP);
+        BigDecimal percent = divide.multiply(BIGDECIMAL_100);
         return percent.toString();
     }
 
@@ -236,7 +276,7 @@ public class EnergyReportService implements IEnergyReportService {
                 weekEnergy,
                 monthEnergy,
                 yearEnergy,
-                yearEnergy.divide(buildingAcreage).setScale(2));
+                yearEnergy.divide(buildingAcreage, 2, BigDecimal.ROUND_HALF_UP));
     }
 
 

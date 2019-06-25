@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.common.dao.energy;
 
 import com.landleaf.ibsaas.common.domain.energy.ConfigSetting;
 import com.landleaf.ibsaas.common.domain.energy.dto.ConfigSettingDTO;
+import com.landleaf.ibsaas.common.domain.energy.report.IntervalData;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 import org.apache.ibatis.annotations.Param;
@@ -55,4 +56,13 @@ public interface ConfigSettingDao extends BaseDao<ConfigSetting> {
                                   @Param("year") Integer year);
 
     List<ConfigSetting> selectList();
+
+    /**
+     * 根据时间获取国标
+     * @param chineseStandardEnergyConsumption
+     * @param equipType
+     * @return
+     */
+    List<IntervalData> getIntervalStandardConsumption(@Param("chineseStandardEnergyConsumption") String chineseStandardEnergyConsumption,
+                                                      @Param("equipType") String equipType);
 }
