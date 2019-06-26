@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.web.web.service.energyflow.processor;
 
 import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
+import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import org.slf4j.Logger;
@@ -54,6 +55,32 @@ public class AbstractEnergyChartProcessor  {
         }
         return result;
     }
+    public String getPreDate(String date,Integer dateType) {
+
+        //根据维度生成
+        Date preDate=null;
+        switch (dateType) {
+            case 1:
+                //时
+                preDate= CalendarUtil.prevDay(DateUtils.convert(date, "yyyy-MM-dd HH:mm"));
+                return DateUtil.format( preDate, "yyyy-MM-dd HH:mm");
+            case 2:
+                //日
+                preDate = CalendarUtil.prevMonth(DateUtils.convert(date, "yyyy-MM-dd"));
+                return DateUtil.format( preDate, "yyyy-MM-dd");
+            case 3:
+                //月
+                preDate= CalendarUtil.prevYear(DateUtils.convert(date, "yyyy-MM"));
+                return DateUtil.format( preDate, "yyyy-MM");
+            case 4:
+                //年
+                return date;
+        }
+        return date;
+    }
+
+
+
 
 
 }

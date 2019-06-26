@@ -63,6 +63,7 @@ public class EnergyReportController extends BasicController {
         return returnSuccess(result);
     }
 
+
     @PostMapping("/overview/histogram")
     @ApiOperation("能耗总览-柱状图")
     public Response overviewHistogram(@RequestBody EnergyReportExDTO energyReportDTO){
