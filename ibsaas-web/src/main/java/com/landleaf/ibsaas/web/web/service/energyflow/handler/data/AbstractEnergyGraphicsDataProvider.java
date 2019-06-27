@@ -1,15 +1,11 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.handler.data;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,18 +14,24 @@ public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataPr
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractEnergyGraphicsDataProvider.class);
 
 
-    public EnergyReportQueryVO reportQueryVO;
+//    public EnergyReportQueryVO reportQueryVO;
 
-    public Map<String, Object> data = Maps.newHashMap();
+//    public Map<String, Object> data = Maps.newHashMap();
 
-    public List<EnergyGraphicsEnum> chartTypes = Lists.newArrayList();
 
-    public void buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime,List<EnergyGraphicsEnum> chartTypes) {
-        reportQueryVO = new EnergyReportQueryVO(dateType, startTime, endTime, equipType, queryType, queryValue);
-        this.chartTypes.clear();
-        this.data.clear();
-        this.chartTypes.addAll(chartTypes);
+
+    public EnergyReportQueryVO buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime) {
+        EnergyReportQueryVO reportQueryVO = new EnergyReportQueryVO(dateType, startTime, endTime, equipType, queryType, queryValue);
         this.convertimeByDateType(reportQueryVO);
+//        this.chartTypes.clear();
+//        this.data.clear();
+
+       return reportQueryVO;
+    }
+
+    @Override
+    public EnergyReportQueryVO buildParam(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime, List<EnergyGraphicsEnum> chartTypes) {
+        return null;
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.landleaf.ibsaas.web.web.service.energyflow;
 
-import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
 import com.landleaf.ibsaas.web.web.service.energyflow.handler.data.IEnergyGraphicsDataProvider;
 import org.springframework.beans.factory.annotation.Autowired;

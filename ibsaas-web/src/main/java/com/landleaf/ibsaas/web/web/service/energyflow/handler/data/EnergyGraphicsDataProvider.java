@@ -1,9 +1,8 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.handler.data;
 
 import com.google.common.collect.Maps;
+import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
-import com.landleaf.ibsaas.web.web.service.energy.IConfigSettingService;
-import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import com.landleaf.ibsaas.web.web.service.energyflow.handler.data.asyn.IEnergyFutureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,18 +23,19 @@ public class EnergyGraphicsDataProvider extends AbstractEnergyGraphicsDataProvid
 
     @Override
     public Map<String, Object> getEnergyFlowData(Integer queryType, Integer queryValue, Integer dateType, Integer equipType, String startTime, String endTime,List<EnergyGraphicsEnum> chartTypes) {
-        buildParam(queryType, queryValue, dateType, equipType, startTime, endTime,chartTypes);
-        getEnergyFlowData();
-        return this.data;
+        EnergyReportQueryVO energyReportQueryVO = buildParam(queryType, queryValue, dateType, equipType, startTime, endTime);
+        Map<String, Object> data = Maps.newHashMap();
+        data = getEnergyFlowData(energyReportQueryVO,chartTypes);
+        return data;
     }
 
-    public void getEnergyFlowData(){
+    public Map<String, Object> getEnergyFlowData(EnergyReportQueryVO energyReportQueryVO,List<EnergyGraphicsEnum> chartTypes){
         Map<String ,Object> data = Maps.newHashMap();
         LOGGER.info("*************************逐个获取图表数据*****************************");
         long getDateStartTime = System.currentTimeMillis();
         Map<String, Future> futureMap = Maps.newHashMap();
-        for (EnergyGraphicsEnum enumObj : this.chartTypes) {
-            Future<Object> future = energyFutureService.handlerMsg(enumObj, this.reportQueryVO);
+        for (EnergyGraphicsEnum enumObj : chartTypes) {
+            Future<Object> future = energyFutureService.handlerMsg(enumObj, energyReportQueryVO);
             futureMap.put(enumObj.getCode(),future);
         }
         futureMap.forEach((i,v)->{
@@ -50,7 +50,7 @@ public class EnergyGraphicsDataProvider extends AbstractEnergyGraphicsDataProvid
             data.put(i,o);
         });
         LOGGER.info("*************************共计耗时:{}毫秒*****************************",(System.currentTimeMillis()-getDateStartTime));
-        this.data= data;
+        return data;
     }
 
 
