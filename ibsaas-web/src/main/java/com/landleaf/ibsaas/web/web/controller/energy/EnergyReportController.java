@@ -120,7 +120,7 @@ public class EnergyReportController extends BasicController {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewYoy 入参为:{}", energyReportDTO);
         String result = iEnergyReportService.overviewYoy(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewYoy 出参为:{}", result);
-        return returnSuccess(result);
+        return returnSuccess(result, null);
     }
 
 
@@ -130,7 +130,7 @@ public class EnergyReportController extends BasicController {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyReportController.overviewQoq 入参为:{}", energyReportDTO);
         String result = iEnergyReportService.overviewQoq(energyReportDTO);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyReportController.overviewQoq 出参为:{}", result);
-        return returnSuccess(result);
+        return returnSuccess(result, null);
     }
 
 

@@ -17,6 +17,7 @@ import com.landleaf.ibsaas.common.domain.hvac.HvacPoint;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetPremissionEnum;
 import com.landleaf.ibsaas.common.enums.hvac.HvacFloorEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
+import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.serotonin.bacnet4j.npdu.ip.IpNetwork;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -69,6 +70,9 @@ public class IbsaasClientHvacApplicationTests {
 
     @Autowired
     private DaoAdapter daoAdapter;
+
+    @Autowired
+    private IEnergyDataService iEnergyDataService;
 
     @Test
     public void contextLoads() {
@@ -237,11 +241,25 @@ public class IbsaasClientHvacApplicationTests {
 
     }
 
-    @Autowired
-    private IEnergyDataService iEnergyDataService;
+
     @Test
     public void dateRecord(){
         iEnergyDataService.dataRecord(new Date());
+    }
+
+
+    @Test
+    public void dataOffset(){
+        //补能耗差
+        Date date = CalendarUtil.str2Date("2019-06-25 19:00:00");
+
+
+        Date date2 = CalendarUtil.str2Date("2019-06-26 11:00:00");
+        while (date.compareTo(date2) <= 0){
+            iEnergyDataService.dataRecord(date);
+            date = CalendarUtil.nextHour(date);
+        }
+
     }
 
 }
