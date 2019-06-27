@@ -68,7 +68,9 @@ public class EnergyReportService implements IEnergyReportService {
     @Override
     public HlVl overviewLineChart(EnergyReportExDTO energyReportDTO) {
         List<HlVlBO> hlVlBOList = energyDataDao.overviewLineChart(energyReportDTO);
-        return getHlVl(hlVlBOList);
+        HlVl hlVl = getHlVl(hlVlBOList);
+        hlVl.setXs(dealXTime((List<String>) hlVl.getXs(), energyReportDTO.getDateType()));
+        return hlVl;
     }
 
     @Override
@@ -99,7 +101,7 @@ public class EnergyReportService implements IEnergyReportService {
 //            ys.add(new ProportionalData(map.get(upPrevX), h.getY()));
         });
         ProportionalDataList ys = new ProportionalDataList(comp, current);
-        return new HlVl(xs, ys);
+        return new HlVl(dealXTime(xs,energyReportDTO.getDateType()), ys);
     }
 
 
@@ -124,7 +126,7 @@ public class EnergyReportService implements IEnergyReportService {
             //节能数
             savingConsumption = curConsumption.subtract(staConsumption);
             //节能率
-            savingPercent = savingConsumption.divide(staConsumption, 4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).toString();
+            savingPercent = savingConsumption.divide(staConsumption, 4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
 
         }
         if(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType().equals(energyReportDTO.getEquipType())){
@@ -137,7 +139,7 @@ public class EnergyReportService implements IEnergyReportService {
             //节能数
             savingConsumption = curConsumption.subtract(staConsumption);
             //节能率
-            savingPercent = savingConsumption.divide(staConsumption,4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).toString();
+            savingPercent = savingConsumption.divide(staConsumption,4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
         }
         return new EnergySavingEffectVO(staConsumption, savingPercent, savingConsumption);
     }
@@ -229,7 +231,7 @@ public class EnergyReportService implements IEnergyReportService {
                 energyReportDTO.getEndTime(),
                 energyReportDTO.getEquipType(),
                 EQUIP_AREA,
-                3);
+                5);
         return getHlVl(hlVlBOList);
     }
 
@@ -262,7 +264,7 @@ public class EnergyReportService implements IEnergyReportService {
     private String getProportion(BigDecimal prevValue, BigDecimal curValue){
         BigDecimal subtract = curValue.subtract(prevValue);
         BigDecimal divide = BigDecimal.ZERO.compareTo(prevValue) == 0 ? BigDecimal.ONE : subtract.divide(prevValue, 4, BigDecimal.ROUND_HALF_UP);
-        BigDecimal percent = divide.multiply(BIGDECIMAL_100);
+        BigDecimal percent = divide.multiply(BIGDECIMAL_100).setScale(2, BigDecimal.ROUND_HALF_UP);
         return percent.toString();
     }
 
@@ -344,6 +346,20 @@ public class EnergyReportService implements IEnergyReportService {
             ys.add(h.getY());
         });
         return new HlVl(xs, ys);
+    }
+
+    /**
+     * 横坐标处理
+     * @param xs
+     * @param dateType
+     * @return
+     */
+    public List<String> dealXTime(List<String> xs, Integer dateType){
+        if(DimensionTypeEnum.HOUR.getType() == dateType){
+            //如果是小时的话,则返回 yyyy-MM-dd HH:mm
+            return xs.stream().map(x -> x.substring(0, x.length() - 3)).collect(Collectors.toList());
+        }
+        return xs;
     }
 
     /**
