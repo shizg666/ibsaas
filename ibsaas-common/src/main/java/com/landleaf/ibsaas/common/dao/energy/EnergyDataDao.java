@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.common.dao.energy;
 import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.energy.HlVlBO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
+import com.landleaf.ibsaas.common.domain.energy.report.DayOfYear;
 import com.landleaf.ibsaas.common.domain.energy.report.IntervalData;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
@@ -84,4 +85,18 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      */
     List<IntervalData> getEnergyDateByTime(@Param("equipType") Integer equipType);
 
+    /**
+     * 根据年份获取日
+     * @param year
+     * @return
+     */
+    List<DayOfYear> getDaysByYear(@Param("year") Integer year);
+
+
+    /**
+     * 根据nodeId和时间 类型 查询 是否存在相同数据
+     * @param energyData
+     * @return
+     */
+    EnergyData getEnergyDataByNodeIdAndTime(EnergyData energyData);
 }

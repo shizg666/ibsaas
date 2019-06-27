@@ -207,4 +207,28 @@
         </choose>
         GROUP BY energy_data_year
     </select>
+    <select id="getDaysByYear" resultType="com.landleaf.ibsaas.common.domain.energy.report.DayOfYear">
+        SELECT t.energy_data_year AS year,COUNT(1) AS days
+        FROM (
+        SELECT
+        energy_data_year,energy_data_date
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        GROUP BY energy_data_year,energy_data_date
+        ) t
+        WHERE 1=1
+        <if test="year!=null">
+            AND t.energy_data_year=#{year}
+        </if>
+        GROUP BY t.energy_data_year
+    </select>
+    <select id="getEnergyDataByNodeIdAndTime" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyData">
+        SELECT id FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        AND energy_data_type=#{energyDataType}
+        AND energy_data_time=#{energyDataTime}
+        AND node_id=#{nodeId}
+    </select>
 </mapper>

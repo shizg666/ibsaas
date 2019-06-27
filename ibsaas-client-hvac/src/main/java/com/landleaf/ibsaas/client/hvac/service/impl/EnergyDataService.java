@@ -56,6 +56,7 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
         List<EnergyData> energyDataElectrics = energyDataDao.getRecentlyEnergyData(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType());
         List<EnergyData> result = new ArrayList<>();
         Map<String, BigDecimal> map = energyDataElectrics.stream().collect(Collectors.toMap(EnergyData::getNodeId, EnergyData::getEnergyDataValue));
+
         electricMeterVOList.forEach( em -> {
             EnergyData record = new EnergyData();
             record.setNodeId(em.getId());
@@ -74,7 +75,11 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             record.setEnergyDataSource(IbsaasConstant.ENERGY_DATA_SOURCE_1);
 
             daoAdapter.consummateAddOperation(record);
-            saveSelective(record);
+
+            EnergyData allreadyData = energyDataDao.getEnergyDataByNodeIdAndTime(record);
+            if(allreadyData == null) {
+                saveSelective(record);
+            }
             result.add(record);
         });
 
@@ -105,7 +110,10 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             record.setEnergyDataSource(IbsaasConstant.ENERGY_DATA_SOURCE_1);
 
             daoAdapter.consummateAddOperation(record);
-            saveSelective(record);
+            EnergyData allreadyData = energyDataDao.getEnergyDataByNodeIdAndTime(record);
+            if(allreadyData == null) {
+                saveSelective(record);
+            }
             result.add(record);
         });
         return result;

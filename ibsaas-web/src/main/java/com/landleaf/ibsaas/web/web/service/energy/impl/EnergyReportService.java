@@ -7,10 +7,7 @@ import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.energy.HlVlBO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportExDTO;
-import com.landleaf.ibsaas.common.domain.energy.report.EnergySavingEffectVO;
-import com.landleaf.ibsaas.common.domain.energy.report.ProportionalData;
-import com.landleaf.ibsaas.common.domain.energy.report.IntervalData;
-import com.landleaf.ibsaas.common.domain.energy.report.ProportionalDataList;
+import com.landleaf.ibsaas.common.domain.energy.report.*;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyOverviewTotalVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
@@ -58,6 +55,8 @@ public class EnergyReportService implements IEnergyReportService {
     private static final BigDecimal BIGDECIMAL_100 = new BigDecimal(100);
 
     private static final BigDecimal DAY_OF_YEAR = new BigDecimal(365);
+
+    private static final BigDecimal DAY_OF_YEAR_OR = new BigDecimal(366);
 
     @Autowired
     private EnergyDataDao energyDataDao;
@@ -111,7 +110,8 @@ public class EnergyReportService implements IEnergyReportService {
         LocalDateTime now = LocalDateTime.now();
         //当年能耗
         BigDecimal curConsumption = energyDataDao.getEnergyByYear(energyReportDTO.getEquipType(), now.getYear());
-        BigDecimal dayOfYear = new BigDecimal(now.getDayOfYear());
+        Map<String, BigDecimal> daysMap = getDaysMap();
+        BigDecimal dayOfYear = daysMap.get(String.valueOf(now.getYear()));
         //根据类型获取能耗标准
         String standardConsumptionStr = configSettingDao.getStandardConsumption(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()), now.getYear());
         BigDecimal standardConsumption = new BigDecimal(standardConsumptionStr);
@@ -124,7 +124,7 @@ public class EnergyReportService implements IEnergyReportService {
             //国标到现在的能耗
             staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption);
             //节能数
-            savingConsumption = curConsumption.subtract(staConsumption);
+            savingConsumption = staConsumption.subtract(curConsumption);
             //节能率
             savingPercent = savingConsumption.divide(staConsumption, 4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
 
@@ -135,9 +135,9 @@ public class EnergyReportService implements IEnergyReportService {
             ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(BUILDING_ACREAGE, LGC);
             BigDecimal lgcAcreage = new BigDecimal(lgcAcreageConfig.getSettingValue());
             //国标每天到现在的能耗
-            staConsumption = lgcAcreage.multiply(standardConsumption).divide(DAY_OF_YEAR,2, BigDecimal.ROUND_HALF_UP).multiply(dayOfYear);
+            staConsumption = lgcAcreage.multiply(standardConsumption).divide(getDayOfYear(now.getYear()),2, BigDecimal.ROUND_HALF_UP).multiply(dayOfYear);
             //节能数
-            savingConsumption = curConsumption.subtract(staConsumption);
+            savingConsumption = staConsumption.subtract(curConsumption);
             //节能率
             savingPercent = savingConsumption.divide(staConsumption,4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
         }
@@ -150,7 +150,8 @@ public class EnergyReportService implements IEnergyReportService {
         List<IntervalData> energyData = energyDataDao.getEnergyDateByTime(energyReportDTO.getEquipType());
         List<IntervalData> standardData = configSettingDao.getIntervalStandardConsumption(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()));
         Map<String, BigDecimal> standardMap = standardData.stream().collect(Collectors.toMap(IntervalData::getTimeInterval, IntervalData::getIntervalValue));
-        BigDecimal dayOfYear = new BigDecimal(now.getDayOfYear());
+        Map<String, BigDecimal> daysMap = getDaysMap();
+        BigDecimal dayOfYear = daysMap.get(String.valueOf(now.getYear()));
         List<String> xs = new ArrayList<>();
         List<String> comp = new ArrayList<>();
         List<String> current = new ArrayList<>();
@@ -172,7 +173,7 @@ public class EnergyReportService implements IEnergyReportService {
 //                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), staConsumption.toString()));
 
                 }else {
-                    BigDecimal consumption = ed.getIntervalValue().multiply(DAY_OF_YEAR).multiply(peopleAttendance);
+                    BigDecimal consumption = ed.getIntervalValue().multiply(getDayOfYear(now.getYear())).multiply(peopleAttendance);
 
                     comp.add(standardMap.get(ed.getTimeInterval()).toString());
                     current.add(consumption.toString());
@@ -191,7 +192,7 @@ public class EnergyReportService implements IEnergyReportService {
                 if(now.getYear() == Integer.valueOf(ed.getTimeInterval())){
                     BigDecimal standardConsumption = standardMap.get(ed.getTimeInterval());
                     //国标每天到现在的能耗
-                    BigDecimal staConsumption = lgcAcreage.multiply(standardConsumption).divide(DAY_OF_YEAR, 2, BigDecimal.ROUND_HALF_UP).multiply(dayOfYear);
+                    BigDecimal staConsumption = lgcAcreage.multiply(standardConsumption).divide(getDayOfYear(now.getYear()), 2, BigDecimal.ROUND_HALF_UP).multiply(dayOfYear);
                     comp.add(staConsumption.toString());
                     current.add(ed.getIntervalValue().toString());
 
@@ -205,9 +206,6 @@ public class EnergyReportService implements IEnergyReportService {
 //                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), consumption.toString()));
                 }
             });
-
-
-
         }
         ProportionalDataList ys = new ProportionalDataList(comp, current);
         return new HlVl(xs, ys);
@@ -239,11 +237,12 @@ public class EnergyReportService implements IEnergyReportService {
     public String overviewYoy(EnergyReportExDTO energyReportDTO) {
         BigDecimal curValue = energyDataDao.getEnergyByDate(energyReportDTO);
         EnergyReportExDTO query = offsetEnergyReportDTO(energyReportDTO);
-        BigDecimal prevValue = BigDecimal.ZERO;
+        BigDecimal prevValue = null;
         if(query!=energyReportDTO){
             //维度不是年
             prevValue = energyDataDao.getEnergyByDate(query);
         }
+        prevValue = prevValue == null? BigDecimal.ZERO : prevValue;
         return getProportion(prevValue, curValue);
     }
 
@@ -252,6 +251,7 @@ public class EnergyReportService implements IEnergyReportService {
         BigDecimal curValue = energyDataDao.getEnergyByDate(energyReportDTO);
         EnergyReportExDTO query = offsetParallelEnergyReportDTO(energyReportDTO);
         BigDecimal prevValue = energyDataDao.getEnergyByDate(query);
+        prevValue = prevValue == null? BigDecimal.ZERO : prevValue;
         return getProportion(prevValue, curValue);
     }
 
@@ -417,6 +417,32 @@ public class EnergyReportService implements IEnergyReportService {
         return query;
     }
 
+    /**
+     * 判断一天365天还是366天
+     * @param year
+     * @return
+     */
+    public BigDecimal getDayOfYear(Integer year){
+        if(year == null){
+            return DAY_OF_YEAR;
+        }
+        if(year%4==0&&year%100!=0||year%400==0){
+            return DAY_OF_YEAR_OR;
+        }
+        return DAY_OF_YEAR;
+    }
+
+    /**
+     * 获取所有年份的天数map
+     * @return
+     */
+    public Map<String, BigDecimal> getDaysMap(){
+        List<DayOfYear> dayOfYears =  energyDataDao.getDaysByYear(null);
+        return dayOfYears.stream().collect(
+                Collectors.toMap(
+                        k -> String.valueOf(k.getYear()),
+                        v -> new BigDecimal(v.getDays())));
+    }
 
     @Override
     public HlVl areaLineChart(EnergyReportDTO energyReportDTO) {

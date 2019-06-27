@@ -21,11 +21,12 @@ public enum  FanCoilMachModeEnum {
     THREE_WIND(3, "三档风"),
     FOUR_WIND(4, "四档风"),
     FIVE_WIND(5, "五档风"),
-    AUTO_ONE_WIND(6, "自动一档"),
-    AUTO_TWO_WIND(7, "自动二档"),
-    AUTO_THREE_WIND(8, "自动三档"),
-    AUTO_FOUR_WIND(9, "自动四档"),
-    AUTO_FIVE_WIND(10, "自动五档"),
+    AUTO_ONE_WIND(6, "自动"),
+//    AUTO_ONE_WIND(6, "自动一档"),
+//    AUTO_TWO_WIND(7, "自动二档"),
+//    AUTO_THREE_WIND(8, "自动三档"),
+//    AUTO_FOUR_WIND(9, "自动四档"),
+//    AUTO_FIVE_WIND(10, "自动五档"),
     AUTO_TOP_WIND(11, "自动停风"),
     ;
 
