@@ -41,7 +41,7 @@ public class EnergyHistogramChartProcessor extends AbstractEnergyChartProcessor 
         HlVl result = new HlVl();
         Map<String, Map<String, List<String>>> tmpResult = Maps.newHashMap();
         //分区或者分项分组
-        Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType());
+        Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType(),requestBody.getEnergyType());
         //获取原始数据
         long getDBStartTime = System.currentTimeMillis();
         List<EnergyReportResponseVO> energyReporyInfolist = energyReportService.getEnergyReporyInfolist(requestBody);
@@ -97,31 +97,6 @@ public class EnergyHistogramChartProcessor extends AbstractEnergyChartProcessor 
 }
 
 
-    /**
-     * 根据所选维度 变更更查询范围
-     *
-     * @param energyReportDTO
-     */
-    private EnergyReportQueryVO offsetEnergyReportDTO(EnergyReportQueryVO energyReportDTO) {
-        EnergyReportQueryVO query = new EnergyReportQueryVO();
-        BeanUtils.copyProperties(energyReportDTO, query);
-        if (DimensionTypeEnum.HOUR.getType() == energyReportDTO.getDateType()) {
-            query.setStartTime(DateUtils.convert(CalendarUtil.prevDay(DateUtils.convert(query.getStartTime()))));
-            query.setEndTime(DateUtils.convert(CalendarUtil.prevDay(DateUtils.convert(query.getEndTime()))));
-        }
-        if (DimensionTypeEnum.DAY.getType() == energyReportDTO.getDateType()) {
-            query.setStartTime(DateUtils.convert(CalendarUtil.prevMonth(DateUtils.convert(query.getStartTime()))));
-            query.setEndTime(DateUtils.convert(CalendarUtil.prevMonth(DateUtils.convert(query.getEndTime()))));
-        }
-        if (DimensionTypeEnum.MONTH.getType() == energyReportDTO.getDateType()) {
-            query.setStartTime(DateUtils.convert(CalendarUtil.prevYear(DateUtils.convert(query.getStartTime()))));
-            query.setEndTime(DateUtils.convert(CalendarUtil.prevYear(DateUtils.convert(query.getEndTime()))));
-        }
-        if (DimensionTypeEnum.YEAR.getType() == energyReportDTO.getDateType()) {
-            return energyReportDTO;
-        }
-        return query;
-    }
 
 
 

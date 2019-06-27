@@ -1,10 +1,13 @@
 package com.landleaf.ibsaas.web.web.service.energyflow.processor;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
+import com.landleaf.ibsaas.common.enums.energy.EnergyTypeEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.spring.SpringManagerAware;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.redis.energy.ConfigSettingRedis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,23 +64,44 @@ public class EnergyGraphicsDataProcessor {
      * @param queryType
      * @return
      */
-    public Map<String, List<ConfigSettingVO>> getQueryTypeGroup(Integer queryType) {
+    public Map<String, List<ConfigSettingVO>> getQueryTypeGroup(Integer queryType,Integer energyType ) {
         List<ConfigSettingVO> classificationList = configSettingRedis.getConfigSettingVOByType("equip_classification");
         List<ConfigSettingVO> areaList = configSettingRedis.getConfigSettingVOByType("equip_area");
 
-        Map<String, List<ConfigSettingVO>> classificationGroup = classificationList.stream().collect(Collectors.groupingBy(ConfigSettingVO::getSettingCode));
-        Map<String, List<ConfigSettingVO>> areaGroup = areaList.stream().collect(Collectors.groupingBy(ConfigSettingVO::getSettingCode));
+        //区域未加标记
+        List<ConfigSettingVO> waterAreaList = areaList.stream().filter(i -> StringUtils.equals(i.getCharacter1(), String.valueOf(EnergyTypeEnum.ENERGY_WATER.getEnergyType()))).collect(Collectors.toList());
+        List<ConfigSettingVO> electricAreaList = areaList.stream().filter(i -> StringUtils.equals(i.getCharacter1(), String.valueOf(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType()))).collect(Collectors.toList());
+        List<ConfigSettingVO> waterClassificationList = classificationList.stream().filter(i -> StringUtils.equals(i.getCharacter1(), String.valueOf(EnergyTypeEnum.ENERGY_WATER.getEnergyType()))).collect(Collectors.toList());
+        List<ConfigSettingVO> electricClassificationList = classificationList.stream().filter(i -> StringUtils.equals(i.getCharacter1(), String.valueOf(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType()))).collect(Collectors.toList());
+
+        Map<String, List<ConfigSettingVO>> waterClassificationGroup = waterClassificationList.stream().collect(Collectors.groupingBy(ConfigSettingVO::getSettingCode));
+        Map<String, List<ConfigSettingVO>> electricClassificationGroup = electricClassificationList.stream().collect(Collectors.groupingBy(ConfigSettingVO::getSettingCode));
+        Map<String, List<ConfigSettingVO>> waterAreaGroup = areaList.stream().collect(Collectors.groupingBy(ConfigSettingVO::getSettingCode));
+        Map<String, List<ConfigSettingVO>> electricAreaGroup = areaList.stream().collect(Collectors.groupingBy(ConfigSettingVO::getSettingCode));
 
         Map<String, List<ConfigSettingVO>> queryTypeGroup = null;
 
         switch (queryType) {
             case 1:
                 //分区
-                queryTypeGroup = areaGroup;
+                if(energyType.intValue()== EnergyTypeEnum.ENERGY_WATER.getEnergyType()){
+                    //水
+                    queryTypeGroup = waterAreaGroup;
+                }else if(energyType.intValue()== EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType()){
+                    //电
+                    queryTypeGroup = electricAreaGroup;
+                }
+
                 break;
             case 2:
                 //分项
-                queryTypeGroup = classificationGroup;
+                if(energyType.intValue()== EnergyTypeEnum.ENERGY_WATER.getEnergyType()){
+                    //水
+                    queryTypeGroup = waterClassificationGroup;
+                }else if(energyType.intValue()== EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType()){
+                    //电
+                    queryTypeGroup = electricClassificationGroup;
+                }
                 break;
         }
         return queryTypeGroup;

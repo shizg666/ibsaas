@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
+import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
@@ -39,25 +40,29 @@ public class EnergyYearOnYearChartProcessor extends AbstractEnergyChartProcessor
     public Map<String, String> getData(EnergyReportQueryVO requestBody) {
         Map<String, String> result = Maps.newHashMap();
         //分区或者分项分组
-        Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType());
+        Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType(),requestBody.getEnergyType());
         //获取原始数据
         long getDBStartTime = System.currentTimeMillis();
         //同比不区分时间
         requestBody.setQueryValue(null);
-        //本期与去年同期比较各减去一年
-        EnergyReportQueryVO targetBody = getCompareTarget(requestBody);
+        //往前推一个维度
+        //往前挪一个维度
+        EnergyReportQueryVO targetBody = offsetEnergyReportDTO(requestBody);
         //本期数据
         List<EnergyReportResponseVO> energyReporyInfolist = energyReportService.getEnergyReporyInfolist(requestBody);
         //比较数据
-        List<EnergyReportResponseVO> compareTargetInfolist = energyReportService.getEnergyReporyInfolist(targetBody);
+        List<EnergyReportResponseVO> compareTargetInfolist = Lists.newArrayList();
         LOGGER.info("获取能耗同比图数据耗时{}毫秒", System.currentTimeMillis() - getDBStartTime);
+        if(requestBody.getDateType().intValue()!= DimensionTypeEnum.YEAR.getType()){
+            compareTargetInfolist = energyReportService.getEnergyReporyInfolist(targetBody);
+        }
         if(CollectionUtils.isEmpty(energyReporyInfolist)){
             energyReporyInfolist= Lists.newArrayList();
         }
         if(CollectionUtils.isEmpty(compareTargetInfolist)){
             compareTargetInfolist= Lists.newArrayList();
         }
-        //计算 ：该时间段相比去年同一时间段的和值比较
+        //计算 ：该时间段相比上一维度时间段的和值比较
         /**
          * 同比增长速度=
          (本期数-去年同期数)/去年同期数

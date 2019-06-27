@@ -37,7 +37,7 @@ public class EnergySharePieChartProcessor extends AbstractEnergyChartProcessor {
     public Map<String, String> getData(EnergyReportQueryVO requestBody) {
         Map<String, String> result = Maps.newHashMap();
         //分区或者分项分组2
-        Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType());
+        Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType(),requestBody.getEnergyType());
         //获取原始数据
         long getDBStartTime = System.currentTimeMillis();
         //同比不区分时间

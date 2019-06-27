@@ -35,7 +35,7 @@ public class EnergyTimeLineChartProcessor extends AbstractEnergyChartProcessor {
         HlVl result =new HlVl();
         Map<String, Map<String, List<String>>> tmpResult = Maps.newHashMap();
         //分区或者分项分组
-        Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType());
+        Map<String, List<ConfigSettingVO>> queryTypeGroup = energyGraphicsDataProcessor.getQueryTypeGroup(requestBody.getQueryType(),requestBody.getEnergyType());
         //获取原始数据
         long getDBStartTime = System.currentTimeMillis();
         List<EnergyReportResponseVO> energyReporyInfolist = energyReportService.getEnergyReporyInfolist(requestBody);

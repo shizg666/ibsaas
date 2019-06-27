@@ -2,11 +2,13 @@ package com.landleaf.ibsaas.web.web.service.energyflow.processor;
 
 import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
+import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -78,6 +80,33 @@ public class AbstractEnergyChartProcessor  {
         }
         return date;
     }
+
+    /**
+     * 根据所选维度 变更更查询范围
+     *
+     * @param energyReportDTO
+     */
+    public EnergyReportQueryVO offsetEnergyReportDTO(EnergyReportQueryVO energyReportDTO) {
+        EnergyReportQueryVO query = new EnergyReportQueryVO();
+        BeanUtils.copyProperties(energyReportDTO, query);
+        if (DimensionTypeEnum.HOUR.getType() == energyReportDTO.getDateType()) {
+            query.setStartTime(DateUtils.convert(CalendarUtil.prevDay(DateUtils.convert(query.getStartTime()))));
+            query.setEndTime(DateUtils.convert(CalendarUtil.prevDay(DateUtils.convert(query.getEndTime()))));
+        }
+        if (DimensionTypeEnum.DAY.getType() == energyReportDTO.getDateType()) {
+            query.setStartTime(DateUtils.convert(CalendarUtil.prevMonth(DateUtils.convert(query.getStartTime()))));
+            query.setEndTime(DateUtils.convert(CalendarUtil.prevMonth(DateUtils.convert(query.getEndTime()))));
+        }
+        if (DimensionTypeEnum.MONTH.getType() == energyReportDTO.getDateType()) {
+            query.setStartTime(DateUtils.convert(CalendarUtil.prevYear(DateUtils.convert(query.getStartTime()))));
+            query.setEndTime(DateUtils.convert(CalendarUtil.prevYear(DateUtils.convert(query.getEndTime()))));
+        }
+        if (DimensionTypeEnum.YEAR.getType() == energyReportDTO.getDateType()) {
+            return energyReportDTO;
+        }
+        return query;
+    }
+
 
 
 
