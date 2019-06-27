@@ -100,8 +100,13 @@ public class EnergyYearOnYearChartProcessor extends AbstractEnergyChartProcessor
                 compareTargetSum = compareTargetResponseVOS.stream().mapToDouble(i1 -> {
                     return Double.parseDouble(i1.getEnergyValue());
                 }).sum();
-                double  fenmu =compareTargetSum>0?compareTargetSum:1;
-                String value = new BigDecimal((currestSum - compareTargetSum) / fenmu).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
+                String value = "100";
+                if(compareTargetSum<=0){
+
+                }else {
+                    double  fenmu =compareTargetSum>0?compareTargetSum:1;
+                    value = new BigDecimal((currestSum - compareTargetSum) / fenmu).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
+                }
                 result.put(settingValue, value);
             }
         });
