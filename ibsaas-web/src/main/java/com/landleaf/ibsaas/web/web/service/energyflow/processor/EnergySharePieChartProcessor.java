@@ -53,6 +53,9 @@ public class EnergySharePieChartProcessor extends AbstractEnergyChartProcessor {
         sum = energyReporyInfolist.stream().mapToDouble(i1 -> {
             return Double.parseDouble(i1.getEnergyValue());
         }).sum();
+        if(sum<=0){
+            sum=1.0d;
+        }
 
         Map<String, List<EnergyReportResponseVO>> currentGroup = energyReporyInfolist.stream().collect(Collectors.groupingBy(EnergyReportResponseVO::getTypeValue));
         Map<String, List<ConfigSettingVO>> finalQueryTypeGroup = queryTypeGroup;
@@ -79,7 +82,6 @@ public class EnergySharePieChartProcessor extends AbstractEnergyChartProcessor {
                 currestSum = currentResponseVOS.stream().mapToDouble(i1 -> {
                     return Double.parseDouble(i1.getEnergyValue());
                 }).sum();
-
                 String value = new BigDecimal(currestSum / sum).multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_DOWN).toPlainString();
                 remain = remain - Double.parseDouble(value);
                 result.put(settingValue, value);

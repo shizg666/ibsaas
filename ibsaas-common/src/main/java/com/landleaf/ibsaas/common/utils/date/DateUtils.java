@@ -852,6 +852,8 @@ public class DateUtils {
 	 * @return
 	 */
 	public static  List<Date> getDayList(String startTime, String endTime) {
+		Date startDate = DateUtil.parseDate(startTime);
+		Date endDate = DateUtil.parseDate(endTime);
 		List<Date> result = new ArrayList<Date>();
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(DateUtil.parseDate(startTime));
@@ -864,7 +866,9 @@ public class DateUtils {
 		tempStart.set(Calendar.MINUTE, 0);
 		tempStart.set(Calendar.SECOND, 0);
 		tempStart.set(Calendar.MILLISECOND, 0);
-
+		if(startDate.getYear()==endDate.getYear()&&startDate.getMonth()==endDate.getMonth()&&startDate.getDay()==endDate.getDay()){
+			return result;
+		}
 		while (tempStart.before(tempEnd)&&(tempEnd.getTimeInMillis()-tempStart.getTimeInMillis())>1000*3600*24L) {
 			result.add(tempStart.getTime());
 			tempStart.add(Calendar.HOUR, 24);
@@ -874,6 +878,8 @@ public class DateUtils {
 	}
 
 	public static List<Date> getHourList(String startTime, String endTime) {
+		Date startDate = DateUtil.parseDate(startTime);
+		Date endDate = DateUtil.parseDate(endTime);
 		List<Date> result = new ArrayList<Date>();
 		Calendar tempStart = Calendar.getInstance();
 		tempStart.setTime(DateUtil.parseDate(startTime));
@@ -885,7 +891,9 @@ public class DateUtils {
 		tempStart.set(Calendar.MINUTE, 0);
 		tempStart.set(Calendar.SECOND, 0);
 		tempStart.set(Calendar.MILLISECOND, 0);
-
+		if(startDate.getYear()==endDate.getYear()&&startDate.getMonth()==endDate.getMonth()&&startDate.getDay()==endDate.getDay()&&startDate.getHours()==endDate.getHours()){
+			return result;
+		}
 		while (tempStart.before(tempEnd)&&(tempEnd.getTimeInMillis()-tempStart.getTimeInMillis())>1000*3600L) {
 			result.add(tempStart.getTime());
 			tempStart.add(Calendar.HOUR, 1);
