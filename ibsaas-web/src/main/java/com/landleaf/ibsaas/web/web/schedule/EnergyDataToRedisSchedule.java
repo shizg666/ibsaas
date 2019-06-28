@@ -36,7 +36,6 @@ public class EnergyDataToRedisSchedule {
     private IEnergyReportService iEnergyReportService;
     @Autowired
     private RedisHandle redisHandle;
-
     @Scheduled(cron = "0 15 0 1 * ? ")
     @Async("energyDataToRedisThreadPool")
     public void energyDatatoRedis(){
@@ -47,10 +46,10 @@ public class EnergyDataToRedisSchedule {
             long start = System.currentTimeMillis();
             Calendar c=Calendar.getInstance();
             c.add(Calendar.MONTH, -1);
-            String gtimelast = sdf.format(c.getTime()); //上月
-            System.out.println(gtimelast);
+//            String gtimelast = sdf.format(c.getTime()); //上月
+//            System.out.println(gtimelast);
             int lastMonthMaxDay=c.getActualMaximum(Calendar.DAY_OF_MONTH);
-            System.out.println(lastMonthMaxDay);
+//            System.out.println(lastMonthMaxDay);
             c.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), lastMonthMaxDay, 23, 59, 59);
             //按格式输出
             String endTime = sdf.format(c.getTime()); //上月最后一天
