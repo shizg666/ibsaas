@@ -132,7 +132,7 @@ public class EnergyReportService implements IEnergyReportService {
 ////            ys.add(new ProportionalData(map.get(upPrevX), h.getY()));
 //        });
         ProportionalDataList ys = new ProportionalDataList(comp, current);
-        return new HlVl(dealXTime(xs,energyReportDTO.getDateType()), ys);
+        return new HlVl(xs, ys);
     }
 
 
