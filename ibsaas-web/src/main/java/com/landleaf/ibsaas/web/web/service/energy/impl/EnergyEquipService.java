@@ -24,6 +24,7 @@ import com.landleaf.ibsaas.web.web.service.energy.IEnergyEquipVerifyService;
 import com.landleaf.ibsaas.web.web.util.WebDaoAdapter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,9 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         //存储基础设备
         EnergyEquip energyEquip = new EnergyEquip();
         BeanUtils.copyProperties(energyEquipDTO, energyEquip);
+        //校验是否绑定水电表 和 重复绑定
+        checkBindNodeId(energyEquip);
+
         webDaoAdapter.consummateAddOperation(energyEquip);
         synchronized (this) {
             if (StringUtils.isBlank(energyEquip.getEquipNo())) {
@@ -128,6 +132,7 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         }
         //存储设备校验值
         EnergyEquipVerify newEnergyEquipVerify = getNewEnergyEquipVerify(energyEquipDTO, energyEquip.getId());
+
         iEnergyEquipVerifyService.save(newEnergyEquipVerify);
 
         //获取设备
@@ -142,6 +147,8 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         EnergyEquip energyEquip = new EnergyEquip();
         BeanUtils.copyProperties(energyEquipDTO, energyEquip);
         webDaoAdapter.consummateUpdateOperation(energyEquip);
+        //校验是否绑定水电表 和 重复绑定
+        checkBindNodeId(energyEquip);
         updateByPrimaryKeySelective(energyEquip);
 
         EnergyEquipVO old = getEnergyEquipById(energyEquipDTO.getId());
@@ -160,8 +167,8 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
     @Override
     public NodeChoiceVO nodes() {
         NodeChoiceVO result = new NodeChoiceVO();
-        result.setElectricNodes(hvacNodeDao.getHvacNodeByInstanceNumber(HvacConstant.ELECTRIC_METER_PORT));
-        result.setWaterNodes(hvacNodeDao.getHvacNodeByInstanceNumber(HvacConstant.WATER_METER_PORT));
+        result.setElectricNodes(hvacNodeDao.getHvacNodeByInstanceNumberWithoutEquip(HvacConstant.ELECTRIC_METER_PORT));
+        result.setWaterNodes(hvacNodeDao.getHvacNodeByInstanceNumberWithoutEquip(HvacConstant.WATER_METER_PORT));
         return result;
     }
 
@@ -175,8 +182,9 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
             energyEquipVerifyDao.updateUnEnableByEquipId(energyEquipDTO.getId(), webDaoAdapter.getUserCode(), now);
             EnergyEquipVerify newEnergyEquipVerify = getNewEnergyEquipVerify(energyEquipDTO, energyEquipDTO.getId());
             iEnergyEquipVerifyService.saveSelective(newEnergyEquipVerify);
+            return true;
         }
-        return false;
+        throw new BusinessException("校验时间和校验值相同");
     }
 
 
@@ -197,6 +205,16 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
     private boolean checkUnique(String equipName, String equipNo){
         EnergyEquip energyEquip = energyEquipDao.selectUnique(equipName, equipNo);
         return energyEquip == null;
+    }
+
+    private void checkBindNodeId(EnergyEquip energyEquip){
+        if(energyEquip.getNodeId() == null){
+            throw new BusinessException("未选择具体水电表节点");
+        }
+        List<EnergyEquip> energyEquips = energyEquipDao.getEnergyEquipByNodeId(energyEquip.getNodeId(), energyEquip.getId());
+        if(CollectionUtils.isNotEmpty(energyEquips)){
+            throw new BusinessException("该水电表节点已绑定设备,请选择其他水电表节点");
+        }
     }
 
     /**

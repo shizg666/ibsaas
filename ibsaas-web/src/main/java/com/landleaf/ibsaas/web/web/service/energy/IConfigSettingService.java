@@ -7,6 +7,7 @@ import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -49,6 +50,13 @@ public interface IConfigSettingService extends IBaseService<ConfigSetting> {
      * @return
      */
     List<ChoiceButton> getChoiceButtons(String type);
+
+    /**
+     *  返回分类选择框
+     * @param type
+     * @return
+     */
+    Map<String, List<ChoiceButton>> getEquipClassificationChoiceButton(String type);
 
     List<ConfigSettingVO> selectList();
 }

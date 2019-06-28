@@ -41,7 +41,7 @@ public class HydraulicModuleWebController extends BasicController {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>HydraulicModuleWebController.overview入参为:空");
 //        List<HydraulicModuleVO> hydraulicModuleVOList = iHydraulicModuleWebService.overview();
         Map<String, Map<String, HydraulicModuleVO>> hydraulicModuleVOList = iHydraulicModuleWebService.totalOverview();
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<HydraulicModuleWebController.overview出参为:{}",hydraulicModuleVOList);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<HydraulicModuleWebController.overview出参为:{}",hydraulicModuleVOList.size());
         return returnSuccess(hydraulicModuleVOList);
     }
 

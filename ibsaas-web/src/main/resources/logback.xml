@@ -7,38 +7,40 @@
 	<property name="APP_Name" value="ibsaas-web" />
 	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" />
 	<contextName>${APP_Name}</contextName>
-	
+
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
 			<pattern>%d{yyyyMMddHHmmss}|%-5level| %logger{0}.%M | %msg | %thread %n</pattern>
 		</encoder>
-	</appender>  
-	
-  <appender name="FILELOG" class="ch.qos.logback.core.rolling.RollingFileAppender">   
+	</appender>
+
+  <appender name="FILELOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
         　<fileNamePattern>${APP_Name}_logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
 　　　　　<maxHistory>30</maxHistory>
     </rollingPolicy>
     <encoder>
-      <pattern>%d{yyMMddHHmmss.SSS}|%-5level| %msg%n</pattern>   
-    </encoder>   
+      <pattern>%d{yyMMddHHmmss.SSS}|%-5level| %msg%n</pattern>
+    </encoder>
   </appender>
-  
-    <appender name="RUNLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">   
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">   
-      <fileNamePattern>${catalina.home}/logs/run.%d{yyyyMMdd}.log</fileNamePattern>   
-      <maxHistory>7</maxHistory>    
-    </rollingPolicy>   
-    <encoder>   
-      <pattern>%d{yyMMddHHmmss.SSS}|%-5level| %msg%n</pattern>   
-    </encoder>   
+
+    <appender name="RUNLOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${catalina.home}/logs/run.%d{yyyyMMdd}.log</fileNamePattern>
+      <maxHistory>7</maxHistory>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyMMddHHmmss.SSS}|%-5level| %msg%n</pattern>
+    </encoder>
   </appender>
-  
+
+    <logger name="com.landleaf.ibsaas.common.dao" level="INFO" />
+
 	<logger name="logback">
-		<appender-ref ref="STDOUT" />  
+		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILELOG" />
 	</logger>
-    
+
 	<root level="info">
 		<appender-ref ref="STDOUT" />
 	</root>

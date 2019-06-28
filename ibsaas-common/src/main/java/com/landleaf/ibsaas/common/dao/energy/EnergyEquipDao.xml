@@ -99,6 +99,7 @@
         <if test="equipClassification!=null and equipClassification!=''">
             AND tcs_4.setting_code=#{equipClassification}
         </if>
+        ORDER BY tee.id
     </select>
 
     <select id="getDataEnergyEquipSearchVO"
@@ -144,5 +145,15 @@
             AND ted.energy_data_time=#{energyDataTime}
         </if>
         ORDER BY ted.energy_data_time DESC
+    </select>
+    <select id="getEnergyEquipByNodeId" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyEquip">
+        SELECT id FROM t_energy_equip
+        WHERE is_active=1
+        <if test="nodeId!=null and nodeId!=''">
+            AND node_id=#{nodeId}
+        </if>
+        <if test="id!=null and id!=''">
+            AND id!=#{id}
+        </if>
     </select>
 </mapper>

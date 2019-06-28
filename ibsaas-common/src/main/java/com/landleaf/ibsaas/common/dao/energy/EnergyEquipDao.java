@@ -52,4 +52,12 @@ public interface EnergyEquipDao extends BaseDao<EnergyEquip> {
      * @return
      */
     List<EnergyEquipSearchVO> getDataEnergyEquipSearchVO(EnergyEquipSearchDTO energyEquipSearchDTO);
+
+    /**
+     * 根据节点查询设备
+     * @param nodeId
+     * @param id
+     * @return
+     */
+    List<EnergyEquip> getEnergyEquipByNodeId(@Param("nodeId") String nodeId, @Param("id") String id);
 }

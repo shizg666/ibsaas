@@ -37,7 +37,7 @@ public class NewFanWebController extends BasicController {
     public Response overview(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.overview入参为:空");
         List<NewFanVO> newFanVOList = iNewFanWebService.overview();
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<NewFanController.overview出参为:{}",newFanVOList);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<NewFanController.overview出参为:{}",newFanVOList.size());
         return returnSuccess(newFanVOList);
     }
 

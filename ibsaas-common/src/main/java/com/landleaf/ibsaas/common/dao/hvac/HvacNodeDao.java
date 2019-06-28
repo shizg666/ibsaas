@@ -29,6 +29,12 @@ public interface HvacNodeDao extends BaseDao<HvacNode> {
      * @return
      */
     List<HvacNodeVO> getHvacNodeByInstanceNumber(@Param("deviceInstanceNumber") Integer deviceInstanceNumber);
+    /**
+     * 根据设备点位获取设备节点数据没绑定设备的
+     * @param deviceInstanceNumber
+     * @return
+     */
+    List<HvacNodeVO> getHvacNodeByInstanceNumberWithoutEquip(@Param("deviceInstanceNumber") Integer deviceInstanceNumber);
 
     /**
      * 根据节点id获取某个节点的数据

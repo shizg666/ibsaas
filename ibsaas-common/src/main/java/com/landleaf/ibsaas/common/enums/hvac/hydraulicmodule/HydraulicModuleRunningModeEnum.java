@@ -16,8 +16,8 @@ public enum  HydraulicModuleRunningModeEnum {
     /**
      * 运行模式
      */
-    CLOD_MODE(1, "制冷"),
-    HOT_MODE(2, "制热"),
+    CLOD_MODE(2, "制冷"),
+    HOT_MODE(1, "制热"),
     AUTO_MODE(3, "自动"),
 
     ;

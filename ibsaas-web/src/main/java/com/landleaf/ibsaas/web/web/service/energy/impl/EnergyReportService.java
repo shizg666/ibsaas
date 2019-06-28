@@ -57,6 +57,10 @@ public class EnergyReportService implements IEnergyReportService {
     private static final BigDecimal DAY_OF_YEAR = new BigDecimal(365);
 
     private static final BigDecimal DAY_OF_YEAR_OR = new BigDecimal(366);
+    /**
+     * 1L = 0.001立方米的水
+     */
+    private static final BigDecimal L_TO_M3 = new BigDecimal(0.001);
 
     @Autowired
     private EnergyDataDao energyDataDao;
@@ -122,7 +126,7 @@ public class EnergyReportService implements IEnergyReportService {
             ConfigSettingVO lgcAcreageConfig = configSettingDao.getByTypeAndCode(LGC, PEOPLE_ATTENDANCE);
             BigDecimal peopleAttendance = new BigDecimal(lgcAcreageConfig.getSettingValue());
             //国标到现在的能耗
-            staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption);
+            staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption).multiply(L_TO_M3);
             //节能数
             savingConsumption = staConsumption.subtract(curConsumption);
             //节能率
@@ -166,14 +170,14 @@ public class EnergyReportService implements IEnergyReportService {
                 if(now.getYear() == Integer.valueOf(ed.getTimeInterval())){
                     BigDecimal standardConsumption = standardMap.get(ed.getTimeInterval());
                     //国标到现在的能耗
-                    BigDecimal staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption);
+                    BigDecimal staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption).multiply(L_TO_M3);
                     comp.add(standardMap.get(ed.getTimeInterval()).toString());
                     current.add(staConsumption.toString());
 
 //                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), staConsumption.toString()));
 
                 }else {
-                    BigDecimal consumption = ed.getIntervalValue().multiply(getDayOfYear(now.getYear())).multiply(peopleAttendance);
+                    BigDecimal consumption = ed.getIntervalValue().multiply(getDayOfYear(now.getYear())).multiply(peopleAttendance).multiply(L_TO_M3);
 
                     comp.add(standardMap.get(ed.getTimeInterval()).toString());
                     current.add(consumption.toString());
