@@ -42,6 +42,13 @@ public interface IEnergyEquipService extends IBaseService<EnergyEquip> {
      */
     NodeChoiceVO nodes();
 
+
+    /**
+     * 获取所有电表水表节点
+     * @return
+     */
+    NodeChoiceVO nodesEx();
+
     /**
      * 更新校验信息
      * @param energyEquipDTO

@@ -29,7 +29,7 @@
         SELECT
         <choose>
             <when test="dateType == 1">
-                date_format(energy_data_time, '%Y-%m-%d %H:%i:%s')
+                date_format(energy_data_time, '%Y-%m-%d %H:%i')
             </when>
             <when test="dateType == 2">
                 energy_data_date
@@ -56,7 +56,7 @@
             </otherwise>
         </choose>
         <if test="startTime!=null and endTime!=null">
-            AND energy_data_time &gt; #{startTime} AND energy_data_time &lt;= #{endTime}
+            AND energy_data_time &gt;= #{startTime} AND energy_data_time &lt; #{endTime}
         </if>
         <choose>
             <when test="dateType == 1">
@@ -119,21 +119,9 @@
     <select id="getEnergyRanking" resultType="com.landleaf.ibsaas.common.domain.energy.HlVlBO">
         SELECT
         tcs.setting_value AS x,
-        SUM(ted.energy_data_increase_value) AS y
-        FROM t_energy_data ted
-        LEFT JOIN t_energy_equip tee ON ted.node_id=tee.node_id AND tee.is_active=1
-        LEFT JOIN t_config_setting tcs
-        <choose>
-            <when test="energyConfigSetting=='equip_area'">
-                ON tee.equip_area=tcs.setting_code
-            </when>
-            <when test="energyConfigSetting=='equip_classification'">
-                ON tee.equip_classification=tcs.setting_code
-            </when>
-        </choose>
-        AND tcs.setting_type=#{energyConfigSetting} AND tcs.is_active=1
-        WHERE ted.is_active=1
-        AND ted.energy_data_source=1
+        SUM(IFNULL(ted.energy_data_increase_value,0)) AS y
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_data ted ON ted.node_id=tee.node_id AND ted.is_active=1
         <choose>
             <when test="equipType == 1">
                 AND ted.energy_data_type=#{equipType}
@@ -144,10 +132,22 @@
             </otherwise>
         </choose>
         <if test="startTime!=null and endTime!=null">
-            AND ted.energy_data_time &gt; #{startTime} AND energy_data_time &lt;= #{endTime}
+            AND ted.energy_data_time &gt;= #{startTime} AND energy_data_time &lt; #{endTime}
         </if>
+        AND ted.energy_data_source=1
+        LEFT JOIN t_config_setting tcs
+        <choose>
+            <when test="energyConfigSetting=='equip_area'">
+                ON tee.equip_area=tcs.setting_code
+            </when>
+            <when test="energyConfigSetting=='equip_classification'">
+                ON tee.equip_classification=tcs.setting_code
+            </when>
+        </choose>
+        AND tcs.setting_type=#{energyConfigSetting} AND tcs.is_active=1
+        WHERE tee.is_active=1
         GROUP BY tcs.setting_value
-        ORDER BY SUM(ted.energy_data_increase_value) DESC
+        ORDER BY SUM(IFNULL(ted.energy_data_increase_value,0)) DESC
         LIMIT #{lmt}
     </select>
     <select id="getEnergyByDate" resultType="java.math.BigDecimal">
@@ -166,7 +166,7 @@
             </otherwise>
         </choose>
         <if test="startTime!=null and endTime!=null">
-            AND energy_data_time &gt; #{startTime} AND energy_data_time &lt;= #{endTime}
+            AND energy_data_time &gt;= #{startTime} AND energy_data_time &lt; #{endTime}
         </if>
     </select>
     <select id="getEnergyByYear" resultType="java.math.BigDecimal">

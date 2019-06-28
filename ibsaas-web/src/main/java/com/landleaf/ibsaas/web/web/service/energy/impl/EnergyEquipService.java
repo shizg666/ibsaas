@@ -172,6 +172,14 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         return result;
     }
 
+    @Override
+    public NodeChoiceVO nodesEx() {
+        NodeChoiceVO result = new NodeChoiceVO();
+        result.setElectricNodes(hvacNodeDao.getHvacNodeByInstanceNumber(HvacConstant.ELECTRIC_METER_PORT));
+        result.setWaterNodes(hvacNodeDao.getHvacNodeByInstanceNumber(HvacConstant.WATER_METER_PORT));
+        return result;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean updateEnergyEquipVerifyById(EnergyEquipDTO energyEquipDTO) {

@@ -16,8 +16,11 @@ import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
 import com.landleaf.ibsaas.common.enums.energy.EnergyTypeEnum;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.common.enums.energy.QueryTypeEnum;
+import com.landleaf.ibsaas.common.utils.date.DateUtil;
+import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import com.landleaf.ibsaas.web.web.service.energy.IEnergyReportService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +28,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -70,16 +70,30 @@ public class EnergyReportService implements IEnergyReportService {
 
     @Override
     public HlVl overviewLineChart(EnergyReportExDTO energyReportDTO) {
+        EnergyReportQueryVO reportQueryVO = convertimeByDateType(energyReportDTO);
+        energyReportDTO = dealDate(energyReportDTO);
         List<HlVlBO> hlVlBOList = energyDataDao.overviewLineChart(energyReportDTO);
-        HlVl hlVl = getHlVl(hlVlBOList);
-        hlVl.setXs(dealXTime((List<String>) hlVl.getXs(), energyReportDTO.getDateType()));
-        return hlVl;
+        List<String> xs = getXs(CalendarUtil.str2Date(reportQueryVO.getStartTime()), CalendarUtil.str2Date(reportQueryVO.getEndTime()), energyReportDTO.getDateType());
+        List<String> ys = new ArrayList<>();
+        Map<String, String> map = hlVlBOList.stream().collect(Collectors.toMap(HlVlBO::getX, HlVlBO::getY));
+        xs.forEach( k -> {
+            String v = map.get(k);
+            if(StringUtils.isBlank(v)){
+                v = "0";
+            }
+            ys.add(v);
+        });
+        return new HlVl(xs, ys);
     }
 
     @Override
     public HlVl overviewHistogram(EnergyReportExDTO energyReportDTO) {
         //现值
+        EnergyReportQueryVO reportQueryVO = convertimeByDateType(energyReportDTO);
+        energyReportDTO = dealDate(energyReportDTO);
+        Integer dateType = energyReportDTO.getDateType();
         List<HlVlBO> hlVlBOS = energyDataDao.overviewLineChart(energyReportDTO);
+        Map<String, String> currentMap = hlVlBOS.stream().collect(Collectors.toMap(HlVlBO::getX, HlVlBO::getY));
         //往前挪一个维度
         EnergyReportExDTO query = offsetEnergyReportDTO(energyReportDTO);
         Map<String, String> map = new HashMap<>(64);
@@ -92,17 +106,31 @@ public class EnergyReportService implements IEnergyReportService {
             map.putAll(tempMap);
         }
 
-        List<String> xs = new ArrayList<>();
+        List<String> xs = getXs(CalendarUtil.str2Date(reportQueryVO.getStartTime()), CalendarUtil.str2Date(reportQueryVO.getEndTime()), energyReportDTO.getDateType());
         List<String> comp = new ArrayList<>();
         List<String> current = new ArrayList<>();
 //        List<ProportionalData> ys = new ArrayList<>();
-        hlVlBOS.forEach( h -> {
-            xs.add(h.getX());
-            String upPrevX = getUpPrevX(h.getX(), energyReportDTO.getDateType());
-            comp.add(map.get(upPrevX));
-            current.add(h.getY());
-//            ys.add(new ProportionalData(map.get(upPrevX), h.getY()));
+        xs.forEach( k -> {
+            String v = currentMap.get(k);
+            if(StringUtils.isBlank(v)){
+                v = "0";
+            }
+            current.add(v);
+            String upPrevX = getUpPrevX(k, dateType);
+            String upPrevV = map.get(upPrevX);
+            if(StringUtils.isBlank(upPrevV)){
+                upPrevV = "0";
+            }
+            comp.add(upPrevV);
         });
+        
+//        hlVlBOS.forEach( h -> {
+//            xs.add(h.getX());
+//            String upPrevX = getUpPrevX(h.getX(), energyReportDTO.getDateType());
+//            comp.add(map.get(upPrevX));
+//            current.add(h.getY());
+////            ys.add(new ProportionalData(map.get(upPrevX), h.getY()));
+//        });
         ProportionalDataList ys = new ProportionalDataList(comp, current);
         return new HlVl(dealXTime(xs,energyReportDTO.getDateType()), ys);
     }
@@ -111,6 +139,7 @@ public class EnergyReportService implements IEnergyReportService {
 
     @Override
     public EnergySavingEffectVO overviewSavingEffect(EnergyReportExDTO energyReportDTO) {
+        energyReportDTO = dealDate(energyReportDTO);
         LocalDateTime now = LocalDateTime.now();
         //当年能耗
         BigDecimal curConsumption = energyDataDao.getEnergyByYear(energyReportDTO.getEquipType(), now.getYear());
@@ -150,6 +179,7 @@ public class EnergyReportService implements IEnergyReportService {
 
     @Override
     public HlVl overviewSavingEffectLineChart(EnergyReportExDTO energyReportDTO) {
+        energyReportDTO = dealDate(energyReportDTO);
         LocalDateTime now = LocalDateTime.now();
         List<IntervalData> energyData = energyDataDao.getEnergyDateByTime(energyReportDTO.getEquipType());
         List<IntervalData> standardData = configSettingDao.getIntervalStandardConsumption(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()));
@@ -217,28 +247,31 @@ public class EnergyReportService implements IEnergyReportService {
 
     @Override
     public HlVl overviewRankingClassification(EnergyReportExDTO energyReportDTO) {
+        energyReportDTO = dealDate(energyReportDTO);
         List<HlVlBO> hlVlBOList = energyDataDao.getEnergyRanking(
                 energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(),
                 energyReportDTO.getEquipType(),
                 EQUIP_CLASSIFICATION,
                 5);
-        return getHlVl(hlVlBOList);
+        return getHlVlEx(hlVlBOList);
     }
 
     @Override
     public HlVl overviewRankingArea(EnergyReportExDTO energyReportDTO) {
+        energyReportDTO = dealDate(energyReportDTO);
         List<HlVlBO> hlVlBOList = energyDataDao.getEnergyRanking(
                 energyReportDTO.getStartTime(),
                 energyReportDTO.getEndTime(),
                 energyReportDTO.getEquipType(),
                 EQUIP_AREA,
                 5);
-        return getHlVl(hlVlBOList);
+        return getHlVlEx(hlVlBOList);
     }
 
     @Override
     public String overviewYoy(EnergyReportExDTO energyReportDTO) {
+        energyReportDTO = dealDate(energyReportDTO);
         BigDecimal curValue = energyDataDao.getEnergyByDate(energyReportDTO);
         EnergyReportExDTO query = offsetEnergyReportDTO(energyReportDTO);
         BigDecimal prevValue = null;
@@ -247,15 +280,18 @@ public class EnergyReportService implements IEnergyReportService {
             prevValue = energyDataDao.getEnergyByDate(query);
         }
         prevValue = prevValue == null? BigDecimal.ZERO : prevValue;
+        curValue = curValue == null ? BigDecimal.ZERO : curValue;
         return getProportion(prevValue, curValue);
     }
 
     @Override
     public String overviewQoq(EnergyReportExDTO energyReportDTO) {
+        energyReportDTO = dealDate(energyReportDTO);
         BigDecimal curValue = energyDataDao.getEnergyByDate(energyReportDTO);
         EnergyReportExDTO query = offsetParallelEnergyReportDTO(energyReportDTO);
         BigDecimal prevValue = energyDataDao.getEnergyByDate(query);
         prevValue = prevValue == null? BigDecimal.ZERO : prevValue;
+        curValue = curValue == null ? BigDecimal.ZERO : curValue;
         return getProportion(prevValue, curValue);
     }
 
@@ -317,9 +353,11 @@ public class EnergyReportService implements IEnergyReportService {
      */
     private String getUpPrevX(String x, Integer dateType){
         if(DimensionTypeEnum.HOUR.getType() == dateType){
-            return CalendarUtil.date2Str(
-                    CalendarUtil.prevDay(
-                            CalendarUtil.str2Date(x)));
+            x = x + ":00";
+            String steDate = CalendarUtil.date2Str(
+                                CalendarUtil.prevDay(
+                                        CalendarUtil.str2Date(x)));
+            return steDate.substring(0, steDate.length() - 3);
         }
         if(DimensionTypeEnum.DAY.getType() == dateType){
             return CalendarUtil.date2StrPattern(
@@ -337,13 +375,153 @@ public class EnergyReportService implements IEnergyReportService {
         return null;
     }
 
+    public EnergyReportQueryVO convertimeByDateType(EnergyReportExDTO energyReportExDTO) {
+        EnergyReportQueryVO reportQueryVO = new EnergyReportQueryVO();
+        String startTime = CalendarUtil.date2Str(energyReportExDTO.getStartTime());
+        String endTime = CalendarUtil.date2Str(energyReportExDTO.getEndTime());
+        Integer dateType = energyReportExDTO.getDateType();
+        //根据维度生成
+        switch (dateType) {
+            case 1:
+                //时
+                startTime = DateUtils.convert(DateUtils.getStartDateForHour(DateUtils.convert(startTime)));
+                endTime = DateUtils.convert(DateUtils.getEndDateForHour(DateUtils.convert(endTime)));
+                break;
+            case 2:
+                //日
+                startTime = DateUtils.convert(DateUtils.getStartDateForDay(DateUtils.convert(startTime)));
+                endTime = DateUtils.convert(DateUtils.getEndDateForDay(DateUtils.convert(endTime)));
+                break;
+            case 3:
+                //月
+                startTime = DateUtils.convert(DateUtils.getStartDateForMonth(DateUtils.convert(startTime)));
+                endTime = DateUtils.convert(DateUtils.getEndDateForMonth(DateUtils.convert(endTime)));
+                break;
+            case 4:
+                //年
+                startTime = DateUtils.convert(DateUtils.getStartDateForYear(DateUtils.convert(startTime)));
+                endTime = DateUtils.convert(DateUtils.getEndDateForYear(DateUtils.convert(endTime)));
+                break;
+        }
+        reportQueryVO.setStartTime(startTime);
+        reportQueryVO.setEndTime(endTime);
+        return reportQueryVO;
+    }
+
+    /**
+     * 根据时间区间获取x轴
+     * @return
+     */
+    private List<String> getXs(Date start, Date end, Integer dateType){
+        List<String> result = Lists.newArrayList();
+        String startTime = CalendarUtil.date2Str(start);
+        String endTime = CalendarUtil.date2Str(end);
+        List<Date> dateList;
+        //根据维度生成
+        switch (dateType) {
+            case 1:
+                //时
+                dateList = DateUtils.getHourList(startTime, endTime);
+                for (Date date : dateList) {
+                    result.add(DateUtil.format(date, "yyyy-MM-dd HH:mm"));
+                }
+                break;
+            case 2:
+                //日
+                dateList = DateUtils.getDayList(startTime, endTime);
+                for (Date date : dateList) {
+                    result.add(DateUtil.format(date, "yyyy-MM-dd"));
+                }
+                break;
+            case 3:
+                //月
+                dateList = DateUtils.getMonthList(startTime, endTime);
+                for (Date date : dateList) {
+                    result.add(DateUtil.format(date, "yyyy-MM"));
+                }
+                break;
+            case 4:
+                //年
+                dateList = DateUtils.getYearList(startTime, endTime);
+                for (Date date : dateList) {
+                    result.add(DateUtil.format(date, "yyyy"));
+                }
+                break;
+        }
+        return result;
+    }
+
+    /**
+     * 处理前端时间
+     * @param energyReportExDTO
+     */
+    public EnergyReportExDTO dealDate(EnergyReportExDTO energyReportExDTO){
+        EnergyReportExDTO result = new EnergyReportExDTO();
+        BeanUtils.copyProperties(energyReportExDTO, result);
+        //后一时间应向后推一个维度的值
+        if(DimensionTypeEnum.HOUR.getType() == energyReportExDTO.getDateType()){
+
+        }
+        if(DimensionTypeEnum.DAY.getType() == energyReportExDTO.getDateType()){
+            result.setEndTime(CalendarUtil.nextDay(energyReportExDTO.getEndTime()));
+        }
+        if(DimensionTypeEnum.MONTH.getType() == energyReportExDTO.getDateType()){
+            result.setEndTime(CalendarUtil.nextMonth(energyReportExDTO.getEndTime()));
+        }
+        if(DimensionTypeEnum.YEAR.getType() == energyReportExDTO.getDateType()){
+            result.setEndTime(CalendarUtil.nextYear(energyReportExDTO.getEndTime()));
+        }
+        return result;
+    }
+
+
+    /**
+     * 处理前端时间
+     * @param energyReportExDTO
+     */
+    public Date dealEndTime(EnergyReportExDTO energyReportExDTO){
+        //后一时间应向后推一个维度的值
+        if(DimensionTypeEnum.HOUR.getType() == energyReportExDTO.getDateType()){
+
+        }
+        if(DimensionTypeEnum.DAY.getType() == energyReportExDTO.getDateType()){
+           return CalendarUtil.nextDay(energyReportExDTO.getEndTime());
+        }
+        if(DimensionTypeEnum.MONTH.getType() == energyReportExDTO.getDateType()){
+            return CalendarUtil.nextMonth(energyReportExDTO.getEndTime());
+        }
+        if(DimensionTypeEnum.YEAR.getType() == energyReportExDTO.getDateType()){
+            return CalendarUtil.nextYear(energyReportExDTO.getEndTime());
+        }
+        return energyReportExDTO.getEndTime();
+    }
 
     /**
      * 根据查询结果变更返回值
      * @param hlVlBOList
      * @return
      */
-    private HlVl getHlVl(List<HlVlBO> hlVlBOList) {
+    private HlVl getHlVl(List<HlVlBO> hlVlBOList, EnergyReportExDTO energyReportExDTO) {
+        List<String> xs = getXs(energyReportExDTO.getStartTime(), energyReportExDTO.getEndTime(), energyReportExDTO.getDateType());
+        List<String> ys = new ArrayList<>();
+        Map<String, String> map = hlVlBOList.stream().collect(Collectors.toMap(HlVlBO::getX, HlVlBO::getY));
+        xs.forEach( k -> {
+            String v = map.get(k);
+            if(StringUtils.isBlank(v)){
+                v = "0";
+            }
+            ys.add(v);
+        });
+        return new HlVl(xs, ys);
+    }
+
+
+    /**
+     * 根据查询结果变更返回值
+     * @param hlVlBOList
+     * @return
+     */
+    private HlVl getHlVlEx(List<HlVlBO> hlVlBOList) {
         List<String> xs = new ArrayList<>(), ys = new ArrayList<>();
         hlVlBOList.forEach( h -> {
             xs.add(h.getX());

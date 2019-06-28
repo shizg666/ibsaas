@@ -39,4 +39,11 @@ public class EnergyEquipSearchDTO  extends BaseDTO implements Serializable {
      */
     @ApiModelProperty("抄表时间")
     private Date energyDataTime;
+
+
+    @ApiModelProperty("抄表开始时间")
+    private Date startTime;
+
+    @ApiModelProperty("抄表结束时间")
+    private Date endTime;
 }

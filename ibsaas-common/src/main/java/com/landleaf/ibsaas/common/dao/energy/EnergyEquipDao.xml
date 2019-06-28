@@ -144,6 +144,9 @@
         <if test="energyDataTime!=null">
             AND ted.energy_data_time=#{energyDataTime}
         </if>
+        <if test="startTime!=null and endTime!=null">
+            AND ted.energy_data_time BETWEEN #{startTime} AND #{endTime}
+        </if>
         ORDER BY ted.energy_data_time DESC
     </select>
     <select id="getEnergyEquipByNodeId" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyEquip">

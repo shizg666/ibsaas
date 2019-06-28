@@ -123,4 +123,13 @@ public class EnergyEquipController extends BasicController {
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyEquipController.nodes出参为:{}", nodeChoiceVO);
         return returnSuccess(nodeChoiceVO);
     }
+
+    @GetMapping("/nodes-ex")
+    @ApiOperation("获取所有电表和水表节点")
+    public Response nodesEx(){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>EnergyEquipController.nodes入参为:空");
+        NodeChoiceVO nodeChoiceVO = iEnergyEquipService.nodesEx();
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<EnergyEquipController.nodes出参为:{}", nodeChoiceVO);
+        return returnSuccess(nodeChoiceVO);
+    }
 }
