@@ -16,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -74,6 +77,18 @@ public class ConfigSettingService extends AbstractBaseService<ConfigSettingDao, 
         return configSettingVOList.stream()
                 .map(cs -> new ChoiceButton(cs.getSettingCode(), cs.getSettingValue()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, List<ChoiceButton>> getEquipClassificationChoiceButton(String type) {
+        List<ConfigSettingVO> configSettingVOList = typeList(type);
+        Map<String, List<ChoiceButton>> result = new HashMap<>(8);
+        configSettingVOList.forEach( cs -> {
+            result.computeIfAbsent(cs.getCharacter1(), k -> new ArrayList<>());
+            result.get(cs.getCharacter1()).add(new ChoiceButton(cs.getSettingCode(), cs.getSettingValue()));
+        });
+
+        return result;
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.landleaf.ibsaas.common.dao.hvac.HvacFieldDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacPointDao;
 import com.landleaf.ibsaas.common.domain.energy.ConfigSetting;
+import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 import com.landleaf.ibsaas.common.domain.hvac.HvacField;
 import com.landleaf.ibsaas.common.domain.hvac.HvacNode;
@@ -24,8 +25,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -244,17 +247,40 @@ public class IbsaasClientHvacApplicationTests {
 
     @Test
     public void dateRecord(){
-        iEnergyDataService.dataRecord(new Date());
+        Date date = CalendarUtil.str2Date("2019-06-27 16:00:00");
+        iEnergyDataService.dataRecord(date);
+    }
+
+    @Test
+    public void insertRecord(){
+        Date date = CalendarUtil.str2Date("2019-06-28 18:00:00");
+        EnergyData record = new EnergyData();
+        record.setNodeId("245880983650439168");
+        record.setEnergyDataTime(date);
+        record.setEnergyDataDate(date);
+        record.setEnergyDataMonth("2019-06");
+        record.setEnergyDataYear(2019);
+        record.setEnergyDataValue(new BigDecimal(15488));
+        record.setEnergyDataIncreaseValue(new BigDecimal(0));
+        record.setEnergyDataType(2);
+        record.setEnergyDataSource(1);
+        daoAdapter.consummateAddOperation(record);
+        try {
+            iEnergyDataService.saveSelective(record);
+        } catch (DuplicateKeyException e) {
+            e.printStackTrace();
+        }
+        System.out.println(11111);
     }
 
 
     @Test
     public void dataOffset(){
         //补能耗差
-        Date date = CalendarUtil.str2Date("2019-06-27 11:00:00");
+        Date date = CalendarUtil.str2Date("2019-06-28 12:00:00");
 
 
-        Date date2 = CalendarUtil.str2Date("2019-06-27 15:00:00");
+        Date date2 = CalendarUtil.str2Date("2019-06-28 17:00:00");
         while (date.compareTo(date2) <= 0){
             iEnergyDataService.dataRecord(date);
             date = CalendarUtil.nextHour(date);

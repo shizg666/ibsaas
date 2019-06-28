@@ -137,7 +137,7 @@
         <choose>
             <when test="equipType == 1">
                 AND ted.energy_data_type=#{equipType}
-                AND ted.node_id=245638168865542144
+                AND ted.node_id!=245638168865542144
             </when>
             <otherwise>
                 AND ted.energy_data_type=#{equipType}

@@ -34,7 +34,7 @@ public class SensorWebController extends BasicController {
     public Response overview(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>SensorWebController.overview入参为:空");
         List<SensorVO> sensorVOList = iSensorWebService.overview();
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<SensorWebController.overview出参为:{}",sensorVOList);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<SensorWebController.overview出参为:{}",sensorVOList.size());
         return returnSuccess(sensorVOList);
     }
 

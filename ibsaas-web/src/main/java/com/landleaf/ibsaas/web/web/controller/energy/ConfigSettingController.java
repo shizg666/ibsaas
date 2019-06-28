@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -112,7 +113,8 @@ public class ConfigSettingController extends BasicController {
     @ApiOperation("设备所属分项下拉菜单")
     public Response equipClassification(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>ConfigSettingController.equipClassification入参为:空");
-        List<ChoiceButton> choiceButtons = iConfigSettingService.getChoiceButtons("equip_classification");
+//        List<ChoiceButton> choiceButtons = iConfigSettingService.getChoiceButtons("equip_classification");
+        Map<String, List<ChoiceButton>> choiceButtons = iConfigSettingService.getEquipClassificationChoiceButton("equip_classification");
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<ConfigSettingController.equipClassification出参为:{}",choiceButtons);
         return returnSuccess(choiceButtons);
     }

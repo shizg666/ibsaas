@@ -40,7 +40,7 @@ public class FanCoilWebController extends BasicController {
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>FanCoilWebController.overview入参为:空");
 //        List<FanCoilVO> fanCoilVOList = iFanCoilWebService.overview();
         Map<String, Map<String, FanCoilVO>> fanCoilVOList = iFanCoilWebService.totalOverView();
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.overview出参为:{}",fanCoilVOList);
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<FanCoilWebController.overview出参为:{}",fanCoilVOList.size());
         return returnSuccess(fanCoilVOList);
     }
 

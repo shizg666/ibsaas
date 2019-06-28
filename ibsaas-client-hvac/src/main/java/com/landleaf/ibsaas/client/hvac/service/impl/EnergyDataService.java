@@ -14,6 +14,7 @@ import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -78,7 +79,12 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
 
             EnergyData allreadyData = energyDataDao.getEnergyDataByNodeIdAndTime(record);
             if(allreadyData == null) {
-                saveSelective(record);
+                try {
+                    saveSelective(record);
+                } catch (DuplicateKeyException e) {
+                    e.printStackTrace();
+                    log.warn("该电表记录已存在");
+                }
             }
             result.add(record);
         });
@@ -112,7 +118,12 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             daoAdapter.consummateAddOperation(record);
             EnergyData allreadyData = energyDataDao.getEnergyDataByNodeIdAndTime(record);
             if(allreadyData == null) {
-                saveSelective(record);
+                try {
+                    saveSelective(record);
+                } catch (DuplicateKeyException e) {
+                    e.printStackTrace();
+                    log.warn("该水表记录已存在");
+                }
             }
             result.add(record);
         });
