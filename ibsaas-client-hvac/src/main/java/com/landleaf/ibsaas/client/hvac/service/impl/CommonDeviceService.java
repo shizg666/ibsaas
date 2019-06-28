@@ -227,17 +227,17 @@ public class CommonDeviceService implements ICommonDeviceService {
 
 
         //水力模块/毛细管特殊逻辑
-        if("hmMachRunningMode".equals(fieldName)||"hmPdewRunningMode".equals(fieldName)){
-            List<HvacNodeFieldVO> hnfs = hvacNodeDao.getHvacNodeFieldVOList(id, new ArrayList<String>() {{
-                add("hmMachRunningMode");
-                add("hmPdewRunningMode");
-            }});
-            hnfs.forEach( hnf -> BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
-                    BacnetInfoHolder.REMOTE_DEVICE_MAP.get(hnf.getDeviceInstanceNumber()),
-                    new ObjectIdentifier(BacnetObjectEnum.getObjectType(hnf.getBacnetObjectType()),hnf.getInstanceNumber()),
-                    value));
-            return true;
-        }
+//        if("hmMachRunningMode".equals(fieldName)||"hmPdewRunningMode".equals(fieldName)){
+//            List<HvacNodeFieldVO> hnfs = hvacNodeDao.getHvacNodeFieldVOList(id, new ArrayList<String>() {{
+//                add("hmMachRunningMode");
+//                add("hmPdewRunningMode");
+//            }});
+//            hnfs.forEach( hnf -> BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
+//                    BacnetInfoHolder.REMOTE_DEVICE_MAP.get(hnf.getDeviceInstanceNumber()),
+//                    new ObjectIdentifier(BacnetObjectEnum.getObjectType(hnf.getBacnetObjectType()),hnf.getInstanceNumber()),
+//                    value));
+//            return true;
+//        }
 
         return false;
     }
