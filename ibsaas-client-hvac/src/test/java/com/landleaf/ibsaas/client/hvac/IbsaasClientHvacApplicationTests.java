@@ -169,13 +169,23 @@ public class IbsaasClientHvacApplicationTests {
 //            hvacPointDao.insertSelective(temp);
 //            hvacPointDao.delete(hp);
 //        });
-        List<ConfigSetting> configSettings = configSettingDao.getCongfigSettingLmt( 300);
-        configSettings.forEach(hp -> {
-            ConfigSetting temp = new ConfigSetting();
-            BeanUtils.copyProperties(hp, temp);
+//        List<ConfigSetting> configSettings = configSettingDao.getCongfigSettingLmt( 300);
+//        configSettings.forEach(hp -> {
+//            ConfigSetting temp = new ConfigSetting();
+//            BeanUtils.copyProperties(hp, temp);
+//            daoAdapter.consummateAddOperation(temp);
+//            configSettingDao.insertSelective(temp);
+//            configSettingDao.delete(hp);
+//        });
+
+
+        List<HvacDevice> hvacDevices = hvacDeviceDao.getHvacDeviceLmt(100);
+        hvacDevices.forEach(hd -> {
+            HvacDevice temp = new HvacDevice();
+            BeanUtils.copyProperties(hd, temp);
             daoAdapter.consummateAddOperation(temp);
-            configSettingDao.insertSelective(temp);
-            configSettingDao.delete(hp);
+            hvacDeviceDao.insertSelective(temp);
+            hvacDeviceDao.delete(hd);
         });
 
 

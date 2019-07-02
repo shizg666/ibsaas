@@ -49,7 +49,7 @@ public class CommonDeviceController extends Basic2Controller {
     @ApiOperation("获取所有的硬件设备")
     public Response all(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>CommonDeviceController.all入参为:空");
-        List<HvacDevice> hvacDevices = iHvacDeviceService.all();
+        List<HvacDevice> hvacDevices = iHvacDeviceService.all(null);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<CommonDeviceController.all出参为:{}",hvacDevices);
         return returnSuccess(hvacDevices);
     }
