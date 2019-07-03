@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.client.hvac.util;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
+import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HvacFieldVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -36,6 +38,37 @@ public class HvacUtil {
                             new ObjectIdentifier(
                                     BacnetObjectEnum.OBJECT_TYPE_MAP.get(hf.getBacnetObjectType()),
                                     hf.getInstanceNumber())
+                            , PropertyIdentifier.presentValue));
+                    field.setAccessible(true);
+                    try {
+                        field.set(target, value);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                        log.error("反射对象赋值时,发生错误");
+                    }
+
+                }
+            }
+        });
+    }
+
+
+
+    /**
+     * 根据抽取到的点位数据 给相应DTO转反射赋值
+     * @param values
+     * @param hvacPointDetails
+     * @param target
+     */
+    public static void assignmentByClassEx(Map<String, PropertyValues> values, List<HvacPointDetail> hvacPointDetails, Object target){
+        Field[] fields = ReflectUtil.getFields(target.getClass());
+        hvacPointDetails.forEach(hpd -> {
+            for (Field field : fields) {
+                if(field.getName().equals(hpd.getFieldName())){
+                    String value = BacnetUtil.getState(values.get(hpd.getDeviceId()).getString(
+                            new ObjectIdentifier(
+                                    BacnetObjectEnum.OBJECT_TYPE_MAP.get(hpd.getBacnetObjectType()),
+                                    hpd.getInstanceNumber())
                             , PropertyIdentifier.presentValue));
                     field.setAccessible(true);
                     try {

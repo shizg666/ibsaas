@@ -2,26 +2,30 @@ package com.landleaf.ibsaas.client.hvac.service.impl;
 
 
 import cn.hutool.core.util.ReflectUtil;
-import com.landleaf.ibsaas.client.hvac.config.BacnetInfoHolder;
+import com.landleaf.ibsaas.client.hvac.config.HvacNodeHolder;
+import com.landleaf.ibsaas.client.hvac.config.HvacPointHolder;
+import com.landleaf.ibsaas.client.hvac.config.RemoteDeviceInfoHolder;
 import com.landleaf.ibsaas.client.hvac.config.LocalDeviceConfig;
 import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
 import com.landleaf.ibsaas.client.hvac.util.BacnetUtil;
 import com.landleaf.ibsaas.client.hvac.util.HvacUtil;
-import com.landleaf.ibsaas.common.constant.HvacConstant;
 import com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 
+import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.serotonin.bacnet4j.RemoteDevice;
+import com.serotonin.bacnet4j.exception.BACnetException;
+import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 import com.serotonin.bacnet4j.util.PropertyValues;
-import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +33,11 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import static com.landleaf.ibsaas.common.constant.HvacConstant.*;
 
@@ -60,18 +65,18 @@ public class CommonDeviceService implements ICommonDeviceService {
     private String placeId;
 
     @Autowired
-    private BacnetInfoHolder bacnetInfoHolder;
+    private RemoteDeviceInfoHolder remoteDeviceInfoHolder;
 
 
     @Override
     public void reload() {
-        bacnetInfoHolder.reload();
+        remoteDeviceInfoHolder.reload();
     }
 
     @Override
-    public List<? extends BaseDevice> getCurrentData(Integer deviceInstanceNumber) {
+    public List<? extends BaseDevice> getCurrentData2(Integer deviceInstanceNumber) {
         List<BaseDevice> result = new ArrayList<>();
-        PropertyValues values = BacnetUtil.readProperties(LocalDeviceConfig.getLocalDevice(), BacnetInfoHolder.REMOTE_DEVICE_MAP.get(deviceInstanceNumber), BacnetInfoHolder.OID_MAP.get(deviceInstanceNumber));
+        PropertyValues values = BacnetUtil.readProperties(LocalDeviceConfig.getLocalDevice(), RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(deviceInstanceNumber), RemoteDeviceInfoHolder.OID_MAP.get(deviceInstanceNumber));
         HvacDevice hvacDevice = hvacDeviceDao.getByDeviceInstanceNumber(deviceInstanceNumber);
         List<HvacNodeVO> hvacNodeVOList = hvacNodeDao.getHvacNodeByDeviceId(hvacDevice.getId());
 
@@ -87,12 +92,55 @@ public class CommonDeviceService implements ICommonDeviceService {
 
 
     @Override
+    public List<? extends BaseDevice> getCurrentData(Integer deviceType) {
+        List<HvacPointDetail> hvacPointDetails = HvacPointHolder.DEVICE_POINT_LIST_MAP.get(deviceType);
+        Map<String, List<HvacPointDetail>> hvacPointMap = HvacPointHolder.DEVICE_POINT_MAP.get(deviceType);
+        Map<String, PropertyValues> propertyValues = getPropertyValues(hvacPointDetails);
+
+        List<BaseDevice> result = HvacNodeHolder.DEVICE_NODE_MAP.get(deviceType);
+
+        result.forEach(bd -> {
+            List<HvacPointDetail> hvacPointDetailList = hvacPointMap.get(bd.getId());
+            HvacUtil.assignmentByClassEx(propertyValues, hvacPointDetailList, bd);
+        });
+        return result;
+    }
+
+    private Map<String, PropertyValues> getPropertyValues(List<HvacPointDetail> hvacPointDetails){
+        Map<String, PropertyValues> result = new HashMap<>(8);
+        HashMap<String, List<ObjectIdentifier>> objectIdentifierMap =
+                hvacPointDetails.stream().collect(
+                        Collectors.groupingBy(
+                                HvacPointDetail::getDeviceId,
+                                HashMap::new,
+                                Collectors.mapping(hp ->
+                                        new ObjectIdentifier(
+                                                BacnetObjectEnum.getObjectType(hp.getBacnetObjectType()),
+                                                hp.getInstanceNumber()),
+                                        Collectors.toList())));
+        objectIdentifierMap.forEach((k,v) -> {
+            try {
+                PropertyValues values = BacnetUtil.readPresentValues(LocalDeviceConfig.getLocalDevice(), RemoteDeviceInfoHolder.REMOTE_DEVICE_ID_MAP.get(k), v);
+                result.put(k, values);
+            } catch (BACnetException e) {
+                e.printStackTrace();
+                log.error("------------------------------>请求设备点位事发生错误:{}",e.getMessage(), e);
+            }
+
+        });
+
+        return result;
+    }
+
+
+
+    @Override
     public <T extends BaseDevice> T getCurrentInfo(HvacNodeVO hvacNodeVO){
         HvacDevice hvacDevice = hvacDeviceDao.selectByPrimaryKey(hvacNodeVO.getDeviceId());
         Integer deviceInstanceNumber = hvacDevice.getDeviceInstanceNumber();
         BaseDevice baseDevice = getByDeviceId(deviceInstanceNumber);
         baseDevice.setId(hvacNodeVO.getId());
-        PropertyValues values = BacnetUtil.readProperties(LocalDeviceConfig.getLocalDevice(), BacnetInfoHolder.REMOTE_DEVICE_MAP.get(deviceInstanceNumber), BacnetInfoHolder.OID_MAP.get(deviceInstanceNumber));
+        PropertyValues values = BacnetUtil.readProperties(LocalDeviceConfig.getLocalDevice(), RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(deviceInstanceNumber), RemoteDeviceInfoHolder.OID_MAP.get(deviceInstanceNumber));
         List<HvacFieldVO> hvacFieldVOList = hvacNodeVO.getHvacFieldVOList();
         HvacUtil.assignmentByClass(values, hvacFieldVOList, baseDevice);
         return (T) baseDevice;
@@ -102,7 +150,7 @@ public class CommonDeviceService implements ICommonDeviceService {
 
     @Override
     public void currentDataToRedis(){
-        ConcurrentHashMap<Integer, RemoteDevice> remoteDeviceMap = BacnetInfoHolder.REMOTE_DEVICE_MAP;
+        Map<Integer, RemoteDevice> remoteDeviceMap = RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP;
         //转成collection开启并行处理流   平均处理时间在500ms
         remoteDeviceMap.entrySet().parallelStream().forEach( entry -> {
             List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
@@ -151,7 +199,7 @@ public class CommonDeviceService implements ICommonDeviceService {
             case WEATHER_STATION_PORT:
                 return new WeatherStationVO();
             case HYDRAULIC_MODULE_PORT :
-                return new HydraulicModuleVO();
+                 return new HydraulicModuleVO();
             case WATER_METER_PORT:
                 return new WaterMeterVO();
             case ELECTRIC_METER_PORT:
@@ -200,7 +248,7 @@ public class CommonDeviceService implements ICommonDeviceService {
         }
         HvacNodeFieldVO hvacNodeFieldVO = hvacNodeDao.getHvacNodeFieldVO(id, fieldName);
         BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
-                BacnetInfoHolder.REMOTE_DEVICE_MAP.get(hvacNodeFieldVO.getDeviceInstanceNumber()),
+                RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(hvacNodeFieldVO.getDeviceInstanceNumber()),
                 new ObjectIdentifier(BacnetObjectEnum.getObjectType(hvacNodeFieldVO.getBacnetObjectType()),hvacNodeFieldVO.getInstanceNumber()),
                 value);
         return true;
@@ -215,7 +263,7 @@ public class CommonDeviceService implements ICommonDeviceService {
             //新风机运行模式  特殊处理
             List<HvacNodeFieldVO> hnfs = hvacNodeDao.getHvacNodeFieldVOByFieldName(fieldName);
             hnfs.forEach( hnf -> BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
-                    BacnetInfoHolder.REMOTE_DEVICE_MAP.get(hnf.getDeviceInstanceNumber()),
+                    RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(hnf.getDeviceInstanceNumber()),
                     new ObjectIdentifier(BacnetObjectEnum.getObjectType(hnf.getBacnetObjectType()),hnf.getInstanceNumber()),
                     value));
             return true;

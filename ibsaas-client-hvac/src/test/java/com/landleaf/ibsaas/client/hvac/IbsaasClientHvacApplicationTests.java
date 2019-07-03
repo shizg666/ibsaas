@@ -104,12 +104,12 @@ public class IbsaasClientHvacApplicationTests {
     public void insertField(){
         List<HvacField> list = new ArrayList<HvacField>(){{
             add(getHvacField(
-                    "240563083381182464" ,
+                    6 ,
                     "emComState",
                     "电表通信状态",
                     BacnetPremissionEnum.READ.getPermission()));
             add(getHvacField(
-                    "240563083381182464" ,
+                    6 ,
                     "emReading",
                     "电表读数",
                     BacnetPremissionEnum.READ.getPermission()));
@@ -120,9 +120,9 @@ public class IbsaasClientHvacApplicationTests {
         list.forEach(hf -> hvacFieldDao.insertSelective(hf));
     }
 
-    private HvacField getHvacField(String deviceId, String fieldName, String fieldDescription, Integer permission){
+    private HvacField getHvacField(Integer deviceType, String fieldName, String fieldDescription, Integer permission){
         HvacField hf = new HvacField();
-        hf.setDeviceId(deviceId);
+        hf.setDeviceType(deviceType);
         hf.setFieldName(fieldName);
         hf.setFieldDescription(fieldDescription);
         hf.setPermission(permission);
@@ -135,7 +135,7 @@ public class IbsaasClientHvacApplicationTests {
     public void insertNode(){
 
         for (int i = 1; i <= 27; i++) {
-            HvacNode hd = getHvacNode("240563083381182464",
+            HvacNode hd = getHvacNode(6,
                     i+"##",
                     HvacFloorEnum.A_1_F.getFloor());
             hvacNodeDao.insertSelective(hd);
@@ -147,9 +147,9 @@ public class IbsaasClientHvacApplicationTests {
 //        hvacNodeDao.insertSelective(hd);
     }
 
-    private HvacNode getHvacNode( String deviceId, String nodeName, Integer floor){
+    private HvacNode getHvacNode( Integer deviceType, String nodeName, Integer floor){
         HvacNode hd = new HvacNode();
-        hd.setDeviceId(deviceId);
+        hd.setDeviceType(deviceType);
         hd.setNodeName(nodeName);
         hd.setFloor(floor);
         daoAdapter.consummateAddOperation(hd);

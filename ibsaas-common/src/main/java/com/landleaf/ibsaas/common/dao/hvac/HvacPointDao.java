@@ -1,6 +1,7 @@
 package com.landleaf.ibsaas.common.dao.hvac;
 
 import com.landleaf.ibsaas.common.domain.hvac.HvacPoint;
+import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,4 +29,11 @@ public interface HvacPointDao extends BaseDao<HvacPoint> {
      * @return
      */
     List<HvacPoint> getHvacPointLmt(@Param("maxId") Integer maxId);
+
+    /**
+     * 获取所有点位信息
+     * @return
+     */
+    List<HvacPointDetail> allHvacPointDetails();
+
 }

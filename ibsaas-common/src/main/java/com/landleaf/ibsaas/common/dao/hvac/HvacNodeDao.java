@@ -15,6 +15,11 @@ import java.util.List;
  */
 public interface HvacNodeDao extends BaseDao<HvacNode> {
 
+    /**
+     * 获取所有的节点
+     * @return
+     */
+    List<HvacNode> all();
 
     /**
      * 获取节点  包含所含字段数据

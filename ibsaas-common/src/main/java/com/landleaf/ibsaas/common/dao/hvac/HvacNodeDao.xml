@@ -32,7 +32,7 @@
 
     <sql id="hvac_node_base">
         thn.id,
-        thn.device_id,
+        thn.device_type,
         thn.node_name,
         thn.floor
     </sql>
@@ -142,5 +142,12 @@
         </if>
         AND tee.id IS NULL
     </select>
+    <select id="all" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacNode">
+        SELECT
+        <include refid="hvac_node_base"/>
+        FROM t_hvac_node thn
+        WHERE thn.is_active=1
+    </select>
+
 
 </mapper>

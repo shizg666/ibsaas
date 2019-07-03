@@ -20,6 +20,7 @@ import org.springframework.context.annotation.DependsOn;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,10 +31,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @Slf4j
 @DependsOn("localDeviceConfig")
-public class BacnetInfoHolder {
+public class RemoteDeviceInfoHolder {
 
-    public static final ConcurrentHashMap<Integer, RemoteDevice> REMOTE_DEVICE_MAP = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<Integer, List<ObjectIdentifier>> OID_MAP = new ConcurrentHashMap<>();
+    public static final Map<Integer, RemoteDevice> REMOTE_DEVICE_MAP = new ConcurrentHashMap<>();
+    public static final Map<String, RemoteDevice> REMOTE_DEVICE_ID_MAP = new ConcurrentHashMap<>();
+    public static final Map<Integer, List<ObjectIdentifier>> OID_MAP = new ConcurrentHashMap<>();
 //    public static final ConcurrentHashMap<Integer, List<ObjectIdentifier>> OID_ANALOGINPUT_MAP = new ConcurrentHashMap<>();
 
     @Autowired
@@ -57,6 +59,7 @@ public class BacnetInfoHolder {
                             MstpNetworkUtils.toAddress(brd.getNetworkNumber(), brd.getStation()), brd.getDeviceInstanceNumber());
                 }
                 REMOTE_DEVICE_MAP.put(brd.getDeviceInstanceNumber(), remoteDevice);
+                REMOTE_DEVICE_ID_MAP.put(brd.getId(), remoteDevice);
 //                OID_MAP.put(brd.getDeviceInstanceNumber(), objectIdentifiers);
             } catch (BACnetException e) {
                 e.printStackTrace();
