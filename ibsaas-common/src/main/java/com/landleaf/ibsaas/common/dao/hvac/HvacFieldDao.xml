@@ -5,4 +5,9 @@
 <mapper namespace="com.landleaf.ibsaas.common.dao.hvac.HvacFieldDao">
 
 
+    <select id="getHvacFieldLmt" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacField">
+        SELECT * FROM t_hvac_field
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
 </mapper>

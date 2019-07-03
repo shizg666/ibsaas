@@ -179,14 +179,24 @@ public class IbsaasClientHvacApplicationTests {
 //        });
 
 
-        List<HvacDevice> hvacDevices = hvacDeviceDao.getHvacDeviceLmt(100);
-        hvacDevices.forEach(hd -> {
-            HvacDevice temp = new HvacDevice();
-            BeanUtils.copyProperties(hd, temp);
+//        List<HvacDevice> hvacDevices = hvacDeviceDao.getHvacDeviceLmt(100);
+//        hvacDevices.forEach(hd -> {
+//            HvacDevice temp = new HvacDevice();
+//            BeanUtils.copyProperties(hd, temp);
+//            daoAdapter.consummateAddOperation(temp);
+//            hvacDeviceDao.insertSelective(temp);
+//            hvacDeviceDao.delete(hd);
+//        });
+
+        List<HvacField> hvacFields = hvacFieldDao.getHvacFieldLmt(100);
+        hvacFields.forEach(hf -> {
+            HvacField temp = new HvacField();
+            BeanUtils.copyProperties(hf, temp);
             daoAdapter.consummateAddOperation(temp);
-            hvacDeviceDao.insertSelective(temp);
-            hvacDeviceDao.delete(hd);
+            hvacFieldDao.insertSelective(temp);
+            hvacFieldDao.delete(hf);
         });
+
 
 
 //        System.out.println(hvacPoints);
