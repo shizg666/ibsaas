@@ -30,17 +30,6 @@ public class NewFanController extends Basic2Controller {
 
     private final INewFanService iNewFanService;
 
-
-    @GetMapping("/overview")
-    @ApiOperation("四效新风机总览")
-    public Response overview(){
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.overview入参为:空");
-        List<NewFanVO> newFanVOList = iNewFanService.overview();
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<NewFanController.overview出参为:{}",newFanVOList);
-        return returnSuccess(newFanVOList);
-    }
-
-
     @GetMapping("/running-modes")
     @ApiOperation("获取运行模式下拉菜单")
     public Response runningModes(){
@@ -48,15 +37,6 @@ public class NewFanController extends Basic2Controller {
         List<ChoiceButton> choiceButtons = NewFanRunningModeEnum.getChoiceButtons();
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<NewFanController.runningModes出参为:{}",choiceButtons);
         return returnSuccess(choiceButtons);
-    }
-
-    @GetMapping("/info/{id}")
-    @ApiOperation("单个四效新风机当前状态")
-    public Response getInfo(@PathVariable("id") String id){
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>NewFanController.get入参为:{}", id);
-        NewFanVO newFanVO = iNewFanService.getInfoById(id);
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<NewFanController.get出参为:{}",newFanVO);
-        return returnSuccess(newFanVO);
     }
 
     @PutMapping("/operation")

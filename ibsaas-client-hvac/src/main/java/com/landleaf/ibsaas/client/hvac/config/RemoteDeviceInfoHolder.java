@@ -35,7 +35,7 @@ public class RemoteDeviceInfoHolder {
 
     public static final Map<Integer, RemoteDevice> REMOTE_DEVICE_MAP = new ConcurrentHashMap<>();
     public static final Map<String, RemoteDevice> REMOTE_DEVICE_ID_MAP = new ConcurrentHashMap<>();
-    public static final Map<Integer, List<ObjectIdentifier>> OID_MAP = new ConcurrentHashMap<>();
+//    public static final Map<Integer, List<ObjectIdentifier>> OID_MAP = new ConcurrentHashMap<>();
 //    public static final ConcurrentHashMap<Integer, List<ObjectIdentifier>> OID_ANALOGINPUT_MAP = new ConcurrentHashMap<>();
 
     @Autowired
@@ -74,14 +74,14 @@ public class RemoteDeviceInfoHolder {
      */
     private void clear() {
         REMOTE_DEVICE_MAP.clear();
-        OID_MAP.clear();
+//        OID_MAP.clear();
     }
 
     /**
      * 重写加载设备和点位
      */
     public void reload(){
-        clear();
+//        clear();
         init();
     }
 }

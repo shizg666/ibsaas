@@ -17,6 +17,7 @@ import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 
+import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.serotonin.bacnet4j.RemoteDevice;
@@ -66,28 +67,16 @@ public class CommonDeviceService implements ICommonDeviceService {
 
     @Autowired
     private RemoteDeviceInfoHolder remoteDeviceInfoHolder;
-
+    @Autowired
+    private HvacNodeHolder hvacNodeHolder;
+    @Autowired
+    private HvacPointHolder hvacPointHolder;
 
     @Override
     public void reload() {
         remoteDeviceInfoHolder.reload();
-    }
-
-    @Override
-    public List<? extends BaseDevice> getCurrentData2(Integer deviceInstanceNumber) {
-        List<BaseDevice> result = new ArrayList<>();
-        PropertyValues values = BacnetUtil.readProperties(LocalDeviceConfig.getLocalDevice(), RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(deviceInstanceNumber), RemoteDeviceInfoHolder.OID_MAP.get(deviceInstanceNumber));
-        HvacDevice hvacDevice = hvacDeviceDao.getByDeviceInstanceNumber(deviceInstanceNumber);
-        List<HvacNodeVO> hvacNodeVOList = hvacNodeDao.getHvacNodeByDeviceId(hvacDevice.getId());
-
-        hvacNodeVOList.forEach( bdn -> {
-            BaseDevice baseDevice = getByDeviceId(deviceInstanceNumber);
-            baseDevice.setId(bdn.getId());
-            List<HvacFieldVO> hvacFieldVOList = bdn.getHvacFieldVOList();
-            HvacUtil.assignmentByClass(values, hvacFieldVOList, baseDevice);
-            result.add(baseDevice);
-        });
-        return result;
+        hvacNodeHolder.reload();
+        hvacPointHolder.reload();
     }
 
 
@@ -133,80 +122,15 @@ public class CommonDeviceService implements ICommonDeviceService {
     }
 
 
-
     @Override
-    public <T extends BaseDevice> T getCurrentInfo(HvacNodeVO hvacNodeVO){
-        HvacDevice hvacDevice = hvacDeviceDao.selectByPrimaryKey(hvacNodeVO.getDeviceId());
-        Integer deviceInstanceNumber = hvacDevice.getDeviceInstanceNumber();
-        BaseDevice baseDevice = getByDeviceId(deviceInstanceNumber);
-        baseDevice.setId(hvacNodeVO.getId());
-        PropertyValues values = BacnetUtil.readProperties(LocalDeviceConfig.getLocalDevice(), RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(deviceInstanceNumber), RemoteDeviceInfoHolder.OID_MAP.get(deviceInstanceNumber));
-        List<HvacFieldVO> hvacFieldVOList = hvacNodeVO.getHvacFieldVOList();
-        HvacUtil.assignmentByClass(values, hvacFieldVOList, baseDevice);
-        return (T) baseDevice;
-    }
-
-
-
-    @Override
-    public void currentDataToRedis(){
-        Map<Integer, RemoteDevice> remoteDeviceMap = RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP;
+    public void currentDataToRedis() {
         //转成collection开启并行处理流   平均处理时间在500ms
-        remoteDeviceMap.entrySet().parallelStream().forEach( entry -> {
+        BacnetDeviceTypeEnum.MAP.entrySet().parallelStream().forEach(entry -> {
             List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
-            if(CollectionUtils.isNotEmpty(currentData)) {
+            if (CollectionUtils.isNotEmpty(currentData)) {
                 redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
             }
         });
-
-
-        //map并行流处理  平均处理时间在1.3s
-//        remoteDeviceMap.forEachEntry(remoteDeviceMap.mappingCount(),entry -> {
-//
-//            List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
-//            if(CollectionUtils.isNotEmpty(currentData)) {
-//                redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
-//            }
-//
-//        });
-
-        //普通循环 平均处理时间在1.6s
-//        remoteDeviceMap.forEach( (k, v) -> {
-//            List<? extends BaseDevice> currentData = getCurrentData(k);
-//            if(CollectionUtils.isNotEmpty(currentData)) {
-//                redisHandle.addMap(placeId, Integer.toString(k), currentData);
-//            }
-//
-//        });
-
-
-
-    }
-
-
-    /**
-     * 存入的设备
-     * @param deviceInstanceNumber
-     * @return
-     */
-    private BaseDevice getByDeviceId(Integer deviceInstanceNumber){
-        switch (deviceInstanceNumber) {
-            case NEW_FAN_PORT:
-                return new NewFanVO();
-            case FAN_COIL_PORT_1:
-            case FAN_COIL_PORT_2:
-                return new FanCoilVO();
-            case WEATHER_STATION_PORT:
-                return new WeatherStationVO();
-            case HYDRAULIC_MODULE_PORT :
-                 return new HydraulicModuleVO();
-            case WATER_METER_PORT:
-                return new WaterMeterVO();
-            case ELECTRIC_METER_PORT:
-                return new ElectricMeterVO();
-            default:
-                return new BaseDevice();
-        }
     }
 
 
@@ -248,7 +172,7 @@ public class CommonDeviceService implements ICommonDeviceService {
         }
         HvacNodeFieldVO hvacNodeFieldVO = hvacNodeDao.getHvacNodeFieldVO(id, fieldName);
         BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
-                RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(hvacNodeFieldVO.getDeviceInstanceNumber()),
+                RemoteDeviceInfoHolder.REMOTE_DEVICE_ID_MAP.get(hvacNodeFieldVO.getDeviceId()),
                 new ObjectIdentifier(BacnetObjectEnum.getObjectType(hvacNodeFieldVO.getBacnetObjectType()),hvacNodeFieldVO.getInstanceNumber()),
                 value);
         return true;
@@ -263,7 +187,7 @@ public class CommonDeviceService implements ICommonDeviceService {
             //新风机运行模式  特殊处理
             List<HvacNodeFieldVO> hnfs = hvacNodeDao.getHvacNodeFieldVOByFieldName(fieldName);
             hnfs.forEach( hnf -> BacnetUtil.writePresentValue(LocalDeviceConfig.getLocalDevice(),
-                    RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(hnf.getDeviceInstanceNumber()),
+                    RemoteDeviceInfoHolder.REMOTE_DEVICE_ID_MAP.get(hnf.getDeviceId()),
                     new ObjectIdentifier(BacnetObjectEnum.getObjectType(hnf.getBacnetObjectType()),hnf.getInstanceNumber()),
                     value));
             return true;
@@ -290,5 +214,126 @@ public class CommonDeviceService implements ICommonDeviceService {
         return false;
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*
+        以下为弃用代码
+     */
+
+    //    @Override
+//    @Deprecated
+//    public List<? extends BaseDevice> getCurrentData2(Integer deviceInstanceNumber) {
+//        List<BaseDevice> result = new ArrayList<>();
+//        PropertyValues values = BacnetUtil.readProperties(LocalDeviceConfig.getLocalDevice(), RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(deviceInstanceNumber), RemoteDeviceInfoHolder.OID_MAP.get(deviceInstanceNumber));
+//        HvacDevice hvacDevice = hvacDeviceDao.getByDeviceInstanceNumber(deviceInstanceNumber);
+//        List<HvacNodeVO> hvacNodeVOList = hvacNodeDao.getHvacNodeByDeviceId(hvacDevice.getId());
+//
+//        hvacNodeVOList.forEach( bdn -> {
+//            BaseDevice baseDevice = getByDeviceId(deviceInstanceNumber);
+//            baseDevice.setId(bdn.getId());
+//            List<HvacFieldVO> hvacFieldVOList = bdn.getHvacFieldVOList();
+//            HvacUtil.assignmentByClass(values, hvacFieldVOList, baseDevice);
+//            result.add(baseDevice);
+//        });
+//        return result;
+//    }
+
+//    @Deprecated
+//    public <T extends BaseDevice> T getCurrentInfo(HvacNodeVO hvacNodeVO){
+//        HvacDevice hvacDevice = hvacDeviceDao.selectByPrimaryKey(hvacNodeVO.getDeviceId());
+//        Integer deviceInstanceNumber = hvacDevice.getDeviceInstanceNumber();
+//        BaseDevice baseDevice = getByDeviceId(deviceInstanceNumber);
+//        baseDevice.setId(hvacNodeVO.getId());
+//        PropertyValues values = BacnetUtil.readProperties(LocalDeviceConfig.getLocalDevice(), RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP.get(deviceInstanceNumber), RemoteDeviceInfoHolder.OID_MAP.get(deviceInstanceNumber));
+//        List<HvacFieldVO> hvacFieldVOList = hvacNodeVO.getHvacFieldVOList();
+//        HvacUtil.assignmentByClass(values, hvacFieldVOList, baseDevice);
+//        return (T) baseDevice;
+//    }
+
+    //    @Override
+//    @Deprecated
+//    public void currentDataToRedis2(){
+//        Map<Integer, RemoteDevice> remoteDeviceMap = RemoteDeviceInfoHolder.REMOTE_DEVICE_MAP;
+//        //转成collection开启并行处理流   平均处理时间在500ms
+//        remoteDeviceMap.entrySet().parallelStream().forEach( entry -> {
+//            List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
+//            if(CollectionUtils.isNotEmpty(currentData)) {
+//                redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
+//            }
+//        });
+//
+//
+//        //map并行流处理  平均处理时间在1.3s
+////        remoteDeviceMap.forEachEntry(remoteDeviceMap.mappingCount(),entry -> {
+////
+////            List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
+////            if(CollectionUtils.isNotEmpty(currentData)) {
+////                redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
+////            }
+////
+////        });
+//
+//        //普通循环 平均处理时间在1.6s
+////        remoteDeviceMap.forEach( (k, v) -> {
+////            List<? extends BaseDevice> currentData = getCurrentData(k);
+////            if(CollectionUtils.isNotEmpty(currentData)) {
+////                redisHandle.addMap(placeId, Integer.toString(k), currentData);
+////            }
+////
+////        });
+//    }
+
+//    /**
+//     * 存入的设备
+//     * @param deviceInstanceNumber
+//     * @return
+//     */
+//    @Deprecated
+//    private BaseDevice getByDeviceId(Integer deviceInstanceNumber){
+//        switch (deviceInstanceNumber) {
+//            case NEW_FAN_PORT:
+//                return new NewFanVO();
+//            case FAN_COIL_PORT_1:
+//            case FAN_COIL_PORT_2:
+//                return new FanCoilVO();
+//            case WEATHER_STATION_PORT:
+//                return new WeatherStationVO();
+//            case HYDRAULIC_MODULE_PORT :
+//                return new HydraulicModuleVO();
+//            case WATER_METER_PORT:
+//                return new WaterMeterVO();
+//            case ELECTRIC_METER_PORT:
+//                return new ElectricMeterVO();
+//            default:
+//                return new BaseDevice();
+//        }
+//    }
 
 }

@@ -23,23 +23,23 @@ public interface HvacNodeDao extends BaseDao<HvacNode> {
 
     /**
      * 获取节点  包含所含字段数据
-     * @param deviceId
+     * @param deviceType
      * @return
      */
-    List<HvacNodeVO> getHvacNodeByDeviceId(String deviceId);
+    List<HvacNodeVO> getHvacNodeByDeviceId(@Param("deviceType") Integer deviceType);
 
     /**
      * 根据设备点位获取设备节点数据
-     * @param deviceInstanceNumber
+     * @param deviceType
      * @return
      */
-    List<HvacNodeVO> getHvacNodeByInstanceNumber(@Param("deviceInstanceNumber") Integer deviceInstanceNumber);
+    List<HvacNodeVO> getHvacNodeByDeviceType(@Param("deviceType") Integer deviceType);
     /**
      * 根据设备点位获取设备节点数据没绑定设备的
-     * @param deviceInstanceNumber
+     * @param deviceType
      * @return
      */
-    List<HvacNodeVO> getHvacNodeByInstanceNumberWithoutEquip(@Param("deviceInstanceNumber") Integer deviceInstanceNumber);
+    List<HvacNodeVO> getHvacNodeByDeviceTypeWithoutEquip(@Param("deviceType") Integer deviceType);
 
     /**
      * 根据节点id获取某个节点的数据
@@ -74,8 +74,8 @@ public interface HvacNodeDao extends BaseDao<HvacNode> {
 
     /**
      * 根据设备点位获取 所有节点信息
-     * @param deviceInstanceNumbers
+     * @param deviceType
      * @return
      */
-    List<HvacNode> getHvacNodes(@Param("deviceInstanceNumbers") List<Integer> deviceInstanceNumbers);
+    List<HvacNode> getHvacNodes(@Param("deviceType") Integer deviceType);
 }

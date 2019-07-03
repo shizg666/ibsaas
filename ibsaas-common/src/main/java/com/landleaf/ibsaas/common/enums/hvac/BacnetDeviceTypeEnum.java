@@ -26,9 +26,9 @@ public enum  BacnetDeviceTypeEnum {
 
     ELECTRIC_METER(6, "电表", "com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO"),
 
-    SENSOR(7, "多参数传感器", "com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO"),
+//    SENSOR(7, "多参数传感器", "com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO"),
 
-    AHU(8, "AHU", "com.landleaf.ibsaas.common.domain.hvac.vo.AhuVO"),
+//    AHU(8, "AHU", "com.landleaf.ibsaas.common.domain.hvac.vo.AhuVO"),
     ;
 
     private Integer deviceType;
@@ -67,7 +67,7 @@ public enum  BacnetDeviceTypeEnum {
         this.classPath = classPath;
     }
 
-    private static Map<Integer, BacnetDeviceTypeEnum> MAP = new ConcurrentHashMap<>();
+    public static Map<Integer, BacnetDeviceTypeEnum> MAP = new ConcurrentHashMap<>();
     static {
         for (BacnetDeviceTypeEnum bdte: BacnetDeviceTypeEnum.values()){
             MAP.put(bdte.deviceType, bdte);

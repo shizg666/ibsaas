@@ -16,6 +16,7 @@ import com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.NodeChoiceVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.WaterMeterVO;
+import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
@@ -167,16 +168,16 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
     @Override
     public NodeChoiceVO nodes() {
         NodeChoiceVO result = new NodeChoiceVO();
-        result.setElectricNodes(hvacNodeDao.getHvacNodeByInstanceNumberWithoutEquip(HvacConstant.ELECTRIC_METER_PORT));
-        result.setWaterNodes(hvacNodeDao.getHvacNodeByInstanceNumberWithoutEquip(HvacConstant.WATER_METER_PORT));
+        result.setElectricNodes(hvacNodeDao.getHvacNodeByDeviceTypeWithoutEquip(BacnetDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
+        result.setWaterNodes(hvacNodeDao.getHvacNodeByDeviceTypeWithoutEquip(BacnetDeviceTypeEnum.WATER_METER.getDeviceType()));
         return result;
     }
 
     @Override
     public NodeChoiceVO nodesEx() {
         NodeChoiceVO result = new NodeChoiceVO();
-        result.setElectricNodes(hvacNodeDao.getHvacNodeByInstanceNumber(HvacConstant.ELECTRIC_METER_PORT));
-        result.setWaterNodes(hvacNodeDao.getHvacNodeByInstanceNumber(HvacConstant.WATER_METER_PORT));
+        result.setElectricNodes(hvacNodeDao.getHvacNodeByDeviceType(BacnetDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
+        result.setWaterNodes(hvacNodeDao.getHvacNodeByDeviceType(BacnetDeviceTypeEnum.WATER_METER.getDeviceType()));
         return result;
     }
 
