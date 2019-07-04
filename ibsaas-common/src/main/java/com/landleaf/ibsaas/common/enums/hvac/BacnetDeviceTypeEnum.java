@@ -28,7 +28,7 @@ public enum  BacnetDeviceTypeEnum {
 
 //    SENSOR(7, "多参数传感器", "com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO"),
 
-//    AHU(8, "AHU", "com.landleaf.ibsaas.common.domain.hvac.vo.AhuVO"),
+    AHU(8, "AHU", "com.landleaf.ibsaas.common.domain.hvac.vo.AhuVO"),
     ;
 
     private Integer deviceType;
