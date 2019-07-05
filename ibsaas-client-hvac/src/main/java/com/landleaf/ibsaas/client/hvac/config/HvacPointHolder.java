@@ -42,7 +42,7 @@ public class HvacPointHolder {
         });
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>HvacPointHolder.init初始化加载成功<<<<<<<<<<<<<<<<<<<<<<<<<");
 
-    };
+    }
 
 
     /**

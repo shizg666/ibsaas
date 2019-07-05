@@ -22,7 +22,7 @@ import java.util.List;
  * @date 2019/6/3 16:14
  * @description: 通用hvac处理mq请求
  */
-//@MQConsumeService(topic = TopicConstants.TOPIC_HVAC_WRITE, tags = {TagConstants.TAGS_DEFAULT})
+@MQConsumeService(topic = TopicConstants.TOPIC_HVAC_WRITE, tags = {TagConstants.TAGS_DEFAULT})
 @Component
 @Slf4j
 public class ConsumerMessageForHvac extends AbstractMQMsgProcessor {
