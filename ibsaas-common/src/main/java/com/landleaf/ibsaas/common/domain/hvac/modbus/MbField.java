@@ -24,7 +24,7 @@ public class MbField extends BasicEntity {
     private String fieldName;
 
     @ApiModelProperty("字段描述")
-    private Integer fieldDescription;
+    private String fieldDescription;
 
     @ApiModelProperty("字段权限")
     private Integer permission;

@@ -3,12 +3,14 @@ package com.landleaf.ibsaas.client.hvac.util;
 import cn.hutool.core.util.ReflectUtil;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
+import com.landleaf.ibsaas.common.domain.hvac.assist.MbRegisterDetail;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HvacFieldVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
 import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 import com.serotonin.bacnet4j.util.PropertyValues;
+import com.serotonin.modbus4j.BatchResults;
 import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -65,7 +67,7 @@ public class HvacUtil {
      * @param hvacPointDetails
      * @param target
      */
-    public static void assignmentByClassEx(Map<String, PropertyValues> values, List<HvacPointDetail> hvacPointDetails, Object target){
+    public static void assignmentByClassBacnet(Map<String, PropertyValues> values, List<HvacPointDetail> hvacPointDetails, Object target){
         Field[] fields = ReflectUtil.getFields(target.getClass());
         hvacPointDetails.forEach(hpd -> {
             for (Field field : fields) {
@@ -112,6 +114,31 @@ public class HvacUtil {
             }
         }
         return value;
+    }
+
+    /**
+     * modbus封装对象
+     * @param results
+     * @param mbRegisterDetails
+     * @param target
+     */
+    public static void assignmentByClassModbus(Map<String, BatchResults<String>> results, List<MbRegisterDetail> mbRegisterDetails, Object target){
+        Field[] fields = ReflectUtil.getFields(target.getClass());
+        mbRegisterDetails.forEach(mr -> {
+            for (Field field : fields) {
+                if(field.getName().equals(mr.getFieldName())){
+                    Object value = results.get(mr.getMasterId()).getValue(mr.getRegisterId());
+                    field.setAccessible(true);
+                    try {
+                        field.set(target, value);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                        log.error("反射对象赋值时,发生错误");
+                    }
+
+                }
+            }
+        });
     }
 
 }

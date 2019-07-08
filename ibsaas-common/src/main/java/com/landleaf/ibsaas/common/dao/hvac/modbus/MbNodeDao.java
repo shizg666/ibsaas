@@ -25,4 +25,11 @@ public interface MbNodeDao extends BaseDao<MbNode> {
      * @return
      */
     List<MbNode> all();
+
+    /**
+     * 根据mb类型查询节点
+     * @param mbType
+     * @return
+     */
+    List<MbNode> getMbNodes(@Param("mbType") Integer mbType);
 }

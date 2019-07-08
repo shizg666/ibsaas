@@ -23,4 +23,13 @@
         FROM t_mb_node tmn
         WHERE tmn.is_active=1
     </select>
+    <select id="getMbNodes" resultType="com.landleaf.ibsaas.common.domain.hvac.modbus.MbNode">
+        SELECT
+        <include refid="mb_node_base"/>
+        FROM t_mb_node tmn
+        WHERE tmn.is_active=1
+        <if test="mbType!=null">
+            AND tmn.mb_type=#{mbType}
+        </if>
+    </select>
 </mapper>

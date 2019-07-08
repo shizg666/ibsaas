@@ -1,5 +1,6 @@
 package com.landleaf.ibsaas.common.dao.hvac.modbus;
 
+import com.landleaf.ibsaas.common.domain.hvac.assist.MbRegisterDetail;
 import com.landleaf.ibsaas.common.domain.hvac.modbus.MbRegister;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 import org.apache.ibatis.annotations.Param;
@@ -19,4 +20,11 @@ public interface MbRegisterDao extends BaseDao<MbRegister> {
      * @return
      */
     List<MbRegister> getMbRegisterLmt(@Param("maxId") Integer maxId);
+
+    /**
+     * 所有有效寄存器地址
+     * @return
+     */
+    List<MbRegisterDetail> allMbRegisterDetails();
+
 }

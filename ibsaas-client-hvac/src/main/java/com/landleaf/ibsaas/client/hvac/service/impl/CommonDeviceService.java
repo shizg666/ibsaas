@@ -6,41 +6,41 @@ import com.landleaf.ibsaas.client.hvac.config.HvacNodeHolder;
 import com.landleaf.ibsaas.client.hvac.config.HvacPointHolder;
 import com.landleaf.ibsaas.client.hvac.config.RemoteDeviceInfoHolder;
 import com.landleaf.ibsaas.client.hvac.config.LocalDeviceConfig;
+import com.landleaf.ibsaas.client.hvac.config.modbus.MbNodeHolder;
+import com.landleaf.ibsaas.client.hvac.config.modbus.MbRegisterHolder;
 import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
 import com.landleaf.ibsaas.client.hvac.util.BacnetUtil;
 import com.landleaf.ibsaas.client.hvac.util.HvacUtil;
 import com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
-import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
 
 import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
+import com.landleaf.ibsaas.common.domain.hvac.assist.MbRegisterDetail;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 
 import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
+import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
-import com.serotonin.bacnet4j.RemoteDevice;
 import com.serotonin.bacnet4j.exception.BACnetException;
-import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
 import com.serotonin.bacnet4j.util.PropertyValues;
+import com.serotonin.modbus4j.BatchRead;
+import com.serotonin.modbus4j.BatchResults;
+import com.serotonin.modbus4j.locator.BaseLocator;
+import com.sun.org.apache.regexp.internal.RE;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
-import static com.landleaf.ibsaas.common.constant.HvacConstant.*;
 
 
 /**
@@ -90,7 +90,7 @@ public class CommonDeviceService implements ICommonDeviceService {
 
         result.forEach(bd -> {
             List<HvacPointDetail> hvacPointDetailList = hvacPointMap.get(bd.getId());
-            HvacUtil.assignmentByClassEx(propertyValues, hvacPointDetailList, bd);
+            HvacUtil.assignmentByClassBacnet(propertyValues, hvacPointDetailList, bd);
         });
         return result;
     }
@@ -122,6 +122,33 @@ public class CommonDeviceService implements ICommonDeviceService {
     }
 
 
+    private List<? extends BaseDevice> getMbCurrentData(Integer mbType) {
+        List<MbRegisterDetail> mbRegisterDetails = MbRegisterHolder.MASTER_POINT_LIST_MAP.get(mbType);
+        Map<String, List<MbRegisterDetail>> mbNodeMap = MbRegisterHolder.MASTER_POINT_MAP.get(mbType);
+        Map<String, BatchResults<String>> results  = getBatchResults(mbRegisterDetails);
+
+        List<BaseDevice> result = MbNodeHolder.MODBUS_NODE_MAP.get(mbType);
+        result.forEach(bd -> {
+            List<MbRegisterDetail> mbRegisterDetailList = mbNodeMap.get(bd.getId());
+            HvacUtil.assignmentByClassModbus(results, mbRegisterDetailList, bd);
+        });
+        return result;
+    }
+
+    private Map<String, BatchResults<String>> getBatchResults(List<MbRegisterDetail> mbRegisterDetails) {
+        Map<String, BatchResults<String>> result = new HashMap<>(8);
+
+        Map<String, BatchRead<String>> readMap = new HashMap<>(8);
+        mbRegisterDetails.forEach(mrd -> {
+            readMap.computeIfAbsent(mrd.getMasterId(), k-> new BatchRead<>());
+            readMap.get(mrd.getMasterId())
+                    .addLocator(mrd.getRegisterId(),
+                            BaseLocator.holdingRegister(mrd.getSlaveId(), mrd.getOffset(), mrd.getDataType()));
+        });
+        return result;
+    }
+
+
     @Override
     public void currentDataToRedis() {
         //转成collection开启并行处理流   平均处理时间在500ms
@@ -131,7 +158,16 @@ public class CommonDeviceService implements ICommonDeviceService {
                 redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
             }
         });
+
+        ModbusDeviceTypeEnum.MAP.entrySet().parallelStream().forEach(entry -> {
+            List<? extends BaseDevice> currentData = getMbCurrentData(entry.getKey());
+            if (CollectionUtils.isNotEmpty(currentData)) {
+                redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
+            }
+        });
     }
+
+
 
 
     @Override
