@@ -174,7 +174,7 @@ public class EnergyReportService implements IEnergyReportService {
             //节能率
             savingPercent = savingConsumption.divide(staConsumption,4, BigDecimal.ROUND_HALF_UP).multiply(BIGDECIMAL_100).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
         }
-        return new EnergySavingEffectVO(staConsumption, savingPercent, savingConsumption);
+        return new EnergySavingEffectVO(savingConsumption, savingPercent, standardConsumption);
     }
 
     @Override
@@ -185,7 +185,12 @@ public class EnergyReportService implements IEnergyReportService {
         List<IntervalData> standardData = configSettingDao.getIntervalStandardConsumption(CHINESE_STANDARD_ENERGY_CONSUMPTION, String.valueOf(energyReportDTO.getEquipType()));
         Map<String, BigDecimal> standardMap = standardData.stream().collect(Collectors.toMap(IntervalData::getTimeInterval, IntervalData::getIntervalValue));
         Map<String, BigDecimal> daysMap = getDaysMap();
+        //记录能耗的天数
         BigDecimal dayOfYear = daysMap.get(String.valueOf(now.getYear()));
+        //到现在今年的天数
+        BigDecimal tempDayOfYear = new BigDecimal(now.getDayOfYear());
+
+
         List<String> xs = new ArrayList<>();
         List<String> comp = new ArrayList<>();
         List<String> current = new ArrayList<>();
@@ -200,9 +205,12 @@ public class EnergyReportService implements IEnergyReportService {
                 if(now.getYear() == Integer.valueOf(ed.getTimeInterval())){
                     BigDecimal standardConsumption = standardMap.get(ed.getTimeInterval());
                     //国标到现在的能耗
-                    BigDecimal staConsumption = dayOfYear.multiply(peopleAttendance).multiply(standardConsumption).multiply(L_TO_M3);
+                    BigDecimal staConsumption = tempDayOfYear.multiply(peopleAttendance).multiply(standardConsumption).multiply(L_TO_M3);
                     comp.add(standardMap.get(ed.getTimeInterval()).toString());
-                    current.add(staConsumption.toString());
+
+                    //到今天的水耗
+                    BigDecimal nowData = ed.getIntervalValue().divide(dayOfYear, 2, BigDecimal.ROUND_HALF_UP).multiply(tempDayOfYear);
+                    current.add(nowData.toString());
 
 //                    ys.add(new ProportionalData(standardMap.get(ed.getTimeInterval()).toString(), staConsumption.toString()));
 
@@ -226,9 +234,12 @@ public class EnergyReportService implements IEnergyReportService {
                 if(now.getYear() == Integer.valueOf(ed.getTimeInterval())){
                     BigDecimal standardConsumption = standardMap.get(ed.getTimeInterval());
                     //国标每天到现在的能耗
-                    BigDecimal staConsumption = lgcAcreage.multiply(standardConsumption).divide(getDayOfYear(now.getYear()), 2, BigDecimal.ROUND_HALF_UP).multiply(dayOfYear);
+                    BigDecimal staConsumption = lgcAcreage.multiply(standardConsumption).divide(getDayOfYear(now.getYear()), 2, BigDecimal.ROUND_HALF_UP).multiply(tempDayOfYear);
                     comp.add(staConsumption.toString());
-                    current.add(ed.getIntervalValue().toString());
+
+                    //今年天数计算
+                    BigDecimal nowData = ed.getIntervalValue().divide(dayOfYear, 2, BigDecimal.ROUND_HALF_UP).multiply(tempDayOfYear);
+                    current.add(nowData.toString());
 
 //                    ys.add(new ProportionalData(staConsumption.toString(), ed.getIntervalValue().toString()));
                 }else {
