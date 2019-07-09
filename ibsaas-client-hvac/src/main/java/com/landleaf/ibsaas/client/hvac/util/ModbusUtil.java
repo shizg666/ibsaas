@@ -22,16 +22,30 @@ public class ModbusUtil {
         try {
             return master.send(read);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("------------------------------>ModbusUtil批量读取寄存器地址失败:{}", e.getMessage(), e);
+            if(!(e instanceof ModbusTransportException)) {
+                e.printStackTrace();
+                log.error("------------------------------>ModbusUtil批量读取寄存器地址失败:{}", e.getMessage(), e);
+            }
         }
-        return null;
+        return new BatchResults<>();
     }
 
 
     public static Number readHoldingRegister(ModbusMaster master, int slaveId, int offset, int dataType) {
-        // 03 Holding Register类型数据读取
+        // 4 Holding Register类型数据读取
         BaseLocator<Number> loc = BaseLocator.holdingRegister(slaveId, offset, dataType);
+        try {
+            return master.getValue(loc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("------------------------------>ModbusUtil读取寄存器地址失败:{}", e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public static Number readInputRegister(ModbusMaster master, int slaveId, int offset, int dataType) {
+        // 3 Holding Register类型数据读取
+        BaseLocator<Number> loc = BaseLocator.inputRegister(slaveId, offset, dataType);
         try {
             return master.getValue(loc);
         } catch (Exception e) {

@@ -98,8 +98,8 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         PageHelper.startPage(energyEquipSearchDTO.getPage(), energyEquipSearchDTO.getLimit());
         List<EnergyEquipSearchVO> energyEquipSearchVOList = energyEquipDao.getEnergyEquipSearchVO(energyEquipSearchDTO);
         //从redis获取电水表数据
-        List<WaterMeterVO> waterMeterVOList = redisHandle.getMapField(placeId, String.valueOf(HvacConstant.WATER_METER_PORT));
-        List<ElectricMeterVO> electricMeterVOList = redisHandle.getMapField(placeId, String.valueOf(HvacConstant.ELECTRIC_METER_PORT));
+        List<WaterMeterVO> waterMeterVOList = redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.WATER_METER.getDeviceType()));
+        List<ElectricMeterVO> electricMeterVOList = redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
         Map<String, BigDecimal> map = waterMeterVOList.stream().collect(Collectors.toMap(WaterMeterVO::getId, wm -> new BigDecimal(wm.getWmReading())));
         Map<String, BigDecimal> temp = electricMeterVOList.stream().collect(Collectors.toMap(ElectricMeterVO::getId, em -> new BigDecimal(em.getEmReading())));
         map.putAll(temp);

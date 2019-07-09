@@ -129,8 +129,9 @@ public class HvacUtil {
                 if(field.getName().equals(mr.getFieldName())){
                     Object value = results.get(mr.getMasterId()).getValue(mr.getRegisterId());
                     field.setAccessible(true);
+                    String v = dealModbusValue(mr.getFieldName(), value);
                     try {
-                        field.set(target, value);
+                        field.set(target, v);
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                         log.error("反射对象赋值时,发生错误");
@@ -139,6 +140,17 @@ public class HvacUtil {
                 }
             }
         });
+    }
+
+    private static String dealModbusValue(String fieldName, Object o){
+        if(null == o){
+            return "0";
+        }
+        String result = String.valueOf(o);
+        if("ssHcho".equals(fieldName)){
+            return new BigDecimal(result).divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP).toString();
+        }
+        return result;
     }
 
 }

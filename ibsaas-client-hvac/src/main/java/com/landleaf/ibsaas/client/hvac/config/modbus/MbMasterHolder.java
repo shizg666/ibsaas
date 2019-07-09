@@ -27,7 +27,7 @@ public class MbMasterHolder {
 
     private static ModbusFactory modbusFactory;
 
-    private static final Map<String, ModbusMaster> MODBUS_MASTER_MAP = new ConcurrentHashMap<>();
+    public static final Map<String, ModbusMaster> MODBUS_MASTER_MAP = new ConcurrentHashMap<>();
 
     @Autowired
     private MbMasterDao mbMasterDao;
@@ -49,9 +49,9 @@ public class MbMasterHolder {
             ModbusMaster master = modbusFactory.createTcpMaster(params, false);
             try {
                 //设置超时时间
-                master.setTimeout(1000);
+                master.setTimeout(500);
                 //设置重连次数
-                master.setRetries(3);
+                master.setRetries(0);
                 //初始化
                 master.init();
             } catch (ModbusInitException e) {

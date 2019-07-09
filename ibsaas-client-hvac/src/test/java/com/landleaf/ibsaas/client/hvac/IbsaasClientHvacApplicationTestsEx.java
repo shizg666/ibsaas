@@ -9,6 +9,7 @@ import com.landleaf.ibsaas.common.dao.hvac.modbus.MbRegisterDao;
 import com.landleaf.ibsaas.common.domain.hvac.modbus.MbField;
 import com.landleaf.ibsaas.common.domain.hvac.modbus.MbMaster;
 import com.landleaf.ibsaas.common.domain.hvac.modbus.MbNode;
+import com.landleaf.ibsaas.common.domain.hvac.modbus.MbRegister;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;
@@ -67,6 +68,15 @@ public class IbsaasClientHvacApplicationTestsEx {
 //            daoAdapter.consummateAddOperation(temp);
 //            mbFieldDao.insertSelective(temp);
 //            mbFieldDao.delete(o);
+//        });
+
+//        List<MbRegister> list = mbRegisterDao.getMbRegisterLmt(300);
+//        list.forEach(o -> {
+//            MbRegister temp = new MbRegister();
+//            BeanUtils.copyProperties(o, temp);
+//            daoAdapter.consummateAddOperation(temp);
+//            mbRegisterDao.insertSelective(temp);
+//            mbRegisterDao.delete(o);
 //        });
 
     }

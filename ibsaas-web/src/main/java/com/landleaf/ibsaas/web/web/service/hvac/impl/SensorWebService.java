@@ -42,7 +42,7 @@ public class SensorWebService extends BaseDeviceService implements ISensorWebSer
 
     @Override
     public List<SensorVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(HvacConstant.SENSOR_PORT));
+        return redisHandle.getMapField(placeId, String.valueOf(ModbusDeviceTypeEnum.SENSOR.getDeviceType()));
     }
 
     @Override
