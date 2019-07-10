@@ -13,6 +13,7 @@
 		<module>ibsaas-common</module>
 		<module>ibsaas-datasource</module>
 		<module>ibsaas-rocketmq</module>
+        <module>ibsaas-client-light</module>
     </modules>
 	<packaging>pom</packaging>
 

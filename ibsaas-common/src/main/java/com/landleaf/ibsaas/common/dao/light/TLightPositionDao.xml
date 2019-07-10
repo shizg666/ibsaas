@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.TLightPositionDao">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.light.TLightPosition">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="x_pos" jdbcType="VARCHAR" property="xPos" />
+    <result column="y_pos" jdbcType="VARCHAR" property="yPos" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="device_id" jdbcType="BIGINT" property="deviceId" />
+    <result column="floor_config_id" jdbcType="BIGINT" property="floorConfigId" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="utime" jdbcType="TIMESTAMP" property="utime" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="Reserved" jdbcType="VARCHAR" property="reserved" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, x_pos, y_pos, name, device_id, floor_config_id, ctime, utime, img, Reserved
+  </sql>
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
+    <!--delete from t_light_position-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.landleaf.lgc.entity.TLightPosition">-->
+    <!--insert into t_light_position (id, x_pos, y_pos, -->
+      <!--name, device_id, floor_config_id, -->
+      <!--ctime, utime, img, -->
+      <!--Reserved)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{xPos,jdbcType=VARCHAR}, #{yPos,jdbcType=VARCHAR}, -->
+      <!--#{name,jdbcType=VARCHAR}, #{deviceId,jdbcType=BIGINT}, #{floorConfigId,jdbcType=BIGINT}, -->
+      <!--#{ctime,jdbcType=TIMESTAMP}, #{utime,jdbcType=TIMESTAMP}, #{img,jdbcType=VARCHAR}, -->
+      <!--#{reserved,jdbcType=VARCHAR})-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.landleaf.lgc.entity.TLightPosition">-->
+    <!--insert into t_light_position-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="xPos != null">-->
+        <!--x_pos,-->
+      <!--</if>-->
+      <!--<if test="yPos != null">-->
+        <!--y_pos,-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--name,-->
+      <!--</if>-->
+      <!--<if test="deviceId != null">-->
+        <!--device_id,-->
+      <!--</if>-->
+      <!--<if test="floorConfigId != null">-->
+        <!--floor_config_id,-->
+      <!--</if>-->
+      <!--<if test="ctime != null">-->
+        <!--ctime,-->
+      <!--</if>-->
+      <!--<if test="utime != null">-->
+        <!--utime,-->
+      <!--</if>-->
+      <!--<if test="img != null">-->
+        <!--img,-->
+      <!--</if>-->
+      <!--<if test="reserved != null">-->
+        <!--Reserved,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--#{id,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="xPos != null">-->
+        <!--#{xPos,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="yPos != null">-->
+        <!--#{yPos,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="deviceId != null">-->
+        <!--#{deviceId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="floorConfigId != null">-->
+        <!--#{floorConfigId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="ctime != null">-->
+        <!--#{ctime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="utime != null">-->
+        <!--#{utime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="img != null">-->
+        <!--#{img,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="reserved != null">-->
+        <!--#{reserved,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.landleaf.lgc.entity.TLightPosition">-->
+    <!--update t_light_position-->
+    <!--<set>-->
+      <!--<if test="xPos != null">-->
+        <!--x_pos = #{xPos,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="yPos != null">-->
+        <!--y_pos = #{yPos,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="deviceId != null">-->
+        <!--device_id = #{deviceId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="floorConfigId != null">-->
+        <!--floor_config_id = #{floorConfigId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="ctime != null">-->
+        <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="utime != null">-->
+        <!--utime = #{utime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="img != null">-->
+        <!--img = #{img,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="reserved != null">-->
+        <!--Reserved = #{reserved,jdbcType=VARCHAR},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.landleaf.lgc.entity.TLightPosition">-->
+    <!--update t_light_position-->
+    <!--set x_pos = #{xPos,jdbcType=VARCHAR},-->
+      <!--y_pos = #{yPos,jdbcType=VARCHAR},-->
+      <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--device_id = #{deviceId,jdbcType=BIGINT},-->
+      <!--floor_config_id = #{floorConfigId,jdbcType=BIGINT},-->
+      <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
+      <!--utime = #{utime,jdbcType=TIMESTAMP},-->
+      <!--img = #{img,jdbcType=VARCHAR},-->
+      <!--Reserved = #{reserved,jdbcType=VARCHAR}-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+</mapper>

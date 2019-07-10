@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.TLightProductDeviceDao">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.light.TLightProductDevice">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="device_id" jdbcType="BIGINT" property="deviceId" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, device_id, product_id
+  </sql>
+  <delete id="deleteByProductId" parameterType="java.lang.Long">
+    delete from t_light_product_device
+    where product_id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <delete id="deleteByDeviceId" parameterType="java.lang.Long">
+    delete from t_light_product_device
+    where device_id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+  <!--<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from t_light_product_device-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
+    <!--delete from t_light_product_device-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.landleaf.lgc.entity.TLightProductDevice">-->
+    <!--insert into t_light_product_device (id, device_id, product_id-->
+      <!--)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{deviceId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}-->
+      <!--)-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.landleaf.lgc.entity.TLightProductDevice">-->
+    <!--insert into t_light_product_device-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="deviceId != null">-->
+        <!--device_id,-->
+      <!--</if>-->
+      <!--<if test="productId != null">-->
+        <!--product_id,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--#{id,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="deviceId != null">-->
+        <!--#{deviceId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="productId != null">-->
+        <!--#{productId,jdbcType=BIGINT},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.landleaf.lgc.entity.TLightProductDevice">-->
+    <!--update t_light_product_device-->
+    <!--<set>-->
+      <!--<if test="deviceId != null">-->
+        <!--device_id = #{deviceId,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="productId != null">-->
+        <!--product_id = #{productId,jdbcType=BIGINT},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.landleaf.lgc.entity.TLightProductDevice">-->
+    <!--update t_light_product_device-->
+    <!--set device_id = #{deviceId,jdbcType=BIGINT},-->
+      <!--product_id = #{productId,jdbcType=BIGINT}-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+</mapper>

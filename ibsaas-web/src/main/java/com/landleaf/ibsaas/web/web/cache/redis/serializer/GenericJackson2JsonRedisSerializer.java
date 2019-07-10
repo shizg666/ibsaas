@@ -61,7 +61,7 @@ public class GenericJackson2JsonRedisSerializer implements RedisSerializer<Objec
 
     /**
      * Setting a custom-configured {@link ObjectMapper} is one way to take further control of the JSON serialization
-     * process. For example, an extended {@link SerializerFactory} can be configured that provides custom serializers for
+     * processor. For example, an extended {@link SerializerFactory} can be configured that provides custom serializers for
      * specific types.
      *
      * @param mapper must not be {@literal null}.
