@@ -79,6 +79,9 @@ public class CommonDeviceService implements ICommonDeviceService {
     @Autowired
     private CommonAsyncService commonAsyncService;
 
+    @Autowired
+    private CommonDeviceExService commonDeviceExService;
+
     @Override
     public void reload() {
         remoteDeviceInfoHolder.reload();
@@ -89,45 +92,8 @@ public class CommonDeviceService implements ICommonDeviceService {
 
     @Override
     public List<? extends BaseDevice> getCurrentData(Integer deviceType) {
-        List<HvacPointDetail> hvacPointDetails = HvacPointHolder.DEVICE_POINT_LIST_MAP.get(deviceType);
-        Map<String, List<HvacPointDetail>> hvacPointMap = HvacPointHolder.DEVICE_POINT_MAP.get(deviceType);
-        Map<String, PropertyValues> propertyValues = getPropertyValues(hvacPointDetails);
-
-        List<BaseDevice> result = HvacNodeHolder.DEVICE_NODE_MAP.get(deviceType);
-
-        result.forEach(bd -> {
-            List<HvacPointDetail> hvacPointDetailList = hvacPointMap.get(bd.getId());
-            HvacUtil.assignmentByClassBacnet(propertyValues, hvacPointDetailList, bd);
-        });
-        return result;
+        return commonAsyncService.getCurrentData(deviceType);
     }
-
-    private Map<String, PropertyValues> getPropertyValues(List<HvacPointDetail> hvacPointDetails){
-        Map<String, PropertyValues> result = new HashMap<>(8);
-        HashMap<String, List<ObjectIdentifier>> objectIdentifierMap =
-                hvacPointDetails.stream().collect(
-                        Collectors.groupingBy(
-                                HvacPointDetail::getDeviceId,
-                                HashMap::new,
-                                Collectors.mapping(hp ->
-                                        new ObjectIdentifier(
-                                                BacnetObjectEnum.getObjectType(hp.getBacnetObjectType()),
-                                                hp.getInstanceNumber()),
-                                        Collectors.toList())));
-        objectIdentifierMap.forEach((k,v) -> {
-            try {
-                PropertyValues values = BacnetUtil.readPresentValues(LocalDeviceConfig.getLocalDevice(), RemoteDeviceInfoHolder.REMOTE_DEVICE_ID_MAP.get(k), v);
-                result.put(k, values);
-            } catch (BACnetException e) {
-                e.printStackTrace();
-                log.error("------------------------------>请求设备点位事发生错误:{}",e.getMessage(), e);
-            }
-
-        });
-
-        return result;
-    }
-
 
 
 
@@ -138,20 +104,13 @@ public class CommonDeviceService implements ICommonDeviceService {
     }
 
     private void currentBacnetDataToRedis(){
-        //转成collection开启并行处理流   平均处理时间在500ms
-        BacnetDeviceTypeEnum.MAP.entrySet().parallelStream().forEach(entry -> {
-            List<? extends BaseDevice> currentData = getCurrentData(entry.getKey());
-            if (CollectionUtils.isNotEmpty(currentData)) {
-                redisHandle.addMap(placeId, String.valueOf(entry.getKey()), currentData);
-            }
-        });
+        commonDeviceExService.currentBacnetDataToRedis();
     }
 
 
     private void currentMbDataToRedis(){
-        commonAsyncService.currentMbDataToRedis();
+        commonDeviceExService.currentMbDataToRedis();
     }
-
 
 
 

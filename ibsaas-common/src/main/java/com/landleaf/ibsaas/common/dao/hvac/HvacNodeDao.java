@@ -78,4 +78,11 @@ public interface HvacNodeDao extends BaseDao<HvacNode> {
      * @return
      */
     List<HvacNode> getHvacNodes(@Param("deviceType") Integer deviceType);
+
+    /**
+     * 批处理
+     * @param maxId
+     * @return
+     */
+    List<HvacNode> getHvacNodeLmt(@Param("maxId") Integer maxId);
 }

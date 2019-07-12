@@ -161,13 +161,13 @@ public class IbsaasClientHvacApplicationTests {
     @Test
     public void updateBatch(){
 //        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointDaoByNodeIdOrFieldId( "240563253330186240", null, null);
-        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointLmt( 100);
+        List<HvacPoint> hvacPoints = hvacPointDao.getHvacPointLmt( 300);
         hvacPoints.forEach(hp -> {
             HvacPoint temp = new HvacPoint();
             BeanUtils.copyProperties(hp, temp);
             daoAdapter.consummateAddOperation(temp);
-            hvacPointDao.insertSelective(temp);
             hvacPointDao.delete(hp);
+            hvacPointDao.insertSelective(temp);
         });
 //        List<ConfigSetting> configSettings = configSettingDao.getCongfigSettingLmt( 300);
 //        configSettings.forEach(hp -> {
@@ -193,8 +193,17 @@ public class IbsaasClientHvacApplicationTests {
 //            HvacField temp = new HvacField();
 //            BeanUtils.copyProperties(hf, temp);
 //            daoAdapter.consummateAddOperation(temp);
-//            hvacFieldDao.insertSelective(temp);
 //            hvacFieldDao.delete(hf);
+//            hvacFieldDao.insertSelective(temp);
+//        });
+//
+//        List<HvacNode> list = hvacNodeDao.getHvacNodeLmt(100);
+//        list.forEach(o -> {
+//            HvacNode temp = new HvacNode();
+//            BeanUtils.copyProperties(o, temp);
+//            daoAdapter.consummateAddOperation(temp);
+//            hvacNodeDao.delete(o);
+//            hvacNodeDao.insertSelective(temp);
 //        });
 
 

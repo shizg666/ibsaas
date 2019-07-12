@@ -1,6 +1,6 @@
 package com.landleaf.ibsaas.common.domain.hvac.dto;
 
-import com.landleaf.ibsaas.common.domain.hvac.Ahu;
+import com.landleaf.ibsaas.common.domain.hvac.AchpMonitor;
 import lombok.Data;
 import lombok.ToString;
 
@@ -8,10 +8,10 @@ import java.io.Serializable;
 
 /**
  * @author Lokiy
- * @date 2019/7/2 17:24
+ * @date 2019/7/10 11:16
  * @description:
  */
 @Data
 @ToString(callSuper = true)
-public class AhuDTO extends Ahu implements Serializable {
+public class AchpMonitorDTO extends AchpMonitor implements Serializable {
 }

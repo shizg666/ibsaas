@@ -5,6 +5,7 @@ import com.landleaf.ibsaas.common.dao.hvac.modbus.MbNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.modbus.MbNode;
 import com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO;
 import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
+import com.landleaf.ibsaas.common.enums.hvac.sensor.SensorHchoLevelEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.web.rocketmq.WebMqProducer;
 import com.landleaf.ibsaas.web.web.service.hvac.BaseDeviceService;
@@ -53,6 +54,7 @@ public class SensorWebService extends BaseDeviceService implements ISensorWebSer
         Map<String, Map<String, SensorVO>> result = new HashMap<>(8);
         List<SensorVO> overview = overview();
         overview.forEach(ov -> {
+            ov.setSsHchoLevel(SensorHchoLevelEnum.getLevel(ov.getSsHcho()));
             MbNode temp = map.get(ov.getId());
             result.computeIfAbsent(String.valueOf(temp.getFloor()), k-> new HashMap<>(4));
             result.get(String.valueOf(temp.getFloor())).put(temp.getNodeName(), ov);

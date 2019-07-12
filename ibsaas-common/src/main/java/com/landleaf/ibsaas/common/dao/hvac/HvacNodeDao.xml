@@ -142,6 +142,11 @@
         </if>
         AND tee.id IS NULL
     </select>
+    <select id="getHvacNodeLmt" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacNode">
+        SELECT * FROM t_hvac_node
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
 
 
 </mapper>

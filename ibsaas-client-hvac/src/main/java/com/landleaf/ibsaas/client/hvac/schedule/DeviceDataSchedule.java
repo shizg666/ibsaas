@@ -20,7 +20,7 @@ public class DeviceDataSchedule {
     @Autowired
     private ICommonDeviceService iCommonDeviceService;
 
-    @Scheduled(cron = "0/2 * * * * *")
+    @Scheduled(cron = "0/5 * * * * *")
     public void dataToRedis(){
 //        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>开始刷入redis数据<<<<<<<<<<<<<<<<<<<<<<<<<");
 //        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>开始刷入redis数据<<<<<<<<<<<<<<<<<<<<<<<<<");
