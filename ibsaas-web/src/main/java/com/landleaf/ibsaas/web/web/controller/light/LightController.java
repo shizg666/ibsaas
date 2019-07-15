@@ -26,7 +26,7 @@ public class LightController extends BasicController {
     private ILightService iLightService;
 
     @PostMapping("/controlLight")
-    @ApiOperation(value = "控制某个灯光", notes = "灯光设备列表分页查询")
+    @ApiOperation(value = "控制灯光", notes = "控制灯光")
     public Response controlLight(@RequestBody LightMsg requestBody) {
         iLightService.controlLight(requestBody);
         return returnSuccess();

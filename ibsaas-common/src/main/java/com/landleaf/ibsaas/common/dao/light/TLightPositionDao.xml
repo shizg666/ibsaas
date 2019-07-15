@@ -7,14 +7,14 @@
     <result column="y_pos" jdbcType="VARCHAR" property="yPos" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="device_id" jdbcType="BIGINT" property="deviceId" />
-    <result column="floor_config_id" jdbcType="BIGINT" property="floorConfigId" />
+    <result column="floor_id" jdbcType="BIGINT" property="floorId" />
     <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
     <result column="utime" jdbcType="TIMESTAMP" property="utime" />
     <result column="img" jdbcType="VARCHAR" property="img" />
     <result column="Reserved" jdbcType="VARCHAR" property="reserved" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, x_pos, y_pos, name, device_id, floor_config_id, ctime, utime, img, Reserved
+    id, x_pos, y_pos, name, device_id, floor_id, ctime, utime, img, Reserved
   </sql>
   <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
     <!--delete from t_light_position-->
@@ -22,11 +22,11 @@
   <!--</delete>-->
   <!--<insert id="insert" parameterType="com.landleaf.lgc.entity.TLightPosition">-->
     <!--insert into t_light_position (id, x_pos, y_pos, -->
-      <!--name, device_id, floor_config_id, -->
+      <!--name, device_id, floor_id, -->
       <!--ctime, utime, img, -->
       <!--Reserved)-->
     <!--values (#{id,jdbcType=BIGINT}, #{xPos,jdbcType=VARCHAR}, #{yPos,jdbcType=VARCHAR}, -->
-      <!--#{name,jdbcType=VARCHAR}, #{deviceId,jdbcType=BIGINT}, #{floorConfigId,jdbcType=BIGINT}, -->
+      <!--#{name,jdbcType=VARCHAR}, #{deviceId,jdbcType=BIGINT}, #{floorId,jdbcType=BIGINT}, -->
       <!--#{ctime,jdbcType=TIMESTAMP}, #{utime,jdbcType=TIMESTAMP}, #{img,jdbcType=VARCHAR}, -->
       <!--#{reserved,jdbcType=VARCHAR})-->
   <!--</insert>-->
@@ -48,8 +48,8 @@
       <!--<if test="deviceId != null">-->
         <!--device_id,-->
       <!--</if>-->
-      <!--<if test="floorConfigId != null">-->
-        <!--floor_config_id,-->
+      <!--<if test="floorId != null">-->
+        <!--floor_id,-->
       <!--</if>-->
       <!--<if test="ctime != null">-->
         <!--ctime,-->
@@ -80,8 +80,8 @@
       <!--<if test="deviceId != null">-->
         <!--#{deviceId,jdbcType=BIGINT},-->
       <!--</if>-->
-      <!--<if test="floorConfigId != null">-->
-        <!--#{floorConfigId,jdbcType=BIGINT},-->
+      <!--<if test="floorId != null">-->
+        <!--#{floorId,jdbcType=BIGINT},-->
       <!--</if>-->
       <!--<if test="ctime != null">-->
         <!--#{ctime,jdbcType=TIMESTAMP},-->
@@ -112,8 +112,8 @@
       <!--<if test="deviceId != null">-->
         <!--device_id = #{deviceId,jdbcType=BIGINT},-->
       <!--</if>-->
-      <!--<if test="floorConfigId != null">-->
-        <!--floor_config_id = #{floorConfigId,jdbcType=BIGINT},-->
+      <!--<if test="floorId != null">-->
+        <!--floor_id = #{floorId,jdbcType=BIGINT},-->
       <!--</if>-->
       <!--<if test="ctime != null">-->
         <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
@@ -136,7 +136,7 @@
       <!--y_pos = #{yPos,jdbcType=VARCHAR},-->
       <!--name = #{name,jdbcType=VARCHAR},-->
       <!--device_id = #{deviceId,jdbcType=BIGINT},-->
-      <!--floor_config_id = #{floorConfigId,jdbcType=BIGINT},-->
+      <!--floor_id = #{floorId,jdbcType=BIGINT},-->
       <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
       <!--utime = #{utime,jdbcType=TIMESTAMP},-->
       <!--img = #{img,jdbcType=VARCHAR},-->

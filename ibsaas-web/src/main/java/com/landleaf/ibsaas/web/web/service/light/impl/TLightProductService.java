@@ -3,8 +3,9 @@ package com.landleaf.ibsaas.web.web.service.light.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.landleaf.ibsaas.common.dao.light.TLightDeviceDao;
 import com.landleaf.ibsaas.common.dao.light.TLightProductDao;
-import com.landleaf.ibsaas.common.dao.light.TLightProductDeviceDao;
+import com.landleaf.ibsaas.common.domain.light.TLightDevice;
 import com.landleaf.ibsaas.common.domain.light.TLightProduct;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
@@ -26,7 +27,7 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
     @Autowired
     private IdGenerator idGenerator;
     @Autowired
-    private TLightProductDeviceDao tLightProductDeviceDao;
+    private TLightDeviceDao tLightDeviceDao;
 
 
     @Override
@@ -43,11 +44,14 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
     @Override
     @Transactional
     public Integer deleteProduct(Long id) {
+        TLightDevice tLightDevice = tLightDeviceDao.getDeviceByProductId(id);
+        if (tLightDevice != null){
+            throw new BusinessException("该产品下面尚有设备存在！");
+        }
         Integer result = deleteByPrimaryKey(id);
         if (result < 0 ) {
             throw new BusinessException("产品删除失败");
         }
-        tLightProductDeviceDao.deleteByProductId(id);
         return result;
     }
 

@@ -1,5 +1,6 @@
 package com.landleaf.ibsaas.client.light.handle.netty;
 
+import com.landleaf.ibsaas.client.light.decode.MyDecoder;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
@@ -32,7 +33,7 @@ public class NettyChannelPoolHandler implements ChannelPoolHandler {
         channel.pipeline()
 //                .addLast(new DelimiterBasedFrameDecoder(1024, delimiter))
 //                .addLast(new StringDecoder()).addLast(new StringEncoder()).addLast(new NettyClientHander());
-                .addLast(new NettyClientHander());
+                .addLast(new MyDecoder()).addLast(new NettyClientHander());
 
     }
 }

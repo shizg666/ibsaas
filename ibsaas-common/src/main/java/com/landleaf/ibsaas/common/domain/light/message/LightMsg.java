@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.common.domain.light.message;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -9,6 +10,7 @@ import java.io.Serializable;
  * 灯光控制DTO
  */
 @ApiModel(description = "灯光控制消息实体")
+@ToString
 public class LightMsg implements Serializable {
 
     @ApiModelProperty(value = "楼层")
@@ -21,16 +23,16 @@ public class LightMsg implements Serializable {
     private String group;
     @ApiModelProperty(value = "设备地址")
     private String device;
-    @ApiModelProperty(value = "情景模式")
-    private String scenes;
+    @ApiModelProperty(value = "设置的值")
+    private String value;
 
 
-    public String getScenes() {
-        return scenes;
+    public String getValue() {
+        return value;
     }
 
-    public void setScenes(String scenes) {
-        this.scenes = scenes;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getRegion() {
@@ -73,15 +75,5 @@ public class LightMsg implements Serializable {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "LightMsg{" +
-                "floor='" + floor + '\'' +
-                ", type='" + type + '\'' +
-                ", region='" + region + '\'' +
-                ", group='" + group + '\'' +
-                ", device='" + device + '\'' +
-                ", scenes='" + scenes + '\'' +
-                '}';
-    }
+
 }

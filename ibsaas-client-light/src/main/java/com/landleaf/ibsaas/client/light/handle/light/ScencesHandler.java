@@ -6,7 +6,7 @@ import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import org.springframework.stereotype.Component;
 
 
-@HandlerType(type="2",desc = "灯光场景控制处理器")
+@HandlerType(type="2",desc = "灯光场景控制处理器(R1S1!)")
 @Component
 public class ScencesHandler extends AbstractLightHandler {
     @Override
@@ -14,7 +14,7 @@ public class ScencesHandler extends AbstractLightHandler {
         //02 16进制是ASCII控制字符
         StringBuilder command = new StringBuilder("\u0002");
         String region = lightMsg.getRegion();
-        String scenes = lightMsg.getScenes();
+        String scenes = lightMsg.getValue();
         String group = lightMsg.getGroup();
         String device = lightMsg.getDevice();
 
@@ -22,7 +22,7 @@ public class ScencesHandler extends AbstractLightHandler {
             command.append("R").append(region);
         }
         if (StringUtil.isNotEmpty(scenes)){
-            command.append("S").append(scenes);
+            command.append("S").append(scenes).append("!");
         }
         //03 16进制是ASCII控制字符
         command.append("\u0003");

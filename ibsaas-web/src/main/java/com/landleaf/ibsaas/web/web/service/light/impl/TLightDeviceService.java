@@ -4,7 +4,6 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.dao.light.TLightDeviceDao;
-import com.landleaf.ibsaas.common.dao.light.TLightProductDeviceDao;
 import com.landleaf.ibsaas.common.domain.light.TLightDevice;
 import com.landleaf.ibsaas.common.domain.light.TLightProductDevice;
 import com.landleaf.ibsaas.common.exception.BusinessException;
@@ -13,7 +12,6 @@ import com.landleaf.ibsaas.web.web.service.light.ITLightDeviceService;
 import com.landleaf.ibsaas.common.domain.light.vo.LightDeviceResponseVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightDeviceQueryVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightDeviceRequestVO;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,11 +24,6 @@ import java.util.List;
 
 @Service
 public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TLightDevice> implements ITLightDeviceService<TLightDevice> {
-
-    @Autowired
-    private TLightProductDeviceService tLightProductDeviceService;
-    @Autowired
-    private TLightProductDeviceDao tLightProductDeviceDao;
 
 
     @Override
@@ -49,7 +42,6 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
     @Transactional
     public Integer deleteDevice(Long id) {
         Integer result = deleteByPrimaryKey(id);
-        tLightProductDeviceDao.deleteByProductId(id);
         return result;
     }
 
@@ -82,13 +74,13 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
         Example example = new Example(TLightProductDevice.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("deviceId", tLightDevice.getId());
-        tLightProductDeviceService.updateByExampleSelective(tLightProductDevice,example);
         return tLightDevice;
     }
 
 
     private TLightDevice addDevice(TLightDeviceRequestVO tLightDeviceRequestVO) {
         TLightDevice tLightDevice = new TLightDevice();
+        //Detects duplicates in source code
         BeanUtils.copyProperties(tLightDeviceRequestVO,tLightDevice);
         Date date = new Date();
         tLightDevice.setCtime(date);
@@ -97,10 +89,6 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
         if (result < 0 ){
             throw new BusinessException("灯光设备添加失败");
         }
-        TLightProductDevice tLightProductDevice = new TLightProductDevice();
-        tLightProductDevice.setDeviceId(tLightDevice.getId());
-        tLightProductDevice.setProductId(tLightDeviceRequestVO.getProductId());
-        tLightProductDeviceService.saveSelective(tLightProductDevice);
         return tLightDevice;
     }
 }

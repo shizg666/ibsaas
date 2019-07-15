@@ -1,4 +1,4 @@
-package com.landleaf.ibsaas.client.light.rokectmq;
+package com.landleaf.ibsaas.client.light.rokectmq.consumer;
 
 
 import com.alibaba.rocketmq.common.message.MessageExt;

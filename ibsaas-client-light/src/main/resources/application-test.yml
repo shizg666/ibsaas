@@ -112,24 +112,12 @@ pagehelper:
     count: countSql
 
 rocketmq:
-  producer:
-    enable: true
-    groupName: ibsaas
-    topic: topic_light_control
-    tags: tags
-    #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
-    #消息最大长度 默认1024*4(4M)
-    maxMessageSize: 91920
-    sendMsgTimeout: 30000
-    retryTimesWhenSendFailed: 1
   consumer:
     enable: true
-    groupName: ibsaas
+    groupName: ibsaas_light
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
     #灯光
     topics: topic_light_control-*
-    topic: topic_light
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10

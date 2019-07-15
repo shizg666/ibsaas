@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.knight.TBuilding;
 import com.landleaf.ibsaas.common.domain.knight.TDoor;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
+import com.landleaf.ibsaas.common.enums.BusinessTypeEnum;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.knight.IBuildingService;
 import com.landleaf.ibsaas.web.web.service.knight.IDoorService;
@@ -96,6 +97,9 @@ public class DoorController extends BasicController {
     @PostMapping("/v1/door/addOrUpdateBuilding")
     @ApiOperation(value = "添加或者修改楼栋信息")
     public Response<TBuildingVO> addOrUpdateBuilding(@RequestBody TBuilding tBuilding) {
+        if (tBuilding.getId() == null || tBuilding.getId() == 0){
+            tBuilding.setType(BusinessTypeEnum.BUSINESS_KNIGHT.getType());
+        }
         log.info("DoorController ----->addOrUpdateBuilding TBuilding:{}", JSONObject.toJSONString(tBuilding));
         TBuilding tBuilding1 = iBuildingService.addBuildingOrUpdate(tBuilding);
         TBuildingVO tBuildingVO = new TBuildingVO();

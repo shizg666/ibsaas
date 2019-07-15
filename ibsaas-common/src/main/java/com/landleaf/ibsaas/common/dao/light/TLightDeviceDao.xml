@@ -12,9 +12,10 @@
     <result column="utime" jdbcType="TIMESTAMP" property="utime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="reserved" jdbcType="VARCHAR" property="reserved" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, name, adress, gateway, mac, protocol_docking, ctime, utime, remark, reserved
+    id, name, adress, gateway, mac, protocol_docking, ctime, utime, remark, reserved, product_id
   </sql>
   <select id="getDeviceRecordByCondition"
           resultType="com.landleaf.ibsaas.common.domain.light.vo.LightDeviceResponseVO">
@@ -41,137 +42,39 @@
 
 
   </select>
-  <!--<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
-    <!--select -->
-    <!--<include refid="Base_Column_List" />-->
-    <!--from t_light_device-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</select>-->
-  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
-    <!--delete from t_light_device-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</delete>-->
-  <!--<insert id="insert" parameterType="com.landleaf.lgc.entity.TLightDevice">-->
-    <!--insert into t_light_device (id, name, adress, -->
-      <!--gateway, mac, protocol_docking, -->
-      <!--ctime, utime, remark, -->
-      <!--reserved)-->
-    <!--values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{adress,jdbcType=VARCHAR}, -->
-      <!--#{gateway,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR}, #{protocolDocking,jdbcType=VARCHAR}, -->
-      <!--#{ctime,jdbcType=TIMESTAMP}, #{utime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, -->
-      <!--#{reserved,jdbcType=VARCHAR})-->
-  <!--</insert>-->
-  <!--<insert id="insertSelective" parameterType="com.landleaf.lgc.entity.TLightDevice">-->
-    <!--insert into t_light_device-->
-    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
-      <!--<if test="id != null">-->
-        <!--id,-->
-      <!--</if>-->
-      <!--<if test="name != null">-->
-        <!--name,-->
-      <!--</if>-->
-      <!--<if test="adress != null">-->
-        <!--adress,-->
-      <!--</if>-->
-      <!--<if test="gateway != null">-->
-        <!--gateway,-->
-      <!--</if>-->
-      <!--<if test="mac != null">-->
-        <!--mac,-->
-      <!--</if>-->
-      <!--<if test="protocolDocking != null">-->
-        <!--protocol_docking,-->
-      <!--</if>-->
-      <!--<if test="ctime != null">-->
-        <!--ctime,-->
-      <!--</if>-->
-      <!--<if test="utime != null">-->
-        <!--utime,-->
-      <!--</if>-->
-      <!--<if test="remark != null">-->
-        <!--remark,-->
-      <!--</if>-->
-      <!--<if test="reserved != null">-->
-        <!--reserved,-->
-      <!--</if>-->
-    <!--</trim>-->
-    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
-      <!--<if test="id != null">-->
-        <!--#{id,jdbcType=BIGINT},-->
-      <!--</if>-->
-      <!--<if test="name != null">-->
-        <!--#{name,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="adress != null">-->
-        <!--#{adress,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="gateway != null">-->
-        <!--#{gateway,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="mac != null">-->
-        <!--#{mac,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="protocolDocking != null">-->
-        <!--#{protocolDocking,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="ctime != null">-->
-        <!--#{ctime,jdbcType=TIMESTAMP},-->
-      <!--</if>-->
-      <!--<if test="utime != null">-->
-        <!--#{utime,jdbcType=TIMESTAMP},-->
-      <!--</if>-->
-      <!--<if test="remark != null">-->
-        <!--#{remark,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="reserved != null">-->
-        <!--#{reserved,jdbcType=VARCHAR},-->
-      <!--</if>-->
-    <!--</trim>-->
-  <!--</insert>-->
-  <!--<update id="updateByPrimaryKeySelective" parameterType="com.landleaf.lgc.entity.TLightDevice">-->
-    <!--update t_light_device-->
-    <!--<set>-->
-      <!--<if test="name != null">-->
-        <!--name = #{name,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="adress != null">-->
-        <!--adress = #{adress,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="gateway != null">-->
-        <!--gateway = #{gateway,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="mac != null">-->
-        <!--mac = #{mac,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="protocolDocking != null">-->
-        <!--protocol_docking = #{protocolDocking,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="ctime != null">-->
-        <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
-      <!--</if>-->
-      <!--<if test="utime != null">-->
-        <!--utime = #{utime,jdbcType=TIMESTAMP},-->
-      <!--</if>-->
-      <!--<if test="remark != null">-->
-        <!--remark = #{remark,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="reserved != null">-->
-        <!--reserved = #{reserved,jdbcType=VARCHAR},-->
-      <!--</if>-->
-    <!--</set>-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</update>-->
-  <!--<update id="updateByPrimaryKey" parameterType="com.landleaf.lgc.entity.TLightDevice">-->
-    <!--update t_light_device-->
-    <!--set name = #{name,jdbcType=VARCHAR},-->
-      <!--adress = #{adress,jdbcType=VARCHAR},-->
-      <!--gateway = #{gateway,jdbcType=VARCHAR},-->
-      <!--mac = #{mac,jdbcType=VARCHAR},-->
-      <!--protocol_docking = #{protocolDocking,jdbcType=VARCHAR},-->
-      <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
-      <!--utime = #{utime,jdbcType=TIMESTAMP},-->
-      <!--remark = #{remark,jdbcType=VARCHAR},-->
-      <!--reserved = #{reserved,jdbcType=VARCHAR}-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</update>-->
+  <select id="getDeviceListByIds" resultType="com.landleaf.ibsaas.common.domain.light.TLightDevice">
+    select
+    <include refid="Base_Column_List"/>
+    from t_light_device  where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+  </select>
+
+  <select id="getDeviceProductIdsByIds" resultType="com.landleaf.ibsaas.common.domain.light.TLightDevice">
+    select
+    id,product_id
+    from t_light_device  where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+  </select>
+
+  <select id="getProductIdsByIds" resultType="java.lang.Long">
+    select
+    product_id
+    from t_light_device  where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+
+  </select>
+
+  <select id="getDeviceByProductId" resultType="com.landleaf.ibsaas.common.domain.light.TLightDevice">
+    select
+    <include refid="Base_Column_List"/>
+    from t_light_device  where product_id =  #{id,jdbcType=BIGINT}
+
+  </select>
+
 </mapper>

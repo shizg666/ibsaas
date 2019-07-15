@@ -8,6 +8,7 @@ import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.pool.SimpleChannelPool;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
@@ -32,8 +33,19 @@ public abstract class AbstractLightHandler {
                 String command = this.getCommand(lightMsg);
                 String msg = Hex.str2HexStr(command);
                 log.info("AbstractLightHandler --------> process 发送灯控指令command：{},转化成16进制：{}",command,msg);
-//                buffer.writeBytes(Hex.toBytes(mes));
-//                ch.writeAndFlush(buffer);
+//                buffer.writeBytes(Hex.toBytes(msg));
+////                ch.writeAndFlush(buffer);
+//                ChannelFuture lastWriteFuture = null;
+//                lastWriteFuture = ch.writeAndFlush(buffer);
+//
+//                // Wait until all messages are flushed before closing the channel.
+//                if (lastWriteFuture != null) {
+//                    try {
+//                        lastWriteFuture.sync();
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
 //                pool.release(ch);
             }
         });

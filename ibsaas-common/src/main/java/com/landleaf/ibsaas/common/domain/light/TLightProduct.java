@@ -21,7 +21,7 @@ public class TLightProduct {
     @ApiModelProperty(value = "产品型号")
     private String model;
     @ApiModelProperty(value = "产品类型")
-    private String type;
+    private Long typeId;
     @ApiModelProperty(value = "产品接入协议")
     private String protocol;
     @ApiModelProperty(value = "产品对接协议")
@@ -65,12 +65,12 @@ public class TLightProduct {
         this.model = model == null ? null : model.trim();
     }
 
-    public String getType() {
-        return type;
+    public Long getTypeId() {
+        return typeId;
     }
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
     }
 
     public String getProtocol() {

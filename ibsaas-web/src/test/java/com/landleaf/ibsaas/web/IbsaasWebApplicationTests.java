@@ -2,7 +2,6 @@ package com.landleaf.ibsaas.web;
 
 
 import com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao;
-import com.landleaf.ibsaas.common.domain.energy.dto.EnergyReportDTO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO;
 import com.landleaf.ibsaas.common.enums.energy.DimensionTypeEnum;
@@ -31,6 +30,8 @@ public class IbsaasWebApplicationTests {
     private EnergyReportService energyReportService;
 
 
+
+
     @Test
     public void contextLoads() {
     }
@@ -50,4 +51,5 @@ public class IbsaasWebApplicationTests {
         Long end = System.currentTimeMillis();
         System.out.println(end-start);
     }
+
 }

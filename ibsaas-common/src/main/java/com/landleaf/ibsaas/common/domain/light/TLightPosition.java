@@ -13,7 +13,7 @@ public class TLightPosition {
 
     private Long deviceId;
 
-    private Long floorConfigId;
+    private Long floorId;
 
     private Date ctime;
 
@@ -63,12 +63,12 @@ public class TLightPosition {
         this.deviceId = deviceId;
     }
 
-    public Long getFloorConfigId() {
-        return floorConfigId;
+    public Long getFloorId() {
+        return floorId;
     }
 
-    public void setFloorConfigId(Long floorConfigId) {
-        this.floorConfigId = floorConfigId;
+    public void setFloorId(Long floorId) {
+        this.floorId = floorId;
     }
 
     public Date getCtime() {

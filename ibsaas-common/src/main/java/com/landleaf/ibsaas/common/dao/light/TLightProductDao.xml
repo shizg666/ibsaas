@@ -6,7 +6,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="brand" jdbcType="VARCHAR" property="brand" />
     <result column="model" jdbcType="VARCHAR" property="model" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="type" jdbcType="BIGINT" property="typeId" />
     <result column="protocol" jdbcType="VARCHAR" property="protocol" />
     <result column="protocol_docking" jdbcType="VARCHAR" property="protocolDocking" />
     <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
@@ -15,150 +15,18 @@
     <result column="Reserved2" jdbcType="VARCHAR" property="reserved2" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, name, brand, model, type, protocol, protocol_docking, ctime, utime, Reserved1, 
+    id, name, brand, model, type_id, protocol, protocol_docking, ctime, utime, Reserved1,
     Reserved2
   </sql>
-  <!--<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
-    <!--select -->
-    <!--<include refid="Base_Column_List" />-->
-    <!--from t_light_product-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</select>-->
-  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
-    <!--delete from t_light_product-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</delete>-->
-  <!--<insert id="insert" parameterType="com.landleaf.lgc.entity.TLightProduct">-->
-    <!--insert into t_light_product (id, name, brand, -->
-      <!--model, type, protocol, -->
-      <!--protocol_docking, ctime, utime, -->
-      <!--Reserved1, Reserved2)-->
-    <!--values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, -->
-      <!--#{model,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{protocol,jdbcType=VARCHAR}, -->
-      <!--#{protocolDocking,jdbcType=VARCHAR}, #{ctime,jdbcType=TIMESTAMP}, #{utime,jdbcType=TIMESTAMP}, -->
-      <!--#{reserved1,jdbcType=VARCHAR}, #{reserved2,jdbcType=VARCHAR})-->
-  <!--</insert>-->
-  <!--<insert id="insertSelective" parameterType="com.landleaf.lgc.entity.TLightProduct">-->
-    <!--insert into t_light_product-->
-    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
-      <!--<if test="id != null">-->
-        <!--id,-->
-      <!--</if>-->
-      <!--<if test="name != null">-->
-        <!--name,-->
-      <!--</if>-->
-      <!--<if test="brand != null">-->
-        <!--brand,-->
-      <!--</if>-->
-      <!--<if test="model != null">-->
-        <!--model,-->
-      <!--</if>-->
-      <!--<if test="type != null">-->
-        <!--type,-->
-      <!--</if>-->
-      <!--<if test="protocol != null">-->
-        <!--protocol,-->
-      <!--</if>-->
-      <!--<if test="protocolDocking != null">-->
-        <!--protocol_docking,-->
-      <!--</if>-->
-      <!--<if test="ctime != null">-->
-        <!--ctime,-->
-      <!--</if>-->
-      <!--<if test="utime != null">-->
-        <!--utime,-->
-      <!--</if>-->
-      <!--<if test="reserved1 != null">-->
-        <!--Reserved1,-->
-      <!--</if>-->
-      <!--<if test="reserved2 != null">-->
-        <!--Reserved2,-->
-      <!--</if>-->
-    <!--</trim>-->
-    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
-      <!--<if test="id != null">-->
-        <!--#{id,jdbcType=BIGINT},-->
-      <!--</if>-->
-      <!--<if test="name != null">-->
-        <!--#{name,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="brand != null">-->
-        <!--#{brand,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="model != null">-->
-        <!--#{model,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="type != null">-->
-        <!--#{type,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="protocol != null">-->
-        <!--#{protocol,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="protocolDocking != null">-->
-        <!--#{protocolDocking,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="ctime != null">-->
-        <!--#{ctime,jdbcType=TIMESTAMP},-->
-      <!--</if>-->
-      <!--<if test="utime != null">-->
-        <!--#{utime,jdbcType=TIMESTAMP},-->
-      <!--</if>-->
-      <!--<if test="reserved1 != null">-->
-        <!--#{reserved1,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="reserved2 != null">-->
-        <!--#{reserved2,jdbcType=VARCHAR},-->
-      <!--</if>-->
-    <!--</trim>-->
-  <!--</insert>-->
-  <!--<update id="updateByPrimaryKeySelective" parameterType="com.landleaf.lgc.entity.TLightProduct">-->
-    <!--update t_light_product-->
-    <!--<set>-->
-      <!--<if test="name != null">-->
-        <!--name = #{name,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="brand != null">-->
-        <!--brand = #{brand,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="model != null">-->
-        <!--model = #{model,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="type != null">-->
-        <!--type = #{type,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="protocol != null">-->
-        <!--protocol = #{protocol,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="protocolDocking != null">-->
-        <!--protocol_docking = #{protocolDocking,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="ctime != null">-->
-        <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
-      <!--</if>-->
-      <!--<if test="utime != null">-->
-        <!--utime = #{utime,jdbcType=TIMESTAMP},-->
-      <!--</if>-->
-      <!--<if test="reserved1 != null">-->
-        <!--Reserved1 = #{reserved1,jdbcType=VARCHAR},-->
-      <!--</if>-->
-      <!--<if test="reserved2 != null">-->
-        <!--Reserved2 = #{reserved2,jdbcType=VARCHAR},-->
-      <!--</if>-->
-    <!--</set>-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</update>-->
-  <!--<update id="updateByPrimaryKey" parameterType="com.landleaf.lgc.entity.TLightProduct">-->
-    <!--update t_light_product-->
-    <!--set name = #{name,jdbcType=VARCHAR},-->
-      <!--brand = #{brand,jdbcType=VARCHAR},-->
-      <!--model = #{model,jdbcType=VARCHAR},-->
-      <!--type = #{type,jdbcType=VARCHAR},-->
-      <!--protocol = #{protocol,jdbcType=VARCHAR},-->
-      <!--protocol_docking = #{protocolDocking,jdbcType=VARCHAR},-->
-      <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
-      <!--utime = #{utime,jdbcType=TIMESTAMP},-->
-      <!--Reserved1 = #{reserved1,jdbcType=VARCHAR},-->
-      <!--Reserved2 = #{reserved2,jdbcType=VARCHAR}-->
-    <!--where id = #{id,jdbcType=BIGINT}-->
-  <!--</update>-->
+
+  <select id="getProductListByProductIds" resultType="com.landleaf.ibsaas.common.domain.light.TLightProduct">
+    select
+    <include refid="Base_Column_List"/>
+    from t_light_product  where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+
+  </select>
+
 </mapper>

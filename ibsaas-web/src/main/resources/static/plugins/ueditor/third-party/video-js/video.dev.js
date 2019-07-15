@@ -285,7 +285,7 @@ vjs.on = function(elem, type, fn){
       var handlers = data.handlers[event.type];
 
       if (handlers) {
-        // Copy handlers so if handlers are added/removed during the process it doesn't throw everything off.
+        // Copy handlers so if handlers are added/removed during the processor it doesn't throw everything off.
         var handlersCopy = handlers.slice(0);
 
         for (var m = 0, n = handlersCopy.length; m < n; m++) {
@@ -1628,7 +1628,7 @@ vjs.Component.prototype.getChild = function(name){
  *
  * @param {String|vjs.Component} child The class name or instance of a child to add
  * @param {Object=} options Options, including options to be passed to children of the child.
- * @return {vjs.Component} The child component (created by this process if a string was used)
+ * @return {vjs.Component} The child component (created by this processor if a string was used)
  * @suppress {accessControls|checkRegExp|checkTypes|checkVars|const|constantProperty|deprecated|duplicate|es5Strict|fileoverviewTags|globalThis|invalidCasts|missingProperties|nonStandardJsDocs|strictModuleDepCheck|undefinedNames|undefinedVars|unknownDefines|uselessCode|visibility}
  */
 vjs.Component.prototype.addChild = function(child, options){
@@ -5986,7 +5986,7 @@ vjs.Player.prototype.addTextTrack = function(kind, label, language, options){
   tracks.push(track);
 
   // If track.dflt() is set, start showing immediately
-  // TODO: Add a process to deterime the best track to show for the specific kind
+  // TODO: Add a processor to deterime the best track to show for the specific kind
   // Incase there are mulitple defaulted tracks of the same kind
   // Or the user has a set preference of a specific language that should override the default
   // if (track.dflt()) {
