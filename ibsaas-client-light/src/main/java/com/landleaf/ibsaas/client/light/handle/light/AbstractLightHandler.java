@@ -1,14 +1,11 @@
 package com.landleaf.ibsaas.client.light.handle.light;
 
 import com.landleaf.ibsaas.client.light.client.NettyPoolClient;
-import com.landleaf.ibsaas.client.light.client.NettyTcpClient;
 import com.landleaf.ibsaas.client.light.util.Hex;
-import com.landleaf.ibsaas.common.domain.light.dto.LightControlDTO;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.pool.SimpleChannelPool;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
@@ -20,8 +17,6 @@ public abstract class AbstractLightHandler {
 
     @Autowired
     private NettyPoolClient nettyPoolClient;
-    @Autowired
-    private NettyTcpClient nettyTcpClient;
 
     public void process(LightMsg lightMsg){
         SimpleChannelPool pool = nettyPoolClient.poolMap.get(nettyPoolClient.getHost(lightMsg.getFloor()));

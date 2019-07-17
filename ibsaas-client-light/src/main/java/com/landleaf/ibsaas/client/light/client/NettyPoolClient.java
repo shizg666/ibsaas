@@ -22,9 +22,6 @@ import org.springframework.stereotype.Component;
 import java.net.InetSocketAddress;
 import java.util.Map;
 
-/**
- * Created by YuQi on 2017/7/31.
- */
 @Component
 public class NettyPoolClient {
     final EventLoopGroup group = new NioEventLoopGroup();
@@ -39,7 +36,7 @@ public class NettyPoolClient {
         poolMap = new AbstractChannelPoolMap<InetSocketAddress, SimpleChannelPool>() {
             @Override
             protected SimpleChannelPool newPool(InetSocketAddress key) {
-                return new FixedChannelPool(strap.remoteAddress(key), new NettyChannelPoolHandler(), 2);
+                return new FixedChannelPool(strap.remoteAddress(key), new NettyChannelPoolHandler(), 1);
             }
         };
         InetSocketAddress host4 = new InetSocketAddress("192.168.10.170", 4196);

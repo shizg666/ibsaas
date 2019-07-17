@@ -1,7 +1,8 @@
+
 server:
-  port: 9090
+  port: 9091
   servlet:
-    context-path: /client-hvac
+    context-path: /client-light
     tomcat:
       uri-encoding: UTF-8
 
@@ -16,8 +17,8 @@ spring:
       pool:
         max-active: 50
         max-idle: 30
-        max-wait: 30000
         min-idle: 8
+        max-wait: 3000
     jedis:
       pool:
         #jedis最大分配对象
@@ -40,13 +41,13 @@ spring:
     templateEncoding: UTF-8
     template-loader-path: classpath:/templates/
     expose-spring-macro-helpers: false
-   # static-locations: classpath:/templates/,classpath:/static/
+    # static-locations: classpath:/templates/,classpath:/static/
   mvc:
-    #static-path-pattern: /static/**
+  #s static-path-pattern: /static/**
 
 ibsaas:
-#  face:
-#    redirecturl: http://40.73.246.184
+  #  face:
+  #    redirecturl: http://40.73.246.184
   filter:
     cors:
       enable: true
@@ -100,29 +101,6 @@ ibsaas:
 #       spring.datasource.filters: stat
 
 
-rocketmq:
-  producer:
-    enable: true
-    groupName: ibsaas
-    topic: topic_hvac_write
-    tags: tags
-    #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
-    #消息最大长度 默认1024*4(4M)
-    maxMessageSize: 91920
-    sendMsgTimeout: 30000
-    retryTimesWhenSendFailed: 1
-  consumer:
-    enable: true
-    groupName: topic_hvac_write_test
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
-    #暖通
-    topics: topic_hvac_write-*
-    topic: topic_hvac_write
-    consumeThreadMin: 16
-    consumeThreadMax: 32
-    consumeMessageBatchMaxSize: 10
-
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
@@ -134,15 +112,17 @@ pagehelper:
   params:
     count: countSql
 
-id:
-  generate:
-    workId: 1
-    datacenterId: 1
-
-### 个性化配置
-##本地设备id
-bacnet:
-  local:
-    deviceId: 1234
-  place:
-    id: lgc
+rocketmq:
+  consumer:
+    enable: true
+    groupName: ibsaas_light
+    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    #灯光
+    topics: topic_light_control-*
+    consumeThreadMin: 16
+    consumeThreadMax: 32
+    consumeMessageBatchMaxSize: 10
+tcp:
+  server:
+    ip: 192.168.10.173
+    port: 4196
