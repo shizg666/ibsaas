@@ -30,7 +30,7 @@ public class AchpPumpValve extends BaseDevice implements Serializable {
     @ApiModelProperty("风冷热泵-水泵-变频反馈")
     private String apFreFeedback;
 
-    @ApiModelProperty("风冷热泵-水泵-手自动状态")
+    @ApiModelProperty("风冷热泵-水泵-手自动状态 1:自動 0-手動")
     private String apHandAutoState;
 
 
