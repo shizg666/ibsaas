@@ -28,9 +28,10 @@ spring:
     lettuce:
       pool:
         max-active: 50
-        max-idle: 30
-        max-wait: 30000
+        max-idle: 8
+        max-wait: 10000
         min-idle: 8
+        blockWhenExhausted: true
     jedis:
       pool:
         #jedis最大分配对象
@@ -41,7 +42,7 @@ spring:
         maxWaitMillis: 10000
         testOnBorrow: true
         testOnReturn: true
-        blockWhenExhausted: false
+        blockWhenExhausted: true
         #Idle时进行连接扫描
     timeout: 30000
   freemarker:
