@@ -37,8 +37,13 @@ public enum  BacnetDeviceTypeEnum {
 
     ACHP_MONITOR( 11, "风冷热泵-监测", "com.landleaf.ibsaas.common.domain.hvac.vo.AchpMonitorVO"),
 
+    RAINWATER_COLLECTION( 12, "雨水收集", "com.landleaf.ibsaas.common.domain.hvac.vo.RainwaterCollectionVO"),
 
+    SUMP(13, "集水坑", "com.landleaf.ibsaas.common.domain.hvac.vo.SumpVO"),
 
+    DOMESTIC_WATER(14, "生活水", "com.landleaf.ibsaas.common.domain.hvac.vo.DomesticWaterVO"),
+
+    EXHAUST_BLOWER(15, "排风机", "com.landleaf.ibsaas.common.domain.hvac.vo.ExhaustBlowerVO"),
     ;
 
     private Integer deviceType;
