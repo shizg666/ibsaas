@@ -7,12 +7,17 @@ import com.landleaf.ibsaas.common.dao.light.TLightDeviceDao;
 import com.landleaf.ibsaas.common.dao.light.TLightProductDao;
 import com.landleaf.ibsaas.common.domain.light.TLightDevice;
 import com.landleaf.ibsaas.common.domain.light.TLightProduct;
+import com.landleaf.ibsaas.common.domain.light.TLightType;
+import com.landleaf.ibsaas.common.domain.light.vo.ProductReponseVO;
+import com.landleaf.ibsaas.common.domain.light.vo.TLightProductVO;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
 import com.landleaf.ibsaas.web.web.service.light.ITLightProductService;
 import com.landleaf.ibsaas.common.domain.light.vo.QueryLightProductVO;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +26,15 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class TLightProductService extends AbstractBaseService<TLightProductDao, TLightProduct> implements ITLightProductService<TLightProduct> {
     @Autowired
-    private IdGenerator idGenerator;
-    @Autowired
     private TLightDeviceDao tLightDeviceDao;
+    @Autowired
+    private TLightTypeService tLightTypeService;
 
 
     @Override
@@ -42,7 +49,6 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
     }
 
     @Override
-    @Transactional
     public Integer deleteProduct(Long id) {
         TLightDevice tLightDevice = tLightDeviceDao.getDeviceByProductId(id);
         if (tLightDevice != null){
@@ -56,7 +62,7 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
     }
 
     @Override
-    public PageInfo<TLightProduct> getProductRecordByCondition(QueryLightProductVO requestBody) {
+    public PageInfo<TLightProductVO> getProductRecordByCondition(QueryLightProductVO requestBody) {
         PageHelper.startPage(requestBody.getPage(), requestBody.getLimit(), true);
         Example example = new Example(TLightProduct.class);
         Example.Criteria criteria = example.createCriteria();
@@ -77,10 +83,47 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
         }
         List<TLightProduct> lightProducts = selectByExample(example);
         if (CollectionUtils.isEmpty(lightProducts)) {
-            lightProducts = Lists.newArrayList();
+            return  new PageInfo(Lists.newArrayListWithCapacity(0));
         }
-        return new PageInfo(lightProducts);
+        List<TLightProductVO> tLightProductVOS = Lists.newArrayListWithCapacity(lightProducts.size());
+        List<Long> typeIds = lightProducts.stream().map(TLightProduct::getTypeId).collect(Collectors.toList());
+        List<TLightType> lightTypes = tLightTypeService.getTypeListByIds(typeIds);
+        Map<Long, String> collect = lightTypes.stream().collect(Collectors.toMap(TLightType::getId,TLightType::getName));
+
+        lightProducts.forEach(obj->{
+            TLightProductVO tLightProductVO = new TLightProductVO();
+            BeanUtils.copyProperties(obj,tLightProductVO);
+            tLightProductVO.setType(collect.get(obj.getTypeId()));
+            tLightProductVOS.add(tLightProductVO);
+        });
+
+        return new PageInfo(tLightProductVOS);
     }
+
+    @Override
+    public List<TLightProduct> getProducList() {
+        List<TLightProduct> tLightProducts = selectAll();
+        if (tLightProducts == null){
+            return Lists.newArrayList();
+        }
+        return tLightProducts;
+    }
+
+    @Override
+    public ProductReponseVO getProcutById(Long id) {
+        TLightProduct tLightProduct = selectByPrimaryKey(id);
+        if (tLightProduct == null){
+            throw  new BusinessException("产品不存在！id:{}",id);
+        }
+        ProductReponseVO productReponseVO = new ProductReponseVO();
+        BeanUtils.copyProperties(tLightProduct,productReponseVO);
+        if (tLightProduct.getTypeId() != null){
+            TLightType tLightType = tLightTypeService.selectByPrimaryKey(tLightProduct.getTypeId());
+            productReponseVO.setType(tLightType.getName());
+        }
+        return productReponseVO;
+    }
+
 
     public TLightProduct addProduct(TLightProduct tLightProduct) {
         Date date = new Date();

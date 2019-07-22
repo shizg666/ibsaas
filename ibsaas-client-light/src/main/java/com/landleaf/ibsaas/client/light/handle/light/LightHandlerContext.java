@@ -13,9 +13,11 @@ import java.util.Map;
 public class LightHandlerContext {
 
     private Map<String,Class> handlerMap;
+    private Map<String,Class> reponseHandlerMap;
 
-    public LightHandlerContext(Map<String,Class> handlerMap){
+    public LightHandlerContext(Map<String,Class> handlerMap,Map<String,Class>  reponseHandlerMap){
         this.handlerMap = handlerMap;
+        this.reponseHandlerMap = reponseHandlerMap;
     }
 
     public AbstractLightHandler getLightHandler(String type){
@@ -24,5 +26,13 @@ public class LightHandlerContext {
             throw new IllegalArgumentException("not found handler for type :"+type);
         }
         return (AbstractLightHandler) SpringUtil.getBean(clazz);
+    }
+
+    public Map<String, Class> getReponseHandlerMap() {
+        return reponseHandlerMap;
+    }
+
+    public void setReponseHandlerMap(Map<String, Class> reponseHandlerMap) {
+        this.reponseHandlerMap = reponseHandlerMap;
     }
 }

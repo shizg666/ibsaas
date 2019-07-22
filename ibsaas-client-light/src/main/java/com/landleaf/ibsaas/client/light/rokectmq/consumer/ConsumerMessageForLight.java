@@ -36,7 +36,7 @@ public class ConsumerMessageForLight extends AbstractMQMsgProcessor {
         LightMsg lightMsg = null;
         try{
             lightMsg = MessageUtil.getInstance().getGson().fromJson(new String(messageExt.getBody()), LightMsg.class);
-            log.info("收到消息[topic:{}];[tag:{}];[消息:{}]", TopicConstants.TOPIC_LIGHT_CONTROL, tag, lightMsg);
+            log.info("***********************************收到消息[topic:{}];[tag:{}];[消息:{}]", TopicConstants.TOPIC_LIGHT_CONTROL, tag, lightMsg);
             lightService.lightHandle(lightMsg);
         }catch (Exception e){
             log.error("灯控消息消费失败！{},[topic:{}];[tag:{}];[消息:{}]",e.getMessage(),TopicConstants.TOPIC_LIGHT_CONTROL, tag, lightMsg);

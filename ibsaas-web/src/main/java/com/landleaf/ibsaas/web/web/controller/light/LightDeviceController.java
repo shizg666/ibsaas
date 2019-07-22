@@ -26,13 +26,22 @@ public class LightDeviceController extends BasicController {
     @Autowired
     private ITLightDeviceService itLightDeviceService;
 
-    @PostMapping("/device/getDeviceRecord")
+    @GetMapping("/device/{id}")
+    @ApiOperation(value = "根据主键id获取设备信息", notes = "根据主键id获取设备信息")
+    public Response getDeviceById(@PathVariable Long id) {
+        LightDeviceResponseVO data = itLightDeviceService.getDeviceById(id);
+        return returnSuccess(data);
+    }
+
+
+    @GetMapping("/device/getDeviceRecord")
     @ApiOperation(value = "灯光设备列表分页查询", notes = "灯光设备列表分页查询")
-    public Response getDeviceRecord(@RequestBody TLightDeviceQueryVO requestBody) {
+    public Response getDeviceRecord(TLightDeviceQueryVO requestBody) {
         PageInfo<LightDeviceResponseVO> data = itLightDeviceService.getDeviceRecordByCondition(requestBody);
         BasePageVO<LightDeviceResponseVO> result = new BasePageVO<>(data.getList(), data.getTotal());
         return returnSuccess(result);
     }
+
 
     @ApiOperation(value = "添加或者修改灯光设备信息", notes = "添加或者修改灯光设备信息")
     @PostMapping(value = "/device/addOrUpdateProduct")

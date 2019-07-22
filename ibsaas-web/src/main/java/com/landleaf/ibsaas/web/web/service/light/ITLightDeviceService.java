@@ -12,4 +12,6 @@ public interface ITLightDeviceService<T> {
     Integer deleteDevice(Long id);
 
     PageInfo<LightDeviceResponseVO> getDeviceRecordByCondition(TLightDeviceQueryVO requestBody);
+
+    LightDeviceResponseVO getDeviceById(Long id);
 }

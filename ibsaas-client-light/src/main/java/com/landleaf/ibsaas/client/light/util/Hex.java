@@ -66,7 +66,45 @@ public class Hex {
         return new String(bytes);
     }
 
-    public static void main(String[] args) {
+    public static String bytesToHexString(byte[] bArray) {
+        StringBuffer sb = new StringBuffer(bArray.length);
+        String sTemp;
+        for (int i = 0; i < bArray.length; i++) {
+            sTemp = Integer.toHexString(0xFF & bArray[i]);
+            if (sTemp.length() < 2)
+                sb.append(0);
+            sb.append(sTemp.toUpperCase());
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 16进制转ASCII
+     * @param hex
+     * @return
+     */
+    public static String hexToAsciiStr(String hex) {
+
+        StringBuilder sb = new StringBuilder();
+        StringBuilder temp = new StringBuilder();
+
+        //49204c6f7665204a617661 split into two characters 49, 20, 4c...
+        for (int i = 0; i < hex.length() - 1; i += 2) {
+
+            //grab the hex in pairs
+            String output = hex.substring(i, (i + 2));
+            //convert hex to decimal
+            int decimal = Integer.parseInt(output, 16);
+            //convert the decimal to character
+            sb.append((char) decimal);
+
+            temp.append(decimal);
+        }
+
+        return sb.toString();
+    }
+
+        public static void main(String[] args) {
         String s = "\u0002R1S1!\u0003";
         String s1 = "R1S1!";
         String s2 = "02523153312103";

@@ -19,6 +19,7 @@ spring:
         max-idle: 30
         min-idle: 8
         max-wait: 3000
+        blockWhenExhausted: true
     jedis:
       pool:
         #jedis最大分配对象

@@ -5,7 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "灯光设备返回对象")
 public class LightDeviceResponseVO {
-
+    @ApiModelProperty(value = "产品主键id")
+    private Long id;
     @ApiModelProperty(value = "产品名称")
     private String productName;
     @ApiModelProperty(value = "产品品牌")
@@ -18,6 +19,15 @@ public class LightDeviceResponseVO {
     private String protocol;
     @ApiModelProperty(value = "设备名称")
     private String name;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getProductName() {
         return productName;

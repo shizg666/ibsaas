@@ -41,6 +41,15 @@ public class FloorCommonService implements IFloorCommonService {
         return tFloor;
     }
 
+    @Override
+    public TFloor getFloorById(Long id) {
+        TFloor floor = tFloorMapper.selectByPrimaryKey(id);
+        if (floor == null){
+            return new TFloor();
+        }
+        return floor;
+    }
+
     public TFloor addFloor(TFloor tFloor) {
         TFloor tFloor1 = tFloorMapper.selectByFloor(tFloor.getFloor(),tFloor.getParentId());
         if (tFloor1 != null){

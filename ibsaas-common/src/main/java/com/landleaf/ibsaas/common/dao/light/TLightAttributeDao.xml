@@ -20,7 +20,10 @@
   </select>
   <select id="getAttributeListByProductIds"
           resultType="com.landleaf.ibsaas.common.domain.light.vo.LightProductAttributeVO">
-      select lp.product_id,la.id,la.name,la.code from t_light_attribute la inner join t_light_type_attribute ta on la.id = ta.attribute_id inner join t_light_product lp on lp.type_id = ta.type_id
+      select lp.id as productId,la.id,la.name,la.code
+        from t_light_attribute la
+        inner join t_light_type_attribute ta on la.id = ta.attribute_id
+        inner join t_light_product lp on lp.type_id = ta.type_id
         where lp.id in
     <foreach collection="ids" open="(" separator="," close=")" item="id">
       #{id}

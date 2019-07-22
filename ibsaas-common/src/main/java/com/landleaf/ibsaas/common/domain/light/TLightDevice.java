@@ -1,9 +1,11 @@
 package com.landleaf.ibsaas.common.domain.light;
 
+import lombok.ToString;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Date;
-
+@ToString
 public class TLightDevice {
     @Id
     @GeneratedValue(generator = "JDBC")

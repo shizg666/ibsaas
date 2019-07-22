@@ -6,13 +6,12 @@ import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import org.springframework.stereotype.Component;
 
 
-@HandlerType(type="3",desc = "灯光亮度-增加 处理器")
+@HandlerType(type="9",desc = "灯光亮度-增加 处理器(R1T2D+8)")
 @Component
 public class BrightnessIncreaseHandler extends AbstractLightHandler {
     @Override
     public String getCommand(LightMsg lightMsg) {
-        //02 16进制是ASCII控制字符
-        StringBuilder command = new StringBuilder("\u0002");
+        StringBuilder command = new StringBuilder();
         String region = lightMsg.getRegion();
         String value = lightMsg.getValue();
         if (StringUtil.isNotEmpty(region)){
@@ -21,8 +20,6 @@ public class BrightnessIncreaseHandler extends AbstractLightHandler {
         if (StringUtil.isNotEmpty(value)){
             command.append("T2").append("D+").append(value);
         }
-        //03 16进制是ASCII控制字符
-        command.append("\u0003");
         return command.toString();
     }
 }

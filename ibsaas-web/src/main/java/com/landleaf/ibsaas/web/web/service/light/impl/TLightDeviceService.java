@@ -6,12 +6,14 @@ import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.dao.light.TLightDeviceDao;
 import com.landleaf.ibsaas.common.domain.light.TLightDevice;
 import com.landleaf.ibsaas.common.domain.light.TLightProductDevice;
-import com.landleaf.ibsaas.common.exception.BusinessException;
-import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
-import com.landleaf.ibsaas.web.web.service.light.ITLightDeviceService;
 import com.landleaf.ibsaas.common.domain.light.vo.LightDeviceResponseVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightDeviceQueryVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightDeviceRequestVO;
+import com.landleaf.ibsaas.common.exception.BusinessException;
+import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
+import com.landleaf.ibsaas.web.web.service.light.ILightService;
+import com.landleaf.ibsaas.web.web.service.light.ITLightDeviceService;
+import com.landleaf.ibsaas.web.web.service.light.ITLightPositionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,10 @@ import java.util.List;
 @Service
 public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TLightDevice> implements ITLightDeviceService<TLightDevice> {
 
+    @Autowired
+    private ILightService iLightService;
+    @Autowired
+    private ITLightPositionService itLightPositionService;
 
     @Override
     @Transactional
@@ -42,6 +48,7 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
     @Transactional
     public Integer deleteDevice(Long id) {
         Integer result = deleteByPrimaryKey(id);
+        itLightPositionService.deletePositionByDeviceId(id);
         return result;
     }
 
@@ -53,6 +60,14 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
             lightProducts = Lists.newArrayList();
         }
         return new PageInfo<>(lightProducts);
+    }
+
+    @Override
+    public LightDeviceResponseVO getDeviceById(Long id) {
+        LightDeviceResponseVO result = new LightDeviceResponseVO();
+        TLightDevice tLightDevice = selectByPrimaryKey(id);
+        BeanUtils.copyProperties(tLightDevice,result);
+        return result;
     }
 
     private TLightDevice updateDevice(TLightDeviceRequestVO tLightDeviceRequestVO) {
@@ -89,6 +104,7 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
         if (result < 0 ){
             throw new BusinessException("灯光设备添加失败");
         }
+
         return tLightDevice;
     }
 }

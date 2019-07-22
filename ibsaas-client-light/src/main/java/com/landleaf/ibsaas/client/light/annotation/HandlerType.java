@@ -8,5 +8,6 @@ import java.lang.annotation.*;
 @Inherited
 public @interface HandlerType {
     String type() default "";
+    String business() default "";
     String desc() default "";
 }

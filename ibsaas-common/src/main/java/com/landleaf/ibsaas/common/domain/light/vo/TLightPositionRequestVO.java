@@ -1,15 +1,13 @@
 package com.landleaf.ibsaas.common.domain.light.vo;
 
-import com.landleaf.ibsaas.common.domain.light.TLightAttribute;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.util.Date;
 import java.util.List;
 
 
 @ApiModel(description = "灯光设备VO")
-public class TLightPositionVO {
+public class TLightPositionRequestVO {
 
     @ApiModelProperty(value = "主键id（修改必传）")
     private Long id;
@@ -17,31 +15,11 @@ public class TLightPositionVO {
     private String xPos;
     @ApiModelProperty(value = "纵坐标")
     private String yPos;
-//    @ApiModelProperty(value = "名称")
-//    private String name;
     @ApiModelProperty(value = "设备主键id")
     private Long deviceId;
     @ApiModelProperty(value = "楼层id")
     private Long floorId;
-    @ApiModelProperty(value = "属性列表")
-    private List<LightProductAttributeVO> list;
-//    @ApiModelProperty(value = "创建时间")
-//    private Date ctime;
-//    @ApiModelProperty(value = "修改时间")
-//    private Date utime;
-//    @ApiModelProperty(value = "图片url")
-//    private String img;
-//    @ApiModelProperty(value = "产品名称")
-//    private String reserved;
 
-
-    public List<LightProductAttributeVO> getList() {
-        return list;
-    }
-
-    public void setList(List<LightProductAttributeVO> list) {
-        this.list = list;
-    }
 
     public Long getId() {
         return id;

@@ -1,6 +1,5 @@
 package com.landleaf.ibsaas.common.domain.light.vo;
 
-import com.landleaf.ibsaas.common.domain.light.TLightAttribute;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,14 +15,29 @@ public class TLightPositionResponseVO {
     private String xPos;
     @ApiModelProperty(value = "纵坐标")
     private String yPos;
+//    @ApiModelProperty(value = "名称")
+//    private String name;
     @ApiModelProperty(value = "设备主键id")
     private Long deviceId;
     @ApiModelProperty(value = "楼层id")
     private Long floorId;
-    @ApiModelProperty(value = "状态")
-    private String state;
     @ApiModelProperty(value = "属性列表")
-    List<TLightAttribute> list;
+    private List<LightProductAttributeVO> list;
+    @ApiModelProperty(value = "设备当前的状态值(默认是0)")
+    private String state = "0";
+//    @ApiModelProperty(value = "创建时间")
+//    private Date ctime;
+//    @ApiModelProperty(value = "修改时间")
+//    private Date utime;
+//    @ApiModelProperty(value = "图片url")
+//    private String img;
+//    @ApiModelProperty(value = "产品名称")
+//    private String reserved;
+
+
+    public List<LightProductAttributeVO> getList() {
+        return list;
+    }
 
 
     public String getState() {
@@ -34,11 +48,7 @@ public class TLightPositionResponseVO {
         this.state = state;
     }
 
-    public List<TLightAttribute> getList() {
-        return list;
-    }
-
-    public void setList(List<TLightAttribute> list) {
+    public void setList(List<LightProductAttributeVO> list) {
         this.list = list;
     }
 
@@ -65,6 +75,14 @@ public class TLightPositionResponseVO {
     public void setyPos(String yPos) {
         this.yPos = yPos == null ? null : yPos.trim();
     }
+
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name == null ? null : name.trim();
+//    }
 
     public Long getDeviceId() {
         return deviceId;

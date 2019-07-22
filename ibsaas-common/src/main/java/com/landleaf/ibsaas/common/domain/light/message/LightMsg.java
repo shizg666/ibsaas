@@ -15,7 +15,7 @@ public class LightMsg implements Serializable {
 
     @ApiModelProperty(value = "楼层")
     private String floor;
-    @ApiModelProperty(value = "类型")
+    @ApiModelProperty(value = "类型（2:灯光场景控制处理器）")
     private String type;
     @ApiModelProperty(value = "区域/房间地址")
     private String region;
@@ -25,7 +25,16 @@ public class LightMsg implements Serializable {
     private String device;
     @ApiModelProperty(value = "设置的值")
     private String value;
+    @ApiModelProperty(value = "设备地址")
+    private String adress;
 
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
 
     public String getValue() {
         return value;

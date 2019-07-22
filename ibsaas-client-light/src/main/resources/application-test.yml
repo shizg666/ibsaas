@@ -19,18 +19,6 @@ spring:
         max-idle: 30
         min-idle: 8
         max-wait: 3000
-    jedis:
-      pool:
-        #jedis最大分配对象
-        maxTotal: 50
-        #jedis最大保存idel状态对象数
-        maxIdle: 30
-        #jedis池没有对象返回时，最大等待时间
-        maxWaitMillis: 10000
-        testOnBorrow: true
-        testOnReturn: true
-        blockWhenExhausted: false
-        #Idle时进行连接扫描
     timeout: 30000
   freemarker:
     cache: true
@@ -115,7 +103,7 @@ pagehelper:
 rocketmq:
   consumer:
     enable: true
-    groupName: ibsaas_light
+    groupName: ibsaas_light_test
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
     #灯光
     topics: topic_light_control-*

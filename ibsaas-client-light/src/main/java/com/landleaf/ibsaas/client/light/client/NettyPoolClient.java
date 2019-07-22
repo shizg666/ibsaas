@@ -19,6 +19,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.net.InetSocketAddress;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ public class NettyPoolClient {
     private Map<String,InetSocketAddress> hostMap = Maps.newHashMapWithExpectedSize(4);
 
     public ChannelPoolMap<InetSocketAddress, SimpleChannelPool> poolMap;
+
+    @PostConstruct
     public void build(){
         strap.group(group).channel(NioSocketChannel.class).option(ChannelOption.TCP_NODELAY, true)
                 .option(ChannelOption.SO_KEEPALIVE, true);
