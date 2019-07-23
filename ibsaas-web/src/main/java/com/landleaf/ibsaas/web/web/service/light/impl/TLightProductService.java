@@ -54,7 +54,7 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
         if (tLightDevice != null){
             throw new BusinessException("该产品下面尚有设备存在！");
         }
-        Integer result = deleteByPrimaryKey(id);
+        Integer result = this.dao.deleteByPrimaryId(id);
         if (result < 0 ) {
             throw new BusinessException("产品删除失败");
         }
@@ -111,7 +111,7 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
 
     @Override
     public ProductReponseVO getProcutById(Long id) {
-        TLightProduct tLightProduct = selectByPrimaryKey(id);
+        TLightProduct tLightProduct = this.dao.selectByid(id);
         if (tLightProduct == null){
             throw  new BusinessException("产品不存在！id:{}",id);
         }

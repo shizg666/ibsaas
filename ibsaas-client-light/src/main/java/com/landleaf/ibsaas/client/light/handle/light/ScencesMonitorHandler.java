@@ -17,11 +17,13 @@ public class ScencesMonitorHandler extends AbstractLightHandler {
     @Override
     public String getCommand(LightMsg lightMsg) {
         StringBuilder command = new StringBuilder();
-        String region = lightMsg.getRegion();
+//        String region = lightMsg.getRegion();
+        String adress = lightMsg.getAdress();
         String vaule = lightMsg.getValue();
-        if (StringUtil.isNotEmpty(region)){
-            command.append("R").append(region);
-        }
+//        if (StringUtil.isNotEmpty(region)){
+//            command.append("R").append(region);
+//        }
+        command.append(adress);
         if (StringUtil.isNotEmpty(vaule)){
             command.append("AUTO").append(vaule).append("!");
         }

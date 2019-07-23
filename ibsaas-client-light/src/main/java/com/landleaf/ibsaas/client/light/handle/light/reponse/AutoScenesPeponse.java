@@ -4,21 +4,13 @@ package com.landleaf.ibsaas.client.light.handle.light.reponse;
 import com.landleaf.ibsaas.client.light.annotation.HandlerType;
 import com.landleaf.ibsaas.client.light.enums.HostAdressEnum;
 import com.landleaf.ibsaas.common.dao.light.TLightDeviceStateDao;
-import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
-import com.landleaf.ibsaas.common.domain.light.TLightDeviceState;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsgResponse;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
-import com.landleaf.ibsaas.common.utils.date.DateUtil;
-import com.landleaf.ibsaas.common.utils.date.DateUtils;
-import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.Future;
 
 /**
  * AUTO<a>! / Poll a scene automatically / C  page 28
@@ -43,6 +35,7 @@ public class AutoScenesPeponse implements LightResponse{
         int tIndex = message.indexOf("T");
         int sIndex = message.indexOf("S");
         int wIndex = message.indexOf("W");
+        StringBuilder adress = new StringBuilder();
         String region = "";
         String scenes = "";
         LightMsgResponse lightMsgResponse = new LightMsgResponse();
@@ -62,17 +55,19 @@ public class AutoScenesPeponse implements LightResponse{
         lightMsgResponse.setRegion(region);
         lightMsgResponse.setScenes(scenes);
         lightMsgResponse.setResult(message);
+        lightMsgResponse.setAddress(adress.append("R").append(region).toString());
         return lightMsgResponse;
     }
 
     @Override
     public void handle(LightMsgResponse message) {
         log.info("AutoScenesPeponse -----------------> 接收到消息：{}",message.toString());
-        HostAdressEnum hostAdressEnum = HostAdressEnum.getInstByAdress(message.getAddress().substring(1));
+        HostAdressEnum hostAdressEnum = HostAdressEnum.getInstByAdress(message.getHost().substring(1));
         if (hostAdressEnum == null){
             log.error("根据地址获取不到服务器adress:{}",message.getAddress());
         }
-        String adress = "R_"+message.getRegion();
+//        String adress = "R_"+message.getRegion();
+        String adress = message.getAddress();
 //        TLightDeviceState result = tLightDeviceStateDao.getByAdress(adress);
 //        if (result == null){
 //            TLightDeviceState tLightDeviceState = new TLightDeviceState();
@@ -92,7 +87,7 @@ public class AutoScenesPeponse implements LightResponse{
 //            }
 //        }
         try {
-            redisHandle.addMap(hostAdressEnum.getKey(),"R_"+message.getRegion(),message.getScenes());
+            redisHandle.addMap(hostAdressEnum.getKey(),message.getAddress(),message.getScenes());
         }catch (Exception e){
             retryRedis(hostAdressEnum.getKey(),message,2000L);
         }
@@ -124,13 +119,14 @@ public class AutoScenesPeponse implements LightResponse{
     public void retryRedis(String key,LightMsgResponse message, Long timeout) {
         long currentTimeMillis = System.currentTimeMillis();
         long expireTimeMillis = currentTimeMillis + timeout;
-        String field = "R_"+message.getRegion();
+//        String field = "R_"+message.getRegion();
+        String adress = message.getAddress();
         String value = message.getScenes();
         try {
             while (System.currentTimeMillis() < expireTimeMillis) {
                 Thread.sleep(100L);
                 try {
-                    redisHandle.addMap(key,field,value);
+                    redisHandle.addMap(key,adress,value);
                 }catch (Exception e){
                     log.error("*************************************返回消息入Redis失败：{}",e.getMessage());
                 }
@@ -140,7 +136,7 @@ public class AutoScenesPeponse implements LightResponse{
             log.error("*************************************消息入Redis message:{],最终失败原因：{}",message.toString(),e.getMessage());
         }
         try {
-            redisHandle.addMap(key,field,value);
+            redisHandle.addMap(key,adress,value);
         }catch (Exception e){
             log.error("*************************************返回消息入Redis最终失败：{}",e.getMessage());
         }

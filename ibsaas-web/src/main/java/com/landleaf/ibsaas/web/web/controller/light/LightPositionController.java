@@ -27,10 +27,18 @@ public class LightPositionController extends BasicController {
 
     @GetMapping("/getUnPositionDeviceList")
     @ApiOperation(value = "获取未配置的设备列表", notes = "根据楼层获取灯光位置信息")
-    public Response getUnPositionDeviceList() {
-        List<TLightPositionResponseVO> data = itLightPositionService.getUnPositionDeviceList();
+    public Response<LightPositionDeviceVO> getUnPositionDeviceList() {
+        List<LightPositionDeviceVO> data = itLightPositionService.getUnPositionDeviceList();
         return returnSuccess(data);
     }
+
+    @GetMapping("/getUnPositionDeviceList/{id}")
+    @ApiOperation(value = "根据楼层Id获取位置列表", notes = "根据楼层获取灯光位置信息")
+    public Response<LightPositionDeviceVO> getPositionDeviceList(@PathVariable("id") Long id) {
+        List<LightPositionDeviceVO> data = itLightPositionService.getPositionDeviceList(id);
+        return returnSuccess(data);
+    }
+
 
     @ApiOperation(value = "添加或者修改灯光位置信息", notes = "添加或者修改灯光位置信息")
     @PostMapping(value = "/addOrUpdatePosition")
@@ -47,7 +55,7 @@ public class LightPositionController extends BasicController {
 
     @GetMapping("/device/delete/{id}")
     @ApiOperation(value = "根据id删除灯光位置", notes = "")
-    public Response deletePosition(@PathVariable @ApiParam(name = "id", value = "设备id", required = true) Long id) {
+    public Response deletePosition(@PathVariable @ApiParam(name = "id", value = "位置id", required = true) Long id) {
         log.info("LightDeviceController >>>>>>>>>>>>>>>>>> deletePosition id:{}", id);
         Integer result = itLightPositionService.deletePositionById(id);
         return returnSuccess(result, MessageConstants.COMMON_DELETE_SUCCESS_MESSAGE);

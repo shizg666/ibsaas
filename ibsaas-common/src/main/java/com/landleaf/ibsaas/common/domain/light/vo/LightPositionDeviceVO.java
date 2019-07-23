@@ -18,4 +18,8 @@ public class LightPositionDeviceVO {
     private String model;
     @ApiModelProperty(value = "产品类型")
     private String type;
+    @ApiModelProperty(value = "横坐标")
+    private String xPos;
+    @ApiModelProperty(value = "纵坐标")
+    private String yPos;
 }

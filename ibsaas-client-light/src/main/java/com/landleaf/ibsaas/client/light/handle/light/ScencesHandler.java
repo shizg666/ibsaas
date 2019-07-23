@@ -16,11 +16,14 @@ public class ScencesHandler extends AbstractLightHandler {
 
         //02 16进制是ASCII控制字符
         StringBuilder command = new StringBuilder();
-        String region = lightMsg.getRegion();
+//        String region = lightMsg.getRegion();
+        String adress = lightMsg.getAdress();
         String scenes = lightMsg.getValue();
-        if (StringUtil.isNotEmpty(region)){
-            command.append("R").append(region);
-        }
+
+//        if (StringUtil.isNotEmpty(region)){
+//            command.append("R").append(region);
+//        }
+        command.append(adress);
         if (StringUtil.isNotEmpty(scenes)){
             command.append("S").append(scenes).append("!");
         }

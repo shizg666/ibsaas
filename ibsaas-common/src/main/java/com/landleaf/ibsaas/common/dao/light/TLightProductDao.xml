@@ -29,4 +29,16 @@
 
   </select>
 
+  <select id="selectByid" resultType="com.landleaf.ibsaas.common.domain.light.TLightProduct">
+    select
+    <include refid="Base_Column_List" />
+    from t_light_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryId" parameterType="java.lang.Long">
+        delete from t_light_product
+        where id = #{id,jdbcType=BIGINT}
+  </delete>
+
 </mapper>

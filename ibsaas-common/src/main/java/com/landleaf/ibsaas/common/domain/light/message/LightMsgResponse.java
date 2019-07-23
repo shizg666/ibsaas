@@ -32,6 +32,8 @@ public class LightMsgResponse {
     private String type;
     @ApiModelProperty(value = "消息来源地址")
     private String address;
+    @ApiModelProperty(value = "消息来源服务器")
+    private String host;
     @ApiModelProperty(value = "接收时间")
     private Date ct;
 

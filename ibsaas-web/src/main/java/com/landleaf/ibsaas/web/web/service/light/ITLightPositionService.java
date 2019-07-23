@@ -28,4 +28,6 @@ public interface ITLightPositionService<T> extends IBaseService<T> {
      * @return
      */
     List<LightPositionDeviceVO> getUnPositionDeviceList();
+
+    List<LightPositionDeviceVO> getPositionDeviceList(Long id);
 }

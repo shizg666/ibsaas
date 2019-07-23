@@ -27,5 +27,26 @@
 				select 1 from t_light_position lp where lp.device_id = d.id
 				)
     </select>
+    <select id="getPositionDeviceList"
+            resultType="com.landleaf.ibsaas.common.domain.light.vo.LightPositionDeviceVO">
+          select d.id,d.name,t.name as type,p.brand,p.model,lp.x_pos,lp.y_pos
+	       from t_light_device d
+				left join t_light_product  p on p.id = d.product_id
+				left join t_light_type t  on t.id = p.type_id
+				left join t_light_position lp  on lp.device_id = d.id
+				where  lp.floor_id = #{floorId,jdbcType=BIGINT}
+    </select>
+    <select id="selectByid" resultType="com.landleaf.ibsaas.common.domain.light.TLightPosition">
+        select
+        <include refid="Base_Column_List" />
+        from t_light_position
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryId" parameterType="java.lang.Long">
+        delete from t_light_position
+        where id = #{id,jdbcType=BIGINT}
+  </delete>
+
 
 </mapper>

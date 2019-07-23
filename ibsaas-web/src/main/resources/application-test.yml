@@ -139,7 +139,7 @@ id:
 rocketmq:
   producer:
     enable: true
-    groupName: ibsaas
+    groupName: ibsaas_test
     #目前采用双主，集群
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
     maxMessageSize: 4096

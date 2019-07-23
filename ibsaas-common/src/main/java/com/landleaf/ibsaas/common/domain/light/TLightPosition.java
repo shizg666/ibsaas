@@ -1,7 +1,10 @@
 package com.landleaf.ibsaas.common.domain.light;
 
+import lombok.ToString;
+
 import java.util.Date;
 
+@ToString
 public class TLightPosition {
     private Long id;
 
@@ -36,7 +39,7 @@ public class TLightPosition {
     }
 
     public void setxPos(String xPos) {
-        this.xPos = xPos == null ? null : xPos.trim();
+        this.xPos = xPos;
     }
 
     public String getyPos() {
@@ -44,7 +47,7 @@ public class TLightPosition {
     }
 
     public void setyPos(String yPos) {
-        this.yPos = yPos == null ? null : yPos.trim();
+        this.yPos = yPos;
     }
 
     public String getName() {

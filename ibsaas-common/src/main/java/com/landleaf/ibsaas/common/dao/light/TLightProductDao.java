@@ -11,4 +11,10 @@ import java.util.List;
 public interface TLightProductDao extends BaseDao<TLightProduct> {
 
     List<TLightProduct> getProductListByProductIds(@Param("id") List<Long> productIds);
+
+    TLightProduct selectByid(Long id);
+
+    int deleteByPrimaryId(Long id);
+
+
 }

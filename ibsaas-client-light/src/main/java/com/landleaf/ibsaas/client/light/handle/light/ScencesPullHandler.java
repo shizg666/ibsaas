@@ -15,10 +15,12 @@ public class ScencesPullHandler extends AbstractLightHandler {
     @Override
     public String getCommand(LightMsg lightMsg) {
         StringBuilder command = new StringBuilder();
-        String region = lightMsg.getRegion();
-        if (StringUtil.isNotEmpty(region)){
-            command.append("R").append(region);
-        }
+//        String region = lightMsg.getRegion();
+        String adress = lightMsg.getAdress();
+//        if (StringUtil.isNotEmpty(region)){
+//            command.append("R").append(region);
+//        }
+        command.append(adress);
         command.append("?");
         return command.toString();
     }

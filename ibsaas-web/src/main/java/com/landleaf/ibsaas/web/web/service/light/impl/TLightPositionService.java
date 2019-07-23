@@ -61,7 +61,7 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
 
     @Override
     public Integer deletePositionById(Long id) {
-        TLightPosition tLightPosition = selectByPrimaryKey(id);
+        TLightPosition tLightPosition = this.dao.selectByid(id);
         if (tLightPosition == null){
             throw new BusinessException("找不到该位置信息id：{}",id);
         }
@@ -77,7 +77,7 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
         }catch (Exception e){
             log.error("删除设备位置时，发送取消该设备情景消息失败：{}",e.getMessage());
         }
-        Integer result = deleteByPrimaryKey(id);
+        Integer result = this.dao.deleteByPrimaryId(id);
         return result;
     }
 
@@ -147,6 +147,12 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
     public List<LightPositionDeviceVO> getUnPositionDeviceList() {
         List<LightPositionDeviceVO> voList = this.dao.getUnPositionDeviceList();
         return voList;
+    }
+
+    @Override
+    public List<LightPositionDeviceVO> getPositionDeviceList(Long id) {
+        List<LightPositionDeviceVO> voList = this.dao.getPositionDeviceList(id);
+        return  voList;
     }
 
     private TLightPosition updateDevicePosition(TLightPositionRequestVO requestBody) {

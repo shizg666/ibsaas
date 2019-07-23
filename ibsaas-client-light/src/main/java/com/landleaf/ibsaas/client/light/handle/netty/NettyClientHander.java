@@ -30,7 +30,7 @@ public class NettyClientHander extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         LightMsgResponse lightMsgResponse = (LightMsgResponse) msg;
         InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-        lightMsgResponse.setAddress(socketAddress.getAddress().toString());
+        lightMsgResponse.setHost(socketAddress.getAddress().toString());
         log.info("接收到消息：chnnelId: {},comment: {}",ctx.channel().id(),msg.toString());
         AsyHandle asyHandle = (AsyHandle) SpringUtil.getBean("asyHandle");
         asyHandle.handle(lightMsgResponse);
