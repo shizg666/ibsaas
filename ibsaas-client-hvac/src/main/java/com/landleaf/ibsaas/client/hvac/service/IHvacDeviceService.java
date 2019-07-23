@@ -43,9 +43,10 @@ public interface IHvacDeviceService extends IBaseService<HvacDevice> {
 
     /**
      * 查询所有设备
+     * @param type
      * @return
      */
-    List<HvacDevice> all();
+    List<HvacDevice> all(Integer type);
 
 
 }

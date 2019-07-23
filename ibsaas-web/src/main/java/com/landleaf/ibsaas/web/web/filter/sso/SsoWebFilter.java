@@ -36,6 +36,7 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
+
         logoutPath = filterConfig.getInitParameter(Conf.SSO_LOGOUT_PATH);
         excludedPaths = filterConfig.getInitParameter(Conf.SSO_EXCLUDED_PATHS);
 
@@ -73,7 +74,7 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
             return;
         }
         //redis写死id
-//        sid = "b9d0365e-116c-4433-ac76-27fe9b39a159";
+        sid = "177c7dd3-c772-44df-a1d0-58c7f08b2510";
         if (StringUtils.isNotEmpty(sid)) {
             try {
                 sysUser = ssoWebLoginHelper.get(sid);

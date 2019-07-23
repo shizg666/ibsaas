@@ -28,22 +28,6 @@ public class NewFanService implements INewFanService {
 
     private final ICommonDeviceService iCommonDeviceService;
 
-    private final HvacNodeDao hvacNodeDao;
-
-    @Override
-    public List<NewFanVO> overview() {
-
-        return (List<NewFanVO>) iCommonDeviceService.getCurrentData(HvacConstant.NEW_FAN_PORT);
-    }
-
-    @Override
-    public NewFanVO getInfoById(String id) {
-        NewFanVO newFanVO = new NewFanVO();
-        HvacNodeVO hvacNodeVO = hvacNodeDao.getHvacNodeByNodeId(id);
-        NewFan newFan =  iCommonDeviceService.getCurrentInfo(hvacNodeVO);
-        BeanUtils.copyProperties(newFan, newFanVO);
-        return newFanVO;
-    }
 
     @Override
     public void update(NewFanDTO newFanDTO) {

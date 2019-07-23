@@ -10,6 +10,7 @@ import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.WaterMeterVO;
 import com.landleaf.ibsaas.common.enums.energy.EnergyTypeEnum;
+import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +54,7 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
 
     @Override
     public List<EnergyData> electricDataRecord(Date date) {
-        List<ElectricMeterVO> electricMeterVOList = (List<ElectricMeterVO>) iCommonDeviceService.getCurrentData(HvacConstant.ELECTRIC_METER_PORT);
+        List<ElectricMeterVO> electricMeterVOList = (List<ElectricMeterVO>) iCommonDeviceService.getCurrentData(BacnetDeviceTypeEnum.ELECTRIC_METER.getDeviceType());
         List<EnergyData> energyDataElectrics = energyDataDao.getRecentlyEnergyData(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType());
         List<EnergyData> result = new ArrayList<>();
         Map<String, BigDecimal> map = energyDataElectrics.stream().collect(Collectors.toMap(EnergyData::getNodeId, EnergyData::getEnergyDataValue));
@@ -94,7 +95,7 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
 
     @Override
     public List<EnergyData> waterDataRecord(Date date) {
-        List<WaterMeterVO> waterMeterVOList = (List<WaterMeterVO>) iCommonDeviceService.getCurrentData(HvacConstant.WATER_METER_PORT);
+        List<WaterMeterVO> waterMeterVOList = (List<WaterMeterVO>) iCommonDeviceService.getCurrentData(BacnetDeviceTypeEnum.WATER_METER.getDeviceType());
         List<EnergyData> energyDataWaters = energyDataDao.getRecentlyEnergyData(EnergyTypeEnum.ENERGY_WATER.getEnergyType());
         Map<String, BigDecimal> map = energyDataWaters.stream().collect(Collectors.toMap(EnergyData::getNodeId, EnergyData::getEnergyDataValue));
         List<EnergyData> result = new ArrayList<>();

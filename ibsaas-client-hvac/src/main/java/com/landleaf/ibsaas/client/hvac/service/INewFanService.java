@@ -13,19 +13,6 @@ import java.util.List;
 public interface INewFanService {
 
     /**
-     * 四效新风机总览
-     * @return
-     */
-    List<NewFanVO> overview();
-
-    /**
-     * 单个四效新风机
-     * @param id
-     * @return
-     */
-    NewFanVO getInfoById(String id);
-
-    /**
      * 更新某项值
      * @param newFanDTO
      */

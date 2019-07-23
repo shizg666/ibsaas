@@ -87,9 +87,9 @@ public class BacnetUtil {
             references.add(oid, PropertyIdentifier.presentValue);
         }
         PropertyValues values = RequestUtils.readProperties(localDevice, remoteDevice, references, null);
-        for (ObjectIdentifier oid : oids) {
-            System.err.println(oid.getObjectType().toString()+"|"+oid.getInstanceNumber() + "|" +values.getString(oid, PropertyIdentifier.presentValue));
-        }
+//        for (ObjectIdentifier oid : oids) {
+//            System.err.println(oid.getObjectType().toString()+"|"+oid.getInstanceNumber() + "|" +values.getString(oid, PropertyIdentifier.presentValue));
+//        }
 
         return values;
     }

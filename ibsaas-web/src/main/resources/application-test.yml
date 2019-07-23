@@ -41,7 +41,7 @@ spring:
         maxWaitMillis: 10000
         testOnBorrow: true
         testOnReturn: true
-        blockWhenExhausted: false
+        blockWhenExhausted: true
         #Idle时进行连接扫描
     timeout: 30000
   freemarker:
@@ -82,9 +82,9 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
       - name: master
-        url: jdbc:mysql://127.0.0.1:3306/ibsaas?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
-        password:
+        password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
         maxActive: 50
         initialSize: 5
@@ -100,9 +100,9 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
       - name: slave
-        url: jdbc:mysql://127.0.0.1:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
-        password:
+        password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
         maxActive: 50
         initialSize: 5
@@ -139,7 +139,7 @@ id:
 rocketmq:
   producer:
     enable: true
-    groupName: ibsaas_test
+    groupName: ibsaas
     #目前采用双主，集群
     namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
     maxMessageSize: 4096
@@ -165,13 +165,3 @@ bacnet:
     deviceId: 1234
   place:
     id: lgc
-
-#showSql
-logging:
-  level:
-    com:
-      landleaf:
-        ibsaas:
-          common:
-            dao:
-              knight : debug

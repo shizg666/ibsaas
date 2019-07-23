@@ -24,8 +24,8 @@ public class HvacFieldVO implements Serializable {
     /**
      * 设备id
      */
-    @ApiModelProperty("设备id")
-    private String deviceId;
+    @ApiModelProperty("设备类型")
+    private Integer deviceType;
 
     /**
      * 字段名称
@@ -49,7 +49,10 @@ public class HvacFieldVO implements Serializable {
      * 节点id
      */
     @ApiModelProperty("节点id")
-    private Long nodeId;
+    private String nodeId;
+
+    @ApiModelProperty("连接id")
+    private String deviceId;
 
     /**
      * bacnet对象类型
