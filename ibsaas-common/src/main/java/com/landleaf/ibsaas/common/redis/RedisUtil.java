@@ -586,10 +586,8 @@ public final class RedisUtil {
         }
     }
 
-    @Autowired
-    private JedisSentinelPool jedisSentinelPool;
 
-    public synchronized Jedis getJedis()//需要加：synchronized，否则多线程同时取pool，地址池不够用
+    /*public synchronized Jedis getJedis()//需要加：synchronized，否则多线程同时取pool，地址池不够用
     {
         //return getPool().getResource();
         //解决：Could not get a resource from the pool和java.net.SocketTimeoutException: connect timed out
@@ -622,6 +620,6 @@ public final class RedisUtil {
         //连接了多次也没有获得资源
         return null;
 
-    }
+    }*/
 
 }

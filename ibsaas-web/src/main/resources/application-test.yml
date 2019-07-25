@@ -45,6 +45,7 @@ spring:
         blockWhenExhausted: true
         #Idle时进行连接扫描
     timeout: 30000
+    password: Landleaf@2019
   freemarker:
     cache: true
     check-template-location: true
@@ -142,14 +143,14 @@ rocketmq:
     enable: true
     groupName: ibsaas
     #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.100.153:9876
     maxMessageSize: 4096
     sendMsgTimeout: 30000
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
     groupName: ibsaas_response_test
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.100.153:9876
     #门禁;停车
     topics: knight-*;parking-*
     consumeThreadMin: 16
