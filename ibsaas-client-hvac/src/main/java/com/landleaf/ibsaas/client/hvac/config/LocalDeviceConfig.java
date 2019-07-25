@@ -1,15 +1,23 @@
 package com.landleaf.ibsaas.client.hvac.config;
 
+import com.landleaf.ibsaas.client.hvac.constant.BacnetConstant;
+import com.landleaf.ibsaas.client.hvac.service.IHvacDeviceService;
+import com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao;
+import com.landleaf.ibsaas.common.domain.hvac.HvacDevice;
+import com.landleaf.ibsaas.common.enums.hvac.BaTypeEnum;
 import com.serotonin.bacnet4j.LocalDevice;
 import com.serotonin.bacnet4j.npdu.ip.IpNetwork;
 import com.serotonin.bacnet4j.npdu.ip.IpNetworkBuilder;
+import com.serotonin.bacnet4j.npdu.ip.IpNetworkUtils;
 import com.serotonin.bacnet4j.transport.DefaultTransport;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.List;
 
 /**
  * @author Lokiy
@@ -25,6 +33,9 @@ public class LocalDeviceConfig {
      */
     private static LocalDevice localDevice;
 
+    @Autowired
+    private HvacDeviceDao hvacDeviceDao;
+
     /**
      * 设置本地设备的设备id
      */
@@ -36,12 +47,14 @@ public class LocalDeviceConfig {
      */
     @PostConstruct
     public void initLocalDevice(){
-        localDevice = new LocalDevice(localDeviceId,
-                new DefaultTransport(
-                        new IpNetworkBuilder()
-                                .broadcastIp(IpNetwork.DEFAULT_BROADCAST_IP)
-                                .port(IpNetwork.DEFAULT_PORT)
-                                .build()));
+        DefaultTransport transport = new DefaultTransport(
+                new IpNetworkBuilder()
+                        .broadcastIp(IpNetwork.DEFAULT_BROADCAST_IP)
+                        .port(IpNetwork.DEFAULT_PORT)
+                        .build());
+        List<HvacDevice> hvacDevices = hvacDeviceDao.groupByNetwork();
+        hvacDevices.forEach(hd -> transport.addNetworkRouter(hd.getNetworkNumber(), IpNetworkUtils.toOctetString(hd.getIp() + BacnetConstant.COLON + hd.getPort())));
+        localDevice = new LocalDevice(localDeviceId, transport);
         try {
             log.info(">>>>>>>>>>>>>>>>>>>>>>>>>本地设备开始初始化<<<<<<<<<<<<<<<<<<<<<<<<<");
             localDevice.initialize();

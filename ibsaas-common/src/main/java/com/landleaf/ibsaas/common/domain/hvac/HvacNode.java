@@ -20,8 +20,8 @@ public class HvacNode extends BasicEntity {
     /**
      * 设备id
      */
-    @ApiModelProperty("设备id")
-    private String deviceId;
+    @ApiModelProperty("设备类型")
+    private Integer deviceType;
 
     /**
      * 节点名称

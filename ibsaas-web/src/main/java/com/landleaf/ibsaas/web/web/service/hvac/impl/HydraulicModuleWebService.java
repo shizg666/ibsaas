@@ -10,6 +10,7 @@ import com.landleaf.ibsaas.common.domain.hvac.dto.NewFanDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HydraulicModuleVO;
 import com.landleaf.ibsaas.common.domain.mq.HvacMqMsg;
+import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.rocketmq.TopicConstants;
@@ -50,15 +51,13 @@ public class HydraulicModuleWebService extends BaseDeviceService implements IHyd
 
     @Override
     public List<HydraulicModuleVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(HvacConstant.HYDRAULIC_MODULE_PORT));
+        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.HYDRAULIC_MODULE.getDeviceType()));
     }
 
     @Override
     public Map<String, Map<String, HydraulicModuleVO>> totalOverview() {
         //查找所有水力模块节点
-        List<HvacNode> hvacNodes = hvacNodeDao.getHvacNodes(new ArrayList<Integer>(){{
-            add(HvacConstant.HYDRAULIC_MODULE_PORT);
-        }});
+        List<HvacNode> hvacNodes = hvacNodeDao.getHvacNodes(BacnetDeviceTypeEnum.HYDRAULIC_MODULE.getDeviceType());
         Map<String, HvacNode> map = hvacNodes.stream().collect(Collectors.toMap(HvacNode::getId, hn -> hn));
         //水力模块归类
         Map<String, Map<String, HydraulicModuleVO>> result = new HashMap<>(8);

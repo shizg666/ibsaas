@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -33,7 +34,8 @@ public class SensorWebController extends BasicController {
     @ApiOperation("传感器总览")
     public Response overview(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>SensorWebController.overview入参为:空");
-        List<SensorVO> sensorVOList = iSensorWebService.overview();
+//        List<SensorVO> sensorVOList = iSensorWebService.overview();
+        Map<String, Map<String, SensorVO>> sensorVOList = iSensorWebService.totalOverview();
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<SensorWebController.overview出参为:{}",sensorVOList.size());
         return returnSuccess(sensorVOList);
     }

@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.common.dao.knight.TFloorMapper;
 import com.landleaf.ibsaas.common.domain.knight.TDoor;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource;
+import com.landleaf.ibsaas.common.enums.BusinessTypeEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.service.knight.IFloorService;

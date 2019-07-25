@@ -11562,7 +11562,7 @@ Chart.prototype = {
 			}
 		};
 
-		// set the animation for the current process
+		// set the animation for the current processor
 		setAnimation(animation, chart);
 
 		chart.oldChartHeight = chart.chartHeight;

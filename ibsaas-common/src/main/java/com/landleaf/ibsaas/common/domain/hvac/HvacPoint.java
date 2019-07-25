@@ -22,6 +22,13 @@ public class HvacPoint extends BasicEntity {
 
 
     /**
+     * 设备类型
+     */
+    @Column(name = "device_type")
+    @ApiModelProperty("设备类型")
+    private Integer deviceType;
+
+    /**
      * 远程设备id
      */
     @ApiModelProperty("远程设备id")

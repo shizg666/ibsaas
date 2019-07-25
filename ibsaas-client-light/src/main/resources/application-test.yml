@@ -1,0 +1,116 @@
+
+server:
+  port: 9091
+  servlet:
+    context-path: /client-light
+    tomcat:
+      uri-encoding: UTF-8
+
+spring:
+  redis:
+    enable: true
+    database: 0
+    sentinel:
+      master: mymaster
+      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
+    lettuce:
+      pool:
+        max-active: 50
+        max-idle: 30
+        min-idle: 8
+        max-wait: 3000
+    timeout: 30000
+  freemarker:
+    cache: true
+    check-template-location: true
+    charset: UTF-8
+    content-type: text/html
+    suffix: .ftl
+    templateEncoding: UTF-8
+    template-loader-path: classpath:/templates/
+    expose-spring-macro-helpers: false
+    # static-locations: classpath:/templates/,classpath:/static/
+  mvc:
+  #s static-path-pattern: /static/**
+
+ibsaas:
+  #  face:
+  #    redirecturl: http://40.73.246.184
+  filter:
+    cors:
+      enable: true
+  swagger:
+    enable: true
+    title: 日志服务
+    description: 微服务之 ID 生成服务，仅用于 ID 生成
+    version: 1.0
+    contactName:
+    paths: [/generator]
+  dynamic:
+    datasource:
+      enable: true
+      defaultDatasourceName: master
+      datasourceList:
+        - name: master
+          url: jdbc:mysql://127.0.0.1:3306/ibsaas?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
+          username: root
+          password: Landleaf@2019
+          driverClassName: com.mysql.jdbc.Driver
+          maxActive: 50
+          initialSize: 5
+          validationQuery: select 'x'
+          testWhileIdle: true
+          testOnBorrow: false
+          testOnReturn: false
+          poolPreparedStatements: true
+          maxOpenPreparedStatements: 20
+        #       maxWait: 60000
+        #       minIdle: 1
+        #       timeBetweenEvictionRunsMillis: 60000
+        #       minEvictableIdleTimeMillis: 300000
+        #       spring.datasource.filters: stat
+        - name: slave
+          url: jdbc:mysql://127.0.0.1:3306/ibsaas?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
+          username: root
+          password: Landleaf@2019
+          driverClassName: com.mysql.jdbc.Driver
+          maxActive: 50
+          initialSize: 5
+          validationQuery: select 'x'
+          testWhileIdle: true
+          testOnBorrow: false
+          testOnReturn: false
+          poolPreparedStatements: true
+          maxOpenPreparedStatements: 20
+#       maxWait: 60000
+#       minIdle: 1
+#       timeBetweenEvictionRunsMillis: 60000
+#       minEvictableIdleTimeMillis: 300000
+#       spring.datasource.filters: stat
+
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params:
+    count: countSql
+
+rocketmq:
+  consumer:
+    enable: true
+    groupName: ibsaas_light_test
+    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    #灯光
+    topics: topic_light_control-*
+    consumeThreadMin: 16
+    consumeThreadMax: 32
+    consumeMessageBatchMaxSize: 10
+tcp:
+  server:
+    ip: 192.168.10.173
+    port: 4196

@@ -20,19 +20,10 @@ public interface ICommonDeviceService {
 
     /**
      * 统一获取固定设备当前所有节点的值
-     * @param deviceInstanceNumber
+     * @param deviceType
      * @return
      */
-    List<? extends BaseDevice> getCurrentData(Integer deviceInstanceNumber);
-
-    /**
-     * 获取单个节点当前信息
-     * @param hvacNodeVO
-     * @param <T>
-     * @return
-     */
-    <T extends BaseDevice> T getCurrentInfo(HvacNodeVO hvacNodeVO);
-
+    List<? extends BaseDevice> getCurrentData(Integer deviceType);
 
     /**
      * 当前输入入redis库

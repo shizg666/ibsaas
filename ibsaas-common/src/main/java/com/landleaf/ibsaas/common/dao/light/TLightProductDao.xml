@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.TLightProductDao">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.light.TLightProduct">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="type" jdbcType="BIGINT" property="typeId" />
+    <result column="protocol" jdbcType="VARCHAR" property="protocol" />
+    <result column="protocol_docking" jdbcType="VARCHAR" property="protocolDocking" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="utime" jdbcType="TIMESTAMP" property="utime" />
+    <result column="Reserved1" jdbcType="VARCHAR" property="reserved1" />
+    <result column="Reserved2" jdbcType="VARCHAR" property="reserved2" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, brand, model, type_id, protocol, protocol_docking, ctime, utime, Reserved1,
+    Reserved2
+  </sql>
+
+  <select id="getProductListByProductIds" resultType="com.landleaf.ibsaas.common.domain.light.TLightProduct">
+    select
+    <include refid="Base_Column_List"/>
+    from t_light_product  where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+
+  </select>
+
+  <select id="selectByid" resultType="com.landleaf.ibsaas.common.domain.light.TLightProduct">
+    select
+    <include refid="Base_Column_List" />
+    from t_light_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryId" parameterType="java.lang.Long">
+        delete from t_light_product
+        where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+</mapper>

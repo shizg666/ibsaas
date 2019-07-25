@@ -29,6 +29,7 @@
     where floor = #{floorId,jdbcType=INTEGER}
     and parent_id = #{parentId,jdbcType=BIGINT}
   </select>
+
   <select id="selectByParentIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -38,6 +39,17 @@
       #{parentId}
     </foreach>
   </select>
+
+  <select id="selectByPrimaryKeys" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_floor
+    where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="parentId">
+      #{parentId}
+    </foreach>
+  </select>
+
   <select id="selectByParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -48,12 +60,25 @@
     delete from t_floor
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
   <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TFloor" useGeneratedKeys="true" keyProperty="id">
     insert into t_floor (id, name, floor,
       parent_id, img)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{floor,jdbcType=INTEGER},
       #{parentId,jdbcType=BIGINT}, #{img,jdbcType=VARCHAR})
   </insert>
+
+  <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+    insert into t_floor (name, floor,
+      parent_id, img)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      ( #{item.name,jdbcType=VARCHAR}, #{item.floor,jdbcType=INTEGER},
+      #{item.parentId,jdbcType=BIGINT}, #{item.img,jdbcType=VARCHAR})
+    </foreach>
+
+  </insert>
+
   <insert id="insertSelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TFloor" useGeneratedKeys="true" keyProperty="id">
     insert into t_floor
     <trim prefix="(" suffix=")" suffixOverrides=",">

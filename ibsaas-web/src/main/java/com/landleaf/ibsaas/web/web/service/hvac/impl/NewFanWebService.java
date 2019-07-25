@@ -5,6 +5,7 @@ import com.landleaf.ibsaas.common.constant.HvacConstant;
 import com.landleaf.ibsaas.common.domain.hvac.dto.NewFanDTO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
 import com.landleaf.ibsaas.common.domain.mq.HvacMqMsg;
+import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.rocketmq.TopicConstants;
@@ -39,7 +40,7 @@ public class NewFanWebService extends BaseDeviceService implements INewFanWebSer
 
     @Override
     public List<NewFanVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(HvacConstant.NEW_FAN_PORT));
+        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.NEW_FAN.getDeviceType()));
     }
 
     @Override

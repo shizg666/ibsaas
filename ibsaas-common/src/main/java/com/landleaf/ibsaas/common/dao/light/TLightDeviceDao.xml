@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.TLightDeviceDao">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.light.TLightDevice">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="adress" jdbcType="VARCHAR" property="adress" />
+    <result column="gateway" jdbcType="VARCHAR" property="gateway" />
+    <result column="mac" jdbcType="VARCHAR" property="mac" />
+    <result column="protocol_docking" jdbcType="VARCHAR" property="protocolDocking" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="utime" jdbcType="TIMESTAMP" property="utime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="reserved" jdbcType="VARCHAR" property="reserved" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, adress, gateway, mac, protocol_docking, ctime, utime, remark, reserved, product_id
+  </sql>
+  <select id="getDeviceRecordByCondition"
+          resultType="com.landleaf.ibsaas.common.domain.light.vo.LightDeviceResponseVO">
+    select d.id,d.name,p.name as productName,p.type,p.brand,p.model,p.protocol from t_light_device d inner join t_light_product_device pd on d.id = pd.device_id inner join t_light_product p on pd.product_id = p.id
+    where 1=1
+    <if test="name != null and name != '' ">
+      and d.name = #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="productName != null and productName != '' ">
+      and p.name = #{productName,jdbcType=VARCHAR}
+    </if>
+    <if test="type != null and type != '' ">
+      and p.type = #{type,jdbcType=VARCHAR}
+    </if>
+    <if test="brand != null and brand != '' ">
+      and p.brand = #{brand,jdbcType=VARCHAR}
+    </if>
+    <if test="model != null and model != '' ">
+      and p.model = #{model,jdbcType=VARCHAR}
+    </if>
+    <if test="protocol != null and protocol != '' ">
+      and p.protocol = #{protocol,jdbcType=VARCHAR}
+    </if>
+
+
+  </select>
+  <select id="getDeviceListByIds" resultType="com.landleaf.ibsaas.common.domain.light.TLightDevice">
+    select
+    <include refid="Base_Column_List"/>
+    from t_light_device  where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+  </select>
+
+  <select id="getDeviceByIds" resultType="com.landleaf.ibsaas.common.domain.light.TLightDevice">
+    select
+    <include refid="Base_Column_List"/>
+    from t_light_device  where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+  </select>
+
+  <select id="getProductIdsByIds" resultType="java.lang.Long">
+    select
+    product_id
+    from t_light_device  where id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+
+  </select>
+
+  <select id="getDeviceByProductId" resultType="com.landleaf.ibsaas.common.domain.light.TLightDevice">
+    select
+    <include refid="Base_Column_List"/>
+    from t_light_device  where product_id =  #{id,jdbcType=BIGINT}
+
+  </select>
+
+</mapper>

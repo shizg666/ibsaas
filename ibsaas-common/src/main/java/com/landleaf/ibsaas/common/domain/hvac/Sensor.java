@@ -36,7 +36,7 @@ public class Sensor extends BaseDevice implements Serializable {
     /**
      * 传感器甲醛
      */
-    @ApiModelProperty("传感器甲醛")
+    @ApiModelProperty("传感器VOC")
     private String ssVoc;
 
     /**
@@ -44,4 +44,8 @@ public class Sensor extends BaseDevice implements Serializable {
      */
     @ApiModelProperty("传感器PM2.5")
     private String ssPm25;
+
+
+    @ApiModelProperty("传感器甲醛")
+    private String ssHcho;
 }
