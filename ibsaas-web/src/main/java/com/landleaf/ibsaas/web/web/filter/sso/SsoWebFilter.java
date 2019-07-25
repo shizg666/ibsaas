@@ -74,7 +74,7 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
             return;
         }
         //redis写死id
-        sid = "177c7dd3-c772-44df-a1d0-58c7f08b2510";
+//        sid = "b9d0365e-116c-4433-ac76-27fe9b39a159";
         if (StringUtils.isNotEmpty(sid)) {
             try {
                 sysUser = ssoWebLoginHelper.get(sid);
@@ -83,17 +83,17 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
             }
         }
         // valid login fail
-//        if (sysUser == null) {
-//            Response returnResponse = new Response<>();
-//            returnResponse.setSuccess(false);
-//            returnResponse.setErrorCode(Conf.SSO_LOGIN_FAIL_RESULT.getCode()+"");
-//            returnResponse.setMessage(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
-//            returnResponse.setErrorMsg(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
-//            res.setContentType("application/json;charset=utf-8");
-////            res.getWriter().println("{\"code\":" + Conf.SSO_LOGIN_FAIL_RESULT.getCode() + ", \"msg\":\"" + Conf.SSO_LOGIN_FAIL_RESULT.getMsg() + "\"}");
-//            res.getWriter().println(JSON.toJSONString(returnResponse));
-//            return;
-//        }
+        if (sysUser == null) {
+            Response returnResponse = new Response<>();
+            returnResponse.setSuccess(false);
+            returnResponse.setErrorCode(Conf.SSO_LOGIN_FAIL_RESULT.getCode()+"");
+            returnResponse.setMessage(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
+            returnResponse.setErrorMsg(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
+            res.setContentType("application/json;charset=utf-8");
+//            res.getWriter().println("{\"code\":" + Conf.SSO_LOGIN_FAIL_RESULT.getCode() + ", \"msg\":\"" + Conf.SSO_LOGIN_FAIL_RESULT.getMsg() + "\"}");
+            res.getWriter().println(JSON.toJSONString(returnResponse));
+            return;
+        }
         //将用户信息设置到UserContext中
         UserContext.setCurrentUser(sysUser);
         // already login, allow

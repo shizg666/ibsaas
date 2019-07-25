@@ -98,7 +98,7 @@ public class TestController {
         kngihtMessage.setMsgId("123");
         kngihtMessage.setMsgName("knight");
         kngihtMessage.setSubMsgName("deleteDepart");
-       DeleteDepartDTO requestBody = new DeleteDepartDTO();
+        DeleteDepartDTO requestBody = new DeleteDepartDTO();
         requestBody.setDepartId(15);
         kngihtMessage.setRequestBody(requestBody);
         webMqProducer.sendMessage(JSON.toJSONString(kngihtMessage),"ibsaas_knight_lifang_lgc_1921681010", TagConstants.TAGS_DEFAULT);
