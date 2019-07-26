@@ -44,9 +44,6 @@ public class MbMasterHolder {
         mbMasters.forEach( mm -> {
             IpParameters params = new IpParameters();
             params.setHost(mm.getHost());
-
-
-
             params.setPort(mm.getPort());
             params.setEncapsulated(mm.getEncapsulated() == 1);
             ModbusMaster master = modbusFactory.createTcpMaster(params, false);
