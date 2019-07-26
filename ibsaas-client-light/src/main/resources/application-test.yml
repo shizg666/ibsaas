@@ -19,6 +19,19 @@ spring:
         max-idle: 30
         min-idle: 8
         max-wait: 3000
+        blockWhenExhausted: true
+    jedis:
+      pool:
+        #jedis最大分配对象
+        maxTotal: 50
+        #jedis最大保存idel状态对象数
+        maxIdle: 30
+        #jedis池没有对象返回时，最大等待时间
+        maxWaitMillis: 10000
+        testOnBorrow: true
+        testOnReturn: true
+        blockWhenExhausted: false
+        #Idle时进行连接扫描
     timeout: 30000
   freemarker:
     cache: true
@@ -52,7 +65,7 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
         - name: master
-          url: jdbc:mysql://127.0.0.1:3306/ibsaas?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
+          url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
           password: Landleaf@2019
           driverClassName: com.mysql.jdbc.Driver
@@ -70,7 +83,7 @@ ibsaas:
         #       minEvictableIdleTimeMillis: 300000
         #       spring.datasource.filters: stat
         - name: slave
-          url: jdbc:mysql://127.0.0.1:3306/ibsaas?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
+          url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
           password: Landleaf@2019
           driverClassName: com.mysql.jdbc.Driver
@@ -103,8 +116,8 @@ pagehelper:
 rocketmq:
   consumer:
     enable: true
-    groupName: ibsaas_light_test
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    groupName: ibsaas_light
+    namesrvAddr: 40.73.100.153:9876;
     #灯光
     topics: topic_light_control-*
     consumeThreadMin: 16

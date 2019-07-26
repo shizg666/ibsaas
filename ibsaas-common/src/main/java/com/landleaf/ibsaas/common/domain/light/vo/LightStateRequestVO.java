@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 
 @ApiModel(description = "灯光设备VO")
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @ToString
 public class LightStateRequestVO {
 
-    @NotBlank(message = "楼层id不能为空")
+    @NotNull(message = "楼层id不能为空")
     @ApiModelProperty(value = "楼层id")
     private Long floorId;
     @NotBlank(message = "地址不能为空")

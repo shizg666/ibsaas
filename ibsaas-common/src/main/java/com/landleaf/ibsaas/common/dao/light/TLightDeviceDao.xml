@@ -19,7 +19,10 @@
   </sql>
   <select id="getDeviceRecordByCondition"
           resultType="com.landleaf.ibsaas.common.domain.light.vo.LightDeviceResponseVO">
-    select d.id,d.name,p.name as productName,p.type,p.brand,p.model,p.protocol from t_light_device d inner join t_light_product_device pd on d.id = pd.device_id inner join t_light_product p on pd.product_id = p.id
+    select d.id,d.name,p.name as productName,t.name as type,p.brand,p.model,p.protocol
+    from t_light_device d
+    inner join t_light_product p on d.product_id = p.id
+    inner join t_light_type  t on p.type_id = t.id
     where 1=1
     <if test="name != null and name != '' ">
       and d.name = #{name,jdbcType=VARCHAR}

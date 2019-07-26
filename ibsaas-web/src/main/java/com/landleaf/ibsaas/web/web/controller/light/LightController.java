@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.web.web.controller.light;
 
 import com.landleaf.ibsaas.common.constant.RedisConstants;
 import com.landleaf.ibsaas.common.domain.Response;
+import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
 import com.landleaf.ibsaas.common.domain.light.vo.LightReponseStateVO;
@@ -9,6 +10,7 @@ import com.landleaf.ibsaas.common.domain.light.vo.LightStateRequestVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightPositionResponseVO;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
+import com.landleaf.ibsaas.web.tcp.cache.ConcurrentHashMapCacheUtils;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
 import com.landleaf.ibsaas.web.web.service.buliding.impl.FloorCommonService;
 import com.landleaf.ibsaas.web.web.service.light.ILightService;
@@ -17,10 +19,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/light")
@@ -43,7 +47,6 @@ public class LightController extends BasicController {
         return returnSuccess();
     }
 
-
     @GetMapping("/getPositionListByFloor/{id}")
     @ApiOperation(value = "根据楼层获取灯光管理信息（包含属性）", notes = "根据楼层获取灯光位置信息")
     public Response<TLightPositionResponseVO> getPositionListByFloor(@PathVariable("id") Long id) {
@@ -59,11 +62,18 @@ public class LightController extends BasicController {
         if (tFloor.getFloor() == 3){
             key =  RedisConstants.LIGHT_DEVICE_3F;
         }else if (tFloor.getFloor() == 4){
-            key =  RedisConstants.LIGHT_DEVICE_3F;
+            key =  RedisConstants.LIGHT_DEVICE_4F;
         }
         String state = redisHandle.getMapField(key,requestVO.getAdress());
         if (StringUtil.isBlank(state)){
-            state = "0";
+            //如果是空手动拉取一下
+            LightMsg lightMsg = new LightMsg();
+            lightMsg.setAdress(requestVO.getAdress());
+            lightMsg.setFloor(String.valueOf(tFloor.getFloor()));
+            lightMsg.setType("3");
+            iLightService.controlLight(lightMsg);
+            //
+            state = iLightService.getTryLightState(key,requestVO.getAdress(),2000L);
         }
         return returnSuccess(state);
     }

@@ -45,7 +45,7 @@ public class BuildingController extends BasicController {
     }
 
     @GetMapping("/getBuildingInfoAllByType")
-    @ApiOperation(value = "获取某一类型楼栋信息(包括楼层信息)", notes = "获取楼栋所有信息")
+    @ApiOperation(value = "获取某一类型楼栋信息(包括楼层信息)(1：门禁，2：照明)", notes = "获取楼栋所有信息")
     public Response<List<BuildingReponseVO>> getBuildingInfoAllByType(@RequestParam(value = "type") Integer type) {
         List<BuildingReponseVO> list = iBuildingCommonService.getBuildingAllInfoByType(type);
         return returnSuccess(list);

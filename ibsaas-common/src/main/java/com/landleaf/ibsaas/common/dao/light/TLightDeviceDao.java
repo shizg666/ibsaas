@@ -20,4 +20,5 @@ public interface TLightDeviceDao extends BaseDao<TLightDevice> {
     List<Long> getProductIdsByIds(@Param("ids") List<Long> deviceIds);
 
     TLightDevice getDeviceByProductId(Long id);
+
 }

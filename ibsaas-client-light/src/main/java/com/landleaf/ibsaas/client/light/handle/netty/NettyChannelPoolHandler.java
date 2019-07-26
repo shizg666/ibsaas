@@ -6,21 +6,23 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.pool.ChannelPoolHandler;
 import io.netty.channel.socket.SocketChannel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by YuQi on 2017/7/31.
  */
 @Component
+@Slf4j
 public class NettyChannelPoolHandler implements ChannelPoolHandler {
     @Override
     public void channelReleased(Channel ch) throws Exception {
-        System.out.println("channelReleased. Channel ID: " + ch.id());
+        log.info("channelReleased. Channel ID: " + ch.id());
     }
 
     @Override
     public void channelAcquired(Channel ch) throws Exception {
-        System.out.println("channelAcquired. Channel ID: " + ch.id());
+        log.info("channelAcquired. Channel ID: " + ch.id());
     }
 
     @Override

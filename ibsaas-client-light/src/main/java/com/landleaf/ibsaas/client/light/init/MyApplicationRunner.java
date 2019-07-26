@@ -5,6 +5,7 @@ import com.landleaf.ibsaas.client.light.service.ITLightDeviceService;
 import com.landleaf.ibsaas.client.light.service.LightService;
 import com.landleaf.ibsaas.common.domain.light.TLightDevice;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
+import com.landleaf.ibsaas.common.domain.light.vo.LightDeviceFloorVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -30,20 +31,20 @@ public class MyApplicationRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-
-        List<TLightDevice> tLightDeviceList = itLightDeviceService.getDeviceList();
-
+//        List<TLightDevice> tLightDeviceList = itLightDeviceService.getDeviceList();
+        List<LightDeviceFloorVO> tLightDeviceList = itLightDeviceService.deviceAutoMonitor();
         tLightDeviceList.forEach(obj->{
             System.out.println(obj.toString());
             LightMsg lightMsg = new LightMsg();
-            lightMsg.setRegion(obj.getAdress());
+            lightMsg.setAdress(obj.getAdress());
             lightMsg.setValue("1");
-            lightMsg.setFloor(obj.getReserved());
+            lightMsg.setFloor(String.valueOf(obj.getFloor()));
             lightMsg.setType("3");
             scencesMonitorHandler.process(lightMsg);
         });
-
-
     }
 }
+
+
+
+

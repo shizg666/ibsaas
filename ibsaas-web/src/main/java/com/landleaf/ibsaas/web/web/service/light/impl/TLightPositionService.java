@@ -68,6 +68,7 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
         try{
             TLightDevice tLightDevice = tLightDeviceDao.selectByPrimaryKey(tLightPosition.getDeviceId());
             TFloor tFloor = floorCommonService.getFloorById(tLightPosition.getFloorId());
+            //发送取消监听消息
             LightMsg lightMsg = new LightMsg();
             lightMsg.setRegion(tLightDevice.getAdress());
             lightMsg.setFloor(String.valueOf(tFloor.getFloor()));
@@ -132,6 +133,8 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
         tlightPositionVOS.forEach(obj ->{
             Long deviceId = obj.getDeviceId();
             Long productId = deviceMap.get(deviceId).getProductId();
+            List<LightProductAttributeVO> voList = data.get(productId);
+            voList.sort((a, b) -> Integer.valueOf(a.getCode()) - Integer.valueOf(b.getCode()));
             obj.setList(data.get(productId));
 //            if (exsitKey){
 //                String scenes = redisHandle.getMapField(finalKey,"R_"+deviceMap.get(deviceId).getAdress());
@@ -180,14 +183,13 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
             TFloor tFloor = floorCommonService.getFloorById(requestBody.getFloorId());
             //查询现有的状态
             LightMsg lightMsg = new LightMsg();
-            lightMsg.setRegion(tLightDevice.getAdress());
             lightMsg.setAdress(tLightDevice.getAdress());
             lightMsg.setFloor(String.valueOf(tFloor.getFloor()));
             lightMsg.setType("3");
             iLightService.controlLight(lightMsg);
             //状态改变监听
             LightMsg lightMsg2 = new LightMsg();
-            lightMsg2.setRegion(tLightDevice.getAdress());
+            lightMsg2.setAdress(tLightDevice.getAdress());
             lightMsg2.setFloor(String.valueOf(tFloor.getFloor()));
             lightMsg2.setType("2");
             lightMsg2.setValue("1");

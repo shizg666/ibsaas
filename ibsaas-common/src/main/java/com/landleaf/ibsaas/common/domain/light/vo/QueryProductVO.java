@@ -8,11 +8,11 @@ import lombok.ToString;
 import java.util.Map;
 import java.util.Set;
 
-@ApiModel(description = "产品查询列表初始化对象")
+@ApiModel(description = "产品查询列表初始化对象实体")
 @ToString
 public class QueryProductVO {
 
-    @ApiModelProperty(value = "类型列表")
+    @ApiModelProperty(value = "品牌列表")
     Set<String> brand;
     @ApiModelProperty(value = "型号列表")
     Set<String> model;

@@ -42,6 +42,12 @@
         from t_light_position
         where id = #{id,jdbcType=BIGINT}
     </select>
+    <select id="getDeviceFloor" resultType="com.landleaf.ibsaas.common.domain.light.vo.LightDeviceFloorVO">
+          select d.id,d.name,d.adress,f.floor
+	       from t_light_device d
+				inner join t_light_position lp  on lp.device_id = d.id
+				inner join t_floor f  on lp.floor_id = f.id
+    </select>
 
     <delete id="deleteByPrimaryId" parameterType="java.lang.Long">
         delete from t_light_position

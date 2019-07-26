@@ -8,4 +8,6 @@ public interface ILightService {
 
     void controlLight(LightMsg requestBody);
 
+    String getTryLightState(String key, String adress, Long timeout) ;
+
 }
