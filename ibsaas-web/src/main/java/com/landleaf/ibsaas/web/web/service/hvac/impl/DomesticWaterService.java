@@ -38,7 +38,8 @@ public class DomesticWaterService extends BaseDeviceService implements IDomestic
 
     @Override
     public List<DomesticWaterVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.DOMESTIC_WATER.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.DOMESTIC_WATER.getDeviceType()));
+        return (List<DomesticWaterVO>) baseOverview(BacnetDeviceTypeEnum.DOMESTIC_WATER.getDeviceType());
     }
 
     @Override

@@ -51,7 +51,8 @@ public class AchpDetailWebService extends BaseDeviceService implements IAchpDeta
 
     @Override
     public List<AchpDetailVO> overviewDetail() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.ACHP_DETAIL.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.ACHP_DETAIL.getDeviceType()));
+        return (List<AchpDetailVO>) baseOverview(BacnetDeviceTypeEnum.ACHP_DETAIL.getDeviceType());
     }
 
 
@@ -83,7 +84,8 @@ public class AchpDetailWebService extends BaseDeviceService implements IAchpDeta
 
     @Override
     public List<AchpPumpValveVO> overviewPumpValve() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.ACHP_PUMP_VALVE.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.ACHP_PUMP_VALVE.getDeviceType()));
+        return (List<AchpPumpValveVO>) baseOverview(BacnetDeviceTypeEnum.ACHP_PUMP_VALVE.getDeviceType());
     }
 
     @Override
@@ -97,7 +99,8 @@ public class AchpDetailWebService extends BaseDeviceService implements IAchpDeta
 
     @Override
     public List<AchpMonitorVO> overviewMonitor() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.ACHP_MONITOR.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.ACHP_MONITOR.getDeviceType()));
+        return (List<AchpMonitorVO>) baseOverview(BacnetDeviceTypeEnum.ACHP_MONITOR.getDeviceType());
     }
 
     @Override

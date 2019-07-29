@@ -39,7 +39,8 @@ public class ExhaustBlowerService extends BaseDeviceService implements IExhaustB
 
     @Override
     public List<ExhaustBlowerVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.EXHAUST_BLOWER.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.EXHAUST_BLOWER.getDeviceType()));
+        return (List<ExhaustBlowerVO>) baseOverview(BacnetDeviceTypeEnum.EXHAUST_BLOWER.getDeviceType());
     }
 
     @Override

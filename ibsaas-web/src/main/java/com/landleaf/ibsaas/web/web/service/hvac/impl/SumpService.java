@@ -30,6 +30,7 @@ public class SumpService extends BaseDeviceService implements ISumpService {
 
     @Override
     public List<SumpVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.SUMP.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.SUMP.getDeviceType()));
+        return (List<SumpVO>) baseOverview(BacnetDeviceTypeEnum.SUMP.getDeviceType());
     }
 }

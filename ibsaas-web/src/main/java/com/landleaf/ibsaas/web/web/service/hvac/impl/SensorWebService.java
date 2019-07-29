@@ -43,7 +43,8 @@ public class SensorWebService extends BaseDeviceService implements ISensorWebSer
 
     @Override
     public List<SensorVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(ModbusDeviceTypeEnum.SENSOR.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(ModbusDeviceTypeEnum.SENSOR.getDeviceType()));
+        return (List<SensorVO>) baseOverview(ModbusDeviceTypeEnum.SENSOR.getDeviceType());
     }
 
     @Override

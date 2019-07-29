@@ -38,7 +38,8 @@ public class RainwaterCollectionService extends BaseDeviceService implements IRa
 
     @Override
     public List<RainwaterCollectionVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.RAINWATER_COLLECTION.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.RAINWATER_COLLECTION.getDeviceType()));
+        return (List<RainwaterCollectionVO>) baseOverview(BacnetDeviceTypeEnum.RAINWATER_COLLECTION.getDeviceType());
     }
 
     @Override

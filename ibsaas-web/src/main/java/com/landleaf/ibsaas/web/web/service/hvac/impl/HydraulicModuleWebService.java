@@ -51,7 +51,8 @@ public class HydraulicModuleWebService extends BaseDeviceService implements IHyd
 
     @Override
     public List<HydraulicModuleVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.HYDRAULIC_MODULE.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.HYDRAULIC_MODULE.getDeviceType()));
+        return (List<HydraulicModuleVO>) baseOverview(BacnetDeviceTypeEnum.HYDRAULIC_MODULE.getDeviceType());
     }
 
     @Override

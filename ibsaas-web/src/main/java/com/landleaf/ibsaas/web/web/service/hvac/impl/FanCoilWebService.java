@@ -52,7 +52,8 @@ public class FanCoilWebService extends BaseDeviceService implements IFanCoilWebS
 //        List<FanCoilVO> fanCoilVOList = redisHandle.getMapField(placeId, String.valueOf(HvacConstant.FAN_COIL_PORT_1));
 //        List<FanCoilVO> fanCoilVOList2 = redisHandle.getMapField(placeId, String.valueOf(HvacConstant.FAN_COIL_PORT_2));
 //        fanCoilVOList.addAll(fanCoilVOList2);
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.FAN_COIL.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.FAN_COIL.getDeviceType()));
+        return (List<FanCoilVO>) baseOverview(BacnetDeviceTypeEnum.FAN_COIL.getDeviceType());
     }
 
     @Override

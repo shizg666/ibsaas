@@ -40,7 +40,8 @@ public class NewFanWebService extends BaseDeviceService implements INewFanWebSer
 
     @Override
     public List<NewFanVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.NEW_FAN.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.NEW_FAN.getDeviceType()));
+        return (List<NewFanVO>) baseOverview(BacnetDeviceTypeEnum.NEW_FAN.getDeviceType());
     }
 
     @Override

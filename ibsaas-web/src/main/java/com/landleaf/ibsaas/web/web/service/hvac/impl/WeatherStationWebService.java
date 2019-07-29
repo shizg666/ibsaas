@@ -30,7 +30,8 @@ public class WeatherStationWebService extends BaseDeviceService implements IWeat
 
     @Override
     public List<WeatherStationVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.WEATHER_STATION.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.WEATHER_STATION.getDeviceType()));
+        return (List<WeatherStationVO>) baseOverview(BacnetDeviceTypeEnum.WEATHER_STATION.getDeviceType());
     }
 
     @Override

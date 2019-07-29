@@ -45,7 +45,8 @@ public class AhuWebService extends BaseDeviceService implements IAhuWebService {
 
     @Override
     public List<AhuVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.AHU.getDeviceType()));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.AHU.getDeviceType()));
+        return (List<AhuVO>) baseOverview(BacnetDeviceTypeEnum.AHU.getDeviceType());
     }
 
     @Override
