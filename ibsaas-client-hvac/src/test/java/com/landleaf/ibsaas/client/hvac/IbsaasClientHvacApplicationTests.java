@@ -306,10 +306,10 @@ public class IbsaasClientHvacApplicationTests {
     @Test
     public void dataOffset(){
         //补能耗差
-        Date date = CalendarUtil.str2Date("2019-06-28 12:00:00");
+        Date date = CalendarUtil.str2Date("2019-07-25 15:00:00");
 
 
-        Date date2 = CalendarUtil.str2Date("2019-06-28 17:00:00");
+        Date date2 = CalendarUtil.str2Date("2019-07-25 17:00:00");
         while (date.compareTo(date2) <= 0){
             iEnergyDataService.dataRecord(date);
             date = CalendarUtil.nextHour(date);

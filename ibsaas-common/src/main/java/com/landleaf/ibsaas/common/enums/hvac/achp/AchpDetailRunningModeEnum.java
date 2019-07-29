@@ -15,8 +15,9 @@ public enum  AchpDetailRunningModeEnum {
     /**
      * 风冷热泵详情运行模式
      */
-    COLD_MODE(0, "热水模式"),
-    HOT_MODE(1, "冷水模式"),
+    HOT_MODE(0, "热水模式"),
+    COLD_MODE(1, "冷水模式"),
+    ONLY_PUMP_MODE(3, "仅用泵模式"),
     ;
 
     private Integer state;

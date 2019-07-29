@@ -32,6 +32,7 @@ spring:
         blockWhenExhausted: false
         #Idle时进行连接扫描
     timeout: 30000
+    password: Landleaf@2019
   freemarker:
     cache: true
     check-template-location: true
