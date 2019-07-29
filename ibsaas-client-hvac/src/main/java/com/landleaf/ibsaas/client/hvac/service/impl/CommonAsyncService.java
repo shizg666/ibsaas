@@ -66,6 +66,7 @@ public class CommonAsyncService {
         }
     }
 
+
     public List<? extends BaseDevice> getCurrentData(Integer deviceType) {
         List<HvacPointDetail> hvacPointDetails = HvacPointHolder.DEVICE_POINT_LIST_MAP.get(deviceType);
         Map<String, List<HvacPointDetail>> hvacPointMap = HvacPointHolder.DEVICE_POINT_MAP.get(deviceType);

@@ -29,4 +29,5 @@ public class CommonDeviceExService {
     public void currentBacnetDataToRedis(){
         BacnetDeviceTypeEnum.MAP.forEach((key, value) -> commonAsyncService.currentOneBacnetDataToRedis(key));
     }
+
 }

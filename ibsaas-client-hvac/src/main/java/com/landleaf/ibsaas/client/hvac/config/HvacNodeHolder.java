@@ -35,7 +35,7 @@ public class HvacNodeHolder {
         List<HvacNode> hvacNodes = hvacNodeDao.all();
         hvacNodes.forEach(hn -> {
             DEVICE_NODE_MAP.computeIfAbsent(hn.getDeviceType(), k -> new ArrayList<>());
-            BaseDevice device = getByDeviceId(hn.getDeviceType());
+            BaseDevice device = getByDeviceType(hn.getDeviceType());
             device.setId(hn.getId());
             DEVICE_NODE_MAP.get(hn.getDeviceType()).add(device);
         });
@@ -49,7 +49,7 @@ public class HvacNodeHolder {
      * @param deviceType
      * @return
      */
-    private BaseDevice getByDeviceId(Integer deviceType){
+    private BaseDevice getByDeviceType(Integer deviceType){
         BacnetDeviceTypeEnum bacnetDeviceTypeEnum = BacnetDeviceTypeEnum.getBacnetDeviceTypeEnum(deviceType);
         if(bacnetDeviceTypeEnum == null){
             return new BaseDevice();
@@ -59,7 +59,7 @@ public class HvacNodeHolder {
             return (BaseDevice) aClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("------------------------------>HvacNodeHolder.getByDeviceId类类型生成错误:{}",e.getMessage(), e);
+            log.error("------------------------------>HvacNodeHolder.getByDeviceType类类型生成错误:{}",e.getMessage(), e);
         }
         return new BaseDevice();
     }

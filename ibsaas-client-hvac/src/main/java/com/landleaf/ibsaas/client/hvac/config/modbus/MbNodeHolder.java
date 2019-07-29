@@ -34,22 +34,22 @@ public class MbNodeHolder {
         List<MbNode> list = mbNodeDao.all();
         list.forEach(node -> {
             MODBUS_NODE_MAP.computeIfAbsent(node.getMbType(), k -> new ArrayList<>());
-            BaseDevice device = getByDeviceId(node.getMbType());
+            BaseDevice device = getByMbType(node.getMbType());
             device.setId(node.getId());
             MODBUS_NODE_MAP.get(node.getMbType()).add(device);
         });
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>HvacNodeHolder.init初始化完成<<<<<<<<<<<<<<<<<<<<<<<<<");
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>MbNodeHolder.init初始化完成<<<<<<<<<<<<<<<<<<<<<<<<<");
     }
 
 
 
     /**
      * 存入的设备
-     * @param deviceType
+     * @param mbType
      * @return
      */
-    private BaseDevice getByDeviceId(Integer deviceType){
-        ModbusDeviceTypeEnum typeEnum = ModbusDeviceTypeEnum.getModbusDeviceTypeEnum(deviceType);
+    private BaseDevice getByMbType(Integer mbType){
+        ModbusDeviceTypeEnum typeEnum = ModbusDeviceTypeEnum.getModbusDeviceTypeEnum(mbType);
         if(typeEnum == null){
             return new BaseDevice();
         }
@@ -58,7 +58,7 @@ public class MbNodeHolder {
             return (BaseDevice) aClass.newInstance();
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("------------------------------>MbNodeHolder.getByDeviceId类类型生成错误:{}",e.getMessage(), e);
+            log.error("------------------------------>MbNodeHolder.getByMbType类类型生成错误:{}",e.getMessage(), e);
         }
         return new BaseDevice();
     }
