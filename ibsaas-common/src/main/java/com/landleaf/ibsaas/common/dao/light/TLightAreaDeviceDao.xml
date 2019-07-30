@@ -18,5 +18,10 @@
     floor =  #{id,jdbcType=INTEGER}
     order by code
   </select>
+  <select id="getAreaDeviceList" resultType="com.landleaf.ibsaas.common.domain.light.vo.LightDeviceFloorVO">
+    select ad.floor,d.adress,d.name
+      from t_light_area_device ad
+		inner join t_light_device d on ad.device_id = d.id
+  </select>
 
 </mapper>

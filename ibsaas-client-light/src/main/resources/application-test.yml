@@ -116,14 +116,10 @@ pagehelper:
 rocketmq:
   consumer:
     enable: true
-    groupName: ibsaas_light
+    groupName: ibsaas_light_test
     namesrvAddr: 40.73.100.153:9876;
     #灯光
     topics: topic_light_control-*
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10
-tcp:
-  server:
-    ip: 192.168.10.173
-    port: 4196

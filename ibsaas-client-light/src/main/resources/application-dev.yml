@@ -124,10 +124,7 @@ rocketmq:
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10
-tcp:
-  server:
-    ip: 192.168.10.173
-    port: 4196
+
 #host:
 #   hostList:
 #     - ip: 192.168.10.173
