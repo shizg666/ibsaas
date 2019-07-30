@@ -101,7 +101,28 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
 
-
+rocketmq:
+  producer:
+    enable: true
+    groupName: ibsaas
+    topic: topic_hvac_write
+    tags: tags
+    #目前采用双主，集群
+    namesrvAddr: 40.73.100.153:9876
+    #消息最大长度 默认1024*4(4M)
+    maxMessageSize: 91920
+    sendMsgTimeout: 30000
+    retryTimesWhenSendFailed: 1
+  consumer:
+    enable: true
+    groupName: topic_hvac_write_test
+    namesrvAddr: 40.73.246.184:9876
+    #暖通
+    topics: topic_hvac_write-*
+    topic: topic_hvac_write
+    consumeThreadMin: 16
+    consumeThreadMax: 32
+    consumeMessageBatchMaxSize: 10
 
 
 mybatis:
