@@ -5,14 +5,12 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.dao.light.TLightDeviceDao;
 import com.landleaf.ibsaas.common.domain.light.TLightDevice;
-import com.landleaf.ibsaas.common.domain.light.TLightProductDevice;
 import com.landleaf.ibsaas.common.domain.light.vo.LightDeviceResponseVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightDeviceQueryVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightDeviceRequestVO;
 import com.landleaf.ibsaas.common.enums.light.LightProcotolEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
-import com.landleaf.ibsaas.web.web.service.light.ILightService;
 import com.landleaf.ibsaas.web.web.service.light.ITLightDeviceService;
 import com.landleaf.ibsaas.web.web.service.light.ITLightPositionService;
 import org.springframework.beans.BeanUtils;
@@ -20,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -28,8 +25,6 @@ import java.util.List;
 @Service
 public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TLightDevice> implements ITLightDeviceService<TLightDevice> {
 
-    @Autowired
-    private ILightService iLightService;
     @Autowired
     private ITLightPositionService itLightPositionService;
 

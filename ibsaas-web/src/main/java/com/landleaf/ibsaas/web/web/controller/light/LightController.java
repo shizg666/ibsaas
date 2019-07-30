@@ -4,33 +4,24 @@ import com.google.common.collect.Lists;
 import com.landleaf.ibsaas.common.constant.RedisConstants;
 import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
-import com.landleaf.ibsaas.common.domain.knight.TFloor;
-import com.landleaf.ibsaas.common.domain.light.TLightType;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
-import com.landleaf.ibsaas.common.domain.light.vo.LightReponseStateVO;
 import com.landleaf.ibsaas.common.domain.light.vo.LightStateRequestVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightAreaResponseVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightPositionResponseVO;
 import com.landleaf.ibsaas.common.enums.light.LightProcotolEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
-import com.landleaf.ibsaas.web.tcp.cache.ConcurrentHashMapCacheUtils;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
-import com.landleaf.ibsaas.web.web.service.buliding.impl.FloorCommonService;
 import com.landleaf.ibsaas.web.web.service.light.ILightService;
 import com.landleaf.ibsaas.web.web.service.light.ITLightAreaDeviceService;
-import com.landleaf.ibsaas.web.web.service.light.ITLightPositionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/light")
@@ -40,11 +31,7 @@ public class LightController extends BasicController {
     @Autowired
     private ILightService iLightService;
     @Autowired
-    private ITLightPositionService itLightPositionService;
-    @Autowired
     private RedisHandle redisHandle;
-    @Autowired
-    private FloorCommonService floorCommonService;
     @Autowired
     private ITLightAreaDeviceService itLightAreaDeviceService;
 

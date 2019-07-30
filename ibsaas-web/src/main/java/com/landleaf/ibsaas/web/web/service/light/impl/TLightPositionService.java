@@ -1,7 +1,6 @@
 package com.landleaf.ibsaas.web.web.service.light.impl;
 
 import com.google.common.collect.Lists;
-import com.landleaf.ibsaas.common.constant.RedisConstants;
 import com.landleaf.ibsaas.common.dao.light.TLightAttributeDao;
 import com.landleaf.ibsaas.common.dao.light.TLightDeviceDao;
 import com.landleaf.ibsaas.common.dao.light.TLightPositionDao;
@@ -14,8 +13,6 @@ import com.landleaf.ibsaas.common.domain.light.vo.LightProductAttributeVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightPositionRequestVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightPositionResponseVO;
 import com.landleaf.ibsaas.common.exception.BusinessException;
-import com.landleaf.ibsaas.common.redis.RedisHandle;
-import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.service.buliding.impl.FloorCommonService;
 import com.landleaf.ibsaas.web.web.service.light.ILightService;
@@ -42,8 +39,7 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
     private TLightDeviceDao tLightDeviceDao;
     @Autowired
     private FloorCommonService floorCommonService;
-    @Autowired
-    private RedisHandle redisHandle;
+
     @Autowired
     private ILightService iLightService;
 
