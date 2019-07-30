@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TLightTypeDao extends BaseDao<TLightType> {
-
+    TLightType selectByid(Long id);
 }

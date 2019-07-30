@@ -16,7 +16,7 @@ public class LightStateRequestVO {
 
     @NotNull(message = "楼层id不能为空")
     @ApiModelProperty(value = "楼层id")
-    private Long floorId;
+    private Integer floorId;
     @NotBlank(message = "地址不能为空")
     @ApiModelProperty(value = "地址")
     private String adress;

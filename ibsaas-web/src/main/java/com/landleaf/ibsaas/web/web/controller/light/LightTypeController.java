@@ -1,6 +1,8 @@
 package com.landleaf.ibsaas.web.web.controller.light;
 
 
+import com.google.common.collect.Lists;
+import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.light.TLightProduct;
 import com.landleaf.ibsaas.common.domain.light.TLightType;
@@ -27,9 +29,16 @@ public class LightTypeController extends BasicController {
 
     @GetMapping("/type/getProducList")
     @ApiOperation(value = "获取灯光类型列表", notes = "获取灯光类型列表")
-    public Response<Map<Long, String>> getTypeList() {
+    public Response<List<ChoiceButton>>  getTypeList() {
         List<TLightType> tLightProducts = itLightTypeService.getTypeList();
-        Map<Long, String> data = tLightProducts.stream().collect(Collectors.toMap(TLightType::getId, TLightType::getName));
-        return returnSuccess(data);
+//        Map<Long, String> data = tLightProducts.stream().collect(Collectors.toMap(TLightType::getId, TLightType::getName));
+        List<ChoiceButton> choiceButtons = Lists.newArrayList();
+        tLightProducts.forEach(obj->{
+            ChoiceButton choiceButton = new ChoiceButton();
+            choiceButton.setChoiceKey(String.valueOf(obj.getId()));
+            choiceButton.setChoiceValue(obj.getName());
+            choiceButtons.add(choiceButton);
+        });
+        return returnSuccess(choiceButtons);
     }
 }

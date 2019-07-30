@@ -1,10 +1,12 @@
 package com.landleaf.ibsaas.common.domain.light.vo;
 
 
+import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,43 +15,43 @@ import java.util.Set;
 public class QueryProductVO {
 
     @ApiModelProperty(value = "品牌列表")
-    Set<String> brand;
+    List<ChoiceButton> brand;
     @ApiModelProperty(value = "型号列表")
-    Set<String> model;
+    List<ChoiceButton> model;
     @ApiModelProperty(value = "协议列表")
-    Set<String> protocol;
+    List<ChoiceButton> protocol;
     @ApiModelProperty(value = "类型列表")
-    Map<Long, String> type;
+    List<ChoiceButton> type;
 
-    public Set<String> getBrand() {
+    public List<ChoiceButton> getBrand() {
         return brand;
     }
 
-    public void setBrand(Set<String> brand) {
+    public void setBrand(List<ChoiceButton> brand) {
         this.brand = brand;
     }
 
-    public Set<String> getModel() {
+    public List<ChoiceButton> getModel() {
         return model;
     }
 
-    public void setModel(Set<String> model) {
+    public void setModel(List<ChoiceButton> model) {
         this.model = model;
     }
 
-    public Set<String> getProtocol() {
+    public List<ChoiceButton> getProtocol() {
         return protocol;
     }
 
-    public void setProtocol(Set<String> protocol) {
+    public void setProtocol(List<ChoiceButton> protocol) {
         this.protocol = protocol;
     }
 
-    public Map<Long, String> getType() {
+    public List<ChoiceButton> getType() {
         return type;
     }
 
-    public void setType(Map<Long, String> type) {
+    public void setType(List<ChoiceButton> type) {
         this.type = type;
     }
 }

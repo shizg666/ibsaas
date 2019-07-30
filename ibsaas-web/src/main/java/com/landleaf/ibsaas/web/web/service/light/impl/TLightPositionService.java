@@ -97,10 +97,10 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("floorId", id);
         List<TLightPosition> tLightPositions = selectByExample(example);
-        List<TLightPositionResponseVO> tlightPositionVOS = Lists.newArrayList();
         if (CollectionUtils.isEmpty(tLightPositions)){
-            return tlightPositionVOS;
+            return Lists.newArrayListWithCapacity(0);
         }
+        List<TLightPositionResponseVO> tlightPositionVOS = Lists.newArrayList();
         List<Long> deviceIds = Lists.newArrayList();
         tLightPositions.forEach(o->{
             TLightPositionResponseVO tLightPositionVO = new TLightPositionResponseVO();

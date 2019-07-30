@@ -8,7 +8,7 @@ import com.landleaf.ibsaas.datasource.mybatis.service.IBaseService;
 
 import java.util.List;
 
-public interface ITLightPositionService<T> extends IBaseService<T> {
+public interface ITLightPositionService<T>  {
     TLightPosition addOrUpdatePosition(TLightPositionRequestVO requestBody);
 
     Integer deletePositionById(Long id);

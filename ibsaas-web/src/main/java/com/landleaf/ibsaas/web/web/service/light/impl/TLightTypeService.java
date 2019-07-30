@@ -30,4 +30,9 @@ public class TLightTypeService extends AbstractBaseService<TLightTypeDao, TLight
         }
         return result;
     }
+
+    @Override
+    public TLightType selectByid(Long id) {
+        return this.dao.selectByid(id);
+    }
 }

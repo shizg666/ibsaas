@@ -9,6 +9,7 @@ import com.landleaf.ibsaas.common.domain.light.TLightProductDevice;
 import com.landleaf.ibsaas.common.domain.light.vo.LightDeviceResponseVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightDeviceQueryVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightDeviceRequestVO;
+import com.landleaf.ibsaas.common.enums.light.LightProcotolEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.service.light.ILightService;
@@ -59,14 +60,17 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
         if (CollectionUtils.isEmpty(lightProducts)) {
             lightProducts = Lists.newArrayList();
         }
+        lightProducts.forEach(obj->{
+            obj.setProtocol(LightProcotolEnum.getInstByType(obj.getProtocol()).getName());
+        });
         return new PageInfo<>(lightProducts);
     }
 
     @Override
     public LightDeviceResponseVO getDeviceById(Long id) {
-        LightDeviceResponseVO result = new LightDeviceResponseVO();
-        TLightDevice tLightDevice = selectByPrimaryKey(id);
-        BeanUtils.copyProperties(tLightDevice,result);
+        LightDeviceResponseVO result = this.dao.selectDeviceById(id );
+        result.setProtocolId(result.getProtocol());
+        result.setProtocol(LightProcotolEnum.getInstByType(result.getProtocol()).getName());
         return result;
     }
 
@@ -82,13 +86,13 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
 //        Example.Criteria criteria = example.createCriteria();
 //        criteria.andCondition("deviceId =", tLightDevice.getId());
 //        tLightProductDeviceService.deleteByExample(example);
-        //修改关联表
-        TLightProductDevice tLightProductDevice = new TLightProductDevice();
-        tLightProductDevice.setDeviceId(tLightDevice.getId());
-        tLightProductDevice.setProductId(tLightDeviceRequestVO.getProductId());
-        Example example = new Example(TLightProductDevice.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("deviceId", tLightDevice.getId());
+//        //修改关联表
+//        TLightProductDevice tLightProductDevice = new TLightProductDevice();
+//        tLightProductDevice.setDeviceId(tLightDevice.getId());
+//        tLightProductDevice.setProductId(tLightDeviceRequestVO.getProductId());
+//        Example example = new Example(TLightProductDevice.class);
+//        Example.Criteria criteria = example.createCriteria();
+//        criteria.andEqualTo("deviceId", tLightDevice.getId());
         return tLightDevice;
     }
 

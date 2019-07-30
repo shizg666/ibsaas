@@ -23,7 +23,16 @@ public class TLightDeviceQueryVO {
     private String protocol;
     @ApiModelProperty(value = "设备名称")
     private String name;
+    @ApiModelProperty(value = "产品类型id")
+    private Long typeId;
 
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
 
     public int getPage() {
         return page;

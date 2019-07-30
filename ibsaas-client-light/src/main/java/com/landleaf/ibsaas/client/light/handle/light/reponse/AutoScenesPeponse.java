@@ -3,7 +3,6 @@ package com.landleaf.ibsaas.client.light.handle.light.reponse;
 
 import com.landleaf.ibsaas.client.light.annotation.HandlerType;
 import com.landleaf.ibsaas.client.light.enums.HostAdressEnum;
-import com.landleaf.ibsaas.common.dao.light.TLightDeviceStateDao;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsgResponse;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +22,6 @@ import java.util.Date;
 public class AutoScenesPeponse implements LightResponse{
     @Autowired
     private RedisHandle redisHandle;
-
-    private TLightDeviceStateDao tLightDeviceStateDao;
 
     @Override
     public LightMsgResponse getReponse(String message) {

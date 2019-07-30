@@ -9,18 +9,18 @@ import com.landleaf.ibsaas.common.domain.light.TLightDevice;
 import com.landleaf.ibsaas.common.domain.light.TLightProduct;
 import com.landleaf.ibsaas.common.domain.light.TLightType;
 import com.landleaf.ibsaas.common.domain.light.vo.ProductReponseVO;
+import com.landleaf.ibsaas.common.domain.light.vo.QueryLightProductVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightProductVO;
+import com.landleaf.ibsaas.common.enums.light.LightProcotolEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
-import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
 import com.landleaf.ibsaas.web.web.service.light.ITLightProductService;
-import com.landleaf.ibsaas.common.domain.light.vo.QueryLightProductVO;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service
+
+        ;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
@@ -94,6 +94,8 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
             TLightProductVO tLightProductVO = new TLightProductVO();
             BeanUtils.copyProperties(obj,tLightProductVO);
             tLightProductVO.setType(collect.get(obj.getTypeId()));
+            tLightProductVO.setProtocolId(obj.getProtocol());
+            tLightProductVO.setProtocol(LightProcotolEnum.getInstByType(obj.getProtocol()).getName());
             tLightProductVOS.add(tLightProductVO);
         });
 
@@ -117,8 +119,9 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
         }
         ProductReponseVO productReponseVO = new ProductReponseVO();
         BeanUtils.copyProperties(tLightProduct,productReponseVO);
+        productReponseVO.setProtocol(LightProcotolEnum.getInstByType(productReponseVO.getProtocol()).getName());
         if (tLightProduct.getTypeId() != null){
-            TLightType tLightType = tLightTypeService.selectByPrimaryKey(tLightProduct.getTypeId());
+            TLightType tLightType = tLightTypeService.selectByid(tLightProduct.getTypeId());
             productReponseVO.setType(tLightType.getName());
         }
         return productReponseVO;

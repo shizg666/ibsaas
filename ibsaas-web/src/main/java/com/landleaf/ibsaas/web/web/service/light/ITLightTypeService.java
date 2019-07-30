@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface ITLightTypeService<TLightType> {
+public interface ITLightTypeService<T> {
 
     /**
      * 获取产品类型列表
@@ -15,4 +15,8 @@ public interface ITLightTypeService<TLightType> {
     List<TLightType> getTypeList();
 
     List<TLightType> getTypeListByIds(List<Long> ids);
+
+   TLightType selectByid(Long id);
+
+
 }

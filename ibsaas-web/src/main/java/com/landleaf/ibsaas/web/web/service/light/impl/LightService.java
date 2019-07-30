@@ -56,7 +56,7 @@ public class LightService implements ILightService {
                 Thread.sleep(200L);
                 String state = redisHandle.getMapField(key,adress);
                 if (StringUtil.isNotEmpty(state)) {
-                    break;
+                    return  state;
                 }
             }
         } catch (InterruptedException e) {

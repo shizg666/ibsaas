@@ -3,7 +3,7 @@ package com.landleaf.ibsaas.common.domain.light.vo;
 import io.swagger.annotations.ApiModelProperty;
 
 public class LightProductAttributeVO {
-    @ApiModelProperty(value = "产品名称")
+    @ApiModelProperty(value = "属性主键id")
     private Long id;
     @ApiModelProperty(value = "属性名称")
     private String name;
@@ -11,8 +11,19 @@ public class LightProductAttributeVO {
     private String value;
     @ApiModelProperty(value = "属性编码")
     private String code;
-    @ApiModelProperty(value = "产品名称")
+    @ApiModelProperty(value = "图片名称")
+    private String reserved;
+    @ApiModelProperty(value = "产品id")
     private Long productId;
+
+
+    public String getReserved() {
+        return reserved;
+    }
+
+    public void setReserved(String reserved) {
+        this.reserved = reserved;
+    }
 
     public Long getProductId() {
         return productId;

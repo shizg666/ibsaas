@@ -9,5 +9,11 @@
   <sql id="Base_Column_List">
     id, name, reserved
   </sql>
+    <select id="selectByid" resultType="com.landleaf.ibsaas.common.domain.light.TLightType">
+        select
+        <include refid="Base_Column_List" />
+        from t_light_type
+        where id = #{id,jdbcType=BIGINT}
+    </select>
 
 </mapper>

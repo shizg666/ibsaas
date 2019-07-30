@@ -51,6 +51,8 @@
             <artifactId>ibsaas-datasource</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+
+
         <!--&lt;!&ndash;jackson模块&ndash;&gt;-->
         <!--<dependency>-->
             <!--<groupId>com.fasterxml.jackson.module</groupId>-->

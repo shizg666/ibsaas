@@ -108,6 +108,7 @@ public class BuildingCommonService implements IBuildingCommonService {
             FloorReponseVO floorReponseVO = new FloorReponseVO();
             BeanUtils.copyProperties(obj,floorReponseVO);
             floorReponseVO.setKey("floor_"+ String.valueOf(floorReponseVO.getId()));
+            floorReponseVO.setImg(StringUtil.isBlank(obj.getImg())?"":path+obj.getImg());
             floorIds.add(obj.getId());
             floorReponseVOS.add(floorReponseVO);
         });

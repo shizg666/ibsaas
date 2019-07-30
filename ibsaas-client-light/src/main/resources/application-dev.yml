@@ -12,7 +12,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 40.73.246.184:26378,40.73.246.184:26379,40.73.246.184:26380
+      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
     lettuce:
       pool:
         max-active: 50
@@ -68,7 +68,7 @@ ibsaas:
         - name: master
           url: jdbc:mysql://127.0.0.1:3306/ibsaas?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
-          password: Landleaf@2019
+          password:
           driverClassName: com.mysql.jdbc.Driver
           maxActive: 50
           initialSize: 5
@@ -86,7 +86,7 @@ ibsaas:
         - name: slave
           url: jdbc:mysql://127.0.0.1:3306/ibsaas?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
-          password: Landleaf@2019
+          password:
           driverClassName: com.mysql.jdbc.Driver
           maxActive: 50
           initialSize: 5
@@ -117,8 +117,8 @@ pagehelper:
 rocketmq:
   consumer:
     enable: true
-    groupName: ibsaas_light
-    namesrvAddr: 40.73.246.184:9876
+    groupName: ibsaas_light_test
+    namesrvAddr: 40.73.100.153:9876
     #灯光
     topics: topic_light_control-*
     consumeThreadMin: 16
@@ -128,3 +128,11 @@ tcp:
   server:
     ip: 192.168.10.173
     port: 4196
+#host:
+#   hostList:
+#     - ip: 192.168.10.173
+#       port: 4196
+#       floor: 3
+#     - ip: 192.168.10.170
+#       port: 4196
+#       floor: 4
