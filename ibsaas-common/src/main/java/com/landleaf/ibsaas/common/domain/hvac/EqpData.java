@@ -29,6 +29,27 @@ public class EqpData extends BasicEntity implements Serializable {
     @ApiModelProperty("对应的点位id")
     private String pointId;
 
+    @ApiModelProperty("站点id")
+    private String hostId;
+
+    @ApiModelProperty("节点id")
+    private String nodeId;
+
+    @ApiModelProperty("属性id")
+    private String fieldId;
+
+    @ApiModelProperty("节点名称")
+    private String nodeName;
+
+    @ApiModelProperty("楼层")
+    private Integer floor;
+
+    @ApiModelProperty("属性名称")
+    private String fieldName;
+
+    @ApiModelProperty("属性描述")
+    private String fieldDescription;
+
     @ApiModelProperty("数据记录时间")
     private Date eqpDataTime;
 
@@ -42,7 +63,7 @@ public class EqpData extends BasicEntity implements Serializable {
     private Integer eqpDataYear;
 
     @ApiModelProperty("当前数据值")
-    private BigDecimal eqpDataValue;
+    private String eqpDataValue;
 
     @ApiModelProperty("数据来源 1-1小时记录数值")
     private Integer eqpDataSource;

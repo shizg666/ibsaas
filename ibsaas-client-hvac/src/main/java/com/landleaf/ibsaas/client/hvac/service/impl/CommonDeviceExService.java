@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 
 /**
  * @author Lokiy
@@ -30,4 +32,17 @@ public class CommonDeviceExService {
         BacnetDeviceTypeEnum.MAP.forEach((key, value) -> commonAsyncService.currentOneBacnetDataToRedis(key));
     }
 
+
+
+
+
+    @Async("taskExecutor")
+    public void currentBacnetDataToDatabase(Date date) {
+        ModbusDeviceTypeEnum.MAP.forEach((key, value) -> commonAsyncService.currentOneMbDataToDatabase(key, date));
+    }
+
+    @Async("taskExecutor")
+    public void currentMbDataToDatabase(Date date) {
+        BacnetDeviceTypeEnum.MAP.forEach((key, value) -> commonAsyncService.currentOneBacnetDataToDatabase(key, date));
+    }
 }

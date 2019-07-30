@@ -13,6 +13,9 @@ import lombok.Data;
 @ApiModel("点位详情")
 public class HvacPointDetail {
 
+    @ApiModelProperty("点位id")
+    private String pointId;
+
     @ApiModelProperty("节点id")
     private String nodeId;
 
@@ -21,6 +24,9 @@ public class HvacPointDetail {
 
     @ApiModelProperty("节点名称")
     private String nodeName;
+
+    @ApiModelProperty("楼层")
+    private Integer floor;
 
     @ApiModelProperty("设备id")
     private String deviceId;

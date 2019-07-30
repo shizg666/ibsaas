@@ -1,8 +1,8 @@
 package com.landleaf.ibsaas.client.hvac.service;
 
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
-import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,6 +29,13 @@ public interface ICommonDeviceService {
      * 当前输入入redis库
      */
     void currentDataToRedis();
+
+
+    /**
+     * 数据入库
+     * @param date
+     */
+    void currentDataToDatabase(Date date);
 
     /**
      * 写入设备数据

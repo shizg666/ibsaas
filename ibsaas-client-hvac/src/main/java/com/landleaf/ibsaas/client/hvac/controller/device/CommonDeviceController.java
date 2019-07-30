@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.client.hvac.controller.device;
 
 import com.landleaf.ibsaas.client.hvac.controller.Basic2Controller;
 import com.landleaf.ibsaas.client.hvac.service.*;
+import com.landleaf.ibsaas.common.constant.IbsaasConstant;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
@@ -66,6 +67,14 @@ public class CommonDeviceController extends Basic2Controller {
     @GetMapping("/current-data/redis")
     public Response currentDataToRedis(){
         iCommonDeviceService.currentDataToRedis();
+        return returnSuccess();
+    }
+
+
+    @GetMapping("/current-data/database")
+    public Response currentDataToDatabase(){
+        Date now = new Date(System.currentTimeMillis()/ IbsaasConstant.SECOND_OFFSET*IbsaasConstant.SECOND_OFFSET);
+        iCommonDeviceService.currentDataToDatabase(now);
         return returnSuccess();
     }
 

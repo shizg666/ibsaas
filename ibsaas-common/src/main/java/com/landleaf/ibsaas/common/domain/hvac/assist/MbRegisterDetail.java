@@ -25,6 +25,9 @@ public class MbRegisterDetail {
     @ApiModelProperty("节点名称")
     private String nodeName;
 
+    @ApiModelProperty("楼层")
+    private Integer floor;
+
     @ApiModelProperty("站点id")
     private String masterId;
 

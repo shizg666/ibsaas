@@ -6,45 +6,30 @@ import com.landleaf.ibsaas.client.hvac.config.HvacNodeHolder;
 import com.landleaf.ibsaas.client.hvac.config.HvacPointHolder;
 import com.landleaf.ibsaas.client.hvac.config.RemoteDeviceInfoHolder;
 import com.landleaf.ibsaas.client.hvac.config.LocalDeviceConfig;
-import com.landleaf.ibsaas.client.hvac.config.modbus.MbMasterHolder;
-import com.landleaf.ibsaas.client.hvac.config.modbus.MbNodeHolder;
-import com.landleaf.ibsaas.client.hvac.config.modbus.MbRegisterHolder;
+
 import com.landleaf.ibsaas.client.hvac.service.ICommonDeviceService;
 import com.landleaf.ibsaas.client.hvac.util.BacnetUtil;
-import com.landleaf.ibsaas.client.hvac.util.HvacUtil;
-import com.landleaf.ibsaas.client.hvac.util.ModbusUtil;
+
 import com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 
-import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
-import com.landleaf.ibsaas.common.domain.hvac.assist.MbRegisterDetail;
+
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 
-import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
+
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
-import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
-import com.serotonin.bacnet4j.exception.BACnetException;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
-import com.serotonin.bacnet4j.util.PropertyValues;
-import com.serotonin.modbus4j.BatchRead;
-import com.serotonin.modbus4j.BatchResults;
-import com.serotonin.modbus4j.locator.BaseLocator;
-import com.sun.org.apache.regexp.internal.RE;
+
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 
 /**
@@ -111,6 +96,28 @@ public class CommonDeviceService implements ICommonDeviceService {
     private void currentMbDataToRedis(){
         commonDeviceExService.currentMbDataToRedis();
     }
+
+
+
+
+
+    @Override
+    public void currentDataToDatabase(Date date){
+        currentBacnetDataToDatabase(date);
+        currentMbDataToDatabase(date);
+    }
+
+
+    private void currentBacnetDataToDatabase(Date date){
+        commonDeviceExService.currentBacnetDataToDatabase(date);
+    }
+
+
+    private void currentMbDataToDatabase(Date date){
+        commonDeviceExService.currentMbDataToDatabase(date);
+    }
+
+
 
 
 

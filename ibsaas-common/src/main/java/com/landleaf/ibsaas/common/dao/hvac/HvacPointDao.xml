@@ -27,9 +27,11 @@
     <select id="allHvacPointDetails"
             resultType="com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail">
         SELECT
+        thp.id AS pointId,
         thp.node_id,
         thn.device_type,
         thn.node_name,
+        thn.floor,
         thp.device_id,
         thd.ip,
         thd.port,

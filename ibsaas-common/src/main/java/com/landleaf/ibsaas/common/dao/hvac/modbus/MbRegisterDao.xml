@@ -17,6 +17,7 @@
         tmr.node_id,
         tmr.mb_type,
         tmn.node_name,
+        tmn.floor,
         tmr.master_id,
         tmm.host,
         tmm.port,
