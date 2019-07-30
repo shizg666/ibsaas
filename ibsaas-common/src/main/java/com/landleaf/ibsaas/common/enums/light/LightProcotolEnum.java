@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public enum LightProcotolEnum  {
     PROTOCOL_TCP("1", "tcp/ip" ),
-    PROTOCOL_RS232("2", "re232" )
+    PROTOCOL_RS232("2", "rs232" )
 
     ;
     public  String type;
