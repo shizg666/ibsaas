@@ -84,7 +84,7 @@ public class LightController extends BasicController {
             //
             state = iLightService.getTryLightState(key,requestVO.getAdress(),2000L);
         }
-        return returnSuccess(state);
+        return returnSuccess(state,null);
     }
     @GetMapping("/getProtocolList")
     @ApiOperation(value = "获取灯光协议列表", notes = "获取灯光协议列表")
