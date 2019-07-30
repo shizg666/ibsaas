@@ -68,7 +68,7 @@ ibsaas:
         - name: master
           url: jdbc:mysql://40.73.87.245:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
-          password: Landleaf@2019
+          password: aA123456
           driverClassName: com.mysql.jdbc.Driver
           maxActive: 50
           initialSize: 5
@@ -86,7 +86,7 @@ ibsaas:
         - name: slave
           url: jdbc:mysql://40.73.87.245:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
-          password: Landleaf@2019
+          password: aA123456
           driverClassName: com.mysql.jdbc.Driver
           maxActive: 50
           initialSize: 5

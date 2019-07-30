@@ -13,6 +13,9 @@ import com.landleaf.ibsaas.common.domain.light.vo.QueryLightProductVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightProductVO;
 import com.landleaf.ibsaas.common.enums.light.LightProcotolEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
+import com.landleaf.ibsaas.common.tcp.code.NumberUtil;
+import com.landleaf.ibsaas.common.utils.number.NumberUtils;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.service.light.ITLightProductService;
 import org.apache.commons.lang3.StringUtils;
@@ -64,8 +67,8 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
         PageHelper.startPage(requestBody.getPage(), requestBody.getLimit(), true);
         Example example = new Example(TLightProduct.class);
         Example.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(requestBody.getType())) {
-            criteria.andEqualTo("type", requestBody.getType());
+        if (NumberUtils.isNotEmpty(requestBody.getTypeId())) {
+            criteria.andEqualTo("typeId", requestBody.getTypeId());
         }
         if (StringUtils.isNotBlank(requestBody.getProtocol())) {
             criteria.andEqualTo("protocol", requestBody.getProtocol());
@@ -93,7 +96,12 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
             BeanUtils.copyProperties(obj,tLightProductVO);
             tLightProductVO.setType(collect.get(obj.getTypeId()));
             tLightProductVO.setProtocolId(obj.getProtocol());
-            tLightProductVO.setProtocol(LightProcotolEnum.getInstByType(obj.getProtocol()).getName());
+            LightProcotolEnum procotolEnum = LightProcotolEnum.getInstByType(obj.getProtocol());
+            if (procotolEnum == null){
+                tLightProductVO.setProtocol(obj.getProtocol());
+            }else {
+                tLightProductVO.setProtocol(procotolEnum.getName());
+            }
             tLightProductVOS.add(tLightProductVO);
         });
 
@@ -127,6 +135,15 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
 
 
     public TLightProduct addProduct(TLightProduct tLightProduct) {
+        if (StringUtil.isBlank(tLightProduct.getBrand())){
+            throw new BusinessException("产品品牌不能为空！");
+        }
+        if (StringUtil.isBlank(tLightProduct.getModel())){
+            throw new BusinessException("产品型号不能为空！");
+        }
+        if (NumberUtils.isEmpty(tLightProduct.getTypeId())){
+            throw new BusinessException("产品类型不能为空！");
+        }
         Date date = new Date();
         tLightProduct.setCtime(date);
         tLightProduct.setUtime(date);

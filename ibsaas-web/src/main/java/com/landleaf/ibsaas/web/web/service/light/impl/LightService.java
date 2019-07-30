@@ -44,6 +44,8 @@ public class LightService implements ILightService {
             }
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
+            log.error("获取设备状态失败：{}",e.getMessage());
+            return "0";
         }
         return "0";
     }

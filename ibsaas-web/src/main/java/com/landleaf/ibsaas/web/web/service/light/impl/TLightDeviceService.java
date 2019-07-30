@@ -56,7 +56,12 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
             lightProducts = Lists.newArrayList();
         }
         lightProducts.forEach(obj->{
-            obj.setProtocol(LightProcotolEnum.getInstByType(obj.getProtocol()).getName());
+            LightProcotolEnum lightProcotolEnum = LightProcotolEnum.getInstByType(obj.getProtocol());
+            if (lightProcotolEnum == null){
+                obj.setProtocol(obj.getProtocol());
+            }else {
+                obj.setProtocol(lightProcotolEnum.getName());
+            }
         });
         return new PageInfo<>(lightProducts);
     }
