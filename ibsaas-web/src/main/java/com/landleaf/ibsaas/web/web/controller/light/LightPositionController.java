@@ -42,7 +42,7 @@ public class LightPositionController extends BasicController {
 
     @ApiOperation(value = "添加或者修改灯光位置信息", notes = "添加或者修改灯光位置信息")
     @PostMapping(value = "/addOrUpdatePosition")
-    public Response<TLightDevice> addOrUpdatePosition(@RequestBody @ApiParam TLightPositionRequestVO requestBody) {
+    public Response<TLightPosition> addOrUpdatePosition(@RequestBody @ApiParam TLightPositionRequestVO requestBody) {
         TLightPosition result = itLightPositionService.addOrUpdatePosition(requestBody);
         String message;
         if (requestBody.getId() == null || requestBody.getId() == 0L) {

@@ -39,8 +39,14 @@ public class MyApplicationRunner implements CommandLineRunner {
             lightMsg.setAdress(obj.getAdress());
             lightMsg.setValue("1");
             lightMsg.setFloor(String.valueOf(obj.getFloor()));
-            lightMsg.setType("3");
+            lightMsg.setType("2");
             scencesMonitorHandler.process(lightMsg);
+//            //手动拉取
+//            LightMsg lightMsg2 = new LightMsg();
+//            lightMsg2.setAdress(obj.getAdress());
+//            lightMsg2.setFloor(String.valueOf(obj.getFloor()));
+//            lightMsg2.setType("3");
+//            scencesMonitorHandler.process(lightMsg);
         });
     }
 }

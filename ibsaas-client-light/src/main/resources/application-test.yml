@@ -33,6 +33,7 @@ spring:
         blockWhenExhausted: false
         #Idle时进行连接扫描
     timeout: 30000
+    password: Landleaf@2019
   freemarker:
     cache: true
     check-template-location: true
@@ -65,9 +66,9 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
         - name: master
-          url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
+          url: jdbc:mysql://40.73.87.245:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
-          password: Landleaf@2019
+          password: aA123456
           driverClassName: com.mysql.jdbc.Driver
           maxActive: 50
           initialSize: 5
@@ -83,9 +84,9 @@ ibsaas:
         #       minEvictableIdleTimeMillis: 300000
         #       spring.datasource.filters: stat
         - name: slave
-          url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
+          url: jdbc:mysql://40.73.87.245:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
-          password: Landleaf@2019
+          password: aA123456
           driverClassName: com.mysql.jdbc.Driver
           maxActive: 50
           initialSize: 5
@@ -116,14 +117,10 @@ pagehelper:
 rocketmq:
   consumer:
     enable: true
-    groupName: ibsaas_light
+    groupName: ibsaas_light_test
     namesrvAddr: 40.73.100.153:9876;
     #灯光
     topics: topic_light_control-*
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10
-tcp:
-  server:
-    ip: 192.168.10.173
-    port: 4196

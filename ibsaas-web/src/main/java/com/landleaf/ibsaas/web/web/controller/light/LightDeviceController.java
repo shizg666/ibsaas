@@ -28,7 +28,7 @@ public class LightDeviceController extends BasicController {
 
     @GetMapping("/device/{id}")
     @ApiOperation(value = "根据主键id获取设备信息", notes = "根据主键id获取设备信息")
-    public Response getDeviceById(@PathVariable Long id) {
+    public Response<LightDeviceResponseVO> getDeviceById(@PathVariable Long id) {
         LightDeviceResponseVO data = itLightDeviceService.getDeviceById(id);
         return returnSuccess(data);
     }

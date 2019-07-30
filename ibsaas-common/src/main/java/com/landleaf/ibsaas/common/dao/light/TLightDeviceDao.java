@@ -21,4 +21,7 @@ public interface TLightDeviceDao extends BaseDao<TLightDevice> {
 
     TLightDevice getDeviceByProductId(Long id);
 
+
+    LightDeviceResponseVO selectDeviceById(Long id );
+
 }

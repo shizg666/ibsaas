@@ -9,18 +9,19 @@ import com.landleaf.ibsaas.common.domain.light.TLightDevice;
 import com.landleaf.ibsaas.common.domain.light.TLightProduct;
 import com.landleaf.ibsaas.common.domain.light.TLightType;
 import com.landleaf.ibsaas.common.domain.light.vo.ProductReponseVO;
-import com.landleaf.ibsaas.common.domain.light.vo.TLightProductVO;
-import com.landleaf.ibsaas.common.exception.BusinessException;
-import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
-import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
-import com.landleaf.ibsaas.web.web.service.light.ITLightProductService;
 import com.landleaf.ibsaas.common.domain.light.vo.QueryLightProductVO;
-import net.bytebuddy.implementation.bytecode.Throw;
+import com.landleaf.ibsaas.common.domain.light.vo.TLightProductVO;
+import com.landleaf.ibsaas.common.enums.light.LightProcotolEnum;
+import com.landleaf.ibsaas.common.exception.BusinessException;
+import com.landleaf.ibsaas.common.tcp.code.NumberUtil;
+import com.landleaf.ibsaas.common.utils.number.NumberUtils;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
+import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
+import com.landleaf.ibsaas.web.web.service.light.ITLightProductService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import tk.mybatis.mapper.entity.Example;
 
@@ -66,8 +67,8 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
         PageHelper.startPage(requestBody.getPage(), requestBody.getLimit(), true);
         Example example = new Example(TLightProduct.class);
         Example.Criteria criteria = example.createCriteria();
-        if (StringUtils.isNotBlank(requestBody.getType())) {
-            criteria.andEqualTo("type", requestBody.getType());
+        if (NumberUtils.isNotEmpty(requestBody.getTypeId())) {
+            criteria.andEqualTo("typeId", requestBody.getTypeId());
         }
         if (StringUtils.isNotBlank(requestBody.getProtocol())) {
             criteria.andEqualTo("protocol", requestBody.getProtocol());
@@ -94,6 +95,13 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
             TLightProductVO tLightProductVO = new TLightProductVO();
             BeanUtils.copyProperties(obj,tLightProductVO);
             tLightProductVO.setType(collect.get(obj.getTypeId()));
+            tLightProductVO.setProtocolId(obj.getProtocol());
+            LightProcotolEnum procotolEnum = LightProcotolEnum.getInstByType(obj.getProtocol());
+            if (procotolEnum == null){
+                tLightProductVO.setProtocol(obj.getProtocol());
+            }else {
+                tLightProductVO.setProtocol(procotolEnum.getName());
+            }
             tLightProductVOS.add(tLightProductVO);
         });
 
@@ -117,8 +125,9 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
         }
         ProductReponseVO productReponseVO = new ProductReponseVO();
         BeanUtils.copyProperties(tLightProduct,productReponseVO);
+        productReponseVO.setProtocol(LightProcotolEnum.getInstByType(productReponseVO.getProtocol()).getName());
         if (tLightProduct.getTypeId() != null){
-            TLightType tLightType = tLightTypeService.selectByPrimaryKey(tLightProduct.getTypeId());
+            TLightType tLightType = tLightTypeService.selectByid(tLightProduct.getTypeId());
             productReponseVO.setType(tLightType.getName());
         }
         return productReponseVO;
@@ -126,6 +135,15 @@ public class TLightProductService extends AbstractBaseService<TLightProductDao, 
 
 
     public TLightProduct addProduct(TLightProduct tLightProduct) {
+        if (StringUtil.isBlank(tLightProduct.getBrand())){
+            throw new BusinessException("产品品牌不能为空！");
+        }
+        if (StringUtil.isBlank(tLightProduct.getModel())){
+            throw new BusinessException("产品型号不能为空！");
+        }
+        if (NumberUtils.isEmpty(tLightProduct.getTypeId())){
+            throw new BusinessException("产品类型不能为空！");
+        }
         Date date = new Date();
         tLightProduct.setCtime(date);
         tLightProduct.setUtime(date);

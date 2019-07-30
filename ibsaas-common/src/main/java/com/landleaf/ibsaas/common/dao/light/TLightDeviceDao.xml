@@ -30,8 +30,8 @@
     <if test="productName != null and productName != '' ">
       and p.name = #{productName,jdbcType=VARCHAR}
     </if>
-    <if test="type != null and type != '' ">
-      and p.type = #{type,jdbcType=VARCHAR}
+    <if test="typeId != null and typeId != '' ">
+      and p.type_id = #{typeId,jdbcType=BIGINT}
     </if>
     <if test="brand != null and brand != '' ">
       and p.brand = #{brand,jdbcType=VARCHAR}
@@ -77,6 +77,15 @@
     select
     <include refid="Base_Column_List"/>
     from t_light_device  where product_id =  #{id,jdbcType=BIGINT}
+
+  </select>
+  <select id="selectDeviceById" resultType="com.landleaf.ibsaas.common.domain.light.vo.LightDeviceResponseVO">
+    select
+    d.id, d.name, d.adress, d.gateway, d.mac, d.protocol_docking,d.product_id, lp.name as productName, lp.brand, lp.model , lp.protocol ,t.name as type
+    from t_light_device  d
+    inner join t_light_product lp on lp.id = d.product_id
+    inner join t_light_type t on lp.type_id = t.id
+    where d.id =  #{id,jdbcType=BIGINT}
 
   </select>
 

@@ -4,6 +4,7 @@ package com.landleaf.ibsaas.web.web.controller.building;
 import com.alibaba.fastjson.JSONObject;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.building.vo.BuildingCloneVO;
+import com.landleaf.ibsaas.common.domain.building.vo.FloorRequestVO;
 import com.landleaf.ibsaas.common.domain.knight.TBuilding;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
@@ -96,6 +97,15 @@ public class BuildingController extends BasicController {
         log.info("BuildingController ----->cloneBuilding TBuilding:{}", JSONObject.toJSONString(buildingCloneVO));
         List<BuildingReponseVO> buildingReponseVOS = iBuildingCommonService.cloneBuilding(buildingCloneVO);
         return returnSuccess(buildingReponseVOS);
+    }
+
+
+
+    @PostMapping("/deleteFloor/{id}")
+    @ApiOperation(value = "删除楼层信息", notes = "")
+    public Response deleteFloor(@RequestBody @ApiParam FloorRequestVO floorRequestVO){
+        iFloorCommonService.deleteFloor(floorRequestVO.getId(),floorRequestVO.getType());
+        return returnSuccess();
     }
 
 

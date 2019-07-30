@@ -25,6 +25,8 @@ public class TLightProductVO {
     private String type;
     @ApiModelProperty(value = "产品接入协议")
     private String protocol;
+    @ApiModelProperty(value = "产品接入协议")
+    private String protocolId;
     @ApiModelProperty(value = "产品对接协议")
     private String protocolDocking;
     @ApiModelProperty(value = "产品创建时间")
@@ -33,6 +35,15 @@ public class TLightProductVO {
     private Date utime;
     private String reserved1;
     private String reserved2;
+
+
+    public String getProtocolId() {
+        return protocolId;
+    }
+
+    public void setProtocolId(String protocolId) {
+        this.protocolId = protocolId;
+    }
 
     public String getType() {
         return type;

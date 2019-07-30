@@ -1,33 +1,16 @@
 package com.landleaf.ibsaas.web.web.service.light.impl;
 
 import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
-import com.google.gson.internal.LinkedTreeMap;
-import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
-import com.landleaf.ibsaas.common.domain.knight.control.QueryMjDoorByIdDTO;
-import com.landleaf.ibsaas.common.domain.knight.control.Station;
-import com.landleaf.ibsaas.common.domain.light.dto.LightControlDTO;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
-import com.landleaf.ibsaas.common.enums.knight.KnightSubMsgTypeEnum;
-import com.landleaf.ibsaas.common.enums.parking.MsgTypeEnum;
-import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
-import com.landleaf.ibsaas.common.utils.MessageUtil;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.rocketmq.TopicConstants;
-import com.landleaf.ibsaas.web.asyn.IFutureService;
 import com.landleaf.ibsaas.web.rocketmq.WebMqProducer;
-import com.landleaf.ibsaas.web.tcp.cache.ConcurrentHashMapCacheUtils;
 import com.landleaf.ibsaas.web.web.service.light.ILightService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -56,11 +39,13 @@ public class LightService implements ILightService {
                 Thread.sleep(200L);
                 String state = redisHandle.getMapField(key,adress);
                 if (StringUtil.isNotEmpty(state)) {
-                    break;
+                    return  state;
                 }
             }
         } catch (InterruptedException e) {
             log.error(e.getMessage(), e);
+            log.error("获取设备状态失败：{}",e.getMessage());
+            return "0";
         }
         return "0";
     }

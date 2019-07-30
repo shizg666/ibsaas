@@ -22,8 +22,18 @@ public class QueryLightProductVO extends BaseDTO implements Serializable {
     private String model;
     @ApiModelProperty(value = "产品类型")
     private String type;
+    @ApiModelProperty(value = "产品类型")
+    private Long typeId;
     @ApiModelProperty(value = "产品接入协议")
     private String protocol;
+
+    public Long getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
 
     public String getName() {
         return name;
