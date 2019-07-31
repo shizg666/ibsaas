@@ -102,6 +102,9 @@ public class HvacUtil {
         if(StringUtils.isBlank(value)){
             return value;
         }
+        if("NaN".equals(value)){
+            return null;
+        }
         //数值形式
         if(ObjectType.analogInput.equals(objectType)
                 || ObjectType.analogOutput.equals(objectType)
@@ -143,14 +146,26 @@ public class HvacUtil {
     }
 
     private static String dealModbusValue(String fieldName, Object o){
-        if(null == o){
-            return "0";
+        String temp = modbusSpecialValue(fieldName, o);
+        if(temp != null){
+            return temp;
         }
-        String result = String.valueOf(o);
+        if(null == o){
+            return null;
+        }
+        return String.valueOf(o);
+    }
+
+    private static String modbusSpecialValue(String fieldName, Object o){
         if("ssHcho".equals(fieldName)){
+            if(o == null){
+                return "0.01";
+            }
+            String result = String.valueOf(o);
+            //modbus 甲醛数值为100倍
             return new BigDecimal(result).divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP).toString();
         }
-        return result;
+        return null;
     }
 
 }

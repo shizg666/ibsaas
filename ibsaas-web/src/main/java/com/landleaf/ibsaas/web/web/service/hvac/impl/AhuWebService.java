@@ -75,15 +75,15 @@ public class AhuWebService extends BaseDeviceService implements IAhuWebService {
             throw new BusinessException("风机关闭状态下,所有运行设置不生效");
         }
         //只有在“水阀控制模式”为“手动模式”时可编辑
-        if(StringUtils.isNotBlank(ahuDTO.getAhuWaterValveFeedback())){
+        if(StringUtils.isNotBlank(ahuDTO.getAhuWaterValveAdjust())){
             if(!String.valueOf(AhuHandAutomaticallyEnum.HAND_MODE.getState()).equals(ahuVO.getAhuWaterValveMode())){
-                throw new BusinessException("水阀开度反馈,只有在“水阀控制模式”为“手动模式”时可编辑");
+                throw new BusinessException("水阀调节控制,只有在“水阀控制模式”为“手动模式”时可编辑");
             }
             return;
         }
         //风机手动状态下，“风机频率调节控制”不可调；
         //风机自动状态下，“风机频率调节控制”可调
-        if(StringUtils.isNotBlank(ahuDTO.getAhuWaterValveAdjust())){
+        if(StringUtils.isNotBlank(ahuDTO.getAhuFrequencyAdjust())){
             if(!String.valueOf(AhuHandAutomaticallyEnum.AUTO_MODE.getState()).equals(ahuVO.getAhuHandAutomatically())){
                 throw new BusinessException("风机频率调节控制,只有在风机自动状态下才能调节");
             }

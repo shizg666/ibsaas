@@ -1,5 +1,7 @@
 package com.landleaf.ibsaas.client.hvac.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import com.landleaf.ibsaas.client.hvac.config.HvacNodeHolder;
 import com.landleaf.ibsaas.client.hvac.config.HvacPointHolder;
 import com.landleaf.ibsaas.client.hvac.config.LocalDeviceConfig;
@@ -32,16 +34,14 @@ import com.serotonin.modbus4j.BatchResults;
 import com.serotonin.modbus4j.locator.BaseLocator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -65,20 +65,35 @@ public class CommonAsyncService {
     @Autowired
     private EqpDataDao eqpDataDao;
 
+    private void copyList(List<? extends BaseDevice> currentData, List<? extends BaseDevice> oriData){
+        Map<String, ? extends BaseDevice> tempMap = currentData.stream().collect(Collectors.toMap(BaseDevice::getId, b -> b));
+        oriData.forEach(o -> {
+            BaseDevice baseDevice = tempMap.get(o.getId());
+            BeanUtil.copyProperties(baseDevice, o, CopyOptions.create().ignoreNullValue().ignoreError());
+        });
+
+    }
+
 
     @Async("taskExecutor")
     public void currentOneMbDataToRedis(Integer deviceType){
         List<? extends BaseDevice> currentData = getMbCurrentData(deviceType);
+        List<? extends BaseDevice> oriData = redisHandle.getMapField(placeId, String.valueOf(deviceType));
+        oriData = oriData == null ? MbNodeHolder.MODBUS_NODE_MAP.get(deviceType) : oriData;
         if (CollectionUtils.isNotEmpty(currentData)) {
-            redisHandle.addMap(placeId, String.valueOf(deviceType), currentData);
+            copyList(currentData, oriData);
+            redisHandle.addMap(placeId, String.valueOf(deviceType), oriData);
         }
     }
 
     @Async("taskExecutor")
     public void currentOneBacnetDataToRedis(Integer deviceType){
         List<? extends BaseDevice> currentData = getCurrentData(deviceType);
+        List<? extends BaseDevice> oriData = redisHandle.getMapField(placeId, String.valueOf(deviceType));
+        oriData = oriData == null ? HvacNodeHolder.DEVICE_NODE_MAP.get(deviceType) : oriData;
         if (CollectionUtils.isNotEmpty(currentData)) {
-            redisHandle.addMap(placeId, String.valueOf(deviceType), currentData);
+            copyList(currentData, oriData);
+            redisHandle.addMap(placeId, String.valueOf(deviceType), oriData);
         }
     }
 

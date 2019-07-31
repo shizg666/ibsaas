@@ -15,8 +15,8 @@ public enum  AhuHandAutomaticallyEnum {
     /**
      * ahu手自动
      */
-    AUTO_MODE(0, "自动"),
-    HAND_MODE(1, "手动"),
+    AUTO_MODE(1, "自动"),
+    HAND_MODE(0, "手动"),
     ;
 
     private Integer state;

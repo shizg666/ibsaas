@@ -41,6 +41,12 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.5.18</version>
+        </dependency>
     </dependencies>
 
     <!-- 不加不能加载mainclass-->

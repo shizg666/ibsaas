@@ -1,5 +1,7 @@
 package com.landleaf.ibsaas.common.enums.hvac.sensor;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.math.BigDecimal;
 import java.util.TreeMap;
 
@@ -55,6 +57,9 @@ public enum  SensorHchoLevelEnum {
     }
 
     public static String getLevel(String hcho){
+        if(StringUtils.isBlank(hcho)){
+            return EXCELLENT.level;
+        }
         return HCHO_LEVEL_MAP.ceilingEntry(new BigDecimal(hcho)).getValue().level;
     }
 }
