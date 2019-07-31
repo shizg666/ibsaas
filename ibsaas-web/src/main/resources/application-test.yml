@@ -166,3 +166,7 @@ bacnet:
     deviceId: 1234
   place:
     id: lgc
+
+
+light:
+  control: false

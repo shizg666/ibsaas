@@ -70,7 +70,13 @@ public class TLightDeviceService extends AbstractBaseService<TLightDeviceDao, TL
     public LightDeviceResponseVO getDeviceById(Long id) {
         LightDeviceResponseVO result = this.dao.selectDeviceById(id );
         result.setProtocolId(result.getProtocol());
-        result.setProtocol(LightProcotolEnum.getInstByType(result.getProtocol()).getName());
+        LightProcotolEnum lightProcotolEnum = LightProcotolEnum.getInstByType(result.getProtocol());
+        if (lightProcotolEnum == null){
+            result.setProtocol(result.getProtocol());
+        }else {
+            result.setProtocol(lightProcotolEnum.getName());
+        }
+//        result.setProtocol(LightProcotolEnum.getInstByType(result.getProtocol()).getName());
         return result;
     }
 

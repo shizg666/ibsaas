@@ -9,6 +9,7 @@ import com.landleaf.ibsaas.common.domain.light.vo.LightStateRequestVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightAreaResponseVO;
 import com.landleaf.ibsaas.common.domain.light.vo.TLightPositionResponseVO;
 import com.landleaf.ibsaas.common.enums.light.LightProcotolEnum;
+import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
@@ -18,6 +19,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,10 +36,15 @@ public class LightController extends BasicController {
     private RedisHandle redisHandle;
     @Autowired
     private ITLightAreaDeviceService itLightAreaDeviceService;
+    @Value("${light.control}")
+    private Boolean control;
 
     @PostMapping("/controlLight")
     @ApiOperation(value = "控制灯光", notes = "控制灯光")
     public Response controlLight(@RequestBody LightMsg requestBody) {
+        if (!control){
+            throw new BusinessException("您没有该权限！");
+        }
         iLightService.controlLight(requestBody);
         return returnSuccess();
     }

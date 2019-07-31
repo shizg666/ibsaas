@@ -159,3 +159,5 @@ bacnet:
   place:
     id: lgc
 
+light:
+  control: false
