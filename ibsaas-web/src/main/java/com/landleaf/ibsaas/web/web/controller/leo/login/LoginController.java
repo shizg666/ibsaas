@@ -52,7 +52,7 @@ public class LoginController extends BasicController {
         }
         //传过来已经加密一次了
 //        password = EncryptMD5Util.encryptMD5(password);
-        if (!StringUtils.equals(user.getPassword(), password)) {
+        if (!StringUtils.equals(existUser.getPassword(), password)) {
             throw new BusinessException("密码错误！");
         }
         ssoWebLoginHelper.set(sessionid, existUser, 3600 * 24L);
