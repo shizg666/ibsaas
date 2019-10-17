@@ -14,6 +14,7 @@
 		<module>ibsaas-datasource</module>
 		<module>ibsaas-rocketmq</module>
         <module>ibsaas-client-light</module>
+        <module>ibsaas-client-parking-lifang-mq</module>
     </modules>
 	<packaging>pom</packaging>
 
