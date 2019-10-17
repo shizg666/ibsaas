@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.TLightAttributeDao">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.light.TLightAttribute">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="value" jdbcType="VARCHAR" property="value" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="reserved" jdbcType="VARCHAR" property="reserved" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, value, code, reserved
+  </sql>
+  <select id="getAttributeListByTypeIds" resultType="com.landleaf.ibsaas.common.domain.light.TLightAttribute">
+     select la.id,la.name,la.code from t_light_attribute la inner join t_light_type_attribute ta on la.id = ta.attribute_id
+      where ta.type_id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+  </select>
+  <select id="getAttributeListByProductIds"
+          resultType="com.landleaf.ibsaas.common.domain.light.vo.LightProductAttributeVO">
+      select lp.id as productId,la.id,la.name,la.code,la.reserved
+        from t_light_attribute la
+        inner join t_light_type_attribute ta on la.id = ta.attribute_id
+        inner join t_light_product lp on lp.type_id = ta.type_id
+        where lp.id in
+    <foreach collection="ids" open="(" separator="," close=")" item="id">
+      #{id}
+    </foreach>
+
+  </select>
+
+
+</mapper>

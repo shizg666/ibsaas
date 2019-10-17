@@ -5,8 +5,12 @@ import com.google.gson.reflect.TypeToken;
 import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.redis.RedisUtil;
 import com.landleaf.ibsaas.common.utils.MessageUtil;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.service.energy.IConfigSettingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import redis.clients.jedis.Jedis;
@@ -20,35 +24,35 @@ import java.util.List;
 @Component
 public class ConfigSettingRedis {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(ConfigSettingRedis.class);
+
     @Autowired
     private IConfigSettingService configSettingService;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisTemplate redisTemplate;
 
     public List<ConfigSettingVO> getConfigSettingVOByType(String type){
 
-        Jedis jedis = redisUtil.getJedis();
         List<ConfigSettingVO> result = null;
         try {
-            List<String> list = jedis.hmget(RedisUtil.T_CONFIG_SETTING, type);
-            if (list == null || list.size() == 0) {
+            String tempResult = (String) redisTemplate.opsForHash().get(RedisUtil.T_CONFIG_SETTING, type);
+            if (StringUtil.isEmpty(tempResult)) {
                 return null;
             }
-            result= JSON.parseArray(list.get(0), ConfigSettingVO.class);
+            result= JSON.parseArray(tempResult, ConfigSettingVO.class);
 
             if (result == null) {
                 List<ConfigSettingVO> queryResult = configSettingService.typeList(type);
                 if(!CollectionUtils.isEmpty(queryResult)){
-                    jedis.hset(RedisUtil.T_CONFIG_SETTING, type, JSON.toJSONString(queryResult));
+                    redisTemplate.opsForHash().put(RedisUtil.T_CONFIG_SETTING, type, JSON.toJSONString(queryResult));
                 }
                 return queryResult;
             }
-            return result;
-        } finally {
-            jedis.close();
+        }catch (Exception e){
+            LOGGER.error(e.getMessage(),e);
         }
-
+        return result;
     }
 
 }

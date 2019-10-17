@@ -1,6 +1,8 @@
 package com.landleaf.ibsaas.web.web.controller;
 
+import cn.hutool.http.HttpStatus;
 import com.alibaba.fastjson.JSON;
+import com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO;
 import com.landleaf.ibsaas.common.domain.knight.*;
 import com.landleaf.ibsaas.common.domain.knight.attendance.AddAttendanceRecordDTO;
 import com.landleaf.ibsaas.common.domain.knight.attendance.QueryAttendanceRecordDTO;
@@ -10,16 +12,20 @@ import com.landleaf.ibsaas.common.domain.knight.depart.AddDepartDTO;
 import com.landleaf.ibsaas.common.domain.knight.depart.DeleteDepartDTO;
 import com.landleaf.ibsaas.common.domain.knight.depart.QueryDepartDTO;
 import com.landleaf.ibsaas.common.domain.knight.emply.*;
+import com.landleaf.ibsaas.common.domain.leo.User;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
 import com.landleaf.ibsaas.web.asyn.IFutureService;
 import com.landleaf.ibsaas.web.rocketmq.WebMqProducer;
+import com.landleaf.ibsaas.web.web.redis.energy.ConfigSettingRedis;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -92,7 +98,7 @@ public class TestController {
         kngihtMessage.setMsgId("123");
         kngihtMessage.setMsgName("knight");
         kngihtMessage.setSubMsgName("deleteDepart");
-       DeleteDepartDTO requestBody = new DeleteDepartDTO();
+        DeleteDepartDTO requestBody = new DeleteDepartDTO();
         requestBody.setDepartId(15);
         kngihtMessage.setRequestBody(requestBody);
         webMqProducer.sendMessage(JSON.toJSONString(kngihtMessage),"ibsaas_knight_lifang_lgc_1921681010", TagConstants.TAGS_DEFAULT);
@@ -653,5 +659,36 @@ public class TestController {
             e.printStackTrace();
         }
         return JSON.toJSONString(result);
+    }
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @GetMapping("redisTemplate/del")
+    public String testRedisTemplate(){
+
+        Boolean test = redisTemplate.delete("test");
+        return "OK";
+    }
+    @GetMapping("redisTemplate/save")
+    public String testRedisTemplateSave(){
+        User user = new User();
+        user.setUserCode("123456");
+        redisTemplate.opsForValue().set("test", user, 60, TimeUnit.SECONDS);
+        return "OK";
+    }
+    @GetMapping("redisTemplate/get")
+    public String testRedisTemplateGet(){
+        User user= (User) redisTemplate.opsForValue().get("test");
+        return "OK";
+    }
+
+    @Autowired
+    private ConfigSettingRedis configSettingRedis;
+    @GetMapping("redisTemplate/getConfig")
+    public String testRedisTemplateGetConfig(){
+
+        List<ConfigSettingVO> areaList = configSettingRedis.getConfigSettingVOByType("equip_area");
+        return "OK";
     }
 }

@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.web.web.service.hvac.impl;
 
 import com.landleaf.ibsaas.common.constant.HvacConstant;
 import com.landleaf.ibsaas.common.domain.hvac.vo.WeatherStationVO;
+import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.web.web.service.hvac.BaseDeviceService;
 import com.landleaf.ibsaas.web.web.service.hvac.IWeatherStationWebService;
@@ -29,7 +30,8 @@ public class WeatherStationWebService extends BaseDeviceService implements IWeat
 
     @Override
     public List<WeatherStationVO> overview() {
-        return redisHandle.getMapField(placeId, String.valueOf(HvacConstant.WEATHER_STATION_PORT));
+//        return redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.WEATHER_STATION.getDeviceType()));
+        return (List<WeatherStationVO>) baseOverview(BacnetDeviceTypeEnum.WEATHER_STATION.getDeviceType());
     }
 
     @Override

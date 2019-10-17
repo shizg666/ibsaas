@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.TLightAreaDeviceDao">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.light.TLightAreaDevice">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="device_id" jdbcType="BIGINT" property="deviceId" />
+    <result column="floor" jdbcType="INTEGER" property="floor" />
+    <result column="code" jdbcType="INTEGER" property="code" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, device_id, floor, code
+  </sql>
+  <select id="getLightList" resultType="com.landleaf.ibsaas.common.domain.light.TLightAreaDevice">
+    select <include refid="Base_Column_List"/>
+    from t_light_area_device
+    where
+    floor =  #{id,jdbcType=INTEGER}
+    order by code
+  </select>
+  <select id="getAreaDeviceList" resultType="com.landleaf.ibsaas.common.domain.light.vo.LightDeviceFloorVO">
+    select ad.floor,d.adress,d.name
+      from t_light_area_device ad
+		inner join t_light_device d on ad.device_id = d.id
+  </select>
+
+</mapper>

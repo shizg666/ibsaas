@@ -36,6 +36,7 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
+
         logoutPath = filterConfig.getInitParameter(Conf.SSO_LOGOUT_PATH);
         excludedPaths = filterConfig.getInitParameter(Conf.SSO_EXCLUDED_PATHS);
 

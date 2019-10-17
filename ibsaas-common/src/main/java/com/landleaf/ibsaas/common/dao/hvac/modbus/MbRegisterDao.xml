@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.hvac.modbus.MbRegisterDao">
+
+
+    <select id="getMbRegisterLmt" resultType="com.landleaf.ibsaas.common.domain.hvac.modbus.MbRegister">
+        SELECT * FROM t_mb_register
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
+    <select id="allMbRegisterDetails"
+            resultType="com.landleaf.ibsaas.common.domain.hvac.assist.MbRegisterDetail">
+        SELECT
+        tmr.id AS registerId,
+        tmr.node_id,
+        tmr.mb_type,
+        tmn.node_name,
+        tmn.floor,
+        tmr.master_id,
+        tmm.host,
+        tmm.port,
+        tmr.field_id,
+        tmf.field_name,
+        tmf.field_description,
+        tmr.slave_id,
+        tmr.function_code,
+        tmr.offset,
+        tmr.data_type
+        FROM
+        t_mb_register tmr
+        LEFT JOIN t_mb_master tmm ON tmr.master_id=tmm.id AND tmm.is_active=1
+        LEFT JOIN t_mb_node tmn ON tmr.node_id=tmn.id AND tmn.is_active=1
+        LEFT JOIN t_mb_field tmf ON tmr.field_id=tmf.id AND tmf.is_active=1
+        WHERE tmr.is_active=1
+    </select>
+</mapper>

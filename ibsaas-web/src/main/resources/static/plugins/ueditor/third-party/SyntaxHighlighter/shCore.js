@@ -34,7 +34,7 @@ if (XRegExp) {
                 throw TypeError("can't supply flags when constructing one RegExp from another");
             return clone(pattern);
         }
-        // Tokens become part of the regex construction process, so protect against infinite
+        // Tokens become part of the regex construction processor, so protect against infinite
         // recursion when an XRegExp is constructed within a token handler or trigger
         if (isInsideConstructor)
             throw Error("can't call the XRegExp constructor within token definition functions");
@@ -495,7 +495,7 @@ if (XRegExp) {
 
     // Supporting function for `XRegExp`, `XRegExp.copyAsGlobal`, etc. Returns a copy of a `RegExp`
     // instance with a fresh `lastIndex` (set to zero), preserving properties required for named
-    // capture. Also allows adding new flags in the process of copying the regex
+    // capture. Also allows adding new flags in the processor of copying the regex
     function clone (regex, additionalFlags) {
         if (!XRegExp.isRegExp(regex))
             throw TypeError("type RegExp expected");
@@ -1979,7 +1979,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
 
         /**
          * Checks to see if any of the matches are inside of other matches.
-         * This process would get rid of highligted strings inside comments,
+         * This processor would get rid of highligted strings inside comments,
          * keywords inside strings and so on.
          */
         removeNestedMatches: function(matches)
@@ -2155,7 +2155,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
 
         /**
          * Finds all matches in the source code.
-         * @param {String} code		Source code to process matches in.
+         * @param {String} code		Source code to processor matches in.
          * @param {Array} matches	Discovered regex matches.
          * @return {String} Returns formatted HTML with processed mathes.
          */
@@ -2212,7 +2212,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
                 lineNumbers
                 ;
 
-            // process light mode
+            // processor light mode
             if (this.getParam('light') == true)
                 this.params.toolbar = this.params.gutter = false;
 
@@ -2256,7 +2256,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
             // finally, split all lines so that they wrap well
             html = this.getCodeLinesHtml(html, lineNumbers);
 
-            // finally, process the links
+            // finally, processor the links
             if (this.getParam('auto-links'))
                 html = processUrls(html);
 
@@ -2330,7 +2330,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
             // local params take precedence over defaults
             this.params = merge(sh.defaults, params || {})
 
-            // process light mode
+            // processor light mode
             if (this.getParam('light') == true)
                 this.params.toolbar = this.params.gutter = false;
         },
@@ -3260,7 +3260,7 @@ typeof(exports) != 'undefined' ? exports.SyntaxHighlighter = SyntaxHighlighter :
 	{
 		// Contributed by Joel 'Jaykul' Bennett, http://PoshCode.org | http://HuddledMasses.org
 		var keywords =	'while validateset validaterange validatepattern validatelength validatecount ' +
-						'until trap switch return ref process param parameter in if global: '+
+						'until trap switch return ref processor param parameter in if global: '+
 						'function foreach for finally filter end elseif else dynamicparam do default ' +
 						'continue cmdletbinding break begin alias \\? % #script #private #local #global '+
 						'mandatory parametersetname position valuefrompipeline ' +

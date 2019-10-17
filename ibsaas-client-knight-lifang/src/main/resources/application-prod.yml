@@ -77,7 +77,7 @@ rocketmq:
     topic: knight
     tags: tags
     #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.246.184:9876
     #消息最大长度 默认1024*4(4M)
     maxMessageSize: 91920
     sendMsgTimeout: 30000
@@ -85,7 +85,7 @@ rocketmq:
   consumer:
     enable: true
     groupName: ibsaas_knight_lifang_lgc_1921681010
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.246.184:9876
     #门禁
     topics: ibsaas_knight_lifang_lgc_1921681010-*
     topic: ibsaas_knight_lifang_lgc_1921681010

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.hvac.modbus.MbNodeDao">
+
+    <sql id="mb_node_base">
+        tmn.id,
+        tmn.mb_type,
+        tmn.node_name,
+        tmn.floor,
+        tmn.description
+    </sql>
+
+    <select id="getMbNodeLmt" resultType="com.landleaf.ibsaas.common.domain.hvac.modbus.MbNode">
+        SELECT * FROM t_mb_node
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
+    <select id="all" resultType="com.landleaf.ibsaas.common.domain.hvac.modbus.MbNode">
+        SELECT
+        <include refid="mb_node_base"/>
+        FROM t_mb_node tmn
+        WHERE tmn.is_active=1
+    </select>
+    <select id="getMbNodes" resultType="com.landleaf.ibsaas.common.domain.hvac.modbus.MbNode">
+        SELECT
+        <include refid="mb_node_base"/>
+        FROM t_mb_node tmn
+        WHERE tmn.is_active=1
+        <if test="mbType!=null">
+            AND tmn.mb_type=#{mbType}
+        </if>
+    </select>
+</mapper>

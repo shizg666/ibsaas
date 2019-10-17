@@ -6,13 +6,14 @@
 
     <resultMap id="hvacNodeVOResultMap" type="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
         <id column="id" property="id"/>
-        <result column="device_id" property="deviceId"/>
+        <result column="device_type" property="deviceType"/>
         <result column="node_name" property="nodeName"/>
         <result column="floor" property="floor"/>
         <collection property="hvacFieldVOList" ofType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacFieldVO">
             <result column="field_name" property="fieldName"/>
             <result column="field_description" property="fieldDescription"/>
             <result column="permission" property="permission"/>
+            <result column="device_id" property="deviceId"/>
             <result column="bacnet_object_type" property="bacnetObjectType"/>
             <result column="instance_number" property="instanceNumber"/>
         </collection>
@@ -20,8 +21,9 @@
 
     <sql id="hvacNodeVOSql">
         thn.id,
-        thn.device_id,
+        thn.device_type,
         thn.node_name,
+        thp.device_id,
         thn.floor,
         thf.field_name,
         thf.field_description,
@@ -32,20 +34,27 @@
 
     <sql id="hvac_node_base">
         thn.id,
-        thn.device_id,
+        thn.device_type,
         thn.node_name,
         thn.floor
     </sql>
 
+
+    <select id="all" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacNode">
+        SELECT
+        <include refid="hvac_node_base"/>
+        FROM t_hvac_node thn
+        WHERE thn.is_active=1
+    </select>
     <select id="getHvacNodeByDeviceId" resultMap="hvacNodeVOResultMap">
         SELECT
         <include refid="hvacNodeVOSql"/>
         FROM
         t_hvac_node thn
         LEFT JOIN t_hvac_point thp ON thn.id=thp.node_id AND thp.is_active=1
-        LEFT JOIN t_hvac_field thf ON thp.field_id = thf.id AND thn.device_id=thf.device_id AND thf.is_active=1
+        LEFT JOIN t_hvac_field thf ON thp.field_id = thf.id AND thf.is_active=1
         WHERE thn.is_active=1
-        AND thn.device_id=#{deviceId}
+        AND thn.device_type=#{deviceType}
     </select>
     <select id="getHvacNodeByNodeId" resultMap="hvacNodeVOResultMap">
         SELECT
@@ -53,17 +62,16 @@
         FROM
         t_hvac_node thn
         LEFT JOIN t_hvac_point thp ON thn.id=thp.node_id AND thp.is_active=1
-        LEFT JOIN t_hvac_field thf ON thp.field_id = thf.id AND thn.device_id=thf.device_id AND thf.is_active=1
+        LEFT JOIN t_hvac_field thf ON thp.field_id = thf.id AND thf.is_active=1
         WHERE thn.is_active=1
         AND thn.id=#{id}
     </select>
     <select id="getHvacNodeFieldVO" resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeFieldVO">
         SELECT
-        thp.node_id AS nodeId, thf.field_name AS fieldName,	thd.device_instance_number AS deviceInstanceNumber,
+        thp.node_id AS nodeId, thf.field_name AS fieldName,	thp.device_id AS deviceId,
         thp.bacnet_object_type AS bacnetObjectType, thp.instance_number AS instanceNumber, thf.permission
         FROM t_hvac_point thp
         INNER JOIN t_hvac_field thf ON  thp.field_id = thf.id AND thf.is_active=1
-        INNER JOIN t_hvac_device thd ON thf.device_id = thd.id AND thd.is_active=1
         WHERE thp.is_active=1
         <if test="nodeId!=null and nodeId!=''">
             AND thp.node_id=#{nodeId}
@@ -74,11 +82,10 @@
     </select>
     <select id="getHvacNodeFieldVOList" resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeFieldVO">
         SELECT
-        thp.node_id AS nodeId, thf.field_name AS fieldName,	thd.device_instance_number AS deviceInstanceNumber,
+        thp.node_id AS nodeId, thf.field_name AS fieldName,	thp.device_id AS deviceId,
         thp.bacnet_object_type AS bacnetObjectType, thp.instance_number AS instanceNumber, thf.permission
         FROM t_hvac_point thp
         INNER JOIN t_hvac_field thf ON  thp.field_id = thf.id AND thf.is_active=1
-        INNER JOIN t_hvac_device thd ON thf.device_id = thd.id AND thd.is_active=1
         WHERE thp.is_active=1
         <if test="nodeId!=null and nodeId!=''">
             AND thp.node_id=#{nodeId}
@@ -95,11 +102,10 @@
     <select id="getHvacNodeFieldVOByFieldName"
             resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeFieldVO">
         SELECT
-        thp.node_id AS nodeId, thf.field_name AS fieldName,	thd.device_instance_number AS deviceInstanceNumber,
+        thp.node_id AS nodeId, thf.field_name AS fieldName,	thp.device_id AS deviceId,
         thp.bacnet_object_type AS bacnetObjectType, thp.instance_number AS instanceNumber, thf.permission
         FROM t_hvac_point thp
         INNER JOIN t_hvac_field thf ON  thp.field_id = thf.id AND thf.is_active=1
-        INNER JOIN t_hvac_device thd ON thf.device_id = thd.id AND thd.is_active=1
         WHERE thp.is_active=1
         <if test="fieldName!=null and fieldName!=''">
             AND thf.field_name=#{fieldName}
@@ -109,38 +115,38 @@
         SELECT
         <include refid="hvac_node_base"/>
         FROM t_hvac_node thn
-        LEFT JOIN t_hvac_device thd ON thn.device_id=thd.id AND thd.is_active=1
         WHERE thn.is_active=1
-        <if test="deviceInstanceNumbers!=null and deviceInstanceNumbers.size>0">
-            AND thd.device_instance_number IN
-            <foreach collection="deviceInstanceNumbers" index="index" item="item" open="(" close=")" separator=",">
-                #{item}
-            </foreach>
+        <if test="deviceType!=null">
+           AND thn.device_type=#{deviceType}
         </if>
 
     </select>
-    <select id="getHvacNodeByInstanceNumber" resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
+    <select id="getHvacNodeByDeviceType" resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
         SELECT
         <include refid="hvac_node_base"/>
         FROM t_hvac_node thn
-        LEFT JOIN t_hvac_device thd ON thn.device_id=thd.id AND thd.is_active=1
         WHERE thn.is_active=1
-        <if test="deviceInstanceNumber!=null">
-            AND thd.device_instance_number=#{deviceInstanceNumber}
+        <if test="deviceType!=null">
+            AND thd.device_type=#{deviceType}
         </if>
     </select>
 
-    <select id="getHvacNodeByInstanceNumberWithoutEquip" resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
+    <select id="getHvacNodeByDeviceTypeWithoutEquip" resultType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO">
         SELECT
         <include refid="hvac_node_base"/>
         FROM t_hvac_node thn
         LEFT JOIN t_energy_equip tee ON thn.id=tee.node_id AND tee.is_active=1
-        LEFT JOIN t_hvac_device thd ON thn.device_id=thd.id AND thd.is_active=1
         WHERE thn.is_active=1
-        <if test="deviceInstanceNumber!=null">
-            AND thd.device_instance_number=#{deviceInstanceNumber}
+        <if test="deviceType!=null">
+            AND thd.device_type=#{deviceType}
         </if>
         AND tee.id IS NULL
     </select>
+    <select id="getHvacNodeLmt" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacNode">
+        SELECT * FROM t_hvac_node
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
+
 
 </mapper>

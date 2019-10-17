@@ -13,6 +13,7 @@
 		<module>ibsaas-common</module>
 		<module>ibsaas-datasource</module>
 		<module>ibsaas-rocketmq</module>
+        <module>ibsaas-client-light</module>
     </modules>
 	<packaging>pom</packaging>
 
@@ -79,6 +80,8 @@
         <bacnet4j.version>3.2.4-4</bacnet4j.version>
 
 		<hutool.version>4.5.9</hutool.version>
+
+		<modbus4j.version>3.0.5</modbus4j.version>
 	</properties>
 
 	<dependencies>
@@ -336,7 +339,12 @@
 			<version>${hutool.version}</version>
 		</dependency>
 
-
+		<!--modbus协议-->
+		<dependency>
+			<groupId>com.infiniteautomation</groupId>
+			<artifactId>modbus4j</artifactId>
+			<version>${modbus4j.version}</version>
+		</dependency>
 	</dependencies>
 
 <!--

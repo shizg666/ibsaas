@@ -495,6 +495,14 @@ public class RedisHandle implements BaseRedisDao<String, Object>{
         redisTemplate.watch(key);
     }
 
+    public void multi() {
+        redisTemplate.multi();
+    }
+
+    public List<Object> exec() {
+        return  redisTemplate.exec();
+    }
+
     @Override
     public void addSet(String key, Object... obj) {
         redisTemplate.boundSetOps(key).add(obj);

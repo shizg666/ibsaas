@@ -31,7 +31,6 @@ spring:
         max-idle: 8
         max-wait: 30000
         min-idle: 8
-        blockWhenExhausted: true
     jedis:
       pool:
         #jedis最大分配对象
@@ -45,6 +44,7 @@ spring:
         blockWhenExhausted: true
         #Idle时进行连接扫描
     timeout: 30000
+    password: Landleaf@2019
   freemarker:
     cache: true
     check-template-location: true
@@ -83,9 +83,9 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
       - name: master
-        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://40.73.87.245:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
-        password: Landleaf@2019
+        password: aA123456
         driverClassName: com.mysql.jdbc.Driver
         maxActive: 50
         initialSize: 5
@@ -101,9 +101,9 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
       - name: slave
-        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://40.73.87.245:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
-        password: Landleaf@2019
+        password: aA123456
         driverClassName: com.mysql.jdbc.Driver
         maxActive: 50
         initialSize: 5
@@ -142,14 +142,14 @@ rocketmq:
     enable: true
     groupName: ibsaas
     #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.100.153:9876
     maxMessageSize: 4096
     sendMsgTimeout: 30000
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
     groupName: ibsaas_response_test
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.100.153:9876
     #门禁;停车
     topics: knight-*;parking-*
     consumeThreadMin: 16
@@ -166,3 +166,7 @@ bacnet:
     deviceId: 1234
   place:
     id: lgc
+
+
+light:
+  control: false

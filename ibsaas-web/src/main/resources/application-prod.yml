@@ -24,7 +24,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
+      nodes: 40.73.246.184:26378,40.73.246.184:26379,40.73.246.184:26380
     lettuce:
       pool:
         max-active: 50
@@ -32,19 +32,9 @@ spring:
         max-wait: 10000
         min-idle: 8
         blockWhenExhausted: true
-    jedis:
-      pool:
-        #jedis最大分配对象
-        maxTotal: 50
-        #jedis最大保存idel状态对象数
-        maxIdle: 8
-        #jedis池没有对象返回时，最大等待时间
-        maxWaitMillis: 10000
-        testOnBorrow: true
-        testOnReturn: true
-        blockWhenExhausted: true
         #Idle时进行连接扫描
     timeout: 30000
+    password: Landleaf@2019
   freemarker:
     cache: true
     check-template-location: true
@@ -143,14 +133,14 @@ rocketmq:
     enable: true
     groupName: ibsaas
     #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.246.184:9876
     maxMessageSize: 4096
     sendMsgTimeout: 30000
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
     groupName: ibsaas_response
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.246.184:9876
     #门禁;停车
     topics: knight-*;parking-*
     consumeThreadMin: 16
@@ -169,3 +159,5 @@ bacnet:
   place:
     id: lgc
 
+light:
+  control: false

@@ -1,8 +1,8 @@
 package com.landleaf.ibsaas.client.hvac.service;
 
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
-import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,24 +20,22 @@ public interface ICommonDeviceService {
 
     /**
      * 统一获取固定设备当前所有节点的值
-     * @param deviceInstanceNumber
+     * @param deviceType
      * @return
      */
-    List<? extends BaseDevice> getCurrentData(Integer deviceInstanceNumber);
-
-    /**
-     * 获取单个节点当前信息
-     * @param hvacNodeVO
-     * @param <T>
-     * @return
-     */
-    <T extends BaseDevice> T getCurrentInfo(HvacNodeVO hvacNodeVO);
-
+    List<? extends BaseDevice> getCurrentData(Integer deviceType);
 
     /**
      * 当前输入入redis库
      */
     void currentDataToRedis();
+
+
+    /**
+     * 数据入库
+     * @param date
+     */
+    void currentDataToDatabase(Date date);
 
     /**
      * 写入设备数据

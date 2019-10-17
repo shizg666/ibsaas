@@ -60,8 +60,8 @@ public class HvacDeviceService extends AbstractBaseService<HvacDeviceDao, HvacDe
     }
 
     @Override
-    public List<HvacDevice> all() {
-        return hvacDeviceDao.all();
+    public List<HvacDevice> all(Integer type) {
+        return hvacDeviceDao.all(type);
     }
 
 

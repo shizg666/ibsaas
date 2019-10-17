@@ -5256,7 +5256,7 @@
                 function fDCTQuant(data, fdtbl)
                 {
                     var d0, d1, d2, d3, d4, d5, d6, d7;
-                    /* Pass 1: process rows. */
+                    /* Pass 1: processor rows. */
                     var dataOff=0;
                     var i;
                     var I8 = 8;
@@ -5316,7 +5316,7 @@
                         dataOff += 8; /* advance pointer to next row */
                     }
     
-                    /* Pass 2: process columns. */
+                    /* Pass 2: processor columns. */
                     dataOff = 0;
                     for (i=0; i<I8; ++i)
                     {

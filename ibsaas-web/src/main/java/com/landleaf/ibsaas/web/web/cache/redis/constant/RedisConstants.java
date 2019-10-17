@@ -50,4 +50,5 @@ public class RedisConstants implements Serializable {
      * 电表-分区-key
      */
     public static final String ENERGY_ELECTRICITY_DATA_AREA = "energy_electricity_area";
+
 }

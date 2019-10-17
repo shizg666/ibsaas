@@ -290,7 +290,7 @@
 
 			if (r && options.ajaxFormValidation) {
 				methods._validateFormWithAjax(form, options);
-				// cancel form auto-submission - process with async call onAjaxFormComplete
+				// cancel form auto-submission - processor with async call onAjaxFormComplete
 				return false;
 			}
 
@@ -436,7 +436,7 @@
 		},
 		/**
 		* This method is called to perform an ajax form validation.
-		* During this process all the (field, value) pairs are sent to the server which returns a list of invalid fields or true
+		* During this processor all the (field, value) pairs are sent to the server which returns a list of invalid fields or true
 		*
 		* @param {jqObject} form
 		* @param {Map} options

@@ -18,6 +18,26 @@ public class BuildingReponseVO {
     @ApiModelProperty(value="楼层列表")
     private List<FloorReponseVO> list;
 
+    private Integer type;
+
+    private String typeName;
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
     public Long getId() {
         return id;
     }

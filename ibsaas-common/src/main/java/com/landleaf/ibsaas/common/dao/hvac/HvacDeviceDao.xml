@@ -5,7 +5,7 @@
 <mapper namespace="com.landleaf.ibsaas.common.dao.hvac.HvacDeviceDao">
 
     <sql id="hvac_device_base">
-        id, ip, port, device_instance_number AS deviceInstanceNumber, description
+        id, ip, port, device_instance_number, description, network_number, station, type
     </sql>
 
 
@@ -13,11 +13,25 @@
         SELECT
         <include refid="hvac_device_base"/>
         FROM t_hvac_device WHERE is_active=1
+        <if test="type!=null">
+            AND type=#{type}
+        </if>
     </select>
     <select id="getByDeviceInstanceNumber" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacDevice">
         SELECT
         <include refid="hvac_device_base"/>
         FROM t_hvac_device WHERE is_active=1
         AND device_instance_number=#{deviceInstanceNumber}
+    </select>
+    <select id="getHvacDeviceLmt" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacDevice">
+        SELECT * FROM t_hvac_device
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
+    <select id="groupByNetwork" resultType="com.landleaf.ibsaas.common.domain.hvac.HvacDevice">
+        SELECT ip,port,network_number FROM t_hvac_device
+        WHERE is_active=1
+        AND type=1
+        GROUP BY ip,port,network_number
     </select>
 </mapper>

@@ -11,7 +11,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
+      nodes: 40.73.246.184:26378,40.73.246.184:26379,40.73.246.184:26380
     lettuce:
       pool:
         max-active: 50
@@ -31,6 +31,7 @@ spring:
         blockWhenExhausted: false
         #Idle时进行连接扫描
     timeout: 30000
+    password: Landleaf@2019
   freemarker:
     cache: true
     check-template-location: true
@@ -107,7 +108,7 @@ rocketmq:
     topic: topic_hvac_write
     tags: tags
     #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.246.184:9876
     #消息最大长度 默认1024*4(4M)
     maxMessageSize: 91920
     sendMsgTimeout: 30000
@@ -115,7 +116,7 @@ rocketmq:
   consumer:
     enable: true
     groupName: topic_hvac_write_test
-    namesrvAddr: 40.73.100.153:9876;40.73.246.184:9876
+    namesrvAddr: 40.73.246.184:9876
     #暖通
     topics: topic_hvac_write-*
     topic: topic_hvac_write

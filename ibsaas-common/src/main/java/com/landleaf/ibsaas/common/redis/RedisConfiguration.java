@@ -100,7 +100,7 @@ public class RedisConfiguration {
         return redisTemplate.opsForHash();
     }
 
-    @Bean(name = "jedis.pool.config")
+    /*@Bean(name = "jedis.pool.config")
     public JedisPoolConfig jedisPoolConfig(@Value("${spring.redis.jedis.pool.maxTotal}") int maxTotal,
                                            @Value("${spring.redis.jedis.pool.maxIdle}") int maxIdle,
                                            @Value("${spring.redis.jedis.pool.maxWaitMillis}") int maxWaitMillis,
@@ -122,6 +122,7 @@ public class RedisConfiguration {
     public JedisSentinelPool jedisSentinelPool(@Qualifier("jedis.pool.config") JedisPoolConfig config,
                                                @Value("${spring.redis.sentinel.master}") String clusterName,
                                                @Value("${spring.redis.timeout}") String timeout,
+                                               @Value("${spring.redis.password}") String password,
                                                @Value("${spring.redis.sentinel.nodes}") String sentinelNodes) {
         LOGGER.info("缓存服务器的主服务名称：" + clusterName + ", 主从服务ip&port:" + sentinelNodes);
         Assert.isTrue(StringUtils.isNotEmpty(clusterName), "主服务名称配置为空");
@@ -129,10 +130,10 @@ public class RedisConfiguration {
 
         Set<String> sentinels = Sets.newHashSet(StringUtils.split(sentinelNodes, ","));
 
-        JedisSentinelPool sentinelJedisPool = new JedisSentinelPool(clusterName, sentinels, config, Integer.parseInt(timeout));
+        JedisSentinelPool sentinelJedisPool = new JedisSentinelPool(clusterName, sentinels, config, Integer.parseInt(timeout),password);
 
         return sentinelJedisPool;
-    }
+    }*/
 
 
 }

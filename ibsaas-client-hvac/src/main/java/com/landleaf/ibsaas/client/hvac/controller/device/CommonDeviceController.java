@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.client.hvac.controller.device;
 
 import com.landleaf.ibsaas.client.hvac.controller.Basic2Controller;
 import com.landleaf.ibsaas.client.hvac.service.*;
+import com.landleaf.ibsaas.common.constant.IbsaasConstant;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.energy.EnergyData;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
@@ -49,16 +50,16 @@ public class CommonDeviceController extends Basic2Controller {
     @ApiOperation("获取所有的硬件设备")
     public Response all(){
         log.info(">>>>>>>>>>>>>>>>>>>>>>>>>CommonDeviceController.all入参为:空");
-        List<HvacDevice> hvacDevices = iHvacDeviceService.all();
+        List<HvacDevice> hvacDevices = iHvacDeviceService.all(null);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<CommonDeviceController.all出参为:{}",hvacDevices);
         return returnSuccess(hvacDevices);
     }
 
 
-    @GetMapping("/current-data/{deviceInstanceNumber}")
-    public Response currentData(@PathVariable("deviceInstanceNumber") Integer deviceInstanceNumber){
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>CommonDeviceController.currentData入参为:{}",deviceInstanceNumber);
-        List<? extends BaseDevice> data = iCommonDeviceService.getCurrentData(deviceInstanceNumber);
+    @GetMapping("/current-data/{deviceType}")
+    public Response currentData(@PathVariable("deviceType") Integer deviceType){
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>CommonDeviceController.currentData入参为:{}",deviceType);
+        List<? extends BaseDevice> data = iCommonDeviceService.getCurrentData(deviceType);
         log.info("<<<<<<<<<<<<<<<<<<<<<<<<<CommonDeviceController.currentData出参为:{}",data);
         return returnSuccess(data);
     }
@@ -66,6 +67,14 @@ public class CommonDeviceController extends Basic2Controller {
     @GetMapping("/current-data/redis")
     public Response currentDataToRedis(){
         iCommonDeviceService.currentDataToRedis();
+        return returnSuccess();
+    }
+
+
+    @GetMapping("/current-data/database")
+    public Response currentDataToDatabase(){
+        Date now = new Date(System.currentTimeMillis()/ IbsaasConstant.SECOND_OFFSET*IbsaasConstant.SECOND_OFFSET);
+        iCommonDeviceService.currentDataToDatabase(now);
         return returnSuccess();
     }
 

@@ -652,7 +652,7 @@ UE.I18N['en'] = {
             lang_resave:"The re-save step",
             uploadBtn:{src:"upload.png", alt:"Upload"},
             clipboard:{style:"background: url(copy.png) -153px -1px no-repeat;"},
-            lang_step:" 1. Click top button to copy the url and then open the dialog to paste it. 2. Open after choose photos uploaded process."
+            lang_step:" 1. Click top button to copy the url and then open the dialog to paste it. 2. Open after choose photos uploaded processor."
         },
         fileType:"Image",
         flashError:"Flash initialization failed!",

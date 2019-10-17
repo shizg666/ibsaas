@@ -4,13 +4,18 @@ import cn.hutool.core.util.ReflectUtil;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
 import com.landleaf.ibsaas.common.domain.hvac.BaseDevice;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeFieldVO;
+import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetPremissionEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
+import com.landleaf.ibsaas.common.redis.RedisHandle;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Lokiy
@@ -23,6 +28,18 @@ public class BaseDeviceService {
 
     @Autowired
     private HvacNodeDao hvacNodeDao;
+
+    @Autowired
+    private RedisHandle redisHandle;
+
+    @Value("${bacnet.place.id}")
+    private String placeId;
+
+    protected Object baseOverview(Integer type){
+        Object result = redisHandle.getMapField(placeId, String.valueOf(type));
+        return result == null ? new ArrayList<>() : result;
+    }
+
 
     /**
      * 根据传入的修改值 判定是否具有写权限

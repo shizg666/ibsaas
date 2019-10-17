@@ -5,6 +5,7 @@ import com.landleaf.ibsaas.common.dao.knight.TBuildingMapper;
 import com.landleaf.ibsaas.common.dao.knight.TFloorMapper;
 import com.landleaf.ibsaas.common.domain.knight.TBuilding;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
+import com.landleaf.ibsaas.common.enums.BusinessTypeEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.service.knight.IBuildingService;
@@ -62,7 +63,7 @@ public class IBuildingServiceImpl implements IBuildingService {
     @Override
     public List<BuildingReponseVO> getBuildingAllInfo() {
         List<BuildingReponseVO> buildingReponseVOArrayList = Lists.newArrayList();
-        List<TBuilding> tBuildingList =  tBuildingMapper.getAllBuilding();
+        List<TBuilding> tBuildingList =  tBuildingMapper.getAllBuildingByType(BusinessTypeEnum.BUSINESS_KNIGHT.getType());
         if (tBuildingList == null || tBuildingList.size() <= 0 ){
             return buildingReponseVOArrayList;
     }
@@ -97,7 +98,7 @@ public class IBuildingServiceImpl implements IBuildingService {
     @Override
     public List<BuildingReponseVO> getBuildingAllInfoByRoleId(String roleId) {
         List<BuildingReponseVO> buildingReponseVOArrayList = Lists.newArrayList();
-        List<TBuilding> tBuildingList =  tBuildingMapper.getAllBuilding();
+        List<TBuilding> tBuildingList =  tBuildingMapper.getAllBuildingByType(BusinessTypeEnum.BUSINESS_KNIGHT.getType());
         if (tBuildingList == null || tBuildingList.size() <= 0 ){
             return buildingReponseVOArrayList;
         }
@@ -141,7 +142,7 @@ public class IBuildingServiceImpl implements IBuildingService {
 
     @Override
     public List<TBuilding> getBuildingList() {
-        List<TBuilding> buildings = tBuildingMapper.getAllBuilding();
+        List<TBuilding> buildings = tBuildingMapper.getAllBuildingByType(BusinessTypeEnum.BUSINESS_KNIGHT.getType());
         return buildings;
     }
 

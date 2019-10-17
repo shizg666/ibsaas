@@ -47,4 +47,22 @@ public class HvacDevice extends BasicEntity {
     @ApiModelProperty("设备描述")
     private String description;
 
+    /**
+     * 网络路由
+     */
+    @ApiModelProperty("网络路由")
+    private Integer networkNumber;
+
+    /**
+     * 网络路由地址
+     */
+    @ApiModelProperty("网络路由地址")
+    private Integer station;
+
+    /**
+     * ba网络类型
+     */
+    @ApiModelProperty("ba网络类型")
+    private Integer type;
+
 }

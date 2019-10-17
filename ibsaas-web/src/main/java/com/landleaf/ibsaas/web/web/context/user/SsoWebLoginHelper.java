@@ -5,6 +5,7 @@ import com.landleaf.ibsaas.common.redis.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
@@ -14,6 +15,9 @@ public class SsoWebLoginHelper {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
 
     /**
@@ -43,18 +47,12 @@ public class SsoWebLoginHelper {
      * 清除用户
      */
     public boolean remove(String sid) {
-        Jedis jedis= null;
-        Long del = 0L;
+        Boolean delete = false;
         try {
-            jedis = redisUtil.getJedis();
-             del = jedis.del(sid);
+             delete = redisTemplate.delete(sid);
         }catch (Exception e){
             LOGGER.error(e.getMessage(),e);
-        } finally{
-            if(jedis!=null){
-                jedis.close();
-            }
         }
-        return del > 0;
+        return delete;
     }
 }
