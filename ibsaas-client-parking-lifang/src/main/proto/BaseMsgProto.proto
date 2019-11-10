@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option java_package = "com.google.proto";
+option java_outer_classname = "BaseMsgProto";
+//公共参数
+message BaseMsg {
+    string createTime = 1; //创建时间
+    string from = 2; //消息源头
+    string to = 3; //消息目的地
+    string msgId = 4; //消息编号
+    string msgName = 5; //消息名称
+    string subMsgName = 6; //子消息名称
+}

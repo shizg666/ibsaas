@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.TLightPositionDao">
+    <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.light.TLightPosition">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="x_pos" jdbcType="VARCHAR" property="xPos"/>
+        <result column="y_pos" jdbcType="VARCHAR" property="yPos"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="device_id" jdbcType="BIGINT" property="deviceId"/>
+        <result column="floor_id" jdbcType="BIGINT" property="floorId"/>
+        <result column="ctime" jdbcType="TIMESTAMP" property="ctime"/>
+        <result column="utime" jdbcType="TIMESTAMP" property="utime"/>
+        <result column="img" jdbcType="VARCHAR" property="img"/>
+        <result column="Reserved" jdbcType="VARCHAR" property="reserved"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, x_pos, y_pos, name, device_id, floor_id, ctime, utime, img, Reserved
+  </sql>
+
+    <select id="getUnPositionDeviceList"
+            resultType="com.landleaf.ibsaas.common.domain.light.vo.LightPositionDeviceVO">
+	      select d.id,d.name,t.name as type,p.brand,p.model
+	       from t_light_device d
+				left join t_light_product  p on p.id = d.product_id
+				left join t_light_type t  on t.id = p.type_id
+				where not EXISTS (
+				select 1 from t_light_position lp where lp.device_id = d.id
+				)
+    </select>
+    <select id="getPositionDeviceList"
+            resultType="com.landleaf.ibsaas.common.domain.light.vo.LightPositionDeviceVO">
+          select d.id,d.name,t.name as type,p.brand,p.model,lp.x_pos,lp.y_pos
+	       from t_light_device d
+				left join t_light_product  p on p.id = d.product_id
+				left join t_light_type t  on t.id = p.type_id
+				left join t_light_position lp  on lp.device_id = d.id
+				where  lp.floor_id = #{floorId,jdbcType=BIGINT}
+    </select>
+    <select id="selectByid" resultType="com.landleaf.ibsaas.common.domain.light.TLightPosition">
+        select
+        <include refid="Base_Column_List" />
+        from t_light_position
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getDeviceFloor" resultType="com.landleaf.ibsaas.common.domain.light.vo.LightDeviceFloorVO">
+          select d.id,d.name,d.adress,f.floor
+	       from t_light_device d
+				inner join t_light_position lp  on lp.device_id = d.id
+				inner join t_floor f  on lp.floor_id = f.id
+    </select>
+
+    <delete id="deleteByPrimaryId" parameterType="java.lang.Long">
+        delete from t_light_position
+        where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+</mapper>

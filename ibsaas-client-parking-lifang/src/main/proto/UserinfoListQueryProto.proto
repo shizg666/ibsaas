@@ -1,0 +1,87 @@
+syntax = "proto3";
+//需要导入any.proto文件才可实现泛型
+option java_package = "com.google.proto";
+option java_outer_classname = "UserinfoListQueryProto";
+
+//车辆记录
+message UserinfoListQuery {
+    string createTime = 1; //创建时间
+    string from = 2; //消息源头
+    string to = 3; //消息目的地
+    string msgId = 4; //消息编号
+    string msgName = 5; //消息名称
+    string subMsgName = 6; //子消息名称
+
+    UserinfoListQueryRequest requestBody = 7; //请求消息体
+
+    UserinfoListQueryResponse response = 8; //响应消息体
+
+}
+
+//请求参数
+message UserinfoListQueryRequest {
+    int32 page = 1;
+    int32 limit = 2;
+    //到期时间
+    string expireTime = 3;
+    //到期状态
+    string expireStatus = 4;
+    //收费类型编码
+    string chargeTypeCode = 5;
+    //收费类型名称
+    string chargeTypeName = 6;
+    //车牌号码
+    string carCode = 7;
+    //车主姓名
+    string userName = 8;
+}
+
+message UserinfoListQueryResponse {
+    //请求是否处理成功
+    bool success = 1;
+    //返回结果有业务异常
+    bool hasBusinessException = 2;
+    //业务异常错误代码
+    string errorCode = 3;
+    //业务异常错误信息
+    string errorMsg = 4;
+    //提示消息，需要进行国际化
+    string message = 5;
+    //正常返回参数
+    UserinfoListQueryPageInfo result = 6;
+
+}
+
+message UserinfoListQueryPageInfo {
+    //总数
+    int64 total = 1;
+    //结果集
+    repeated UserinfoListQueryResult list = 2;
+}
+
+message UserinfoListQueryResult {
+    //记录唯一标记
+    string uniqueId = 1;
+    //车牌号码
+    string carCode = 2;
+    //车辆品牌
+    string brand = 3;
+    //车辆颜色
+    string colour = 4;
+    //车主姓名
+    string userName = 5;
+    //联系方式
+    string contact = 6;
+    //到期时间
+    string expireTime = 7;
+    //到期状态
+    string expireStatus = 8;
+    //收费类型编码
+    string chargeTypeCode = 9;
+    //收费类型名称
+    string chargeTypeName = 10;
+    //备注
+    string remark = 11;
+}
+
+

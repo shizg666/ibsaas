@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao">
+
+    <resultMap id="energyEquipVOResultMap" type="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipVO">
+        <id column="id" property="id"/>
+        <result column="node_id" property="nodeId"/>
+        <result column="equip_no" property="equipNo"/>
+        <result column="equip_name" property="equipName"/>
+        <result column="equip_type" property="equipType"/>
+        <result column="equip_floor" property="equipFloor"/>
+        <result column="equip_area" property="equipArea"/>
+        <result column="equip_classification" property="equipClassification"/>
+        <result column="comment" property="comment"/>
+        <result column="verify_time" property="verifyTime"/>
+        <result column="verify_value" property="verifyValue"/>
+        <association property="node" javaType="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO" resultMap="nodeMap"/>
+    </resultMap>
+
+    <resultMap id="nodeMap" type="com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO" >
+        <result column="node_id" property="nodeId" />
+        <result column="node_name" property="nodeName"  />
+        <result column="floor" property="floor"  />
+    </resultMap>
+
+
+    <sql id="energyEquipVOSql">
+        tee.id,
+        tee.node_id,
+        tee.equip_no,
+        tee.equip_name,
+        tee.equip_type,
+        tee.equip_floor,
+        tee.equip_area,
+        tee.equip_classification,
+        tee.comment,
+        teev.verify_time,
+        teev.verify_value,
+        thn.node_name,
+        thn.floor
+    </sql>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(1) FROM t_energy_equip
+    </select>
+    <select id="selectUnique" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyEquip">
+        SELECT id FROM t_energy_equip
+        WHERE equip_no=#{equipNo}
+        OR equip_name=#{equipName}
+    </select>
+    <select id="getEnergyEquipVO" resultMap="energyEquipVOResultMap">
+        SELECT
+        <include refid="energyEquipVOSql"/>
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_equip_verify teev ON tee.id=teev.equip_id AND teev.is_active=1 AND teev.enable_flag=1
+        LEFT JOIN t_hvac_node thn ON tee.node_id=thn.id AND thn.is_active=1
+        WHERE tee.is_active=1
+        AND tee.id=#{id}
+    </select>
+    <select id="getEnergyEquipSearchVO"
+            resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipSearchVO">
+        SELECT
+        tee.id,
+        tee.node_id,
+        tee.equip_name,
+        tee.equip_no,
+        tee.equip_type,
+        tcs_1.setting_value AS equipTypeStr,
+        tee.equip_floor,
+        tcs_2.setting_value AS equipFloorStr,
+        tee.equip_area,
+        tcs_3.setting_value AS equipAreaStr,
+        tee.equip_classification,
+        tcs_4.setting_value AS equipClassificationStr,
+        tee.comment,
+        teev.verify_time,
+        teev.verify_value
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_equip_verify teev ON tee.id=teev.equip_id AND teev.is_active=1 AND teev.enable_flag=1
+        LEFT JOIN t_config_setting tcs_1 ON tee.equip_type=tcs_1.setting_code AND tcs_1.setting_type='equip_type' AND tcs_1.is_active=1
+        LEFT JOIN t_config_setting tcs_2 ON tee.equip_floor=tcs_2.setting_code AND tcs_2.setting_type='equip_floor' AND tcs_2.is_active=1
+        LEFT JOIN t_config_setting tcs_3 ON tee.equip_area=tcs_3.setting_code AND tcs_3.setting_type='equip_area' AND tcs_3.is_active=1
+        LEFT JOIN t_config_setting tcs_4 ON tee.equip_classification=tcs_4.setting_code AND tcs_4.setting_type='equip_classification' AND tcs_4.is_active=1
+        WHERE tee.is_active=1
+        <if test="equipName!=null and equipName!=''">
+            AND LOCATE(#{equipName},tee.equip_name)
+        </if>
+        <if test="equipType!=null and equipType!=''">
+            AND tcs_1.setting_code=#{equipType}
+        </if>
+        <if test="equipFloor!=null and equipFloor!=''">
+            AND tcs_2.setting_code=#{equipFloor}
+        </if>
+        <if test="equipArea!=null and equipArea!=''">
+            AND tcs_3.setting_code=#{equipArea}
+        </if>
+        <if test="equipClassification!=null and equipClassification!=''">
+            AND tcs_4.setting_code=#{equipClassification}
+        </if>
+        ORDER BY tee.id
+    </select>
+
+    <select id="getDataEnergyEquipSearchVO"
+            resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyEquipSearchVO">
+        SELECT
+        tee.id,
+        tee.equip_name,
+        tee.equip_no,
+        tee.equip_type,
+        tcs_1.setting_value AS equipTypeStr,
+        tee.equip_floor,
+        tcs_2.setting_value AS equipFloorStr,
+        tee.equip_area,
+        tcs_3.setting_value AS equipAreaStr,
+        tee.equip_classification,
+        tcs_4.setting_value AS equipClassificationStr,
+        tee.comment,
+        ted.energy_data_time,
+        ted.energy_data_value
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_data ted ON tee.node_id=ted.node_id AND ted.is_active=1 AND ted.energy_data_source=1
+        LEFT JOIN t_config_setting tcs_1 ON tee.equip_type=tcs_1.setting_code AND tcs_1.setting_type='equip_type' AND tcs_1.is_active=1
+        LEFT JOIN t_config_setting tcs_2 ON tee.equip_floor=tcs_2.setting_code AND tcs_2.setting_type='equip_floor' AND tcs_2.is_active=1
+        LEFT JOIN t_config_setting tcs_3 ON tee.equip_area=tcs_3.setting_code AND tcs_3.setting_type='equip_area' AND tcs_3.is_active=1
+        LEFT JOIN t_config_setting tcs_4 ON tee.equip_classification=tcs_4.setting_code AND tcs_4.setting_type='equip_classification' AND tcs_4.is_active=1
+        WHERE tee.is_active=1
+        <if test="equipName!=null and equipName!=''">
+            AND LOCATE(#{equipName},tee.equip_name)
+        </if>
+        <if test="equipType!=null and equipType!=''">
+            AND tcs_1.setting_code=#{equipType}
+        </if>
+        <if test="equipFloor!=null and equipFloor!=''">
+            AND tcs_2.setting_code=#{equipFloor}
+        </if>
+        <if test="equipArea!=null and equipArea!=''">
+            AND tcs_3.setting_code=#{equipArea}
+        </if>
+        <if test="equipClassification!=null and equipClassification!=''">
+            AND tcs_4.setting_code=#{equipClassification}
+        </if>
+        <if test="energyDataTime!=null">
+            AND ted.energy_data_time=#{energyDataTime}
+        </if>
+        <if test="startTime!=null and endTime!=null">
+            AND ted.energy_data_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        ORDER BY ted.energy_data_time DESC
+    </select>
+    <select id="getEnergyEquipByNodeId" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyEquip">
+        SELECT id FROM t_energy_equip
+        WHERE is_active=1
+        <if test="nodeId!=null and nodeId!=''">
+            AND node_id=#{nodeId}
+        </if>
+        <if test="id!=null and id!=''">
+            AND id!=#{id}
+        </if>
+    </select>
+</mapper>

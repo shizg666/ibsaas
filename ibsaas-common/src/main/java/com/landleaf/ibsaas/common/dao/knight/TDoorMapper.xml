@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.knight.TDoorMapper">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.knight.TDoor">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="control_id" jdbcType="INTEGER" property="controlId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="x_pos" jdbcType="VARCHAR" property="xPos" />
+    <result column="y_pos" jdbcType="VARCHAR" property="yPos" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, control_id, parent_id, x_pos, y_pos
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByParentIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where parent_id in
+    <foreach collection="ids" open="(" separator="," close=")" item="parentId">
+      #{parentId}
+    </foreach>
+  </select>
+  <select id="selectByParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where parent_id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectControlDoorByParentId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where parent_id = #{id,jdbcType=BIGINT}
+    and   control_id != 0
+  </select>
+  <select id="getDoorListOrderByfloor"  resultMap="BaseResultMap">
+    select
+    door.id, door.name
+    from t_door door inner join t_floor floor on  door.parent_id = floor.id
+    where door.control_id = 0 or door.control_id is null
+   order by floor.floor
+  </select>
+  <select id="selectByContrloId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where control_id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="getDoorInfoByControlIds" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_door
+    where control_id in
+    <foreach collection="ids" open="(" separator="," close=")" item="controlId">
+      #{controlId}
+    </foreach>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_door
+    where id = #{controlId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.knight.TDoor" useGeneratedKeys="true" keyProperty="id">
+   insert into t_door (id, name, control_id,
+      parent_id, x_pos, y_pos
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{controlId,jdbcType=INTEGER},
+      #{parentId,jdbcType=BIGINT}, #{xPos,jdbcType=VARCHAR}, #{yPos,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TDoor">
+    insert into t_door
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="controlId != null">
+        control_id,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="xPos != null">
+        x_pos,
+      </if>
+      <if test="yPos != null">
+        y_pos,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="controlId != null">
+        #{controlId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="xPos != null">
+        #{xPos,jdbcType=VARCHAR},
+      </if>
+      <if test="yPos != null">
+        #{yPos,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.landleaf.ibsaas.common.domain.knight.TDoor">
+    update t_door
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="controlId != null">
+        control_id = #{controlId,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=BIGINT},
+      </if>
+      <if test="xPos != null">
+        x_pos = #{xPos,jdbcType=VARCHAR},
+      </if>
+      <if test="yPos != null">
+        y_pos = #{yPos,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.landleaf.ibsaas.common.domain.knight.TDoor">
+    update t_door
+    set name = #{name,jdbcType=VARCHAR},
+      control_id = #{controlId,jdbcType=INTEGER},
+      parent_id = #{parentId,jdbcType=BIGINT},
+      x_pos = #{xPos,jdbcType=VARCHAR},
+      y_pos = #{yPos,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="bindingDoorControl">
+    update t_door
+    set
+      control_id = #{controId}
+    where id = #{id}
+  </update>
+</mapper>

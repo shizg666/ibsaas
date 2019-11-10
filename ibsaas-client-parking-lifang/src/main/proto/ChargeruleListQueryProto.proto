@@ -1,0 +1,49 @@
+syntax = "proto3";
+option java_package = "com.google.proto";
+option java_outer_classname = "ChargeruleListQueryProto";
+
+//收费类型列表
+message ChargeruleListQuery {
+    string createTime = 1; //创建时间
+    string from = 2; //消息源头
+    string to = 3; //消息目的地
+    string msgId = 4; //消息编号
+    string msgName = 5; //消息名称
+    string subMsgName = 6; //子消息名称
+
+    ChargeruleListQueryRequest requestBody = 7; //请求消息体
+
+    ChargeruleListQueryResponse response = 8; //响应消息体
+
+}
+
+message ChargeruleListQueryRequest {
+
+}
+
+message ChargeruleListQueryResponse {
+    //请求是否处理成功
+    bool success = 1;
+    //返回结果有业务异常
+    bool hasBusinessException = 2;
+    //业务异常错误代码
+    string errorCode = 3;
+    //业务异常错误信息
+    string errorMsg = 4;
+    //提示消息，需要进行国际化
+    string message = 5;
+    //正常返回参数
+    repeated ChargeruleListQueryResult result = 6;
+
+}
+
+
+message ChargeruleListQueryResult {
+    //记录唯一标记
+    string uniqueId = 1;
+    //收费类型编码
+    string chargeTypeCode = 2;
+    //收费类型名称
+    string chargeTypeName = 3;
+}
+

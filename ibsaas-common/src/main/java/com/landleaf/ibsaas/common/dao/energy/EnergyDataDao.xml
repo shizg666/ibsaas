@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.energy.EnergyDataDao">
+
+
+    <select id="getRecentlyEnergyData" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyData">
+        SELECT
+        ted.node_id,
+        ted.energy_data_time,
+        ted.energy_data_date,
+        ted.energy_data_month,
+        ted.energy_data_year,
+        ted.energy_data_value,
+        ted.energy_data_increase_value,
+        ted.energy_data_type,
+        ted.energy_data_source
+        FROM
+        t_energy_data ted,
+        (SELECT node_id, MAX(energy_data_time) AS energy_data_time FROM t_energy_data WHERE is_active=1 AND energy_data_source=1 AND energy_data_type=#{energyType} GROUP BY node_id) t
+        WHERE ted.is_active=1
+        AND ted.energy_data_source=1
+        AND ted.energy_data_type=#{energyType}
+        AND ted.node_id=t.node_id
+        AND ted.energy_data_time=t.energy_data_time
+    </select>
+    <select id="overviewLineChart" resultType="com.landleaf.ibsaas.common.domain.energy.HlVlBO">
+        SELECT
+        <choose>
+            <when test="dateType == 1">
+                date_format(energy_data_time, '%Y-%m-%d %H:%i')
+            </when>
+            <when test="dateType == 2">
+                energy_data_date
+            </when>
+            <when test="dateType == 3">
+                energy_data_month
+            </when>
+            <when test="dateType == 4">
+                energy_data_year
+            </when>
+        </choose>
+         AS x,
+        SUM(energy_data_increase_value) AS y
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        <choose>
+            <when test="equipType == 1">
+                AND energy_data_type=#{equipType}
+                AND node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
+        <if test="startTime!=null and endTime!=null">
+            AND energy_data_time &gt;= #{startTime} AND energy_data_time &lt; #{endTime}
+        </if>
+        <choose>
+            <when test="dateType == 1">
+                GROUP BY energy_data_time
+                ORDER BY energy_data_time
+            </when>
+            <when test="dateType == 2">
+                GROUP BY energy_data_date
+                ORDER BY energy_data_date
+            </when>
+            <when test="dateType == 3">
+                GROUP BY energy_data_month
+                ORDER BY STR_TO_DATE(energy_data_month + '-01','%Y-%m-%d')
+            </when>
+            <when test="dateType == 4">
+                GROUP BY energy_data_year
+                ORDER BY energy_data_year
+            </when>
+        </choose>
+    </select>
+
+    <select id="getEnergyReporyInfoByType" parameterType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
+        select sum(d.energy_data_increase_value) as energyValue, d.energy_data_${dateCode} as timeValue,e.equip_classification as typeValue
+        from t_energy_data d INNER JOIN t_energy_equip e  on d.node_id = e.node_id
+        WHERE d.is_active=1 and e.id != 245638168865542144
+        <if test="startTime!=null and endTime!=null">
+            and d.energy_data_time &gt;= #{startTime} and d.energy_data_time &lt;= #{endTime}
+        </if>
+        <if test="energyType != null and energyType != ''">
+            and  e.equip_type = #{energyType}
+        </if>
+        <if test="queryValue != null and queryValue != ''">
+            and  e.equip_classification = #{queryValue}
+        </if>
+        group by energy_data_${dateCode}
+        <if test="queryValue == null or queryValue == ''">
+            ,e.equip_classification
+        </if>
+    </select>
+
+    <select id="getEnergyReporyInfoByArea"  parameterType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportResponseVO">
+        select sum(d.energy_data_increase_value) as energyValue, d.energy_data_${dateCode} as timeValue ,e.equip_area as typeValue
+        from t_energy_data d INNER JOIN t_energy_equip e  on d.node_id = e.node_id
+        WHERE d.is_active=1 and e.id != 245638168865542144
+        <if test="startTime!=null and endTime!=null">
+            and d.energy_data_time &gt;= #{startTime} and d.energy_data_time &lt;= #{endTime}
+        </if>
+
+        <if test="energyType != null and energyType != ''">
+            and  e.equip_type = #{energyType}
+        </if>
+        <if test="queryValue != null and queryValue != ''">
+            and  e.equip_area = #{queryValue}
+        </if>
+        group by energy_data_${dateCode}
+        <if test="queryValue == null or queryValue == ''">
+            ,e.equip_area
+        </if>
+    </select>
+    <select id="getEnergyRanking" resultType="com.landleaf.ibsaas.common.domain.energy.HlVlBO">
+        SELECT
+        tcs.setting_value AS x,
+        SUM(IFNULL(ted.energy_data_increase_value,0)) AS y
+        FROM t_energy_equip tee
+        LEFT JOIN t_energy_data ted ON ted.node_id=tee.node_id AND ted.is_active=1
+        <choose>
+            <when test="equipType == 1">
+                AND ted.energy_data_type=#{equipType}
+                AND ted.node_id!=245638168865542144
+            </when>
+            <otherwise>
+                AND ted.energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
+        <if test="startTime!=null and endTime!=null">
+            AND ted.energy_data_time &gt;= #{startTime} AND energy_data_time &lt; #{endTime}
+        </if>
+        AND ted.energy_data_source=1
+        LEFT JOIN t_config_setting tcs
+        <choose>
+            <when test="energyConfigSetting=='equip_area'">
+                ON tee.equip_area=tcs.setting_code
+            </when>
+            <when test="energyConfigSetting=='equip_classification'">
+                ON tee.equip_classification=tcs.setting_code
+            </when>
+        </choose>
+        AND tcs.setting_type=#{energyConfigSetting} AND tcs.is_active=1
+        WHERE tee.is_active=1
+        GROUP BY tcs.setting_value
+        ORDER BY SUM(IFNULL(ted.energy_data_increase_value,0)) DESC
+        LIMIT #{lmt}
+    </select>
+    <select id="getEnergyByDate" resultType="java.math.BigDecimal">
+        SELECT
+        SUM(energy_data_increase_value)
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        <choose>
+            <when test="equipType == 1">
+                AND energy_data_type=#{equipType}
+                AND node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
+        <if test="startTime!=null and endTime!=null">
+            AND energy_data_time &gt;= #{startTime} AND energy_data_time &lt; #{endTime}
+        </if>
+    </select>
+    <select id="getEnergyByYear" resultType="java.math.BigDecimal">
+        SELECT
+        SUM(energy_data_increase_value)
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        <choose>
+            <when test="equipType == 1">
+                AND energy_data_type=#{equipType}
+                AND node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
+        <if test="year!=null and year!=null">
+            AND energy_data_year=#{year}
+        </if>
+    </select>
+    <select id="getEnergyDateByTime"
+            resultType="com.landleaf.ibsaas.common.domain.energy.report.IntervalData">
+        SELECT
+        energy_data_year AS timeInterval,
+        SUM(energy_data_increase_value) AS intervalValue
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        <choose>
+            <when test="equipType == 1">
+                AND energy_data_type=#{equipType}
+                AND node_id=245638168865542144
+            </when>
+            <otherwise>
+                AND energy_data_type=#{equipType}
+            </otherwise>
+        </choose>
+        GROUP BY energy_data_year
+    </select>
+    <select id="getDaysByYear" resultType="com.landleaf.ibsaas.common.domain.energy.report.DayOfYear">
+        SELECT t.energy_data_year AS year,COUNT(1) AS days
+        FROM (
+        SELECT
+        energy_data_year,energy_data_date
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        GROUP BY energy_data_year,energy_data_date
+        ) t
+        WHERE 1=1
+        <if test="year!=null">
+            AND t.energy_data_year=#{year}
+        </if>
+        GROUP BY t.energy_data_year
+    </select>
+    <select id="getEnergyDataByNodeIdAndTime" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyData">
+        SELECT id FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_source=1
+        AND energy_data_type=#{energyDataType}
+        AND energy_data_time=#{energyDataTime}
+        AND node_id=#{nodeId}
+    </select>
+</mapper>

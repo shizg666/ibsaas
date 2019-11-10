@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.leo.UserDao">
+
+    <resultMap id="userResultMap" type="com.landleaf.ibsaas.common.domain.leo.User">
+        <id property="id" column="id" jdbcType="VARCHAR" />
+        <id property="userCode" column="user_code" jdbcType="VARCHAR" />
+        <id property="password" column="password" jdbcType="VARCHAR" />
+        <id property="versionNo" column="version_no" jdbcType="VARCHAR" />
+        <id property="active" column="is_active" jdbcType="VARCHAR" />
+        <id property="userChineseName" column="user_ch_name" jdbcType="VARCHAR" />
+        <id property="userChineseSpell" column="user_ch_spell" jdbcType="VARCHAR" />
+        <id property="userChineseShortSpell" column="user_ch_short_spell" jdbcType="VARCHAR" />
+        <id property="userEnglishName" column="user_en_name" jdbcType="VARCHAR" />
+        <id property="mobile" column="mobile" jdbcType="VARCHAR" />
+        <id property="phone" column="phone" jdbcType="VARCHAR" />
+        <id property="remark" column="remark" jdbcType="VARCHAR" />
+        <id property="email" column="email" jdbcType="VARCHAR" />
+        <id property="createTime" column="create_time" jdbcType="TIMESTAMP" />
+        <id property="createUserCode" column="create_user_code" jdbcType="VARCHAR" />
+        <id property="modifyTime" column="modify_time" jdbcType="TIMESTAMP" />
+        <id property="modifyUserCode" column="modify_user_code" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!--根据用户名获取用户-->
+    <select id="getUser" parameterType="string" resultMap="userResultMap">
+    	select a.id, a.user_code, a.password,  a.version_no, a.is_active,
+    	a.user_ch_name, a.user_ch_spell, a.user_ch_short_spell, a.user_en_name, a.mobile, a.phone, a.remark, a.email,
+    	a.create_time, a.create_user_code, a.modify_time, a.modify_user_code
+    	from t_base_user a
+    	where a.user_code = #{userCode, jdbcType=VARCHAR} and a.is_active = 1
+    </select>
+
+    <!--根据主键id批量删除 -->
+    <update id="deleteUserByIds">
+        UPDATE t_base_user
+        <set>
+            is_active=0
+        </set>
+        WHERE  is_active=1
+        AND id IN
+        <foreach collection="userIds" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </update>
+
+</mapper>

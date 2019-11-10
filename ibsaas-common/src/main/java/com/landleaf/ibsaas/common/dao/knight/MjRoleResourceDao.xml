@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.knight.MjRoleResourceDao">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="mj_role_id" jdbcType="BIGINT" property="mjRoleId" />
+    <result column="mj_door_id" jdbcType="INTEGER" property="mjDoorId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_user_code" jdbcType="VARCHAR" property="createUserCode" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="modify_user_code" jdbcType="VARCHAR" property="modifyUserCode" />
+  </resultMap>
+  <delete id="deleteByRoleId" parameterType="java.lang.String">
+    delete from t_mj_role_resource
+    where mj_role_id = #{roleId,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertBatch" parameterType="com.landleaf.ibsaas.common.domain.knight.role.MjRoleResource">
+    insert into t_mj_role_resource (id, mj_role_id, mj_door_id,
+      create_time, create_user_code, modify_time,
+      modify_user_code)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+    (#{item.id,jdbcType=BIGINT}, #{item.mjRoleId,jdbcType=BIGINT}, #{item.mjDoorId,jdbcType=INTEGER},
+    #{item.createTime,jdbcType=TIMESTAMP}, #{item.createUserCode,jdbcType=VARCHAR}, #{item.modifyTime,jdbcType=TIMESTAMP},
+    #{item.modifyUserCode,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+</mapper>

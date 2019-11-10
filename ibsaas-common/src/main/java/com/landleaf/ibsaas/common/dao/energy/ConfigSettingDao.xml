@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.energy.ConfigSettingDao">
+
+    <sql id="config_setting_base">
+        id,
+        setting_type,
+        setting_type_name,
+        setting_code,
+        setting_code_name,
+        setting_value,
+        sorting,
+        character1,
+        character2,
+        character3,
+        character4,
+        character5
+    </sql>
+
+    <select id="selectUnique" resultType="com.landleaf.ibsaas.common.domain.energy.ConfigSetting">
+        SELECT id FROM t_config_setting
+        WHERE is_active=1
+        <if test="id!=null and id!=''">
+            AND id!=#{id}
+        </if>
+        AND setting_type=#{settingType}
+        AND setting_code=#{settingCode}
+    </select>
+    <select id="getByType" resultType="com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO">
+        SELECT
+        <include refid="config_setting_base"/>
+        FROM t_config_setting
+        WHERE is_active=1
+        AND setting_type=#{type}
+        ORDER BY sorting
+    </select>
+    <select id="getByTypeAndCode" resultType="com.landleaf.ibsaas.common.domain.energy.vo.ConfigSettingVO">
+        SELECT
+        <include refid="config_setting_base"/>
+        FROM t_config_setting
+        WHERE is_active=1
+        AND setting_type=#{type}
+        AND setting_code=#{code}
+    </select>
+    <select id="getCongfigSettingLmt" resultType="com.landleaf.ibsaas.common.domain.energy.ConfigSetting">
+        SELECT * FROM t_config_setting
+        WHERE is_active=1
+        AND id &lt; #{maxId}
+    </select>
+    <select id="getStandardConsumption" resultType="java.lang.String">
+        SELECT
+        setting_value
+        FROM t_config_setting
+        WHERE is_active=1
+        AND setting_type=#{settingType}
+        AND setting_code=#{equipType}
+        AND YEAR(STR_TO_DATE(character1,'%Y-%m-%d')) = #{year}
+        ORDER BY STR_TO_DATE(character1,'%Y-%m-%d') DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectList" resultType="com.landleaf.ibsaas.common.domain.energy.ConfigSetting">
+        SELECT * FROM t_config_setting
+        WHERE is_active=1
+    </select>
+    <select id="getIntervalStandardConsumption"
+            resultType="com.landleaf.ibsaas.common.domain.energy.report.IntervalData">
+        SELECT
+        t.timeInterval,
+        cs.setting_value AS intervalValue
+        FROM t_config_setting cs,
+        (SELECT
+        YEAR(STR_TO_DATE(character1,'%Y-%m-%d'))  AS timeInterval,
+        MAX(STR_TO_DATE(character1,'%Y-%m-%d')) AS curDate
+        FROM t_config_setting
+        WHERE is_active=1
+        AND setting_type=#{chineseStandardEnergyConsumption}
+        AND setting_code=#{equipType}
+        GROUP BY YEAR(STR_TO_DATE(character1,'%Y-%m-%d'))) t
+        WHERE cs.is_active=1
+        AND cs.setting_type=#{chineseStandardEnergyConsumption}
+        AND cs.setting_code=#{equipType}
+        AND t.curDate=STR_TO_DATE(cs.character1,'%Y-%m-%d')
+    </select>
+</mapper>

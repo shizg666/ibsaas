@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.TFloorConfigDao">
+  <resultMap id="BaseResultMap" type="com.landleaf.ibsaas.common.domain.light.TFloorConfig">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="img" jdbcType="VARCHAR" property="img" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    <result column="utime" jdbcType="TIMESTAMP" property="utime" />
+    <result column="reserved" jdbcType="VARCHAR" property="reserved" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="floor_id" jdbcType="BIGINT" property="floorId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, img, name, ctime, utime, reserved, type, floor_id
+  </sql>
+  <!--<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+    <!--select -->
+    <!--<include refid="Base_Column_List" />-->
+    <!--from t_floor_config-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</select>-->
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">-->
+    <!--delete from t_floor_config-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</delete>-->
+  <!--<insert id="insert" parameterType="com.landleaf.ibsaas.common.domain.light.TFloorConfig">-->
+    <!--insert into t_floor_config (id, img, name, -->
+      <!--ctime, utime, reserved, -->
+      <!--type, floor_id)-->
+    <!--values (#{id,jdbcType=BIGINT}, #{img,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, -->
+      <!--#{ctime,jdbcType=TIMESTAMP}, #{utime,jdbcType=TIMESTAMP}, #{reserved,jdbcType=VARCHAR}, -->
+      <!--#{type,jdbcType=VARCHAR}, #{floorId,jdbcType=BIGINT})-->
+  <!--</insert>-->
+  <!--<insert id="insertSelective" parameterType="com.landleaf.ibsaas.common.domain.light.TFloorConfig">-->
+    <!--insert into t_floor_config-->
+    <!--<trim prefix="(" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--id,-->
+      <!--</if>-->
+      <!--<if test="img != null">-->
+        <!--img,-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--name,-->
+      <!--</if>-->
+      <!--<if test="ctime != null">-->
+        <!--ctime,-->
+      <!--</if>-->
+      <!--<if test="utime != null">-->
+        <!--utime,-->
+      <!--</if>-->
+      <!--<if test="reserved != null">-->
+        <!--reserved,-->
+      <!--</if>-->
+      <!--<if test="type != null">-->
+        <!--type,-->
+      <!--</if>-->
+      <!--<if test="floorId != null">-->
+        <!--floor_id,-->
+      <!--</if>-->
+    <!--</trim>-->
+    <!--<trim prefix="values (" suffix=")" suffixOverrides=",">-->
+      <!--<if test="id != null">-->
+        <!--#{id,jdbcType=BIGINT},-->
+      <!--</if>-->
+      <!--<if test="img != null">-->
+        <!--#{img,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--#{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="ctime != null">-->
+        <!--#{ctime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="utime != null">-->
+        <!--#{utime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="reserved != null">-->
+        <!--#{reserved,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="type != null">-->
+        <!--#{type,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="floorId != null">-->
+        <!--#{floorId,jdbcType=BIGINT},-->
+      <!--</if>-->
+    <!--</trim>-->
+  <!--</insert>-->
+  <!--<update id="updateByPrimaryKeySelective" parameterType="com.landleaf.lgc.entity.TFloorConfig">-->
+    <!--update t_floor_config-->
+    <!--<set>-->
+      <!--<if test="img != null">-->
+        <!--img = #{img,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="name != null">-->
+        <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="ctime != null">-->
+        <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="utime != null">-->
+        <!--utime = #{utime,jdbcType=TIMESTAMP},-->
+      <!--</if>-->
+      <!--<if test="reserved != null">-->
+        <!--reserved = #{reserved,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="type != null">-->
+        <!--type = #{type,jdbcType=VARCHAR},-->
+      <!--</if>-->
+      <!--<if test="floorId != null">-->
+        <!--floor_id = #{floorId,jdbcType=BIGINT},-->
+      <!--</if>-->
+    <!--</set>-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.landleaf.lgc.entity.TFloorConfig">-->
+    <!--update t_floor_config-->
+    <!--set img = #{img,jdbcType=VARCHAR},-->
+      <!--name = #{name,jdbcType=VARCHAR},-->
+      <!--ctime = #{ctime,jdbcType=TIMESTAMP},-->
+      <!--utime = #{utime,jdbcType=TIMESTAMP},-->
+      <!--reserved = #{reserved,jdbcType=VARCHAR},-->
+      <!--type = #{type,jdbcType=VARCHAR},-->
+      <!--floor_id = #{floorId,jdbcType=BIGINT}-->
+    <!--where id = #{id,jdbcType=BIGINT}-->
+  <!--</update>-->
+</mapper>
