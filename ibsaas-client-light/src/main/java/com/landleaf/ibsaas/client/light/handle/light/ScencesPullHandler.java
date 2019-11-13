@@ -3,7 +3,6 @@ package com.landleaf.ibsaas.client.light.handle.light;
 import com.landleaf.ibsaas.client.light.annotation.HandlerType;
 import com.landleaf.ibsaas.client.light.constant.LightHandleConstant;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
-import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import org.springframework.stereotype.Component;
 
 /**

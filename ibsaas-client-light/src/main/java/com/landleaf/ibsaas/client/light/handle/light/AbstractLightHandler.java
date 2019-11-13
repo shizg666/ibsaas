@@ -6,7 +6,6 @@ import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.pool.SimpleChannelPool;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;

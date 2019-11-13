@@ -64,7 +64,7 @@ public class AutoScenesPeponse implements LightResponse{
             log.error("根据地址获取不到服务器adress:{}",message.getAddress());
         }
 //        String adress = "R_"+message.getRegion();
-        String adress = message.getAddress();
+//        String adress = message.getAddress();
 //        TLightDeviceState result = tLightDeviceStateDao.getByAdress(adress);
 //        if (result == null){
 //            TLightDeviceState tLightDeviceState = new TLightDeviceState();
@@ -124,12 +124,12 @@ public class AutoScenesPeponse implements LightResponse{
                 Thread.sleep(100L);
                 try {
                     redisHandle.addMap(key,adress,value);
+                    return;
                 }catch (Exception e){
                     log.error("*************************************返回消息入Redis失败：{}",e.getMessage());
                 }
             }
         } catch (InterruptedException e) {
-            log.error(e.getMessage(), e);
             log.error("*************************************消息入Redis message:{],最终失败原因：{}",message.toString(),e.getMessage());
         }
         try {
