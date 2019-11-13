@@ -15,7 +15,6 @@ import com.landleaf.ibsaas.rocketmq.TopicConstants;
 import com.landleaf.ibsaas.web.rocketmq.WebMqProducer;
 import com.landleaf.ibsaas.web.web.service.hvac.BaseDeviceService;
 import com.landleaf.ibsaas.web.web.service.hvac.IAchpDetailWebService;
-import com.sun.tools.javac.comp.Lower;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

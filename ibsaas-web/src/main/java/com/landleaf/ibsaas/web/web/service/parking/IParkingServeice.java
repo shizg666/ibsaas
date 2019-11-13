@@ -45,14 +45,14 @@ public interface IParkingServeice {
      * @param queryDTO
      * @return
      */
-    JSONObject usercrdtmList(UsercrdtmListQueryDTO queryDTO);
+    Object usercrdtmList(UsercrdtmListQueryDTO queryDTO);
 
     /**
      * 车辆列表
      * @param queryDTO
      * @return
      */
-    JSONObject userinfoList(UserinfoListQueryDTO queryDTO);
+    Object userinfoList(UserinfoListQueryDTO queryDTO);
 
     /**
      * 车辆详情

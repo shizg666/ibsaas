@@ -10,13 +10,13 @@ import java.util.Map;
  */
 public enum ParkingSubMsgTypeEnum {
     CHANNEL_LIST(1, "CHANNEL_LIST", "parkingChannelListMsgProcess", "queryChannelByType", 1, ChannelListQueryDTO.class),
-    CHARGE_RULE_LIST(2, "CHARGE_RULE_LIST", "parkingChargeRuleListMsgProcess", "queryChannelByType", 1, Object.class),
+    CHARGE_RULE_LIST(2, "CHARGE_RULE_LIST", "parkingChargeRuleListMsgProcess", "queryAllChargerule", 1, BaseQueryDTO.class),
     REAL_COUNT_F_HOUR(3, "REAL_COUNT_F_HOUR", "parkingRealCountFhourMsgProcess", "realCountFHour", 1, UsercrdtmRealCountQueryByHourDTO.class),
     REAL_COUNT_HOUR(4, "REAL_COUNT_HOUR", "parkingRealCountMsgProcess", "realCount", 1, UsercrdtmRealCountQueryDTO.class),
     USER_CRDTM_LIST(5, "USER_CRDTM_LIST", "parkingUsercrdtmMsgProcess", "userCrdtmList", 1, UsercrdtmListQueryDTO.class),
     TRAFFIC_FLOW(6, "TRAFFIC_FLOW", "parkingUsercrdtmMsgProcess", "trafficFlow", 1, UsercrdtmInHistoryQueryDTO.class),
     USERI_NFO_LIST(7, "USERI_NFO_LIST", "parkingUserinfoMsgProcess", "userinfoList", 1, UserinfoListQueryDTO.class),
-    USERI_NFO(8, "USERI_NFO_LIST", "parkingUserinfoMsgProcess", "userinfo", 1, UserinfoDetailQueryDTO.class),
+    USERI_NFO(8, "USERI_NFO", "parkingUserinfoMsgProcess", "userinfo", 1, UserinfoDetailQueryDTO.class),
     ;
 
     /**

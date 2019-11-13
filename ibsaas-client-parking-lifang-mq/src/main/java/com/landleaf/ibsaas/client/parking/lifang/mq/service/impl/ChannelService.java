@@ -44,7 +44,7 @@ public class ChannelService extends AbstractBaseService<ChannelDao, Channel> imp
         } catch (Exception e) {
             e.printStackTrace();
         }
-        List<Channel> channels = channels = selectByExample(example);
+        List<Channel> channels  = selectByExample(example);
         if (!CollectionUtils.isEmpty(channels)) {
             result = channels.stream().map(channel -> {
                 ChannelResponseDTO responseDTO = new ChannelResponseDTO();

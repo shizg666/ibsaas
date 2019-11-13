@@ -16,7 +16,7 @@ public enum ParkingSubMsgTypeEnum {
     USER_CRDTM_LIST(5, "USER_CRDTM_LIST", "parkingUsercrdtmMsgProcess", "userCrdtmList", 1, UsercrdtmListQueryDTO.class),
     TRAFFIC_FLOW(6, "TRAFFIC_FLOW", "parkingUsercrdtmMsgProcess", "trafficFlow", 1, UsercrdtmInHistoryQueryDTO.class),
     USERI_NFO_LIST(7, "USERI_NFO_LIST", "parkingUserinfoMsgProcess", "userinfoList", 1, UserinfoListQueryDTO.class),
-    USERI_NFO(8, "USERI_NFO_LIST", "parkingUserinfoMsgProcess", "userinfo", 1, UserinfoDetailQueryDTO.class),
+    USERI_NFO(8, "USERI_NFO", "parkingUserinfoMsgProcess", "userinfo", 1, UserinfoDetailQueryDTO.class),
     ;
 
     /**

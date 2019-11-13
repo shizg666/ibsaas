@@ -1,6 +1,6 @@
 package com.landleaf.ibsaas.client.parking.lifang.mq.utils.date;
 
-import com.landleaf.ibsaas.client.knight.utils.number.NumberUtils;
+import com.landleaf.ibsaas.client.parking.lifang.mq.utils.number.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;

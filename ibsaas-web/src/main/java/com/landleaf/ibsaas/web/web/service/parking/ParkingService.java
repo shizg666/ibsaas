@@ -6,7 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.internal.LinkedTreeMap;
 import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.common.domain.knight.KnightMessage;
+import com.landleaf.ibsaas.common.domain.parking.ParkingMessage;
 import com.landleaf.ibsaas.common.domain.parking.request.*;
 import com.landleaf.ibsaas.common.domain.parking.response.ChannelResponseDTO;
 import com.landleaf.ibsaas.common.domain.parking.response.ChargeruleResponseDTO;
@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -37,8 +38,11 @@ import java.util.stream.Collectors;
 public class ParkingService implements IParkingServeice {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParkingService.class);
 
-    private static String CLIENT_TOPIC = "ibsaas_parking_lifang_lgc_1921681010";
-    private static Long TIME_OUT = 20 * 1000L;
+    @Value("${rocketmq.producer.client.parking.topic}")
+    private String CLIENT_TOPIC;
+    @Value("${rocketmq.producer.client.parking.response-time-out}")
+    private  Long TIME_OUT;
+
     @Autowired
     private WebMqProducer webMqProducer;
     @Autowired
@@ -73,7 +77,7 @@ public class ParkingService implements IParkingServeice {
     public Response queryAllChargerule() {
         List<Map<String, String>> results = Lists.newArrayList();
         //获取基础数据
-        Response response = sendMsgWaitForResult(new Object(),
+        Response response = sendMsgWaitForResult(new BaseQueryDTO(),
                 MsgTypeEnum.PARKING.getName(),
                 ParkingSubMsgTypeEnum.CHARGE_RULE_LIST.getName());
         if (response != null && response.getResult() != null) {
@@ -133,25 +137,25 @@ public class ParkingService implements IParkingServeice {
     }
 
     @Override
-    public JSONObject usercrdtmList(UsercrdtmListQueryDTO sendRequest) {
+    public Object usercrdtmList(UsercrdtmListQueryDTO sendRequest) {
         //获取基础数据
         Response response = sendMsgWaitForResult(sendRequest,
                 MsgTypeEnum.PARKING.getName(),
                 ParkingSubMsgTypeEnum.USER_CRDTM_LIST.getName());
         if (response != null && response.getResult() != null) {
-            return (JSONObject) response.getResult();
+            return response.getResult();
         }
         return null;
     }
 
     @Override
-    public JSONObject userinfoList(UserinfoListQueryDTO sendRequest) {
+    public Object userinfoList(UserinfoListQueryDTO sendRequest) {
         //获取基础数据
         Response response = sendMsgWaitForResult(sendRequest,
                 MsgTypeEnum.PARKING.getName(),
                 ParkingSubMsgTypeEnum.USERI_NFO_LIST.getName());
         if (response != null && response.getResult() != null) {
-            return (JSONObject) response.getResult();
+            return response.getResult();
         }
         return null;
     }
@@ -163,7 +167,7 @@ public class ParkingService implements IParkingServeice {
                 MsgTypeEnum.PARKING.getName(),
                 ParkingSubMsgTypeEnum.USERI_NFO.getName());
         if (response != null && response.getResult() != null) {
-            return (UserinfoResponseDTO) response.getResult();
+            return JSON.parseObject(JSON.toJSONString(response.getResult()),UserinfoResponseDTO.class);
         }
         return null;
     }
@@ -193,15 +197,15 @@ public class ParkingService implements IParkingServeice {
 
 
         Response response = new Response();
-        KnightMessage request = new KnightMessage();
+        ParkingMessage request = new ParkingMessage();
         String msgId = MessageUtil.generateId(20);
         request.setMsgId(msgId);
         request.setSubMsgName(subMsgName);
         request.setMsgName(msgName);
         request.setRequestBody(requestBody);
         webMqProducer.sendMessage(JSON.toJSONString(request), CLIENT_TOPIC, TagConstants.TAGS_DEFAULT);
-        Future<KnightMessage> cacheFuture = futureService.getParkingCacheFuture(msgId, TIME_OUT);
-        KnightMessage result = new KnightMessage();
+        Future<ParkingMessage> cacheFuture = futureService.getParkingCacheFuture(msgId, TIME_OUT);
+        ParkingMessage result = new ParkingMessage();
         try {
             result = cacheFuture.get(TIME_OUT, TimeUnit.MILLISECONDS);
         } catch (Exception e) {

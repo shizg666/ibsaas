@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * 停车客户端返回数据消费处理
  */
-@MQConsumeService(topic = TopicConstants.TOPIC_PARKING, tags = {TagConstants.TAGS_DEFAULT})
+@MQConsumeService(topic = "${rocketmq.consumer.client.parking.topic}", tags = TagConstants.TAGS_DEFAULT)
 @Component
 public class ComsumerMessageForParking extends AbstractMQMsgProcessor {
 

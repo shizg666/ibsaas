@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -54,9 +55,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class KnightService implements IKnightServeice {
-    private static String CLIENT_TOPIC = "ibsaas_knight_lifang_lgc_1921681010";
-    private static Long TIME_OUT = 20 * 1000L;
-    ;
+    @Value("${rocketmq.producer.client.knight.topic}")
+    private String CLIENT_TOPIC;
+    @Value("${rocketmq.producer.client.knight.response-time-out}")
+    private  Long TIME_OUT;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KnightService.class);
 

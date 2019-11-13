@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.client.parking.lifang.mq.processor;
 
 import com.landleaf.ibsaas.client.parking.lifang.mq.domain.ParkingResponse;
 import com.landleaf.ibsaas.client.parking.lifang.mq.service.IChargeruleService;
+import com.landleaf.ibsaas.common.domain.parking.request.BaseQueryDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ParkingChargeRuleListMsgProcess extends  BaseProcess  {
      *
      * @return
      */
-    public ParkingResponse queryAllChargerule(Object o) {
+    public ParkingResponse queryAllChargerule(BaseQueryDTO o) {
         LOGGER.info("收到【收费类型列表】请求");
         List result = chargeruleService.queryAllChargerule();
         return returnSuccess(result);

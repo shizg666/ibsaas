@@ -78,7 +78,7 @@ rocketmq:
   producer:
     enable: true
     groupName: ibsaas
-    topic: parking_lifang
+    topic: parking
     tags: tags
     #目前采用双主，集群
     namesrvAddr: 40.73.246.184:9876
@@ -88,11 +88,11 @@ rocketmq:
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
-    groupName: ibsaas_parking_lifang_lgc_1921681010_test
+    groupName: ibsaas_parking_lifang_lgc_1921681010
     namesrvAddr: 40.73.246.184:9876
     #停车
-    topics: ibsaas_parking_lifang_lgc_1921681010_test-*
-    topic: ibsaas_parking_lifang_lgc_1921681010_test
+    topics: ibsaas_parking_lifang_lgc_1921681010-*
+    topic: ibsaas_parking_lifang_lgc_1921681010
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10

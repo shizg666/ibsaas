@@ -1,44 +1,30 @@
 package com.landleaf.ibsaas.web.web.controller.parking;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.parking.ParkingRealCountInit;
-import com.landleaf.ibsaas.common.domain.parking.TCPMessage;
 import com.landleaf.ibsaas.common.domain.parking.request.*;
-import com.landleaf.ibsaas.common.domain.parking.response.ChargeruleResponseDTO;
 import com.landleaf.ibsaas.common.domain.parking.response.UserinfoResponseDTO;
-import com.landleaf.ibsaas.common.enums.parking.*;
+import com.landleaf.ibsaas.common.enums.parking.ChannelTypeEnum;
+import com.landleaf.ibsaas.common.enums.parking.ExpireStatusEnum;
+import com.landleaf.ibsaas.common.enums.parking.TCPMessageSourceEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
-import com.landleaf.ibsaas.common.utils.MessageUtil;
-import com.landleaf.ibsaas.common.utils.date.DateUtil;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
-import com.landleaf.ibsaas.web.tcp.cache.ConcurrentHashMapCacheUtils;
 import com.landleaf.ibsaas.web.web.controller.BasicController;
-import com.landleaf.ibsaas.web.web.exception.ParkingException;
 import com.landleaf.ibsaas.web.web.service.parking.IParkingRealCountInitService;
 import com.landleaf.ibsaas.web.web.service.parking.IParkingServeice;
-import io.netty.channel.ChannelHandlerContext;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 /**
@@ -127,8 +113,8 @@ public class ParkingController extends BasicController {
     @GetMapping("/usercrdtm/list")
     @ApiOperation(value = "车辆进出记录", notes = "车辆进出记录")
     public Response usercrdtmList(UsercrdtmListQueryDTO queryDTO) {
-        JSONObject result =parkingServeice.usercrdtmList(queryDTO);
-        if (result == null || result.size() == 0) {
+        Object result =parkingServeice.usercrdtmList(queryDTO);
+        if (result == null ) {
             Map<String, Object> resultMap = Maps.newHashMap();
             resultMap.put("total", 0);
             resultMap.put("list", Lists.newArrayList());
@@ -145,8 +131,8 @@ public class ParkingController extends BasicController {
     @GetMapping("/userinfo/list")
     @ApiOperation(value = "车辆列表", notes = "车辆列表")
     public Response userinfoList(UserinfoListQueryDTO queryDTO) {
-        JSONObject result =parkingServeice.userinfoList(queryDTO);
-        if (result == null || result.size() == 0) {
+        Object result =parkingServeice.userinfoList(queryDTO);
+        if (result == null ) {
             Map<String, Object> resultMap = Maps.newHashMap();
             resultMap.put("list", Lists.newArrayList());
             resultMap.put("total", 0);

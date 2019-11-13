@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -35,11 +36,10 @@ public class RedisConfiguration {
 
     @Bean
     @SuppressWarnings("all")
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-
+    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+        redisConnectionFactory.setValidateConnection(true);
         redisTemplate.setConnectionFactory(redisConnectionFactory);
-
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
@@ -63,8 +63,8 @@ public class RedisConfiguration {
 
     @Bean("redisTemplateEx")
     @SuppressWarnings("all")
-    public RedisTemplate<String, Object> redisTemplateEx(RedisConnectionFactory redisConnectionFactory) {
-
+    public RedisTemplate<String, Object> redisTemplateEx(LettuceConnectionFactory redisConnectionFactory) {
+        redisConnectionFactory.setValidateConnection(true);
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
 

@@ -7,7 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<modules>
 		<module>ibsaas-client-parking-lifang</module>
-		<module>ibsaas-client-knight-lifang</module>
+		<module>ibsaas-client-kngiht-lifang</module>
 		<module>ibsaas-client-hvac</module>
 		<module>ibsaas-web</module>
 		<module>ibsaas-common</module>

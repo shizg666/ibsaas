@@ -3,9 +3,9 @@ package com.landleaf.ibsaas.common.domain.parking.request;
 //车辆查询请求DTO
 public class UserinfoListQueryDTO {
 
-    private Integer page;
+    private Integer page=1;
 
-    private Integer limit;
+    private Integer limit=10;
 
     //到期时间
     private String expireTime;

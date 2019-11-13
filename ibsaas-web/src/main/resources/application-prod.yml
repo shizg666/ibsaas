@@ -137,12 +137,26 @@ rocketmq:
     maxMessageSize: 4096
     sendMsgTimeout: 30000
     retryTimesWhenSendFailed: 1
+    #发送消费端配置
+    client:
+      knight:
+        topic: ibsaas_knight_lifang_lgc_1921681010
+        response-time-out: 20000
+      parking:
+        topic: ibsaas_parking_lifang_lgc_1921681010
+        response-time-out: 20000
   consumer:
     enable: true
     groupName: ibsaas_response
     namesrvAddr: 40.73.246.184:9876
-    #门禁;停车
+    #初始化订阅消费topic
     topics: knight-*;parking-*
+    #监听对象信息
+    client:
+      parking:
+        topic: parking
+      knight:
+        topic: knight
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10

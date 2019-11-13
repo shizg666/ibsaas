@@ -26,9 +26,9 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
       - name: master
-        url: jdbc:mysql://192.168.10.101:3306/acs_parking_video?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://40.73.246.184:3306/parking_lifang_lgc?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
-        password: lf0507
+        password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
         maxActive: 50
         initialSize: 5
@@ -44,9 +44,9 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
       - name: slave
-        url: jdbc:mysql://192.168.10.101:3306/acs_parking_video?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://40.73.246.184:3306/parking_lifang_lgc?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
-        password: lf0507
+        password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
         maxActive: 50
         initialSize: 5
@@ -78,21 +78,21 @@ rocketmq:
   producer:
     enable: true
     groupName: ibsaas
-    topic: parking_lifang_test
+    topic: parking_test
     tags: tags
     #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876
+    namesrvAddr: 40.73.246.184:9876
     #消息最大长度 默认1024*4(4M)
     maxMessageSize: 91920
     sendMsgTimeout: 30000
     retryTimesWhenSendFailed: 1
   consumer:
     enable: true
-    groupName: ibsaas_parking_lifang_lgc_1921681010_test
-    namesrvAddr: 40.73.100.153:9876
+    groupName: ibsaas_parking_lifang_lgc_1921681010_test_local
+    namesrvAddr: 40.73.246.184:9876
     #停车
-    topics: ibsaas_parking_lifang_lgc_1921681010_test-*
-    topic: ibsaas_parking_lifang_lgc_1921681010_test
+    topics: ibsaas_parking_lifang_lgc_1921681010_test_local-*
+    topic: ibsaas_parking_lifang_lgc_1921681010_test_local
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10
