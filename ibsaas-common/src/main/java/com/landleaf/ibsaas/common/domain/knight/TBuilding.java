@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.ToString;
 
-@ApiModel(value = "楼栋信息对象 ")
+@ApiModel(value = "TBuilding楼栋信息对象")
 @ToString
 public class TBuilding {
 
@@ -13,8 +13,7 @@ public class TBuilding {
     private Long id;
     @ApiModelProperty(value="楼栋名称",required = true)
     private String name;
-    //BusinessTypeEnum
-    @ApiModelProperty(value="类型")
+    @ApiModelProperty(value="类型(1门禁2灯光)")
     private Integer type;
 
     public Integer getType() {
