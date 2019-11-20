@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.web.web.service.buliding.impl;
 
 import com.landleaf.ibsaas.common.dao.knight.TBuildingMapper;
 import com.landleaf.ibsaas.common.dao.knight.TFloorMapper;
+import com.landleaf.ibsaas.common.domain.knight.TBuilding;
 import com.landleaf.ibsaas.common.domain.knight.TDoor;
 import com.landleaf.ibsaas.common.domain.knight.TFloor;
 import com.landleaf.ibsaas.common.enums.BusinessTypeEnum;
@@ -32,13 +33,12 @@ public class FloorCommonService implements IFloorCommonService {
 
 
     @Override
-    public TFloor addFloorOrUpdate(TFloor tFloor) {
+    public void addFloorOrUpdate(TFloor tFloor) {
         if (tFloor.getId() == null || tFloor.getId() == 0){
             this.addFloor(tFloor);
         }else {
             this.updateFloor(tFloor);
         }
-        return tFloor;
     }
 
     @Override
@@ -86,8 +86,16 @@ public class FloorCommonService implements IFloorCommonService {
 
 
     @Override
-    public Integer deleteFloor(Long id,Integer type) {
-        floorDeleteCheck.check(id,type);
+    public Integer deleteFloor(Long id) {
+        TFloor tFloor = tFloorMapper.selectByPrimaryKey(id);
+        if (tFloor == null){
+            throw new BusinessException("根据id查询不到楼层信息");
+        }
+        TBuilding building = tBuildingMapper.selectByPrimaryKey(tFloor.getParentId());
+        if (building == null){
+            throw new BusinessException("根据id查询不到楼栋信息");
+        }
+        floorDeleteCheck.check(id,building.getType());
         Integer result = tFloorMapper.deleteByPrimaryKey(id);
         if (result < 0 ){
             throw new BusinessException("楼层删除失败");
@@ -95,14 +103,14 @@ public class FloorCommonService implements IFloorCommonService {
         return result;
     }
 
-    @Override
-    public Integer deleteFloor(Long id) {
-        Integer result = tFloorMapper.deleteByPrimaryKey(id);
-        if (result < 0 ){
-            throw new BusinessException("楼层删除失败");
-        }
-        return result;
-    }
+//    @Override
+//    public Integer deleteFloor(Long id) {
+//        Integer result = tFloorMapper.deleteByPrimaryKey(id);
+//        if (result < 0 ){
+//            throw new BusinessException("楼层删除失败");
+//        }
+//        return result;
+//    }
 
 
     @Override

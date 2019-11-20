@@ -54,13 +54,13 @@ public class BuildingController extends BasicController {
 
     @PostMapping("/addOrUpdate")
     @ApiOperation(value = "添加或者修改楼栋信息")
-    public Response<TBuildingVO> addOrUpdateBuilding(@RequestBody TBuilding tBuilding) {
+    public Response addOrUpdateBuilding(@RequestBody TBuilding tBuilding) {
         log.info("BuildingController ----->addOrUpdateBuilding TBuilding:{}", JSONObject.toJSONString(tBuilding));
-        TBuilding tBuilding1 = iBuildingCommonService.addBuildingOrUpdate(tBuilding);
-        TBuildingVO tBuildingVO = new TBuildingVO();
-        BeanUtils.copyProperties(tBuilding1,tBuildingVO);
-        tBuildingVO.setKey("building_"+tBuildingVO.getId());
-        return returnSuccess(tBuildingVO);
+        iBuildingCommonService.addBuildingOrUpdate(tBuilding);
+//        TBuildingVO tBuildingVO = new TBuildingVO();
+//        BeanUtils.copyProperties(tBuilding1,tBuildingVO);
+//        tBuildingVO.setKey("building_"+tBuildingVO.getId());
+        return returnSuccess();
     }
 
     @PostMapping("/delete/{id}")
@@ -72,12 +72,12 @@ public class BuildingController extends BasicController {
 
     @PostMapping("/floor/addOrUpdate")
     @ApiOperation(value = "添加或者修改楼层信息", notes = "添加或者修改楼层信息")
-    public Response<TFloorVO> addOrUpdateFloor(@RequestBody TFloor tFloor) {
-        TFloor tFloor1 = iFloorCommonService.addFloorOrUpdate(tFloor);
-        TFloorVO tFloorVO = new TFloorVO();
-        BeanUtils.copyProperties(tFloor1,tFloorVO);
-        tFloorVO.setKey("floor_"+tFloorVO.getId());
-        return returnSuccess(tFloorVO);
+    public Response addOrUpdateFloor(@RequestBody TFloor tFloor) {
+        iFloorCommonService.addFloorOrUpdate(tFloor);
+//        TFloorVO tFloorVO = new TFloorVO();
+//        BeanUtils.copyProperties(tFloor1,tFloorVO);
+//        tFloorVO.setKey("floor_"+tFloorVO.getId());
+        return returnSuccess();
     }
 
     @GetMapping("/floor/get-list-floorId/{buildingId}")
@@ -91,20 +91,20 @@ public class BuildingController extends BasicController {
         return returnSuccess(map);
     }
 
-    @PostMapping("/clone")
-    @ApiOperation(value = "复制某一类型的楼栋楼层")
-    public Response<Map<Long,String>> cloneBuilding(@RequestBody BuildingCloneVO buildingCloneVO) {
-        log.info("BuildingController ----->cloneBuilding TBuilding:{}", JSONObject.toJSONString(buildingCloneVO));
-        List<BuildingReponseVO> buildingReponseVOS = iBuildingCommonService.cloneBuilding(buildingCloneVO);
-        return returnSuccess(buildingReponseVOS);
-    }
+//    @PostMapping("/clone")
+//    @ApiOperation(value = "复制某一类型的楼栋楼层")
+//    public Response<Map<Long,String>> cloneBuilding(@RequestBody BuildingCloneVO buildingCloneVO) {
+//        log.info("BuildingController ----->cloneBuilding TBuilding:{}", JSONObject.toJSONString(buildingCloneVO));
+//        List<BuildingReponseVO> buildingReponseVOS = iBuildingCommonService.cloneBuilding(buildingCloneVO);
+//        return returnSuccess(buildingReponseVOS);
+//    }
 
 
 
-    @PostMapping("/floor/delete/{id}")
+    @PostMapping("/floor/delete/{floorId}")
     @ApiOperation(value = "删除楼层信息", notes = "")
-    public Response deleteFloor(@RequestBody @ApiParam FloorRequestVO floorRequestVO){
-        iFloorCommonService.deleteFloor(floorRequestVO.getId(),floorRequestVO.getType());
+    public Response deleteFloor(@PathVariable @ApiParam(name="floorId",value="楼层id",required=true) Long floorId){
+        iFloorCommonService.deleteFloor(floorId);
         return returnSuccess();
     }
 

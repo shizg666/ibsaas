@@ -53,13 +53,12 @@ public class BuildingCommonService implements IBuildingCommonService {
     }
 
     @Override
-    public TBuilding addBuildingOrUpdate(TBuilding tBuilding) {
+    public void addBuildingOrUpdate(TBuilding tBuilding) {
         if (tBuilding.getId() == null || tBuilding.getId() == 0){
             this.addBuilding(tBuilding);
         }else {
             this.updateBuilding(tBuilding);
         }
-        return tBuilding;
     }
 
     public TBuilding addBuilding(TBuilding tBuilding) {

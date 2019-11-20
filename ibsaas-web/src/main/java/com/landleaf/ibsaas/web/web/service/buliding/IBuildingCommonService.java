@@ -11,7 +11,7 @@ public interface IBuildingCommonService {
 
     Integer deleteBuilding(Long id);
 
-    TBuilding addBuildingOrUpdate(TBuilding tBuilding);
+    void addBuildingOrUpdate(TBuilding tBuilding);
 
 
     /**

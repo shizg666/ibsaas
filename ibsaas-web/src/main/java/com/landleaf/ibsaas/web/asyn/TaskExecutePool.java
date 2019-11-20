@@ -54,6 +54,19 @@ public class TaskExecutePool {
         return pool;
     }
 
+
+    @Bean("lightSceneTimeThreadPool")
+    public ExecutorService lightSceneTimeThreadPool() {
+        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+                .setNameFormat("light-thread-pool-%d").build();
+
+        //Common Thread Pool
+        ExecutorService pool = new ThreadPoolExecutor(2, 3,
+                KEEPALIVETIME, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(WORKQUEUE), namedThreadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
+        return pool;
+    }
+
     @Bean("serviceTaskExecutor")
     public ThreadPoolTaskExecutor serviceTaskExecutor(){
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();

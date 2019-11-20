@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 
 
-@ApiModel(value = "楼栋信息对象 ")
+@ApiModel(value = "FloorRequestVO楼层信息对象 ")
 public class FloorRequestVO {
 
     @ApiModelProperty(value="楼层id",required = true)
