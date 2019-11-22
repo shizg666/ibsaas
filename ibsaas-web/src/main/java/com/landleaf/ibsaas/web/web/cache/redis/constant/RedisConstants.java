@@ -10,6 +10,12 @@ import java.io.Serializable;
 */
 public class RedisConstants implements Serializable {
 
+
+    /**
+     * 日期信息缓存
+     */
+    public static final String DAY_INFO = "day_info_";
+
     /**
      * 只读缓存初始化标示的统一前缀
      */

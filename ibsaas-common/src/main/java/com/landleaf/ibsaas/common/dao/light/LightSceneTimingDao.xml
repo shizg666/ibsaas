@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.light.LightSceneTimingDao">
+
+    <select id="getListAreaTime"
+            resultType="com.landleaf.ibsaas.common.domain.light.vo.LightSceneTimingRespVO">
+            SELECT
+                t.id,
+                t.switch_flag,
+                t.skip_holiday_flag,
+                t.time,
+                a.NAME
+            FROM
+                light_scene_timing t
+                INNER JOIN t_light_attribute a ON a.id = t.attribute_id
+            WHERE
+                t.area_id = 1
+    </select>
+    <select id="getListExecuteByTime" resultType="com.landleaf.ibsaas.common.domain.light.SceneTimingDTO">
+       SELECT
+            t.id,
+            t.skip_holiday_flag,
+            d.adress,
+            a.CODE,
+            ad.floor
+        FROM
+            light_scene_timing t
+            INNER JOIN t_light_device d ON d.id = t.attribute_id
+            INNER JOIN t_light_attribute a ON a.id = t.attribute_id
+            inner join t_light_area_device ad on ad.device_id = d.id
+        WHERE
+            t.switch_flag = 1
+            AND t.time = #{time}
+    </select>
+</mapper>

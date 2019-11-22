@@ -1,7 +1,7 @@
 package com.landleaf.ibsaas.web.web.controller.light;
 
 import com.google.common.collect.Lists;
-import com.landleaf.ibsaas.common.constant.RedisConstants;
+import com.landleaf.ibsaas.common.constant.LightConstants;
 import com.landleaf.ibsaas.common.domain.ChoiceButton;
 import com.landleaf.ibsaas.common.domain.Response;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
@@ -59,10 +59,7 @@ public class LightController extends BasicController {
     @GetMapping("/getAreaListByFloor/{id}")
     @ApiOperation(value = "根据楼层获取灯光管理信息（包含属性）", notes = "根据楼层获取灯光位置信息")
     public Response<TLightPositionResponseVO> getAreaListByFloor(@PathVariable("id") Long id) {
-        long start = System.currentTimeMillis();
         List<TLightAreaResponseVO> data = itLightAreaDeviceService.getPositionAtrributeListByFloor(id);
-        long t = System.currentTimeMillis() - start;
-        System.out.println("###########################################################################################"+t);
         return returnSuccess(data);
     }
 
@@ -76,9 +73,9 @@ public class LightController extends BasicController {
         int floor = requestVO.getFloorId();
         String key = "";
         if (floor == 3){
-            key =  RedisConstants.LIGHT_DEVICE_3F;
+            key =  LightConstants.LIGHT_DEVICE_3F;
         }else if (floor == 4){
-            key =  RedisConstants.LIGHT_DEVICE_4F;
+            key =  LightConstants.LIGHT_DEVICE_4F;
         }
         String state = redisHandle.getMapField(key,requestVO.getAdress());
         if (StringUtil.isBlank(state)){

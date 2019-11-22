@@ -2,7 +2,7 @@ package com.landleaf.ibsaas.web.web.service.light.impl;
 
 
 import com.google.common.collect.Lists;
-import com.landleaf.ibsaas.common.constant.RedisConstants;
+import com.landleaf.ibsaas.common.constant.LightConstants;
 import com.landleaf.ibsaas.common.dao.light.TLightAreaDeviceDao;
 import com.landleaf.ibsaas.common.dao.light.TLightAttributeDao;
 import com.landleaf.ibsaas.common.dao.light.TLightDeviceDao;
@@ -68,9 +68,13 @@ public class TLightAreaDeviceService extends AbstractBaseService<TLightAreaDevic
         Map<Long, List<LightProductAttributeVO>> data = tLightAttributes.stream().collect(Collectors.groupingBy(LightProductAttributeVO::getProductId));
         String key = "";
         if (id == 3L){
-            key =  RedisConstants.LIGHT_DEVICE_3F;
+            key =  LightConstants.LIGHT_DEVICE_3F;
         }else if (id == 4L){
-            key =  RedisConstants.LIGHT_DEVICE_4F;
+            key =  LightConstants.LIGHT_DEVICE_4F;
+        }else if (id == 1L){
+            key =  LightConstants.LIGHT_DEVICE_1F;
+        }else{
+            key =  LightConstants.LIGHT_DEVICE_2F;
         }
         Boolean exsitKey = StringUtil.isNotEmpty(key);
         String finalKey = key;

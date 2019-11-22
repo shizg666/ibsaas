@@ -161,3 +161,15 @@ bacnet:
 
 light:
   control: false
+
+
+logging:
+  level:
+    com:
+      landleaf:
+        ibsaas:
+          common:
+            dao:
+              light: debug
+
+

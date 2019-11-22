@@ -2,10 +2,8 @@ package com.landleaf.ibsaas.common.domain.light.message;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 
@@ -13,7 +11,12 @@ import java.io.Serializable;
  * 灯光控制DTO
  */
 @ApiModel(description = "灯光控制消息实体")
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
+@Data
+@Accessors(chain = true)
+@Builder
 public class LightMsg implements Serializable {
 
     @ApiModelProperty(value = "楼层")
