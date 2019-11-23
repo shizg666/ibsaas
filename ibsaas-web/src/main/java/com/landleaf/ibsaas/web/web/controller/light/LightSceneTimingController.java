@@ -45,6 +45,22 @@ public class LightSceneTimingController extends BasicController {
         return returnSuccess();
     }
 
+    @ApiOperation(value = "定时删除", notes = "添加或者修改灯光产品信息")
+    @PostMapping(value = "/delete/{id}")
+    public Response delete(@PathVariable("id") Long id){
+        iLightSceneTimingService.deleteTime(id);
+        return returnSuccess();
+    }
+
+
+    @ApiOperation(value = "定时修改", notes = "添加或者修改灯光产品信息")
+    @PostMapping(value = "/update")
+    public Response update(@RequestBody LightSceneTimingReqVO reqVO){
+        iLightSceneTimingService.update(reqVO);
+        return returnSuccess();
+    }
+
+
     @GetMapping(value = "/get-list/{areaId}")
     public Response<List<LightSceneTimingRespVO>> getListAreaTime(@PathVariable("areaId") Long areaId){
         List<LightSceneTimingRespVO> data = iLightSceneTimingService.getListAreaTime(areaId);

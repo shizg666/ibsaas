@@ -21,7 +21,7 @@ public class LightSceneTiming{
 
     private Long id;
 
-    @ApiModelProperty(value = "区域id")
+    @ApiModelProperty(value = "设备id")
     private Long deviceId;
 
     @ApiModelProperty(value = "t_light_attribute (场景id)")

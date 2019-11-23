@@ -1,23 +1,29 @@
 package com.landleaf.ibsaas.web.web.service.light.impl;
 
 import com.landleaf.ibsaas.common.dao.light.LightSceneTimingDao;
+import com.landleaf.ibsaas.common.domain.leo.User;
 import com.landleaf.ibsaas.common.domain.light.LightSceneTiming;
 import com.landleaf.ibsaas.common.domain.light.SceneTimingDTO;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
 import com.landleaf.ibsaas.common.domain.light.vo.LightSceneTimingReqVO;
 import com.landleaf.ibsaas.common.domain.light.vo.LightSceneTimingRespVO;
 import com.landleaf.ibsaas.common.domain.light.vo.LightTimingSwitchReqVO;
+import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import com.landleaf.ibsaas.web.web.cache.redis.constant.RedisConstants;
+import com.landleaf.ibsaas.web.web.constant.IbsaasWebConstants;
 import com.landleaf.ibsaas.web.web.service.light.ILightSceneTimingService;
 import com.landleaf.ibsaas.web.web.service.light.ILightService;
 import com.landleaf.ibsaas.web.web.service.light.IVacationSettingService;
+import net.bytebuddy.implementation.bytecode.Throw;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +53,18 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
 
     @Override
     public void addAreaTime(LightSceneTimingReqVO reqVO) {
+
+
+        Example example = new Example(LightSceneTiming.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andCondition("time=", reqVO.getTime());
+        criteria.andCondition("device_id=", reqVO.getDeviceId());
+        //渲染选择器使用
+        int count = lightSceneTimingDao.selectCountByExample(example);
+        if (count > 0){
+            throw new BusinessException("该时刻以设置场景！");
+        }
+
         LightSceneTiming lightSceneTiming = new LightSceneTiming();
         BeanUtils.copyProperties(reqVO,lightSceneTiming);
         lightSceneTiming.setCt(now());
@@ -99,6 +117,20 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
 //            LightMsg request =LightMsg.builder().device(o.getAddress()).value(o.getCode()).floor(o.getFloor()).type("2");
 //            iLightService.controlLight();
         });
+    }
+
+    @Override
+    public void deleteTime(Long id) {
+        lightSceneTimingDao.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public void update(LightSceneTimingReqVO reqVO) {
+        LightSceneTiming lightSceneTiming = new LightSceneTiming();
+        BeanUtils.copyProperties(reqVO,lightSceneTiming);
+        lightSceneTiming.setUt(now());
+        lightSceneTimingDao.updateByPrimaryKey(lightSceneTiming);
+
     }
 
 

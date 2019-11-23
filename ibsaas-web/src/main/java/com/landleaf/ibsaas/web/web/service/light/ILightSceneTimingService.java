@@ -25,4 +25,8 @@ public interface ILightSceneTimingService<T> {
     List<LightSceneTimingRespVO> getListAreaTime(Long areaId);
 
     void executeTime(LocalDateTime nowDate);
+
+    void deleteTime(Long id);
+
+    void update(LightSceneTimingReqVO reqVO);
 }
