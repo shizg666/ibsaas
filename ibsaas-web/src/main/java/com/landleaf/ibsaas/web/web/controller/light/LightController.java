@@ -76,6 +76,10 @@ public class LightController extends BasicController {
             key =  LightConstants.LIGHT_DEVICE_3F;
         }else if (floor == 4){
             key =  LightConstants.LIGHT_DEVICE_4F;
+        } else if (floor == 2){
+            key =  LightConstants.LIGHT_DEVICE_2F;
+        }else {
+            key =  LightConstants.LIGHT_DEVICE_1F;
         }
         String state = redisHandle.getMapField(key,requestVO.getAdress());
         if (StringUtil.isBlank(state)){

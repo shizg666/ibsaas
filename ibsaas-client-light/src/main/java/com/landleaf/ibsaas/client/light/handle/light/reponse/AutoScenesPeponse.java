@@ -41,7 +41,7 @@ public class AutoScenesPeponse implements LightResponse{
             if(gIndex > 0){
                 region = message.substring(rIndex+1,gIndex);
             }else if (bIndex > 0){
-                region = message.substring(rIndex+1,gIndex);
+                region = message.substring(rIndex+1,bIndex);
             }else if (tIndex > 0){
                 region = message.substring(rIndex+1,tIndex);
             }

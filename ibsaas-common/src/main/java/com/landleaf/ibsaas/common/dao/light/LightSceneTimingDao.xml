@@ -2,6 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.landleaf.ibsaas.common.dao.light.LightSceneTimingDao">
 
+    <update id="updateById">
+        UPDATE light_scene_timing
+
+        <set>
+            <if test="deviceId != null">
+                device_id = #{deviceId,jdbcType=INTEGER},
+            </if>
+            <if test="attributeId != null and attributeId != '' ">
+                attribute_id = #{attributeId,jdbcType=INTEGER},
+            </if>
+            <if test="time != null ">
+                time = #{time},
+            </if>
+            <if test="skipHolidayFlag != null ">
+                skip_holiday_flag = #{skipHolidayFlag,jdbcType=INTEGER},
+            </if>
+            <if test="switchFlag != null">
+                switch_flag = #{switchFlag,jdbcType=INTEGER},
+            </if>
+            <if test="ct != null ">
+                ct = #{ct},
+            </if>
+            <if test="ut != null ">
+                ut = #{ut},
+            </if>
+
+        </set>
+            WHERE
+                id = #{id}
+    </update>
+
+    <delete id="deleteById">
+         delete from light_scene_timing
+    where id = #{id,jdbcType=BIGINT}
+    </delete>
+
     <select id="getListAreaTime"
             resultType="com.landleaf.ibsaas.common.domain.light.vo.LightSceneTimingRespVO">
             SELECT
@@ -9,13 +45,15 @@
                 t.switch_flag,
                 t.skip_holiday_flag,
                 t.time,
-                a.NAME
+                a.NAME,
+                a.code
             FROM
                 light_scene_timing t
                 INNER JOIN t_light_attribute a ON a.id = t.attribute_id
             WHERE
-                t.area_id = 1
+                t.device_id = #{deviceId}
     </select>
+
     <select id="getListExecuteByTime" resultType="com.landleaf.ibsaas.common.domain.light.SceneTimingDTO">
        SELECT
             t.id,
@@ -31,5 +69,19 @@
         WHERE
             t.switch_flag = 1
             AND t.time = #{time}
+    </select>
+
+
+    <select id="getSceneListByDevice" resultType="com.landleaf.ibsaas.common.domain.light.SelectedVo">
+        SELECT
+            a.id as value,
+            a.NAME as label
+        FROM
+            t_light_device d
+            INNER JOIN t_light_product p ON d.product_id = p.id
+            INNER JOIN t_light_type_attribute ta ON ta.type_id = p.type_id
+            INNER JOIN t_light_attribute a ON ta.attribute_id = a.id
+        WHERE
+	d.id = #{deviceId}
     </select>
 </mapper>

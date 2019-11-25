@@ -4,6 +4,7 @@ import com.landleaf.ibsaas.common.dao.light.LightSceneTimingDao;
 import com.landleaf.ibsaas.common.domain.leo.User;
 import com.landleaf.ibsaas.common.domain.light.LightSceneTiming;
 import com.landleaf.ibsaas.common.domain.light.SceneTimingDTO;
+import com.landleaf.ibsaas.common.domain.light.SelectedVo;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
 import com.landleaf.ibsaas.common.domain.light.vo.LightSceneTimingReqVO;
 import com.landleaf.ibsaas.common.domain.light.vo.LightSceneTimingRespVO;
@@ -16,6 +17,7 @@ import com.landleaf.ibsaas.web.web.constant.IbsaasWebConstants;
 import com.landleaf.ibsaas.web.web.service.light.ILightSceneTimingService;
 import com.landleaf.ibsaas.web.web.service.light.ILightService;
 import com.landleaf.ibsaas.web.web.service.light.IVacationSettingService;
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.implementation.bytecode.Throw;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +29,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 import static java.time.LocalDateTime.now;
@@ -40,6 +43,7 @@ import static java.time.LocalDateTime.now;
  * @since 2019-11-21
  */
 @Service
+@Slf4j
 public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneTimingDao, LightSceneTiming> implements ILightSceneTimingService<LightSceneTiming> {
 
     @Autowired
@@ -67,7 +71,9 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
 
         LightSceneTiming lightSceneTiming = new LightSceneTiming();
         BeanUtils.copyProperties(reqVO,lightSceneTiming);
-        lightSceneTiming.setCt(now());
+        Date date = new Date();
+        lightSceneTiming.setCt(date);
+        lightSceneTiming.setSwitchFlag(1);
         lightSceneTimingDao.insert(lightSceneTiming);
     }
 
@@ -75,19 +81,25 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
     public void timeSwitch(LightTimingSwitchReqVO reqVO) {
         LightSceneTiming lightSceneTiming = new LightSceneTiming();
         BeanUtils.copyProperties(reqVO,lightSceneTiming);
-        lightSceneTiming.setUt(now());
-        lightSceneTimingDao.updateByPrimaryKey(lightSceneTiming);
+        Date date = new Date();
+        lightSceneTiming.setUt(date);
+        lightSceneTimingDao.updateById(lightSceneTiming);
     }
 
     @Override
-    public List<LightSceneTimingRespVO> getListAreaTime(Long areaId) {
-        List<LightSceneTimingRespVO> data = lightSceneTimingDao.getListAreaTime(areaId);
+    public List<LightSceneTimingRespVO> getListAreaTime(Long deviceId) {
+        List<LightSceneTimingRespVO> data = lightSceneTimingDao.getListAreaTime(deviceId);
         return data;
     }
 
     @Override
     @Async("energyDataToRedisThreadPool")
     public void executeTime(LocalDateTime date) {
+
+        String s = "2019-11-24 10:10:10";
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(s,dateTimeFormatter);
+        int day2 = dateTime.getDayOfWeek().getValue();
 
         String day1 = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         //当天日期标识  正常日期-0  节假日（包括周末（法定节假日）-1 补班日2
@@ -114,23 +126,31 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
             if ("1".equals(o.getSkipHolidayFlag()) && finalSpecialFlag ==1){
                 return;
             }
-//            LightMsg request =LightMsg.builder().device(o.getAddress()).value(o.getCode()).floor(o.getFloor()).type("2");
-//            iLightService.controlLight();
+            LightMsg request =LightMsg.builder().device(o.getAddress()).value(o.getCode()).floor(o.getFloor()).type("1").build();
+            log.info("*************************定时开始，操作楼层:{},区域：{},场景：{}",request.getFloor(),request.getAdress(),request.getValue());
+//            iLightService.controlLight(request);
         });
     }
 
     @Override
     public void deleteTime(Long id) {
-        lightSceneTimingDao.deleteByPrimaryKey(id);
+        lightSceneTimingDao.deleteById(id);
     }
 
     @Override
     public void update(LightSceneTimingReqVO reqVO) {
         LightSceneTiming lightSceneTiming = new LightSceneTiming();
         BeanUtils.copyProperties(reqVO,lightSceneTiming);
-        lightSceneTiming.setUt(now());
-        lightSceneTimingDao.updateByPrimaryKey(lightSceneTiming);
+        Date date = new Date();
+        lightSceneTiming.setUt(date);
+        updateByPrimaryKeySelective(lightSceneTiming);
+        lightSceneTimingDao.updateById(lightSceneTiming);
+    }
 
+    @Override
+    public List<SelectedVo> getSceneListByDevice(Long deviceId) {
+        List<SelectedVo> selectedVos = lightSceneTimingDao.getSceneListByDevice(deviceId);
+        return selectedVos;
     }
 
 

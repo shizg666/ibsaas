@@ -3,6 +3,8 @@ package com.landleaf.ibsaas.common.domain.light;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
@@ -19,6 +21,8 @@ import java.util.Date;
 public class LightSceneTiming{
 
 
+    @Id
+    @GeneratedValue(generator = "JDBC")
     private Long id;
 
     @ApiModelProperty(value = "设备id")
@@ -36,9 +40,9 @@ public class LightSceneTiming{
     @ApiModelProperty(value = "0 否 1是")
     private Integer skipHolidayFlag;
 
-    private LocalDateTime ct;
+    private Date ct;
 
-    private LocalDateTime ut;
+    private Date ut;
 
 
 }

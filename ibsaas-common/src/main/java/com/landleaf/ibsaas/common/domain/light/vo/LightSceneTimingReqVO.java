@@ -23,6 +23,9 @@ import java.util.Date;
 @ToString
 public class LightSceneTimingReqVO {
 
+    @ApiModelProperty(value = "主键Id(修改毕传)")
+    private Long id;
+
     @ApiModelProperty(value = "设备id")
     private Long deviceId;
 
@@ -35,5 +38,8 @@ public class LightSceneTimingReqVO {
 
     @ApiModelProperty(value = "0 否 1是")
     private Integer skipHolidayFlag;
+
+    @ApiModelProperty(value = "0 关 1 开")
+    private Integer switchFlag;
 
 }

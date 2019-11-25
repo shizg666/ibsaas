@@ -33,7 +33,7 @@ public class VacationSettingServiceImpl extends AbstractBaseService<VacationSett
         VacationSetting vacationSetting = vacationSettingDao.getSpecialFlag(day);
         if (vacationSetting == null){
             int dayOfWeek = date.getDayOfWeek().getValue();
-            if (dayOfWeek == 0 || dayOfWeek == 6){
+            if (dayOfWeek == 7 || dayOfWeek == 6){
                 return 1;
             }
             return 0;

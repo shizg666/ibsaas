@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.web.web.controller.light;
 
 
 import com.landleaf.ibsaas.common.domain.Response;
+import com.landleaf.ibsaas.common.domain.light.SelectedVo;
 import com.landleaf.ibsaas.common.domain.light.vo.LightSceneTimingReqVO;
 import com.landleaf.ibsaas.common.domain.light.vo.LightSceneTimingRespVO;
 import com.landleaf.ibsaas.common.domain.light.vo.LightTimingSwitchReqVO;
@@ -61,9 +62,16 @@ public class LightSceneTimingController extends BasicController {
     }
 
 
-    @GetMapping(value = "/get-list/{areaId}")
-    public Response<List<LightSceneTimingRespVO>> getListAreaTime(@PathVariable("areaId") Long areaId){
-        List<LightSceneTimingRespVO> data = iLightSceneTimingService.getListAreaTime(areaId);
+    @GetMapping(value = "/get-list/{deviceId}")
+    public Response<List<LightSceneTimingRespVO>> getListAreaTime(@PathVariable("deviceId") Long deviceId){
+        List<LightSceneTimingRespVO> data = iLightSceneTimingService.getListAreaTime(deviceId);
+        return returnSuccess(data);
+    }
+
+
+    @GetMapping(value = "/get-slist-scene/{deviceId}")
+    public Response<SelectedVo> getSceneListByDevice(@PathVariable("deviceId") Long deviceId){
+        List<SelectedVo> data = iLightSceneTimingService.getSceneListByDevice(deviceId);
         return returnSuccess(data);
     }
 
