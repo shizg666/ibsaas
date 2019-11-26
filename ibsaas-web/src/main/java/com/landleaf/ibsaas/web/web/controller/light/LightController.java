@@ -59,10 +59,7 @@ public class LightController extends BasicController {
     @GetMapping("/getAreaListByFloor/{id}")
     @ApiOperation(value = "根据楼层获取灯光管理信息（包含属性）", notes = "根据楼层获取灯光位置信息")
     public Response<TLightPositionResponseVO> getAreaListByFloor(@PathVariable("id") Long id) {
-        long start = System.currentTimeMillis();
         List<TLightAreaResponseVO> data = itLightAreaDeviceService.getPositionAtrributeListByFloor(id);
-        long t = System.currentTimeMillis() - start;
-        System.out.println("###########################################################################################"+t);
         return returnSuccess(data);
     }
 
@@ -79,6 +76,10 @@ public class LightController extends BasicController {
             key =  LightConstants.LIGHT_DEVICE_3F;
         }else if (floor == 4){
             key =  LightConstants.LIGHT_DEVICE_4F;
+        }else if (floor == 2){
+            key =  LightConstants.LIGHT_DEVICE_2F;
+        }else{
+            key =  LightConstants.LIGHT_DEVICE_1F;
         }
         String state = redisHandle.getMapField(key,requestVO.getAdress());
         if (StringUtil.isBlank(state)){

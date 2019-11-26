@@ -71,6 +71,10 @@ public class TLightAreaDeviceService extends AbstractBaseService<TLightAreaDevic
             key =  LightConstants.LIGHT_DEVICE_3F;
         }else if (id == 4L){
             key =  LightConstants.LIGHT_DEVICE_4F;
+        }else if (id == 2L){
+            key =  LightConstants.LIGHT_DEVICE_2F;
+        }else {
+            key =  LightConstants.LIGHT_DEVICE_1F;
         }
         Boolean exsitKey = StringUtil.isNotEmpty(key);
         String finalKey = key;
