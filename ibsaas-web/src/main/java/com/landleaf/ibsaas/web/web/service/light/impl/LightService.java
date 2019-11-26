@@ -10,6 +10,7 @@ import com.landleaf.ibsaas.web.rocketmq.WebMqProducer;
 import com.landleaf.ibsaas.web.web.service.light.ILightService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,12 +21,14 @@ public class LightService implements ILightService {
     private WebMqProducer webMqProducer;
     @Autowired
     private RedisHandle redisHandle;
+    @Value("${rocketmq.producer.client.light.topic}")
+    private String CLIENT_TOPIC;
 
 
     @Override
     public void controlLight(LightMsg requestBody) {
         webMqProducer.sendMessage(JSONUtil.toJsonStr(requestBody),
-                TopicConstants.TOPIC_LIGHT_CONTROL,
+                CLIENT_TOPIC,
                 TagConstants.TAGS_DEFAULT);
     }
 

@@ -83,7 +83,7 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
       - name: master
-        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://40.73.246.184:3306/ibassa_dev?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
         password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
@@ -101,7 +101,7 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
       - name: slave
-        url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://40.73.246.184:3306/ibassa_dev?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
         password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
@@ -154,6 +154,8 @@ rocketmq:
       parking:
         topic: ibsaas_parking_lifang_lgc_1921681010_test_local
         response-time-out: 20000
+      light:
+        topic: topic_light_control_test
   consumer:
     enable: true
     groupName: ibsaas_response_test_local

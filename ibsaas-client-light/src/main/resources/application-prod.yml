@@ -121,6 +121,9 @@ rocketmq:
     namesrvAddr: 40.73.246.184:9876
     #灯光
     topics: topic_light_control-*
+    client:
+      light:
+        topic: topic_light_control
     consumeThreadMin: 16
     consumeThreadMax: 32
     consumeMessageBatchMaxSize: 10

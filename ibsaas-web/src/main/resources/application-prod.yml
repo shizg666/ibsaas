@@ -145,6 +145,8 @@ rocketmq:
       parking:
         topic: ibsaas_parking_lifang_lgc_1921681010
         response-time-out: 20000
+      light:
+        topic: topic_light_control
   consumer:
     enable: true
     groupName: ibsaas_response

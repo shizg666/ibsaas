@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class LightSceneTimingController extends BasicController {
 
     @ApiOperation(value = "添加区域定时", notes = "")
     @PostMapping(value = "/add")
-    public Response addAreaTime(@RequestBody LightSceneTimingReqVO reqVO){
+    public Response addAreaTime(@RequestBody @Valid LightSceneTimingReqVO reqVO){
         iLightSceneTimingService.addAreaTime(reqVO);
         return returnSuccess();
     }

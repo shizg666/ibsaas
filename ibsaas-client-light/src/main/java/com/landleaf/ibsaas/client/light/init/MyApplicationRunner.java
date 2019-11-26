@@ -34,7 +34,6 @@ public class MyApplicationRunner implements CommandLineRunner {
 //        List<TLightDevice> tLightDeviceList = itLightDeviceService.getDeviceList();
         List<LightDeviceFloorVO> tLightDeviceList = itLightDeviceService.deviceAutoMonitor();
         tLightDeviceList.forEach(obj->{
-            System.out.println(obj.toString());
             LightMsg lightMsg = new LightMsg();
             lightMsg.setAdress(obj.getAdress());
             lightMsg.setValue("1");
