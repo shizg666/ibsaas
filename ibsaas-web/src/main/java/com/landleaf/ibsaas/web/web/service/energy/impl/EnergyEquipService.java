@@ -7,6 +7,7 @@ import com.landleaf.ibsaas.common.constant.IbsaasConstant;
 import com.landleaf.ibsaas.common.dao.energy.EnergyEquipDao;
 import com.landleaf.ibsaas.common.dao.energy.EnergyEquipVerifyDao;
 import com.landleaf.ibsaas.common.dao.hvac.HvacNodeDao;
+import com.landleaf.ibsaas.common.dao.hvac.modbus.MbNodeDao;
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquip;
 import com.landleaf.ibsaas.common.domain.energy.EnergyEquipVerify;
 import com.landleaf.ibsaas.common.domain.energy.dto.EnergyEquipDTO;
@@ -17,6 +18,7 @@ import com.landleaf.ibsaas.common.domain.energy.vo.NodeChoiceVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.WaterMeterVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
+import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
@@ -63,6 +65,9 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
     private HvacNodeDao hvacNodeDao;
 
     @Autowired
+    private MbNodeDao mbNodeDao;
+
+    @Autowired
     private WebDaoAdapter<EnergyEquip> webDaoAdapter;
     @Autowired
     private WebDaoAdapter<EnergyEquipVerify> webDaoAdapterVerify;
@@ -99,7 +104,7 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
         List<EnergyEquipSearchVO> energyEquipSearchVOList = energyEquipDao.getEnergyEquipSearchVO(energyEquipSearchDTO);
         //从redis获取电水表数据
         List<WaterMeterVO> waterMeterVOList = redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.WATER_METER.getDeviceType()));
-        List<ElectricMeterVO> electricMeterVOList = redisHandle.getMapField(placeId, String.valueOf(BacnetDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
+        List<ElectricMeterVO> electricMeterVOList = redisHandle.getMapField(placeId, String.valueOf(ModbusDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
         Map<String, BigDecimal> map = waterMeterVOList.stream().collect(Collectors.toMap(WaterMeterVO::getId, wm -> new BigDecimal(wm.getWmReading())));
         Map<String, BigDecimal> temp = electricMeterVOList.stream().collect(Collectors.toMap(ElectricMeterVO::getId, em -> new BigDecimal(em.getEmReading())));
         map.putAll(temp);
@@ -168,7 +173,7 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
     @Override
     public NodeChoiceVO nodes() {
         NodeChoiceVO result = new NodeChoiceVO();
-        result.setElectricNodes(hvacNodeDao.getHvacNodeByDeviceTypeWithoutEquip(BacnetDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
+        result.setElectricNodes(mbNodeDao.getMbNodeByDeviceTypeWithoutEquip(ModbusDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
         result.setWaterNodes(hvacNodeDao.getHvacNodeByDeviceTypeWithoutEquip(BacnetDeviceTypeEnum.WATER_METER.getDeviceType()));
         return result;
     }
@@ -176,7 +181,7 @@ public class EnergyEquipService extends AbstractBaseService<EnergyEquipDao, Ener
     @Override
     public NodeChoiceVO nodesEx() {
         NodeChoiceVO result = new NodeChoiceVO();
-        result.setElectricNodes(hvacNodeDao.getHvacNodeByDeviceType(BacnetDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
+        result.setElectricNodes(mbNodeDao.getMbNodeByDeviceType(ModbusDeviceTypeEnum.ELECTRIC_METER.getDeviceType()));
         result.setWaterNodes(hvacNodeDao.getHvacNodeByDeviceType(BacnetDeviceTypeEnum.WATER_METER.getDeviceType()));
         return result;
     }

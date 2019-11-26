@@ -25,6 +25,9 @@ public interface ICommonDeviceService {
      */
     List<? extends BaseDevice> getCurrentData(Integer deviceType);
 
+
+    List<? extends BaseDevice> getMbCurrentData(Integer deviceType);
+
     /**
      * 当前输入入redis库
      */

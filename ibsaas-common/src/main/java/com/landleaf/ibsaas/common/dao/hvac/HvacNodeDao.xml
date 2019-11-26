@@ -127,7 +127,7 @@
         FROM t_hvac_node thn
         WHERE thn.is_active=1
         <if test="deviceType!=null">
-            AND thd.device_type=#{deviceType}
+            AND thn.device_type=#{deviceType}
         </if>
     </select>
 
@@ -138,7 +138,7 @@
         LEFT JOIN t_energy_equip tee ON thn.id=tee.node_id AND tee.is_active=1
         WHERE thn.is_active=1
         <if test="deviceType!=null">
-            AND thd.device_type=#{deviceType}
+            AND thn.device_type=#{deviceType}
         </if>
         AND tee.id IS NULL
     </select>

@@ -24,7 +24,7 @@ public enum  BacnetDeviceTypeEnum {
 
     WATER_METER(5, "水表", "com.landleaf.ibsaas.common.domain.hvac.vo.WaterMeterVO"),
 
-    ELECTRIC_METER(6, "电表", "com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO"),
+//    ELECTRIC_METER(6, "电表", "com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO"),
 
 //    SENSOR(7, "多参数传感器", "com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO"),
 

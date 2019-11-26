@@ -240,7 +240,7 @@ public class CommonAsyncService {
 
 
 
-    private List<? extends BaseDevice> getMbCurrentData(Integer mbType) {
+    public List<? extends BaseDevice> getMbCurrentData(Integer mbType) {
         List<MbRegisterDetail> mbRegisterDetails = MbRegisterHolder.MASTER_POINT_LIST_MAP.get(mbType);
         Map<String, List<MbRegisterDetail>> mbNodeMap = MbRegisterHolder.MASTER_POINT_MAP.get(mbType);
         Map<String, BatchResults<String>> results  = getBatchResults(mbRegisterDetails);

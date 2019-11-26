@@ -11,6 +11,7 @@ import com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.WaterMeterVO;
 import com.landleaf.ibsaas.common.enums.energy.EnergyTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
+import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
 
     @Override
     public List<EnergyData> electricDataRecord(Date date) {
-        List<ElectricMeterVO> electricMeterVOList = (List<ElectricMeterVO>) iCommonDeviceService.getCurrentData(BacnetDeviceTypeEnum.ELECTRIC_METER.getDeviceType());
+        List<ElectricMeterVO> electricMeterVOList = (List<ElectricMeterVO>) iCommonDeviceService.getMbCurrentData(ModbusDeviceTypeEnum.ELECTRIC_METER.getDeviceType());
         List<EnergyData> energyDataElectrics = energyDataDao.getRecentlyEnergyData(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType());
         List<EnergyData> result = new ArrayList<>();
         Map<String, BigDecimal> map = energyDataElectrics.stream().collect(Collectors.toMap(EnergyData::getNodeId, EnergyData::getEnergyDataValue));
