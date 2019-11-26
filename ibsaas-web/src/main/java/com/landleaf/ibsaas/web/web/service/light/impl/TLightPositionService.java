@@ -120,9 +120,9 @@ public class TLightPositionService extends AbstractBaseService<TLightPositionDao
 //        TFloor tFloor = floorCommonService.getFloorById(id);
 //        String key = "";
 //        if (tFloor.getFloor() == 3){
-//            key =  RedisConstants.LIGHT_DEVICE_3F;
+//            key =  LightConstants.LIGHT_DEVICE_3F;
 //        }else if (tFloor.getFloor() == 4){
-//            key =  RedisConstants.LIGHT_DEVICE_3F;
+//            key =  LightConstants.LIGHT_DEVICE_3F;
 //        }
 //        Boolean exsitKey = StringUtil.isNotEmpty(key);
 //        String finalKey = key;

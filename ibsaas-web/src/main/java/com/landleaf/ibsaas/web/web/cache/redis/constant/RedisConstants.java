@@ -1,5 +1,7 @@
 package com.landleaf.ibsaas.web.web.cache.redis.constant;
 
+import com.landleaf.ibsaas.common.utils.date.DateUtils;
+
 import java.io.Serializable;
 
 /**
@@ -9,6 +11,13 @@ import java.io.Serializable;
  * @version 1.0
 */
 public class RedisConstants implements Serializable {
+
+
+
+    /**
+     * 日期信息缓存
+     */
+    public static final String DAY_INFO = "day_info_";
 
     /**
      * 只读缓存初始化标示的统一前缀
