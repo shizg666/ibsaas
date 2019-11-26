@@ -27,6 +27,9 @@ public class VacationSettingServiceImpl extends AbstractBaseService<VacationSett
     private VacationSettingDao vacationSettingDao;
 
     @Override
+    /**
+     * 正常日期-0  节假日（包括周末（法定节假日）-1 补班日2
+     */
     public Integer getSpecialFlag(LocalDateTime date) {
         String day = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 //        Date day = LocalAndDateUtil.localDateTime2Date(date);

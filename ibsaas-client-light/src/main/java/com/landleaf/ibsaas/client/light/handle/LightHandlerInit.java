@@ -17,7 +17,6 @@ import java.util.Map;
 @Component
 public class LightHandlerInit implements BeanFactoryPostProcessor {
     private static final String HANDLER_PACKAGE = "com.landleaf.ibsaas.client.light.handle.light";
-    private static final String REPONSE_HANDLER_PACKAGE = "com.landleaf.ibsaas.client.light.handle.light.reponse";
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
         Map<String,Class> handlerMap = Maps.newHashMap();

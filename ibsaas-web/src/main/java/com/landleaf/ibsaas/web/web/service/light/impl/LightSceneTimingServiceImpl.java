@@ -51,8 +51,6 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
     @Autowired
     private IVacationSettingService iVacationSettingService;
     @Autowired
-    private ILightService iLightService;
-    @Autowired
     private RedisHandle redisHandle;
 
     @Override
@@ -95,12 +93,6 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
     @Override
     @Async("energyDataToRedisThreadPool")
     public void executeTime(LocalDateTime date) {
-
-        String s = "2019-11-24 10:10:10";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(s,dateTimeFormatter);
-        int day2 = dateTime.getDayOfWeek().getValue();
-
         String day1 = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         //当天日期标识  正常日期-0  节假日（包括周末（法定节假日）-1 补班日2
         String key = RedisConstants.DAY_INFO.concat(day1);

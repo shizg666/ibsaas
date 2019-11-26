@@ -10,8 +10,8 @@ import java.util.Map;
  * 服务器信息
  */
 public enum HostAdressEnum {
-	HOST_1F("1F","192.168.10.173","4196", LightConstants.LIGHT_DEVICE_1F),
-	HOST_2F("2F","192.168.10.173","4196", LightConstants.LIGHT_DEVICE_2F),
+	HOST_1F("1F","192.168.10.174","4196", LightConstants.LIGHT_DEVICE_1F),
+	HOST_2F("2F","192.168.10.175","4196", LightConstants.LIGHT_DEVICE_2F),
 	HOST_3F("3F","192.168.10.173","4196", LightConstants.LIGHT_DEVICE_3F),
 	HOST_4F("4F","192.168.10.170","4196", LightConstants.LIGHT_DEVICE_4F)
 	;
