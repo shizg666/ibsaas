@@ -80,6 +80,10 @@ public class CommonDeviceService implements ICommonDeviceService {
         return commonAsyncService.getCurrentData(deviceType);
     }
 
+    @Override
+    public List<? extends BaseDevice> getMbCurrentData(Integer deviceType) {
+        return commonAsyncService.getMbCurrentData(deviceType);
+    }
 
 
     @Override

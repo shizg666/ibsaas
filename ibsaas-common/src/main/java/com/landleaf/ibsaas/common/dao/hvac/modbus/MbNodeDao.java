@@ -1,6 +1,8 @@
 package com.landleaf.ibsaas.common.dao.hvac.modbus;
 
 import com.landleaf.ibsaas.common.domain.hvac.modbus.MbNode;
+import com.landleaf.ibsaas.common.domain.hvac.vo.HvacNodeVO;
+import com.landleaf.ibsaas.common.domain.hvac.vo.MbNodeVO;
 import com.landleaf.ibsaas.datasource.mybatis.basedao.BaseDao;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,4 +34,8 @@ public interface MbNodeDao extends BaseDao<MbNode> {
      * @return
      */
     List<MbNode> getMbNodes(@Param("mbType") Integer mbType);
+
+    List<MbNodeVO> getMbNodeByDeviceType(@Param("deviceType") Integer deviceType);
+
+    List<MbNodeVO> getMbNodeByDeviceTypeWithoutEquip(@Param("deviceType") Integer deviceType);
 }
