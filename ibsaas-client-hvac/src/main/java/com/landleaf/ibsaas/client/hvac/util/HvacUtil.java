@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
 import com.landleaf.ibsaas.common.domain.hvac.assist.MbRegisterDetail;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HvacFieldVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
@@ -132,7 +133,8 @@ public class HvacUtil {
                 if(field.getName().equals(mr.getFieldName())){
                     Object value = results.get(mr.getMasterId()).getValue(mr.getRegisterId());
                     field.setAccessible(true);
-                    String v = dealModbusValue(mr.getFieldName(), value);
+                    String oriVal = dealModbusValue(mr.getFieldName(), value);
+                    String v = multiplyCoefficient(oriVal, mr.getCoefficient());
                     try {
                         field.set(target, v);
                     } catch (IllegalAccessException e) {
@@ -143,6 +145,22 @@ public class HvacUtil {
                 }
             }
         });
+    }
+
+    /**
+     * mb乘以返回系数
+     * @param oriVal
+     * @param coefficient
+     * @return
+     */
+    private static String multiplyCoefficient(String oriVal, String coefficient){
+        if(StringUtil.isBlank(coefficient) || "1".equals(coefficient)){
+            //无系数或系数为1时 直接返回
+            return oriVal;
+        }
+        BigDecimal ori = new BigDecimal(oriVal);
+        BigDecimal multiply = ori.multiply(new BigDecimal(coefficient));
+        return multiply.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
     }
 
     private static String dealModbusValue(String fieldName, Object o){

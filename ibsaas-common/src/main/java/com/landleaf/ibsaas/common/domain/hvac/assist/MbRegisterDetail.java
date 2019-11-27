@@ -57,4 +57,7 @@ public class MbRegisterDetail {
 
     @ApiModelProperty("mb数据类型")
     private Integer dataType;
+
+    @ApiModelProperty("取值系数")
+    private String coefficient;
 }
