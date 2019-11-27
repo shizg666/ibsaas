@@ -30,7 +30,7 @@ public class ComsumerMessageForParking extends AbstractMQMsgProcessor {
     protected MQConsumeResult consumeMessage(String tag, List<String> keys, MessageExt message) {
         LOGGER.info("消费【停车客户端】消息msgid:{}", message.getMsgId());
         try {
-            String topic = TopicConstants.TOPIC_KNIGHT;
+            String topic = TopicConstants.TOPIC_PARKING;
             String msgBody = new String(message.getBody(), "utf-8");
             LOGGER.info("收到【停车客户端】消息[topic:{}];[tag:{}];[消息:{}]", topic, tag, msgBody);
             //解析消息
