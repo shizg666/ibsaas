@@ -54,7 +54,7 @@ public class LightSceneTimingController extends BasicController {
     }
 
 
-    @ApiOperation(value = "定时修改", notes = "添加或者修改灯光产品信息")
+    @ApiOperation(value = "定时修改", notes = "")
     @PostMapping(value = "/update")
     public Response update(@RequestBody LightSceneTimingReqVO reqVO){
         iLightSceneTimingService.update(reqVO);
@@ -62,6 +62,7 @@ public class LightSceneTimingController extends BasicController {
     }
 
 
+    @ApiOperation(value = "定时列表", notes = "")
     @GetMapping(value = "/get-list/{deviceId}")
     public Response<List<LightSceneTimingRespVO>> getListAreaTime(@PathVariable("deviceId") Long deviceId){
         List<LightSceneTimingRespVO> data = iLightSceneTimingService.getListAreaTime(deviceId);
@@ -69,6 +70,7 @@ public class LightSceneTimingController extends BasicController {
     }
 
 
+    @ApiOperation(value = "场景列表", notes = "")
     @GetMapping(value = "/get-slist-scene/{deviceId}")
     public Response<SelectedVo> getSceneListByDevice(@PathVariable("deviceId") Long deviceId){
         List<SelectedVo> data = iLightSceneTimingService.getSceneListByDevice(deviceId);

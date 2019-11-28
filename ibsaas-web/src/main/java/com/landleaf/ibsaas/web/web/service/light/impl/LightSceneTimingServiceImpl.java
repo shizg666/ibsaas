@@ -93,7 +93,7 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
     }
 
     @Override
-    @Async("energyDataToRedisThreadPool")
+    @Async("lightTimeThreadPool")
     public void executeTime(LocalDateTime date) {
         String day1 = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         //当天日期标识  正常日期-0  节假日（包括周末（法定节假日）-1 补班日2

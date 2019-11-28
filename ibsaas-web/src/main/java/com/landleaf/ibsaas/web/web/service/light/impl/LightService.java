@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.web.web.service.light.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.landleaf.ibsaas.common.domain.light.message.LightMsg;
+import com.landleaf.ibsaas.common.domain.light.vo.LightStateRequestVO;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.rocketmq.TagConstants;
@@ -11,6 +12,7 @@ import com.landleaf.ibsaas.web.web.service.light.ILightService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +53,16 @@ public class LightService implements ILightService {
             return "0";
         }
         return "0";
+    }
+
+    @Override
+    @Async("lightTimeThreadPool")
+    public void getAsynLightState(LightStateRequestVO requestVO) {
+        LightMsg lightMsg = new LightMsg();
+        lightMsg.setAdress(requestVO.getAdress());
+        lightMsg.setFloor(String.valueOf(requestVO.getFloorId()));
+        lightMsg.setType("3");
+        this.controlLight(lightMsg);
     }
 
 

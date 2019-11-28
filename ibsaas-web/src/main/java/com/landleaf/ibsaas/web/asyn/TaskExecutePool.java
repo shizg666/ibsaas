@@ -70,7 +70,7 @@ public class TaskExecutePool {
     @Bean("lightTimeThreadPool")
     public ExecutorService lightTimeThreadPool() {
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
-                .setNameFormat("energyData-thread-pool-%d").build();
+                .setNameFormat("light-thread-pool-%d").build();
 
         //Common Thread Pool
         ExecutorService pool = new ThreadPoolExecutor(2, 3,

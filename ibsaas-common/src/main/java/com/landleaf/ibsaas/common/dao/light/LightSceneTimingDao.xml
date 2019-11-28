@@ -46,7 +46,8 @@
                 t.skip_holiday_flag,
                 t.time,
                 a.NAME,
-                a.code
+                a.code,
+                a.id as attributeId
             FROM
                 light_scene_timing t
                 INNER JOIN t_light_attribute a ON a.id = t.attribute_id
