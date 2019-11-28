@@ -42,6 +42,7 @@ public class NettyPoolClient {
                 return new FixedChannelPool(strap.remoteAddress(key), new NettyChannelPoolHandler(), 1);
             }
         };
+        //连接初始化
         InetSocketAddress host4 = new InetSocketAddress("192.168.10.170", 4196);
         InetSocketAddress host3 = new InetSocketAddress("192.168.10.173", 4196);
         InetSocketAddress host2 = new InetSocketAddress("192.168.10.175", 4196);

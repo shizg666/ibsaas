@@ -52,6 +52,8 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
     private IVacationSettingService iVacationSettingService;
     @Autowired
     private RedisHandle redisHandle;
+    @Autowired
+    private ILightService iLightService;
 
     @Override
     public void addAreaTime(LightSceneTimingReqVO reqVO) {
@@ -118,9 +120,9 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
             if ("1".equals(o.getSkipHolidayFlag()) && finalSpecialFlag ==1){
                 return;
             }
-            LightMsg request =LightMsg.builder().device(o.getAddress()).value(o.getCode()).floor(o.getFloor()).type("1").build();
-            log.info("*************************定时开始，操作楼层:{},区域：{},场景：{}",request.getFloor(),request.getAdress(),request.getValue());
-//            iLightService.controlLight(request);
+            LightMsg request =LightMsg.builder().adress(o.getAdress()).value(o.getCode()).floor(o.getFloor()).type("1").build();
+//            log.info("*************************定时开始，操作楼层:{},区域：{},场景：{}",request.getFloor(),request.getAdress(),request.getValue());
+            iLightService.controlLight(request);
         });
     }
 

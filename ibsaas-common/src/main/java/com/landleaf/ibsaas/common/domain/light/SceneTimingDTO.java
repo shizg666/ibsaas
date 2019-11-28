@@ -24,7 +24,7 @@ public class SceneTimingDTO {
     private String code;
 
     @ApiModelProperty(value = "区域code")
-    private String address;
+    private String adress;
 
     @ApiModelProperty(value = "几楼")
     private String floor;

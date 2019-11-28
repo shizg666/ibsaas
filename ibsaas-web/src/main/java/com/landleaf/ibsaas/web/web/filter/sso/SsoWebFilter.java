@@ -87,6 +87,7 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
             Response returnResponse = new Response<>();
             returnResponse.setSuccess(false);
             returnResponse.setErrorCode(Conf.SSO_LOGIN_FAIL_RESULT.getCode()+"");
+            returnResponse.setMessage(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
             returnResponse.setErrorMsg(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
             res.setContentType("application/json;charset=utf-8");
 //            res.getWriter().println("{\"code\":" + Conf.SSO_LOGIN_FAIL_RESULT.getCode() + ", \"msg\":\"" + Conf.SSO_LOGIN_FAIL_RESULT.getMsg() + "\"}");
@@ -95,7 +96,7 @@ public class SsoWebFilter extends HttpServlet implements Filter, ApplicationCont
         }
         //将用户信息设置到UserContext中
         UserContext.setCurrentUser(sysUser);
-        // already login, allow//            returnResponse.setMessage(Conf.SSO_LOGIN_FAIL_RESULT.getMsg());
+        // already login, allow
         try {
             chain.doFilter(request, response);
         } finally {
