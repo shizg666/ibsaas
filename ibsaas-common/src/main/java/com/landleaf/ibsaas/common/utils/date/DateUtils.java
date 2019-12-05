@@ -894,7 +894,7 @@ public class DateUtils {
 		if(startDate.getYear()==endDate.getYear()&&startDate.getMonth()==endDate.getMonth()&&startDate.getDay()==endDate.getDay()&&startDate.getHours()==endDate.getHours()){
 			return result;
 		}
-		while (tempStart.before(tempEnd)&&(tempEnd.getTimeInMillis()-tempStart.getTimeInMillis())>1000*3600L) {
+		while (tempStart.before(tempEnd)&&(tempEnd.getTimeInMillis()-tempStart.getTimeInMillis())>=1000*3600L) {
 			result.add(tempStart.getTime());
 			tempStart.add(Calendar.HOUR, 1);
 		}
