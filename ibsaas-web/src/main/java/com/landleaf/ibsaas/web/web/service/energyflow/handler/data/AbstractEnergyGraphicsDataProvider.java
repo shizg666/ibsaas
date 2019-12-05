@@ -2,10 +2,12 @@ package com.landleaf.ibsaas.web.web.service.energyflow.handler.data;
 
 import com.landleaf.ibsaas.common.domain.energy.vo.EnergyReportQueryVO;
 import com.landleaf.ibsaas.common.enums.energy.EnergyGraphicsEnum;
+import com.landleaf.ibsaas.common.utils.date.DateUtil;
 import com.landleaf.ibsaas.common.utils.date.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +55,7 @@ public class AbstractEnergyGraphicsDataProvider implements IEnergyGraphicsDataPr
             case 1:
                 //时
                 startTime = DateUtils.convert(DateUtils.getStartDateForHour(DateUtils.convert(startTime)));
-                endTime = DateUtils.convert(DateUtils.getEndDateForHour(DateUtils.convert(endTime)));
+                endTime = DateUtils.convert(DateUtil.addDate(-1, Calendar.HOUR, DateUtils.convert(endTime)));
                 break;
             case 2:
                 //日

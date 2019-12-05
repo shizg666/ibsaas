@@ -396,7 +396,7 @@ public class EnergyReportService implements IEnergyReportService {
             case 1:
                 //时
                 startTime = DateUtils.convert(DateUtils.getStartDateForHour(DateUtils.convert(startTime)));
-                endTime = DateUtils.convert(DateUtils.getEndDateForHour(DateUtils.convert(endTime)));
+                endTime = DateUtils.convert(DateUtil.addDate(-1, Calendar.HOUR, DateUtils.convert(endTime)));
                 break;
             case 2:
                 //日
