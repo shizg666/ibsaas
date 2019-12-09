@@ -29,6 +29,13 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
     List<EnergyData> getRecentlyEnergyData(@Param("energyType") Integer energyType);
 
     /**
+     * 根据能耗类型获取上条最新信息 默认定时任务
+     * @param energyType
+     * @return
+     */
+    List<EnergyData> getRecentlyEnergyDataByTime(@Param("energyType") Integer energyType, @Param("inTime") Date inTime);
+
+    /**
      * 能耗总览-折线图
      *
      * @param energyReportDTO

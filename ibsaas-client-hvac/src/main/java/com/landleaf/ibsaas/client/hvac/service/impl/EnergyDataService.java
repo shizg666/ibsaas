@@ -13,8 +13,10 @@ import com.landleaf.ibsaas.common.enums.energy.EnergyTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.datasource.mybatis.service.AbstractBaseService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -68,12 +70,20 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             record.setEnergyDataMonth(CalendarUtil.getYearAndMonth(date));
             record.setEnergyDataYear(CalendarUtil.year(date));
 
-            BigDecimal electricDataValue = new BigDecimal(em.getEmReading());
-            record.setEnergyDataValue(electricDataValue);
+            //上次数据
             BigDecimal recentlyValue = map.get(em.getId());
-            BigDecimal increaseValue = recentlyValue == null ? BigDecimal.ZERO : electricDataValue.subtract(recentlyValue);
-            record.setEnergyDataIncreaseValue(increaseValue.compareTo(BigDecimal.ZERO)<0 ? BigDecimal.ZERO: increaseValue);
+            if(StringUtil.isBlank(em.getEmReading())){
+                //这次无读数  和上次数据一样
+                record.setEnergyDataValue(recentlyValue);
+                record.setEnergyDataIncreaseValue(BigDecimal.ZERO);
+            }else {
+                BigDecimal electricDataValue = new BigDecimal(em.getEmReading());
+                record.setEnergyDataValue(electricDataValue);
 
+                BigDecimal increaseValue = recentlyValue == null ? BigDecimal.ZERO : electricDataValue.subtract(recentlyValue);
+                record.setEnergyDataIncreaseValue(increaseValue.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : increaseValue);
+
+            }
             record.setEnergyDataType(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType());
             record.setEnergyDataSource(IbsaasConstant.ENERGY_DATA_SOURCE_1);
 
@@ -107,13 +117,18 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
             record.setEnergyDataDate(date);
             record.setEnergyDataMonth(CalendarUtil.getYearAndMonth(date));
             record.setEnergyDataYear(CalendarUtil.year(date));
-
-            BigDecimal electricDataValue = new BigDecimal(wm.getWmReading());
-            record.setEnergyDataValue(electricDataValue);
+            //上次数据
             BigDecimal recentlyValue = map.get(wm.getId());
-            BigDecimal increaseValue = recentlyValue == null ? BigDecimal.ZERO : electricDataValue.subtract(recentlyValue);
-            record.setEnergyDataIncreaseValue(increaseValue.compareTo(BigDecimal.ZERO)<0 ? BigDecimal.ZERO: increaseValue);
-
+            if(StringUtils.isBlank(wm.getWmReading())){
+                //如果本次无读数  则沿用上次的
+                record.setEnergyDataValue(recentlyValue);
+                record.setEnergyDataIncreaseValue(BigDecimal.ZERO);
+            }else {
+                BigDecimal electricDataValue = new BigDecimal(wm.getWmReading());
+                record.setEnergyDataValue(electricDataValue);
+                BigDecimal increaseValue = recentlyValue == null ? BigDecimal.ZERO : electricDataValue.subtract(recentlyValue);
+                record.setEnergyDataIncreaseValue(increaseValue.compareTo(BigDecimal.ZERO) < 0 ? BigDecimal.ZERO : increaseValue);
+            }
             record.setEnergyDataType(EnergyTypeEnum.ENERGY_WATER.getEnergyType());
             record.setEnergyDataSource(IbsaasConstant.ENERGY_DATA_SOURCE_1);
 
@@ -131,4 +146,45 @@ public class EnergyDataService extends AbstractBaseService<EnergyDataDao, Energy
         });
         return result;
     }
+
+
+
+
+
+
+
+
+    @Override
+    public void zeroDataRecord(Date date) {
+        List<EnergyData> energyDataWaters = energyDataDao.getRecentlyEnergyDataByTime(EnergyTypeEnum.ENERGY_WATER.getEnergyType(),date);
+        zeroDataInDb(date, energyDataWaters);
+        List<EnergyData> energyDataElectric = energyDataDao.getRecentlyEnergyDataByTime(EnergyTypeEnum.ENERGY_ELECTRIC.getEnergyType(),date);
+        zeroDataInDb(date, energyDataElectric);
+    }
+
+    private void zeroDataInDb(Date date, List<EnergyData> lastData) {
+        lastData.forEach( e -> {
+            EnergyData record = new EnergyData();
+            record.setNodeId(e.getNodeId());
+            record.setEnergyDataTime(date);
+            record.setEnergyDataDate(date);
+            record.setEnergyDataMonth(CalendarUtil.getYearAndMonth(date));
+            record.setEnergyDataYear(CalendarUtil.year(date));
+            record.setEnergyDataValue(e.getEnergyDataValue());
+            record.setEnergyDataIncreaseValue(BigDecimal.ZERO);
+            daoAdapter.consummateAddOperation(record);
+            EnergyData allreadyData = energyDataDao.getEnergyDataByNodeIdAndTime(record);
+            if(allreadyData == null) {
+                try {
+                    saveSelective(record);
+                } catch (DuplicateKeyException ee) {
+                    ee.printStackTrace();
+                    log.warn("该水电表记录已存在");
+                }
+            }
+        });
+
+    }
+
+
 }

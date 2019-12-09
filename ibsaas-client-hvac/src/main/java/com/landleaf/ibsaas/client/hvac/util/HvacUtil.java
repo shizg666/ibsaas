@@ -74,11 +74,14 @@ public class HvacUtil {
             for (Field field : fields) {
                 if(field.getName().equals(hpd.getFieldName())){
                     ObjectType objectType = BacnetObjectEnum.OBJECT_TYPE_MAP.get(hpd.getBacnetObjectType());
-                    String value = BacnetUtil.getState(values.get(hpd.getDeviceId()).getString(
-                            new ObjectIdentifier(
-                                    objectType,
-                                    hpd.getInstanceNumber())
-                            , PropertyIdentifier.presentValue));
+                    String value = null;
+                    if(values.get(hpd.getDeviceId()) != null) {
+                        value = BacnetUtil.getState(values.get(hpd.getDeviceId()).getString(
+                                new ObjectIdentifier(
+                                        objectType,
+                                        hpd.getInstanceNumber())
+                                , PropertyIdentifier.presentValue));
+                    }
                     field.setAccessible(true);
                     value = dealValue(value, objectType);
                     try {
@@ -131,7 +134,10 @@ public class HvacUtil {
         mbRegisterDetails.forEach(mr -> {
             for (Field field : fields) {
                 if(field.getName().equals(mr.getFieldName())){
-                    Object value = results.get(mr.getMasterId()).getValue(mr.getRegisterId());
+                    Object value = null;
+                    if(results.get(mr.getMasterId()) != null) {
+                        value = results.get(mr.getMasterId()).getValue(mr.getRegisterId());
+                    }
                     field.setAccessible(true);
                     String oriVal = dealModbusValue(mr.getFieldName(), value);
                     String v = multiplyCoefficient(oriVal, mr.getCoefficient());
@@ -154,6 +160,10 @@ public class HvacUtil {
      * @return
      */
     private static String multiplyCoefficient(String oriVal, String coefficient){
+        if (StringUtils.isBlank(oriVal)) {
+            return null;
+        }
+
         if(StringUtil.isBlank(coefficient) || "1".equals(coefficient)){
             //无系数或系数为1时 直接返回
             return oriVal;
