@@ -5,5 +5,5 @@ package com.landleaf.ibsaas.screen.controller;
  * @date 2019/12/10 0010
  * @description:
  */
-public class LargeScreenController {
+public class LargeScreenController{
 }
