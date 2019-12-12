@@ -1,15 +1,17 @@
 package com.landleaf.ibsaas.screen.service;
 
-import com.landleaf.ibsaas.common.domain.hvac.NewFan;
 import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO;
+import com.landleaf.ibsaas.common.domain.hvac.vo.WeatherStationVO;
 import com.landleaf.ibsaas.common.enums.hvac.sensor.SensorHchoLevelEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenNewFanEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenSensorEnum;
+import com.landleaf.ibsaas.screen.model.dto.CityWeatherDTO;
 import com.landleaf.ibsaas.screen.model.vo.LgcMeeting;
 import com.landleaf.ibsaas.screen.model.vo.ScreenFanCoil;
 import com.landleaf.ibsaas.screen.model.vo.ScreenNewFan;
+import com.landleaf.ibsaas.screen.model.vo.ScreenWeather;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +30,8 @@ public class LargeScreenService {
     @Autowired
     private ScreenRedisService redisService;
 
-
+    @Autowired
+    private WeatherInfoService weatherInfoService;
     /**
      * 获取大屏多参数据
      * @return
@@ -79,7 +82,7 @@ public class LargeScreenService {
 
 
     /**
-     * 分盘状态数据
+     * 风盘状态数据
      * @return
      */
     public ScreenFanCoil fanCoilStatus(){
@@ -110,6 +113,27 @@ public class LargeScreenService {
     public Object energyStatus(){
 
         return null;
+    }
+
+    /**
+     * 获取天气信息
+     * @return
+     */
+    public ScreenWeather weatherStatus(){
+        //返回对象
+        ScreenWeather result = new ScreenWeather();
+        //地区天气
+        CityWeatherDTO shanghai = weatherInfoService.getWeatherFromRedis("上海");
+        //大楼气象站数据
+        WeatherStationVO ws = redisService.getWeatherStation();
+
+        result.setWeatherStatus(shanghai.getWeatherStatus());
+        result.setPicUrl(shanghai.getPicUrl());
+        result.setWsTemp(ws.getWsTemp());
+        result.setWsHum(ws.getWsHum());
+        result.setWsPm25(ws.getWsPm25());
+
+        return result;
     }
 
 

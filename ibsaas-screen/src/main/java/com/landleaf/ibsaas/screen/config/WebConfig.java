@@ -22,7 +22,7 @@ import java.util.Map;
 @Configuration
 public class WebConfig {
 
-    private static final String PREFIX_PATH = "/screen";
+    private static final String PREFIX_PATH = "/ws/screen";
 
     @Autowired
     private ScreenWebSocketHandler screenWebSocketHandler;

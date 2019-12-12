@@ -27,7 +27,6 @@ public class ScreenWebSocketHandler implements WebSocketHandler {
     @Override
     public Mono<Void> handle(WebSocketSession session) {
 
-
                 Flux<Map<String, SensorVO>> flux = Flux.interval(Duration.ofSeconds(1))
                 .map(l -> screenService.sensorStatus());
         return session.send(flux.map(d -> session.textMessage(JSONUtil.toJsonStr(d))));

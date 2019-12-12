@@ -3,6 +3,7 @@ package com.landleaf.ibsaas.screen.service;
 import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO;
+import com.landleaf.ibsaas.common.domain.hvac.vo.WeatherStationVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
@@ -57,6 +58,15 @@ public class ScreenRedisService {
         return result == null ? new ArrayList<>() : (List<NewFanVO>) result;
     }
 
+
+    /**
+     * 获取气象站信息
+     * @return
+     */
+    public WeatherStationVO getWeatherStation(){
+        Object result = get(BacnetDeviceTypeEnum.WEATHER_STATION.getDeviceType());
+        return result == null ? null: ((List<WeatherStationVO>) result).get(0);
+    }
 
     /**
      * 处理redis失败的情况
