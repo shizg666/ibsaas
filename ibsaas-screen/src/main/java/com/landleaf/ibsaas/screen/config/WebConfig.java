@@ -30,7 +30,7 @@ public class WebConfig {
     @Bean
     public HandlerMapping handlerMapping() {
         final Map<String, WebSocketHandler> map = Maps.newHashMap();
-        map.put("/sensors", screenWebSocketHandler);
+        map.put(PREFIX_PATH+"/sensors", screenWebSocketHandler);
 
         final SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setOrder(Ordered.HIGHEST_PRECEDENCE);

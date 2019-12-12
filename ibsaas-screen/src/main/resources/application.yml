@@ -1,9 +1,6 @@
 server:
   port: 9097
+
 spring:
-  application:
-    name: ibsaas-screen
   profiles:
-    active: test
-logging:
-  config: classpath:logback-spring.xml
+    active: prod

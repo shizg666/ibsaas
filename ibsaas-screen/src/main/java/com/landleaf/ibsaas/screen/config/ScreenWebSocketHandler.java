@@ -28,11 +28,8 @@ public class ScreenWebSocketHandler implements WebSocketHandler {
     public Mono<Void> handle(WebSocketSession session) {
 
 
-        return session.send(
-                session.receive()
-                        .map(msg -> session.textMessage("服务端返回：小明， -> " + msg.getPayloadAsText())));
-//        Flux<Map<String, SensorVO>> flux = Flux.interval(Duration.ofSeconds(1))
-//                .map(l -> screenService.sensorStatus());
-//        return session.send(flux.map(d -> session.textMessage(JSONUtil.toJsonStr(d))));
+                Flux<Map<String, SensorVO>> flux = Flux.interval(Duration.ofSeconds(1))
+                .map(l -> screenService.sensorStatus());
+        return session.send(flux.map(d -> session.textMessage(JSONUtil.toJsonStr(d))));
     }
 }
