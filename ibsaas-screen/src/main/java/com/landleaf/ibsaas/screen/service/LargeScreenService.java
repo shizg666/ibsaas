@@ -1,17 +1,12 @@
 package com.landleaf.ibsaas.screen.service;
 
-import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.WeatherStationVO;
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.Maps;
+import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 import com.landleaf.ibsaas.common.enums.hvac.sensor.SensorHchoLevelEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenNewFanEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenSensorEnum;
-import com.landleaf.ibsaas.screen.model.dto.CityWeatherDTO;
-import com.landleaf.ibsaas.screen.model.vo.LgcMeeting;
-import com.landleaf.ibsaas.screen.model.vo.ScreenFanCoil;
-import com.landleaf.ibsaas.screen.model.vo.ScreenNewFan;
-import com.landleaf.ibsaas.screen.model.vo.ScreenWeather;
+import com.landleaf.ibsaas.screen.model.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +33,7 @@ public class LargeScreenService {
      */
     public Map<String, SensorVO> sensorStatus(){
         //楼层 + 传感器数据  (取电梯口传感器数据)
-        Map<String, SensorVO> result = new HashMap<>(8);
+        Map<String, SensorVO> result = Maps.newHashMap();
 
         List<SensorVO> sensors = redisService.getSensors();
         Map<String, SensorVO> tempMap = sensors.stream().collect(Collectors.toMap(SensorVO::getId, s -> s));
@@ -61,7 +56,7 @@ public class LargeScreenService {
      */
     public Map<String, ScreenNewFan> newFanStatus(){
         //机组数 + 机组数据
-        Map<String, ScreenNewFan> result = new HashMap<>(8);
+        Map<String, ScreenNewFan> result = Maps.newHashMap();
 
         List<NewFanVO> newFans = redisService.getNewFans();
         Map<String, NewFanVO> tempMap = newFans.stream().collect(Collectors.toMap(NewFanVO::getId, n -> n));
@@ -81,6 +76,9 @@ public class LargeScreenService {
     }
 
 
+    private static final String KEY_1 = "1";
+    private static final String KEY_2 = "2";
+
     /**
      * 风盘状态数据
      * @return
@@ -91,6 +89,36 @@ public class LargeScreenService {
         result.setTotalNum(String.valueOf(fanCoils.size()));
         long count = fanCoils.stream().filter(fc -> "1".equals(fc.getFcOnOff())).count();
         result.setOnNum(String.valueOf(count));
+        return result;
+    }
+
+    /**
+     * 风冷热泵状态数据
+     * @return
+     */
+    public Map<String, List<ScreenAchpDetail>> achpDetailStatus(){
+        Map<String, List<ScreenAchpDetail>> result = new HashMap<String, List<ScreenAchpDetail>>(4){{
+            put(KEY_1, new ArrayList<>());
+            put(KEY_2, new ArrayList<>());
+        }};
+        List<AchpDetailVO> achpDetails = redisService.getAchpDetail();
+        for (int i = 0; i < 6; i++) {
+            AchpDetailVO achpDetailVO = achpDetails.get(i);
+            ScreenAchpDetail temp;
+            if(achpDetailVO!=null){
+                temp = new ScreenAchpDetail();
+                temp.setAdOnOffState(achpDetailVO.getAdOnOffState());
+            }else {
+                temp = defaultScreenAchpDetail();
+            }
+            if(i < 3){
+                //机组一低区风冷热泵
+                result.get(KEY_1).add(temp);
+            }else {
+                //机组二高区风冷热泵
+                result.get(KEY_2).add(temp);
+            }
+        }
         return result;
     }
 
@@ -123,12 +151,12 @@ public class LargeScreenService {
         //返回对象
         ScreenWeather result = new ScreenWeather();
         //地区天气
-        CityWeatherDTO shanghai = weatherInfoService.getWeatherFromRedis("上海");
+        JSONObject lgcWeather = weatherInfoService.getLgcWeather();
         //大楼气象站数据
         WeatherStationVO ws = redisService.getWeatherStation();
 
-        result.setWeatherStatus(shanghai.getWeatherStatus());
-        result.setPicUrl(shanghai.getPicUrl());
+        result.setWeatherStatus(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather"));
+        result.setPicUrl(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather_pic"));
         result.setWsTemp(ws.getWsTemp());
         result.setWsHum(ws.getWsHum());
         result.setWsPm25(ws.getWsPm25());
@@ -164,6 +192,16 @@ public class LargeScreenService {
         newFan.setOnOff("0");
         newFan.setRunningMode("5");
         return newFan;
+    }
+
+    /**
+     * 默认风冷热泵状态
+     * @return
+     */
+    private ScreenAchpDetail defaultScreenAchpDetail(){
+        ScreenAchpDetail screenAchpDetail = new ScreenAchpDetail();
+        screenAchpDetail.setAdOnOffState("0");
+        return screenAchpDetail;
     }
 
 

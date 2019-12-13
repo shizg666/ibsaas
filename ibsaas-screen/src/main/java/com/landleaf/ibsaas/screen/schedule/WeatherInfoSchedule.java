@@ -21,8 +21,15 @@ public class WeatherInfoSchedule {
     private WeatherInfoService weatherInfoService;
 
 
-    @Scheduled(cron = "0/10 * * * * *")
+//    @Scheduled(cron = "0 0/5 * * * *")
     public void shanghaiWeather(){
         weatherInfoService.weather2Redis("上海");
+    }
+
+
+
+    @Scheduled(cron = "0 0/30 * * * *")
+    public void lgcWeather(){
+        weatherInfoService.lgcWeather2Redis();
     }
 }

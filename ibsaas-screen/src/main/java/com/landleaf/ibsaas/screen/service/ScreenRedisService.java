@@ -1,12 +1,11 @@
 package com.landleaf.ibsaas.screen.service;
 
-import com.landleaf.ibsaas.common.domain.hvac.vo.FanCoilVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.NewFanVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO;
-import com.landleaf.ibsaas.common.domain.hvac.vo.WeatherStationVO;
+import com.alibaba.fastjson.JSONObject;
+import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
+import com.landleaf.ibsaas.screen.model.dto.CityWeatherDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,6 +27,12 @@ public class ScreenRedisService {
     @Value("${bacnet.place.id}")
     private String placeId;
 
+    private String cityWeatherPrefix = "city_weather";
+
+    private String lgcWeatherPrefix = "lgc_weather";
+    /*
+    以下为lgc设备信息数据
+     */
 
     /**
      * 获取多参数的数据
@@ -58,6 +63,15 @@ public class ScreenRedisService {
         return result == null ? new ArrayList<>() : (List<NewFanVO>) result;
     }
 
+    /**
+     * 获取风冷热泵数据
+     * @return
+     */
+    public List<AchpDetailVO> getAchpDetail() {
+        Object result = get(BacnetDeviceTypeEnum.ACHP_DETAIL.getDeviceType());
+        return result == null ? new ArrayList<>() : (List<AchpDetailVO>) result;
+    }
+
 
     /**
      * 获取气象站信息
@@ -66,6 +80,16 @@ public class ScreenRedisService {
     public WeatherStationVO getWeatherStation(){
         Object result = get(BacnetDeviceTypeEnum.WEATHER_STATION.getDeviceType());
         return result == null ? null: ((List<WeatherStationVO>) result).get(0);
+    }
+
+
+    /**
+     * 获取电表数据
+     * @return
+     */
+    public List<ElectricMeterVO> getElectricMeter(){
+        Object result = get(ModbusDeviceTypeEnum.ELECTRIC_METER.getDeviceType());
+        return result == null ? null: (List<ElectricMeterVO>) result;
     }
 
     /**
@@ -81,4 +105,52 @@ public class ScreenRedisService {
             return null;
         }
     }
+
+
+
+
+    /*
+    以下为天气存储数据
+     */
+
+    /**
+     * 存入天气信息
+     * @param cityName
+     * @param c
+     */
+    public void setWeatherByCity(String cityName, CityWeatherDTO c) {
+        redisHandle.addMap(cityWeatherPrefix, cityName, c);
+    }
+
+    /**
+     * 获取天气信息
+     * @param cityName
+     * @return
+     */
+    public CityWeatherDTO getWeatherByCity(String cityName) {
+        return redisHandle.getMapField(cityWeatherPrefix, cityName);
+    }
+
+
+    /**
+     * 存放lgc天气json格式
+     * @param jsonWeather
+     */
+    public void setLgcWeather(String jsonWeather){
+        redisHandle.set(lgcWeatherPrefix, jsonWeather);
+    }
+
+    /**
+     * 获取lgcJson格式
+     * @return
+     */
+    public JSONObject getLgcWeather(){
+        String lgcJsonWeather = (String) redisHandle.get(lgcWeatherPrefix);
+        return JSONObject.parseObject(lgcJsonWeather);
+    }
+
+    /*
+     以下为大屏电量操作信息
+     */
+
 }

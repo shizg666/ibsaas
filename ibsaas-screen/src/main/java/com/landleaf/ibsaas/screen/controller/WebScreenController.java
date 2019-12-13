@@ -2,10 +2,7 @@ package com.landleaf.ibsaas.screen.controller;
 
 import com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO;
 import com.landleaf.ibsaas.screen.model.resp.ResponseResult;
-import com.landleaf.ibsaas.screen.model.vo.LgcMeeting;
-import com.landleaf.ibsaas.screen.model.vo.ScreenFanCoil;
-import com.landleaf.ibsaas.screen.model.vo.ScreenNewFan;
-import com.landleaf.ibsaas.screen.model.vo.ScreenWeather;
+import com.landleaf.ibsaas.screen.model.vo.*;
 import com.landleaf.ibsaas.screen.service.LargeScreenService;
 import com.landleaf.ibsaas.screen.service.ScreenAsyncService;
 import io.swagger.annotations.Api;
@@ -66,6 +63,13 @@ public class WebScreenController {
     @GetMapping("/fanCoil")
     public Mono<ResponseResult> fanCoil(){
         ScreenFanCoil status = largeScreenService.fanCoilStatus();
+        return Mono.just(ResponseResult.success(status));
+    }
+
+    @ApiOperation("风盘状态数据")
+    @GetMapping("/achpDetail")
+    public Mono<ResponseResult> achpDetail(){
+        Map<String, List<ScreenAchpDetail>> status = largeScreenService.achpDetailStatus();
         return Mono.just(ResponseResult.success(status));
     }
 

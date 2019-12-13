@@ -2,12 +2,14 @@ package com.landleaf.ibsaas.screen.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.landleaf.ibsaas.common.domain.Response;
-import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.screen.model.dto.CityWeatherDTO;
 import com.landleaf.ibsaas.screen.util.RestTemplateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -17,12 +19,65 @@ import org.springframework.stereotype.Service;
 @Service
 public class WeatherInfoService {
 
+    /**
+     * 至慧管家天气接口 备用
+     */
     private static final String SH_WEATHER_URL = "http://www.lokosmart.com:38082/web/api/weather/info/";
 
-    @Autowired
-    private RedisHandle redisHandle;
+    private static final String SHOW_API_GPS_URL = "http://ali-weather.showapi.com/gps-to-weather";
 
-    private String cityWeatherPrefix = "city_weather";
+    @Autowired
+    private ScreenRedisService screenRedisService;
+
+
+
+
+
+    public void lgcWeather2Redis(){
+        Map<String, String> paramMap = new HashMap<String, String>(){{
+            put("from", "5");
+            put("lat","31.2377403799");
+            put("lng", "121.3553827045");
+        }};
+
+        Map<String, String> headerMap = new HashMap<String, String>(){{
+            put("Authorization", "APPCODE " + "411a73d2c0fc46d78020c6b7cff6b00f");
+
+        }};
+        String s = RestTemplateUtil.get(SHOW_API_GPS_URL, headerMap, paramMap);
+        screenRedisService.setLgcWeather(s.trim());
+    }
+
+
+    public JSONObject getLgcWeather(){
+        return screenRedisService.getLgcWeather();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 存入天气信息
@@ -31,7 +86,7 @@ public class WeatherInfoService {
     public void weather2Redis(String cityName){
         CityWeatherDTO c = getFromUrl(cityName);
         if(c!=null){
-            redisHandle.addMap(cityWeatherPrefix, cityName, c);
+            screenRedisService.setWeatherByCity(cityName, c);
         }
     }
 
@@ -42,7 +97,7 @@ public class WeatherInfoService {
      * @return
      */
     public CityWeatherDTO getWeatherFromRedis(String cityName){
-        return redisHandle.getMapField(cityWeatherPrefix, cityName);
+        return screenRedisService.getWeatherByCity(cityName);
     }
 
 

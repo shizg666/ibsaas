@@ -10,9 +10,11 @@ public enum ScreenHvacEnum{
     /**
      * 请求
      */
-    SENSOR("SENSO", "多参数传感器数据", "com.landleaf.ibsaas.screen.service.LargeScreenService", "sensorStatus", new Class[]{}),
-    NEWFAN("NEWFAN", "新风机状态数据", "com.landleaf.ibsaas.screen.service.LargeScreenService","newFanStatus", new Class[]{}),
-    FANCOIL("FANCOIL","风盘状态数据", "com.landleaf.ibsaas.screen.service.LargeScreenService", "fanCoilStatus", new Class[]{}),
+    SENSOR("SENSOR", "多参数传感器数据", "com.landleaf.ibsaas.screen.service.LargeScreenService", "sensorStatus", new Class[]{}),
+    NEW_FAN("NEW_FAN", "新风机状态数据", "com.landleaf.ibsaas.screen.service.LargeScreenService","newFanStatus", new Class[]{}),
+    FAN_COIL("FAN_COIL","风盘状态数据", "com.landleaf.ibsaas.screen.service.LargeScreenService", "fanCoilStatus", new Class[]{}),
+    ACHP_DETAIL("ACHP_DETAIL","风冷热泵状态数据", "com.landleaf.ibsaas.screen.service.LargeScreenService", "achpDetailStatus", new Class[]{}),
+    WEATHER("WEATHER","天气信息", "com.landleaf.ibsaas.screen.service.LargeScreenService", "weatherStatus", new Class[]{})
     ;
 
     private String type;

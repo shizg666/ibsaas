@@ -1,14 +1,13 @@
 package com.landleaf.ibsaas.screen.util;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -59,5 +58,23 @@ public class RestTemplateUtil {
         return result;
     }
 
+
+    /**
+     * 有头呵参数的请求
+     * @param url
+     * @param headerMap
+     * @param paramMap
+     * @return
+     */
+    public static String get(String url, Map<String, String> headerMap, Map<String, String> paramMap){
+        HttpHeaders headers = new HttpHeaders();
+        headerMap.forEach(headers::add);
+        HttpEntity<String> requestEntity = new HttpEntity<>( headers);
+        UriComponentsBuilder builder = UriComponentsBuilder
+                .fromUriString(url);
+        paramMap.forEach(builder::queryParam);
+        ResponseEntity<String> resEntity = RestTemplateUtil.getInstance().exchange(builder.build().encode().toUri(), HttpMethod.GET, requestEntity, String.class);
+        return resEntity.getBody();
+    }
 
 }
