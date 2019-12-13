@@ -252,5 +252,21 @@
         AND energy_data_time=#{energyDataTime}
         AND node_id=#{nodeId}
     </select>
+    <select id="getSumElectricByDate" resultType="java.math.BigDecimal">
+        SELECT
+        SUM(energy_data_value)
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_type=2
+        AND energy_data_time=#{datetime};
+    </select>
+    <select id="getFirstDate" resultType="java.util.Date">
+        SELECT energy_data_time
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_type=2
+        ORDER BY energy_data_time
+        LIMIT 1
+    </select>
 
 </mapper>

@@ -106,4 +106,18 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @return
      */
     EnergyData getEnergyDataByNodeIdAndTime(EnergyData energyData);
+
+
+    /**
+     * 获取数据最早的时间
+     * @return
+     */
+    Date getFirstDate();
+
+    /**
+     * 根据时间获取电表抄表数据
+     * @param datetime
+     * @return
+     */
+    BigDecimal getSumElectricByDate(@Param("datetime") Date datetime);
 }

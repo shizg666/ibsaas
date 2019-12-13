@@ -83,7 +83,7 @@ public class WebScreenController {
     @ApiOperation("能耗数据")
     @GetMapping("/energy")
     public Mono<ResponseResult> energy(){
-        Object status = largeScreenService.energyStatus();
+        ScreenElectric status = largeScreenService.energyStatus();
         return Mono.just(ResponseResult.success(status));
     }
 

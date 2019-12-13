@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 import com.landleaf.ibsaas.common.enums.hvac.sensor.SensorHchoLevelEnum;
+import com.landleaf.ibsaas.screen.enums.ScreenEnergyDateTypeEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenNewFanEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenSensorEnum;
 import com.landleaf.ibsaas.screen.model.vo.*;
@@ -11,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,11 @@ public class LargeScreenService {
     private ScreenRedisService redisService;
 
     @Autowired
+    private ScreenEnergyService screenEnergyService;
+
+    @Autowired
     private WeatherInfoService weatherInfoService;
+
     /**
      * 获取大屏多参数据
      * @return
@@ -138,9 +144,20 @@ public class LargeScreenService {
      * 能耗状态数据
      * @return
      */
-    public Object energyStatus(){
+    public ScreenElectric energyStatus(){
+        ScreenElectric result = new ScreenElectric();
+        BigDecimal currentSum = screenEnergyService.currentSumElectric();
+        BigDecimal monthSum = screenEnergyService.getLgcSumElectricByType(ScreenEnergyDateTypeEnum.MONTH.getType());
+        BigDecimal yearSum = screenEnergyService.getLgcSumElectricByType(ScreenEnergyDateTypeEnum.YEAR.getType());
 
-        return null;
+
+        result.setYearTotal(currentSum.subtract(yearSum)
+                .setScale(0, BigDecimal.ROUND_HALF_UP)
+                .toString());
+        result.setMonthTotal(currentSum.subtract(monthSum)
+                .setScale(0, BigDecimal.ROUND_HALF_UP)
+                .toString());
+        return result;
     }
 
     /**

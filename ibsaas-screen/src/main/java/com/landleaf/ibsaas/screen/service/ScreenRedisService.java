@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Lokiy
@@ -30,6 +31,8 @@ public class ScreenRedisService {
     private String cityWeatherPrefix = "city_weather";
 
     private String lgcWeatherPrefix = "lgc_weather";
+
+    private String lgcSumElectricPrefix = "lgc_sum_electric";
     /*
     以下为lgc设备信息数据
      */
@@ -153,4 +156,20 @@ public class ScreenRedisService {
      以下为大屏电量操作信息
      */
 
+    /**
+     * 存放年 月 日的抄表数据
+     * @param sumElectricMap
+     */
+    public void setLgcSumElectricDetail(Map<String, Object> sumElectricMap){
+        redisHandle.addMap(lgcSumElectricPrefix, sumElectricMap);
+    }
+
+    /**
+     * 根据年月日类型获取
+     * @param type
+     * @return
+     */
+    public String getLgcSumElectricByType(String type){
+        return redisHandle.getMapField(lgcSumElectricPrefix, type);
+    }
 }
