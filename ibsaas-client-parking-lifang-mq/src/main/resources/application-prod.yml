@@ -81,7 +81,7 @@ rocketmq:
     topic: parking
     tags: tags
     #目前采用双主，集群
-    namesrvAddr: 40.73.246.184:9876
+    namesrvAddr: 47.102.37.61:9876
     #消息最大长度 默认1024*4(4M)
     maxMessageSize: 91920
     sendMsgTimeout: 30000
@@ -89,7 +89,7 @@ rocketmq:
   consumer:
     enable: true
     groupName: ibsaas_parking_lifang_lgc_1921681010
-    namesrvAddr: 40.73.246.184:9876
+    namesrvAddr: 47.102.37.61:9876
     #停车
     topics: ibsaas_parking_lifang_lgc_1921681010-*
     topic: ibsaas_parking_lifang_lgc_1921681010

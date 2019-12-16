@@ -24,7 +24,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 40.73.246.184:26378,40.73.246.184:26379,40.73.246.184:26380
+      nodes: 47.102.37.61:26378,47.102.37.61:26379,47.102.37.61:26380
     lettuce:
       pool:
         max-active: 50
@@ -83,7 +83,7 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
       - name: master
-        url: jdbc:mysql://40.73.246.184:3306/ibassa_dev?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://47.102.37.61:3306/ibassa_dev?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
         password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
@@ -101,7 +101,7 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
       - name: slave
-        url: jdbc:mysql://40.73.246.184:3306/ibassa_dev?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://47.102.37.61:3306/ibassa_dev?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
         password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
@@ -142,7 +142,7 @@ rocketmq:
     enable: true
     groupName: ibsaas
     #目前采用双主，集群
-    namesrvAddr: 40.73.246.184:9876
+    namesrvAddr: 47.102.37.61:9876
     maxMessageSize: 4096
     sendMsgTimeout: 30000
     retryTimesWhenSendFailed: 1
@@ -159,7 +159,7 @@ rocketmq:
   consumer:
     enable: true
     groupName: ibsaas_response_test_local
-    namesrvAddr: 40.73.246.184:9876
+    namesrvAddr: 47.102.37.61:9876
     #初始化订阅消费topic
     topics: knight_test-*;parking_test-*
     #监听对象信息

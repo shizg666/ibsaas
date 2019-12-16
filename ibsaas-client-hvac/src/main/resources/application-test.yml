@@ -12,7 +12,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
+      nodes: 47.102.37.61:26378,47.102.37.61:26379,47.102.37.61:26380
     lettuce:
       pool:
         max-active: 50
@@ -48,7 +48,7 @@ spring:
 
 ibsaas:
 #  face:
-#    redirecturl: http://40.73.246.184
+#    redirecturl: http://47.102.37.61
   filter:
     cors:
       enable: true
@@ -108,7 +108,7 @@ rocketmq:
     topic: topic_hvac_write
     tags: tags
     #目前采用双主，集群
-    namesrvAddr: 40.73.100.153:9876
+    namesrvAddr: 47.102.37.61:9876
     #消息最大长度 默认1024*4(4M)
     maxMessageSize: 91920
     sendMsgTimeout: 30000
@@ -116,7 +116,7 @@ rocketmq:
   consumer:
     enable: true
     groupName: topic_hvac_write_test
-    namesrvAddr: 40.73.246.184:9876
+    namesrvAddr: 47.102.37.61:9876
     #暖通
     topics: topic_hvac_write-*
     topic: topic_hvac_write

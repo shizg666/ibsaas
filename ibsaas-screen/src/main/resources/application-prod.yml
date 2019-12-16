@@ -4,7 +4,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 40.73.246.184:26378,40.73.246.184:26379,40.73.246.184:26380
+      nodes: 47.102.37.61:26378,47.102.37.61:26379,47.102.37.61:26380
     lettuce:
       pool:
         max-active: 50
@@ -40,7 +40,7 @@ spring:
 
 ibsaas:
 #  face:
-#    redirecturl: http://40.73.246.184
+#    redirecturl: http://47.102.37.61
   filter:
     cors:
       enable: true
@@ -57,7 +57,7 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
         - name: master
-          url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
+          url: jdbc:mysql://47.102.37.61:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
           password: Landleaf@2019
           driverClassName: com.mysql.jdbc.Driver
@@ -75,7 +75,7 @@ ibsaas:
         #       minEvictableIdleTimeMillis: 300000
         #       spring.datasource.filters: stat
         - name: slave
-          url: jdbc:mysql://40.73.246.184:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
+          url: jdbc:mysql://47.102.37.61:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT&useSSL=true
           username: root
           password: Landleaf@2019
           driverClassName: com.mysql.jdbc.Driver
