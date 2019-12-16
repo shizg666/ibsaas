@@ -1,7 +1,9 @@
 package com.landleaf.ibsaas.screen.service;
 
 import com.landleaf.ibsaas.common.dao.energy.EnergyDataDao;
+import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO;
+import com.landleaf.ibsaas.common.utils.HlVlUtil;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import com.landleaf.ibsaas.screen.enums.ScreenEnergyDateTypeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +34,10 @@ public class ScreenEnergyService {
 
     @Autowired
     private EnergyDataDao energyDataDao;
+
+    /*
+    以下为当前数值
+     */
 
     /**
      * 每天抽取 年月日的值
@@ -98,4 +106,30 @@ public class ScreenEnergyService {
                         new BigDecimal(er.getEmReading()):BigDecimal.ZERO)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
+
+
+
+
+    /*
+        以下为线型图
+     */
+
+    /**
+     * 折线图
+     * @return
+     */
+    public HlVl energyLineChart(){
+        LocalDateTime now = LocalDateTime.now();
+        Date endMonth = CalendarUtil.localDate2Date(LocalDate.of(now.getYear(), now.getMonth(), 1));
+
+        Date startMonth = CalendarUtil.offsetDate(endMonth, -11, ChronoUnit.MONTHS);
+        //获取月度坐标
+        List<String> xs = HlVlUtil.getXs(startMonth, endMonth, 3);
+
+
+
+        return null;
+    }
+
 }

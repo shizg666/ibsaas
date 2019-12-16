@@ -268,5 +268,10 @@
         ORDER BY energy_data_time
         LIMIT 1
     </select>
+    <select id="getScreenLineChart" resultType="com.landleaf.ibsaas.common.domain.energy.HlVlBO">
+
+
+
+    </select>
 
 </mapper>

@@ -120,4 +120,12 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @return
      */
     BigDecimal getSumElectricByDate(@Param("datetime") Date datetime);
+
+
+
+    /**
+     * 大屏折线图
+     */
+    List<HlVlBO> getScreenLineChart(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
 }
