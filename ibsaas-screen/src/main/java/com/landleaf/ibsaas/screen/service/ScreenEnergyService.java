@@ -2,9 +2,11 @@ package com.landleaf.ibsaas.screen.service;
 
 import com.landleaf.ibsaas.common.dao.energy.EnergyDataDao;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
+import com.landleaf.ibsaas.common.domain.energy.HlVlBO;
 import com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO;
 import com.landleaf.ibsaas.common.utils.HlVlUtil;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
+import com.landleaf.ibsaas.common.utils.date.LocalAndDateUtil;
 import com.landleaf.ibsaas.screen.enums.ScreenEnergyDateTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,10 +17,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Lokiy
@@ -127,9 +127,17 @@ public class ScreenEnergyService {
         //获取月度坐标
         List<String> xs = HlVlUtil.getXs(startMonth, endMonth, 3);
 
-
-
-        return null;
+        List<HlVlBO> screenLineChart = energyDataDao.getScreenLineChart(startMonth, LocalAndDateUtil.localDateTime2Date(now));
+        Map<String, String> map = screenLineChart.stream().collect(Collectors.toMap(HlVlBO::getX, HlVlBO::getY));
+        List<String> ys = new ArrayList<>();
+        xs.forEach( k -> {
+            String v = map.get(k);
+            if(StringUtils.isBlank(v)){
+                v = "0";
+            }
+            ys.add(v);
+        });
+        return new HlVl(xs, ys);
     }
 
 }

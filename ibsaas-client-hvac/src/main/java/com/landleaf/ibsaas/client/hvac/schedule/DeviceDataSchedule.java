@@ -23,7 +23,7 @@ public class DeviceDataSchedule {
     @Autowired
     private ICommonDeviceService iCommonDeviceService;
 
-//    @Scheduled(cron = "0/6 * * * * *")
+    @Scheduled(cron = "0/6 * * * * *")
     public void dataToRedis(){
 //        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>开始刷入redis数据<<<<<<<<<<<<<<<<<<<<<<<<<");
 //        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>开始刷入redis数据<<<<<<<<<<<<<<<<<<<<<<<<<");
@@ -35,7 +35,7 @@ public class DeviceDataSchedule {
     }
 
 
-//    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void deviceDataToDatabase(){
         //系统调用产生的秒数误差
         Date now = new Date(System.currentTimeMillis()/ IbsaasConstant.SECOND_OFFSET*IbsaasConstant.SECOND_OFFSET);

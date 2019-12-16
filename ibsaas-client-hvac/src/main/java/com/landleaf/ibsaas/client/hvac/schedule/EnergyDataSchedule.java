@@ -26,7 +26,7 @@ public class EnergyDataSchedule {
     private IEnergyDataService iEnergyDataService;
 
 
-//    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 * * * *")
     public void toDatabase(){
         //系统调用产生的秒数误差
         Date now = new Date(System.currentTimeMillis()/IbsaasConstant.SECOND_OFFSET*IbsaasConstant.SECOND_OFFSET);

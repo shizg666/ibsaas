@@ -269,9 +269,23 @@
         LIMIT 1
     </select>
     <select id="getScreenLineChart" resultType="com.landleaf.ibsaas.common.domain.energy.HlVlBO">
-
-
-
+        SELECT
+        t.e_month AS x,
+        SUM(t.energy_data_increase_value) AS y
+        FROM
+        (SELECT
+        energy_data_time,
+        DATE_SUB(energy_data_time, INTERVAL 1 HOUR) AS e_time,
+        DATE_FORMAT(DATE_SUB(energy_data_time, INTERVAL 1 HOUR),'%Y-%m') AS e_month,
+        energy_data_value,
+        energy_data_increase_value
+        FROM t_energy_data
+        WHERE is_active=1
+        <if test="startDate!=null and endDate!=null">
+            AND energy_data_time &gt;= #{startDate} AND energy_data_time &lt; #{endDate}
+        </if>
+        AND energy_data_source=1) t
+        GROUP BY t.e_month
     </select>
 
 </mapper>
