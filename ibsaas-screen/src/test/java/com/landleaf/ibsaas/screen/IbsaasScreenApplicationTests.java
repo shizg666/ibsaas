@@ -4,9 +4,6 @@ package com.landleaf.ibsaas.screen;
 import com.landleaf.ibsaas.common.utils.HlVlUtil;
 import com.landleaf.ibsaas.common.utils.date.CalendarUtil;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,8 +11,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class IbsaasScreenApplicationTests {
 
     @Test

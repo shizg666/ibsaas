@@ -22,7 +22,7 @@ import java.util.Map;
  * @description:
  */
 @RestController
-@RequestMapping("/web/screen")
+@RequestMapping("/ibsaas/web/screen")
 @Api("大屏http各请求")
 public class WebScreenController {
 
@@ -32,13 +32,13 @@ public class WebScreenController {
     @Autowired
     private ScreenAsyncService screenAsyncService;
 
-    @RequestMapping("/test")
+    @GetMapping("/test")
     public Mono<String> test(){
         return Mono.just("Hello World!");
     }
 
     @ApiOperation("屏幕所有数据")
-    @RequestMapping("/total")
+    @GetMapping("/total")
     public Mono<ResponseResult> total(){
         Map<String, Object> status = screenAsyncService.asyncExecuteService();
         return Mono.just(ResponseResult.success(status));
