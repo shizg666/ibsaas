@@ -1,5 +1,6 @@
 package com.landleaf.ibsaas.screen.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
@@ -7,6 +8,7 @@ import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.screen.model.dto.CityWeatherDTO;
+import com.landleaf.ibsaas.screen.model.vo.LgcMeeting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,8 @@ public class ScreenRedisService {
     private String lgcSumElectricPrefix = "lgc_sum_electric";
 
     private String lgcScreenElectricLinePrefix = "lgc_screen_electric_line";
+
+    private String lgcScreenMeetingPrefix = "lgc_screen_meeting";
     /*
     以下为lgc设备信息数据
      */
@@ -193,4 +197,14 @@ public class ScreenRedisService {
         return (HlVl) redisHandle.get(lgcScreenElectricLinePrefix);
     }
 
+
+    /**
+     * 根据日期获取时间list
+     * @param day
+     * @return
+     */
+    public List<LgcMeeting> getMeetingList(String day){
+        String jsonStr = redisHandle.getMapField(lgcScreenMeetingPrefix, day);
+        return JSONArray.parseArray(jsonStr, LgcMeeting.class);
+    }
 }

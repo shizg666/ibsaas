@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 import com.landleaf.ibsaas.common.enums.hvac.sensor.SensorHchoLevelEnum;
+import com.landleaf.ibsaas.common.utils.date.LocalAndDateUtil;
 import com.landleaf.ibsaas.screen.enums.ScreenEnergyDateTypeEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenNewFanEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenSensorEnum;
@@ -135,9 +136,8 @@ public class LargeScreenService {
      * @return
      */
     public List<LgcMeeting> meetingStatus(){
-        List<LgcMeeting> meetings = new ArrayList<>();
-        meetings.add(defaultLgcMeeting());
-        return meetings;
+        String day = LocalAndDateUtil.date2StrPattern(new Date(), LocalAndDateUtil.YYYY_MM_DD);
+        return redisService.getMeetingList(day);
     }
 
 

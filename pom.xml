@@ -9,6 +9,7 @@
 		<!--<module>ibsaas-client-parking-lifang</module>-->
 		<module>ibsaas-client-kngiht-lifang</module>
 		<module>ibsaas-client-hvac</module>
+		<module>ibsaas-client-meeting</module>
 		<module>ibsaas-web</module>
 		<module>ibsaas-common</module>
 		<module>ibsaas-datasource</module>

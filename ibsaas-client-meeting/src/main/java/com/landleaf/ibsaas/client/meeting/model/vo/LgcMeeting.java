@@ -1,4 +1,4 @@
-package com.landleaf.ibsaas.screen.model.vo;
+package com.landleaf.ibsaas.client.meeting.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
