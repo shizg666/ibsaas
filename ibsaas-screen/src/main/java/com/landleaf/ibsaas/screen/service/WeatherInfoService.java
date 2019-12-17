@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.screen.model.dto.CityWeatherDTO;
 import com.landleaf.ibsaas.screen.util.RestTemplateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -24,24 +25,49 @@ public class WeatherInfoService {
      */
     private static final String SH_WEATHER_URL = "http://www.lokosmart.com:38082/web/api/weather/info/";
 
+    /**
+     * showapi信息
+     */
     private static final String SHOW_API_GPS_URL = "http://ali-weather.showapi.com/gps-to-weather";
+    private static final String FIVE = "5";
+
+    /**
+     * 固定字符串
+     */
+    private static final String FROM = "from";
+    private static final String LAT = "lat";
+    private static final String LNG = "lng";
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String APP_CODE_PREFIX = "APPCODE ";
+
+    /**
+     * 动态信息
+     */
+    @Value("${screen.weather.app-code}")
+    private String appCode;
+    @Value("${screen.weather.lgc-coord.lat}")
+    private String lgcCoordLat;
+    @Value("${screen.weather.lgc-coord.lng}")
+    private String lgcCoordLng;
+
+
 
     @Autowired
     private ScreenRedisService screenRedisService;
 
 
-
-
-
+    /**
+     * 天气信息刷入redis
+     */
     public void lgcWeather2Redis(){
         Map<String, String> paramMap = new HashMap<String, String>(){{
-            put("from", "5");
-            put("lat","31.2377403799");
-            put("lng", "121.3553827045");
+            put(FROM, FIVE);
+            put(LAT, lgcCoordLat);
+            put(LNG, lgcCoordLng);
         }};
 
         Map<String, String> headerMap = new HashMap<String, String>(){{
-            put("Authorization", "APPCODE " + "411a73d2c0fc46d78020c6b7cff6b00f");
+            put(AUTHORIZATION, APP_CODE_PREFIX + appCode);
 
         }};
         String s = RestTemplateUtil.get(SHOW_API_GPS_URL, headerMap, paramMap);

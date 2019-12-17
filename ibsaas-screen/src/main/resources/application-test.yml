@@ -93,8 +93,6 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
 
-
-
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
@@ -118,3 +116,12 @@ bacnet:
     deviceId: 1234
   place:
     id: lgc
+
+
+## showapi 获取天气配置
+screen:
+  weather:
+    app-code: 19070a52edc84ce0a5d2230bd194d3cc
+    lgc-coord:
+      lat: 31.2377403799
+      lng: 121.3553827045

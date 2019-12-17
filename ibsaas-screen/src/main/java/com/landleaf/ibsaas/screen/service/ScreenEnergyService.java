@@ -116,10 +116,26 @@ public class ScreenEnergyService {
      */
 
     /**
+     * 折线图存入redis
+     */
+    public void lgcElectricLineChart2Redis(){
+        screenRedisService.setLgcScreenElectricLine(electricLineChart());
+    }
+
+    /**
+     * 获取每日的折线图数据 实时数据需修改最后一项值
+     * @return
+     */
+    public HlVl getLgcElectricLineChart(){
+        return screenRedisService.getLgcScreenElectricLine();
+    }
+
+
+    /**
      * 折线图
      * @return
      */
-    public HlVl energyLineChart(){
+    public HlVl electricLineChart(){
         LocalDateTime now = LocalDateTime.now();
         Date endMonth = CalendarUtil.localDate2Date(LocalDate.of(now.getYear(), now.getMonth(), 1));
 
@@ -139,5 +155,6 @@ public class ScreenEnergyService {
         });
         return new HlVl(xs, ys);
     }
+
 
 }

@@ -284,7 +284,7 @@
         <if test="startDate!=null and endDate!=null">
             AND energy_data_time &gt;= #{startDate} AND energy_data_time &lt; #{endDate}
         </if>
-        AND energy_data_source=1) t
+        AND energy_data_type=2) t
         GROUP BY t.e_month
     </select>
 

@@ -60,7 +60,7 @@ public class RestTemplateUtil {
 
 
     /**
-     * 有头呵参数的请求
+     * 有请求头参数的请求
      * @param url
      * @param headerMap
      * @param paramMap

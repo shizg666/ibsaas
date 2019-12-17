@@ -2,6 +2,7 @@ package com.landleaf.ibsaas.screen.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 import com.landleaf.ibsaas.common.enums.hvac.sensor.SensorHchoLevelEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenEnergyDateTypeEnum;
@@ -144,7 +145,21 @@ public class LargeScreenService {
      * 能耗状态数据
      * @return
      */
-    public ScreenElectric energyStatus(){
+    public ScreenEnergy energyStatus(){
+        ScreenEnergy result = new ScreenEnergy();
+        ScreenElectric electricNumeric = getElectricNumeric();
+        HlVl electricGraphics = getElectricGraphics(electricNumeric);
+        result.setElectricNumeric(electricNumeric);
+        result.setElectricGraphics(electricGraphics);
+        return result;
+    }
+
+
+    /**
+     * 获取数值类型的电表数据
+     * @return
+     */
+    public ScreenElectric getElectricNumeric(){
         ScreenElectric result = new ScreenElectric();
         BigDecimal currentSum = screenEnergyService.currentSumElectric();
         BigDecimal monthSum = screenEnergyService.getLgcSumElectricByType(ScreenEnergyDateTypeEnum.MONTH.getType());
@@ -159,6 +174,22 @@ public class LargeScreenService {
                 .toString());
         return result;
     }
+
+    /**
+     * 获取图形的电表数据
+     * @param screenElectric
+     * @return
+     */
+    public HlVl getElectricGraphics(ScreenElectric screenElectric){
+        HlVl hlVl = screenEnergyService.getLgcElectricLineChart();
+        List<String> ys = (List<String>) hlVl.getYs();
+        ys.set(ys.size()-1, screenElectric.getMonthTotal());
+        return hlVl;
+    }
+
+
+
+
 
     /**
      * 获取天气信息

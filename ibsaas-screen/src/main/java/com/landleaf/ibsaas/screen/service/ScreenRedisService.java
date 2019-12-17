@@ -1,6 +1,7 @@
 package com.landleaf.ibsaas.screen.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetDeviceTypeEnum;
 import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
@@ -33,6 +34,8 @@ public class ScreenRedisService {
     private String lgcWeatherPrefix = "lgc_weather";
 
     private String lgcSumElectricPrefix = "lgc_sum_electric";
+
+    private String lgcScreenElectricLinePrefix = "lgc_screen_electric_line";
     /*
     以下为lgc设备信息数据
      */
@@ -172,4 +175,22 @@ public class ScreenRedisService {
     public String getLgcSumElectricByType(String type){
         return redisHandle.getMapField(lgcSumElectricPrefix, type);
     }
+
+
+    /**
+     * 存放折线图数据
+     * @param hlVl
+     */
+    public void setLgcScreenElectricLine(HlVl hlVl){
+        redisHandle.set(lgcScreenElectricLinePrefix, hlVl);
+    }
+
+    /**
+     * 获取折线图数据
+     * @return
+     */
+    public HlVl getLgcScreenElectricLine(){
+        return (HlVl) redisHandle.get(lgcScreenElectricLinePrefix);
+    }
+
 }

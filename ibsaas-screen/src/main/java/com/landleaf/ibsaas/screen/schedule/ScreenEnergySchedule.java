@@ -23,6 +23,7 @@ public class ScreenEnergySchedule {
     @Scheduled(cron = "30 0 0 * * *")
     public void dailySumEnergy2Redis(){
         screenEnergyService.lgcSumElectric2Redis();
-        log.info(">>>>>>>>>>>>>>>>>>>>每日电表抄表数据刷入redis<<<<<<<<<<<<<<<<<<<<");
+        screenEnergyService.lgcElectricLineChart2Redis();
+        log.info(">>>>>>>>>>>>>>>>>>>>每日电表抄表数据和折线数据刷入redis<<<<<<<<<<<<<<<<<<<<");
     }
 }

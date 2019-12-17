@@ -12,5 +12,4 @@ public class IbsaasScreenApplication {
         SpringApplication.run(IbsaasScreenApplication.class, args);
     }
 
-
 }

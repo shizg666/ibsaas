@@ -69,5 +69,23 @@ public class ResponseResult implements Serializable {
     }
 
 
+    public static ResponseResult error(Exception e){
+        ResponseResult response = new ResponseResult();
+        response.setSuccess(false);
+        response.setHasBusinessException(true);
+        response.setMessage(e.getMessage());
+        response.setErrorCode("9000");
+        return response;
+    }
+
+
+    public static ResponseResult defaultError(){
+        ResponseResult response = new ResponseResult();
+        response.setSuccess(false);
+        response.setHasBusinessException(false);
+        response.setMessage("系统异常");
+        response.setErrorCode("9000");
+        return response;
+    }
 
 }
