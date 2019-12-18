@@ -182,6 +182,8 @@ public class LargeScreenService {
      */
     public HlVl getElectricGraphics(ScreenElectric screenElectric){
         HlVl hlVl = screenEnergyService.getLgcElectricLineChart();
+        List<String> tempXs = ((List<String>) hlVl.getXs()).stream().map(s -> s.substring(s.length() - 2)).collect(Collectors.toList());
+        hlVl.setXs(tempXs);
         List<String> ys = (List<String>) hlVl.getYs();
         ys.set(ys.size()-1, screenElectric.getMonthTotal());
         return hlVl;
