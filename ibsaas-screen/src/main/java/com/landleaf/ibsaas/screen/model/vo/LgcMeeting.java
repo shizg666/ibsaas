@@ -24,8 +24,7 @@ import java.util.Date;
 public class LgcMeeting implements Serializable {
 
     @ApiModelProperty("时间")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date meetingTime;
+    private String meetingTime;
 
     @ApiModelProperty("会议室")
     private String meetingRoom;

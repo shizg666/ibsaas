@@ -23,7 +23,7 @@ import java.sql.SQLException;
 public class LgcMeetingDataSourceConfig {
 
     static final String PACKAGE = "com.landleaf.ibsaas.client.meeting.dal.dao.meeting";
-    static final String MAPPER_LOCATION = "com/landleaf/ibsaas/client/meeting/dal/dao/meeting/**/*.xml";
+    static final String MAPPER_LOCATION = "classpath:com/landleaf/ibsaas/client/meeting/dal/mappers/meeting/**/*.xml";
 
     @Value("${lgc.meeting.datasource.driverClassName}")
     private String driverClass;

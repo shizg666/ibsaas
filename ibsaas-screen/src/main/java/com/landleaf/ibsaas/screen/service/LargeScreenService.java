@@ -257,7 +257,7 @@ public class LargeScreenService {
 
     private LgcMeeting defaultLgcMeeting(){
         LgcMeeting lgcMeeting = new LgcMeeting();
-        lgcMeeting.setMeetingTime(new Date());
+        lgcMeeting.setMeetingTime("10-01 13:00~18:00");
         lgcMeeting.setMeetingRoom("SH 2F会议室四姑娘二峰");
         lgcMeeting.setContent("Ibsaas项目技术研讨会议");
         return lgcMeeting;

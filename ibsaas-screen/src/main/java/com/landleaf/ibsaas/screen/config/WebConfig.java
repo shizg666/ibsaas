@@ -22,7 +22,7 @@ import java.util.Map;
 @Configuration
 public class WebConfig {
 
-    private static final String PREFIX_PATH = "/ws/screen";
+    private static final String PREFIX_PATH = "/ibsaas/ws/screen";
 
     @Autowired
     private ScreenWebSocketHandler screenWebSocketHandler;
@@ -30,7 +30,7 @@ public class WebConfig {
     @Bean
     public HandlerMapping handlerMapping() {
         final Map<String, WebSocketHandler> map = Maps.newHashMap();
-        map.put(PREFIX_PATH+"/sensors", screenWebSocketHandler);
+        map.put(PREFIX_PATH+"/total", screenWebSocketHandler);
 
         final SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setOrder(Ordered.HIGHEST_PRECEDENCE);

@@ -9,6 +9,7 @@ import com.landleaf.ibsaas.common.enums.hvac.ModbusDeviceTypeEnum;
 import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.screen.model.dto.CityWeatherDTO;
 import com.landleaf.ibsaas.screen.model.vo.LgcMeeting;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -205,6 +206,9 @@ public class ScreenRedisService {
      */
     public List<LgcMeeting> getMeetingList(String day){
         String jsonStr = redisHandle.getMapField(lgcScreenMeetingPrefix, day);
+        if(StringUtils.isBlank(jsonStr)){
+            return new ArrayList<>();
+        }
         return JSONArray.parseArray(jsonStr, LgcMeeting.class);
     }
 }

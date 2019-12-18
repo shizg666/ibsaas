@@ -3,7 +3,10 @@
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
+<!--
     <classPathEntry location="D:\maven_repository\com\microsoft\sqlserver\mssql-jdbc\6.1.0.jre8\mssql-jdbc-6.1.0.jre8.jar" />
+-->
+    <classPathEntry location="H:\Maven\maven-repository\com\microsoft\sqlserver\mssql-jdbc\6.1.0.jre8\mssql-jdbc-6.1.0.jre8.jar" />
     <context defaultModelType="flat" id="write" targetRuntime="MyBatis3">
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
@@ -13,7 +16,7 @@
         </commentGenerator>
 
         <jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver"
-                        connectionURL="jdbc:sqlserver://47.103.119.69:1433;DatabaseName=DBGateway"
+                        connectionURL="jdbc:sqlserver://47.103.119.69:1433;DatabaseName=book"
                         userId="sa"
                         password="Landleaf@2019">
         </jdbcConnection>
@@ -45,7 +48,12 @@
             <property name="methodNameCalculator" value="default"/>
         </javaClientGenerator>
 
-        <table tableName="Mac" enableSelectByPrimaryKey="true" enableCountByExample="true" enableSelectByExample="true">
+        <table tableName="book_booklist" enableSelectByPrimaryKey="true" enableCountByExample="true" enableSelectByExample="true">
+            <property name="useActualColumnNames" value="true" />
+            <generatedKey column="Id" identity="true" sqlStatement="SqlServer"/>
+        </table>
+
+        <table tableName="book_categories" enableSelectByPrimaryKey="true" enableCountByExample="true" enableSelectByExample="true">
             <property name="useActualColumnNames" value="true" />
             <generatedKey column="Id" identity="true" sqlStatement="SqlServer"/>
         </table>

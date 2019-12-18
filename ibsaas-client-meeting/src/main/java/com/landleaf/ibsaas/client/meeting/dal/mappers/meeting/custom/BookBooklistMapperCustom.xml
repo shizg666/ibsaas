@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.landleaf.ibsaas.client.meeting.dal.dao.meeting.custom.BookBooklistMapperCustom" >
+
+  <select id="getTodayBookList" resultType="com.landleaf.ibsaas.client.meeting.model.vo.BookListView">
+    SELECT
+    bb.id,
+    bb.roomid AS roomId,
+    bc.catname AS roomName,
+    bb.begintime AS beginTime,
+    bb.endtime AS endTime,
+    bb.contactdept AS department,
+    bb.intro AS title,
+    bb.intro AS subject
+    FROM book_booklist bb
+    LEFT OUTER JOIN book_categories bc ON bb.roomid=bc.id
+    WHERE DATEDIFF(day, bb.endtime, GETDATE()) = 0 AND bb.process &lt; 2 AND bb.process &lt;&gt; 4
+    ORDER BY bb.begintime
+  </select>
+</mapper>
