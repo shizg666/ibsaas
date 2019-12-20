@@ -1,7 +1,6 @@
 package com.landleaf.ibsaas.screen.config;
 
 import cn.hutool.json.JSONUtil;
-import com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO;
 import com.landleaf.ibsaas.screen.model.resp.ResponseResult;
 import com.landleaf.ibsaas.screen.service.LargeScreenService;
 import com.landleaf.ibsaas.screen.service.ScreenAsyncService;
@@ -13,7 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.Map;
 
 /**
  * @author Lokiy
@@ -32,9 +30,9 @@ public class ScreenWebSocketHandler implements WebSocketHandler {
     @Override
     public Mono<Void> handle(WebSocketSession session) {
 
-                Flux<ResponseResult> flux = Flux.interval(Duration.ofSeconds(5))
-                .map(l -> ResponseResult.success(screenAsyncService.asyncExecuteService()))
-                        ;
+                Flux<ResponseResult> flux = Flux.interval(Duration.ofSeconds(1))
+                        .map(l -> ResponseResult.success(screenAsyncService.asyncExecuteService()))
+                        .onErrorReturn(ResponseResult.defaultError());
         return session.send(flux.map(d -> session.textMessage(JSONUtil.toJsonStr(d))));
     }
 }

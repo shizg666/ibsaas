@@ -4,7 +4,6 @@ import com.landleaf.ibsaas.screen.service.ScreenEnergyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,7 +19,7 @@ public class ScreenEnergySchedule {
     @Autowired
     private ScreenEnergyService screenEnergyService;
 
-    @Scheduled(cron = "30 0 0 * * *")
+//    @Scheduled(cron = "30 0 0 * * *")
     public void dailySumEnergy2Redis(){
         screenEnergyService.lgcSumElectric2Redis();
         screenEnergyService.lgcElectricLineChart2Redis();
