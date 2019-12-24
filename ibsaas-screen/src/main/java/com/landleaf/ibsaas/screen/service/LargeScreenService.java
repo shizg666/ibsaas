@@ -213,7 +213,7 @@ public class LargeScreenService {
         result.setWeatherStatus(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather"));
         result.setPicUrl(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather_pic"));
         result.setWsTemp(ScreenValueUtil.retainDecimals(ws.getWsTemp(), 1));
-        result.setWsHum(ScreenValueUtil.retainDecimals(ws.getWsHum(), 1));
+        result.setWsHum(ScreenValueUtil.retainDecimals(ws.getWsHum(), 2));
         result.setWsPm25(ws.getWsPm25());
 
         return result;
