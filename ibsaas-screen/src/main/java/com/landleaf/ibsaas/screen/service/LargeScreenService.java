@@ -10,6 +10,7 @@ import com.landleaf.ibsaas.screen.enums.ScreenEnergyDateTypeEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenNewFanEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenSensorEnum;
 import com.landleaf.ibsaas.screen.model.vo.*;
+import com.landleaf.ibsaas.screen.util.ScreenValueUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,10 @@ public class LargeScreenService {
             if(sensorVO == null){
                 sensorVO = defaultSensorVO(e.getNodeId());
             }
+
+            sensorVO.setSsTemp(ScreenValueUtil.retainDecimals(sensorVO.getSsTemp(), 1));
+            sensorVO.setSsHum(ScreenValueUtil.retainDecimals(sensorVO.getSsHum(), 2));
+
             sensorVO.setSsHchoLevel(SensorHchoLevelEnum.getLevel(sensorVO.getSsHcho()));
             result.put(e.getFloor(), sensorVO);
         }
@@ -207,8 +212,8 @@ public class LargeScreenService {
 
         result.setWeatherStatus(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather"));
         result.setPicUrl(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather_pic"));
-        result.setWsTemp(ws.getWsTemp());
-        result.setWsHum(ws.getWsHum());
+        result.setWsTemp(ScreenValueUtil.retainDecimals(ws.getWsTemp(), 1));
+        result.setWsHum(ScreenValueUtil.retainDecimals(ws.getWsHum(), 1));
         result.setWsPm25(ws.getWsPm25());
 
         return result;
@@ -222,7 +227,7 @@ public class LargeScreenService {
     private SensorVO defaultSensorVO(String id){
         SensorVO sensor = new SensorVO();
         sensor.setId(id);
-        sensor.setSsTemp("20.16");
+        sensor.setSsTemp("20.2");
         sensor.setSsHum("44.36");
         sensor.setSsCo2("524.0");
         sensor.setSsVoc("0.242");
