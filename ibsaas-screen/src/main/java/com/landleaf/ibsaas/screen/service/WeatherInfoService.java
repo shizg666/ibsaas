@@ -26,9 +26,10 @@ public class WeatherInfoService {
     private static final String SH_WEATHER_URL = "http://www.lokosmart.com:38082/web/api/weather/info/";
 
     /**
-     * showapi信息
+     * showapi信息 测试地址
      */
-    private static final String SHOW_API_GPS_URL = "http://ali-weather.showapi.com/gps-to-weather";
+    private static final String SHOW_API_GPS_URL_TEST = "http://ali-weather.showapi.com/gps-to-weather";
+    private static final String SHOW_API_GPS_URL = "http://weather01.market.alicloudapi.com/gps-to-weather";
     private static final String FIVE = "5";
 
     /**

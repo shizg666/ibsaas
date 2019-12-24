@@ -121,7 +121,7 @@ bacnet:
 ## showapi 获取天气配置
 screen:
   weather:
-    app-code: 19070a52edc84ce0a5d2230bd194d3cc
+    app-code: 5d2ffa92cf8142f6bf55f485b568a821
     lgc-coord:
       lat: 31.2377403799
       lng: 121.3553827045
