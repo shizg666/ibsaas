@@ -30,7 +30,7 @@ public class ScreenWebSocketHandler implements WebSocketHandler {
     @Override
     public Mono<Void> handle(WebSocketSession session) {
 
-                Flux<ResponseResult> flux = Flux.interval(Duration.ofSeconds(1))
+                Flux<ResponseResult> flux = Flux.interval(Duration.ofSeconds(5))
                         .map(l -> ResponseResult.success(screenAsyncService.asyncExecuteService()))
                         .onErrorReturn(ResponseResult.defaultError());
         return session.send(flux.map(d -> session.textMessage(JSONUtil.toJsonStr(d))));
