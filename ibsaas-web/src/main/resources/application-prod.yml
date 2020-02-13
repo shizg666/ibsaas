@@ -54,7 +54,7 @@ ibsaas:
       path: /logout
     excluded:
 #      paths: /parking/**/*
-      paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**,/login/**,/logout,/test/**,/knight/**,/energy-report/**
+      paths: /swagger-resources/**, /webjars/**, /v2/**, /swagger-ui.html/**,/login/**,/logout,/test/**,/knight/**,/energy-report/**,/excel-data/**
   face:
     redirecturl: http://47.102.37.61
   filter:

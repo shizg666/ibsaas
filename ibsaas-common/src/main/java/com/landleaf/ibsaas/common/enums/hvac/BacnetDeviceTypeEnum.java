@@ -31,7 +31,7 @@ public enum  BacnetDeviceTypeEnum {
     AHU(8, "AHU", "com.landleaf.ibsaas.common.domain.hvac.vo.AhuVO"),
 
 
-    ACHP_DETAIL( 9, "风冷热泵详参", "com.landleaf.ibsaas.common.domain.hvac.vo.AchpDetailVO"),
+    ACHP_DETAIL( 9, "风冷热泵-详参", "com.landleaf.ibsaas.common.domain.hvac.vo.AchpDetailVO"),
 
     ACHP_PUMP_VALVE( 10, "风冷热泵-水阀水泵", "com.landleaf.ibsaas.common.domain.hvac.vo.AchpPumpValveVO"),
 
