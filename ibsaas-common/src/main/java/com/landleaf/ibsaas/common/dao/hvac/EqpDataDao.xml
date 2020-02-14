@@ -14,8 +14,8 @@
         ted.energy_data_value AS dataValue,
         ted.energy_data_increase_value AS dataIncreaseValue
         FROM t_energy_data ted
-        LEFT JOIN t_energy_equip tee ON tee.node_id=ted.node_id AND tee.is_active=1
-        LEFT JOIN t_config_setting tcs ON tee.equip_classification=tcs.setting_code AND tcs.is_active=1 AND tcs.setting_type='equip_classification'
+        INNER JOIN t_energy_equip tee ON tee.node_id=ted.node_id AND tee.is_active=1
+        INNER JOIN t_config_setting tcs ON tee.equip_classification=tcs.setting_code AND tcs.is_active=1 AND tcs.setting_type='equip_classification'
         WHERE ted.is_active=1
         AND ted.energy_data_source=1
         AND ted.energy_data_type=#{deviceType}
@@ -33,11 +33,15 @@
         ted.eqp_data_time AS dataTime,
         ted.node_name AS nodeName,
         ted.floor AS floor,
+        <if test="deviceType == 7">
         tmn.description AS description,
+        </if>
         ted.field_description AS attribute,
         IF(ted.eqp_data_value = 'null','0', ted.eqp_data_value) AS dataValue
         FROM t_eqp_data ted
-        LEFT JOIN t_mb_node tmn ON ted.node_id=tmn.id AND tmn.is_active=1
+        <if test="deviceType == 7">
+        INNER JOIN t_mb_node tmn ON ted.node_id=tmn.id AND tmn.is_active=1
+        </if>
         WHERE ted.is_active=1
         AND ted.device_type=#{deviceType}
         <if test="startTime!=null">
