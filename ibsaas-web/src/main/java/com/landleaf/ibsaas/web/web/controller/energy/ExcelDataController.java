@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,6 +53,7 @@ public class ExcelDataController extends BasicController {
     @PostMapping("download")
     @ApiOperation("导出功能")
     public void download(@RequestBody ExcelDataDTO dataDTO,  HttpServletResponse response) throws IOException {
+        requestHandle(dataDTO);
         // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         try {
             response.setContentType("application/vnd.ms-excel");
@@ -82,6 +85,20 @@ public class ExcelDataController extends BasicController {
             response.setCharacterEncoding("utf-8");
             Response resp = handlerException(new Exception("下载文件失败"));
             response.getWriter().println(JSON.toJSONString(resp));
+        }
+    }
+
+
+    /**
+     * 入参处理
+     * @param dataDTO
+     */
+    private void requestHandle( ExcelDataDTO dataDTO){
+        //此时前端所传参数到天为单位，都为必传项
+        if(dataDTO.getEndTime() != null){
+            //所以结束日期截至到当天23点为止  取得当天所有数据
+            Date date = LocalAndDateUtil.offsetDate(dataDTO.getEndTime(), 23, ChronoUnit.HOURS);
+            dataDTO.setEndTime(date);
         }
     }
 }
