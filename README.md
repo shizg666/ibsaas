@@ -15,3 +15,8 @@
    门禁模块采用的是立方设备，功能基于文档（OCS HTTP说明文档1.4(1).docx）。
    与web服务端数据交互基于rocketmq,指定具体topic，在配置表中配置，ibsaas-client-knight-lifang部署在内网服务器（192.168.10.10）通过消费具体指令，操作指令后通过topic返回数据
    到rocket中间件，web服务端消费数据。
+   
+   
+   自定义jar 
+   
+   mvn install:install-file -Dfile=E:\langlv\repository\modbus4j\modbus4j-3.0.5.jar -DgroupId=com.infiniteautomation -DartifactId=modbus4j -Dversion=3.0.5 -Dpackaging=jar

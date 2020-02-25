@@ -63,8 +63,9 @@ public class UserController extends BasicController {
     @ApiOperation(value = "新增用户", notes = "新增用户")
     @RequestMapping(value = "/v1/user", method = RequestMethod.POST)
     public Response addUser(@RequestBody @ApiParam User user) {
-        String pwd = CryptoUtil.getInstance().getMD5ofStr(user.getPassword());
-        user.setPassword(pwd);
+        //前台加密，这里取消掉
+//        String pwd = CryptoUtil.getInstance().getMD5ofStr(user.getPassword());
+//        user.setPassword(pwd);
         return returnSuccess(userService.addUser(user), MessageConstants.COMMON_ADD_SUCCESS_MESSAGE);
     }
 

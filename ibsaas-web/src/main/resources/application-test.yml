@@ -83,7 +83,7 @@ ibsaas:
       defaultDatasourceName: master
       datasourceList:
       - name: master
-        url: jdbc:mysql://47.102.37.61:3306/ibassa_dev?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://47.102.37.61:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
         password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
@@ -101,7 +101,7 @@ ibsaas:
 #       minEvictableIdleTimeMillis: 300000
 #       spring.datasource.filters: stat
       - name: slave
-        url: jdbc:mysql://47.102.37.61:3306/ibassa_dev?characterEncoding=UTF-8&serverTimezone=CTT
+        url: jdbc:mysql://47.102.37.61:3306/ibsaas_test?characterEncoding=UTF-8&serverTimezone=CTT
         username: root
         password: Landleaf@2019
         driverClassName: com.mysql.jdbc.Driver
