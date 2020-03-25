@@ -5,13 +5,13 @@
     <parent>
         <groupId>com.landleaf.ibsaas</groupId>
         <artifactId>ibsaas</artifactId>
-        <version>0.0.1-SNAPSHOT</version> <!-- lookup parent from repository -->
+        <version>1.0.0.0</version> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.landleaf</groupId>
     <artifactId>ibsaas-client-hvac</artifactId>
     <packaging>jar</packaging>
 
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0.0</version>
     <name>ibsaas-client-hvac</name>
     <description>ibsaas-client-hvac project for Spring Boot</description>
 
@@ -44,17 +44,17 @@
         <dependency>
             <groupId>com.landleaf.ibsaas</groupId>
             <artifactId>ibsaas-datasource</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.landleaf.ibsaas</groupId>
             <artifactId>ibsaas-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.landleaf.ibsaas</groupId>
             <artifactId>ibsaas-rocketmq</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0.0</version>
         </dependency>
         <!--jackson模块-->
         <dependency>

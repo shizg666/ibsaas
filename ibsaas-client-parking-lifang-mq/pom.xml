@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.landleaf.ibsaas</groupId>
         <artifactId>ibsaas</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0.0</version>
     </parent>
     <artifactId>ibsaas-client-parking-lifang-mq</artifactId>
     <packaging>jar</packaging>
@@ -22,12 +22,12 @@
         <dependency>
             <groupId>com.landleaf.ibsaas</groupId>
             <artifactId>ibsaas-datasource</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.landleaf.ibsaas</groupId>
             <artifactId>ibsaas-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0.0</version>
         </dependency>
 
         <dependency>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.landleaf.ibsaas</groupId>
             <artifactId>ibsaas-rocketmq</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>1.0.0.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
