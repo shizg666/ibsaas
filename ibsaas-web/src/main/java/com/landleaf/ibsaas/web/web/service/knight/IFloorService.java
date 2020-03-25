@@ -27,4 +27,6 @@ public interface IFloorService {
      * @return
      */
     RoleFloorDoorsReponseVO getfloorControlDoorByRoleId(Long floorId, String roleId);
+
+    RoleFloorDoorsReponseVO getfloorControlDoorByRoleId(Long floorId);
 }

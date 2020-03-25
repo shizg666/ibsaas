@@ -104,6 +104,7 @@ public class CommonAsyncService {
         Map<String, BatchResults<String>> results  = getBatchResults(mbRegisterDetails);
         mbRegisterDetails.forEach( d -> {
             String value = String.valueOf(results.get(d.getMasterId()).getValue(d.getRegisterId()));
+            //全部数据记录还未处理电表
             EqpData record = getEqpData(ProtocolTypeEnum.MODBUS, d, value, date);
             insertCurrentData(record);
         });
@@ -240,7 +241,7 @@ public class CommonAsyncService {
 
 
 
-    private List<? extends BaseDevice> getMbCurrentData(Integer mbType) {
+    public List<? extends BaseDevice> getMbCurrentData(Integer mbType) {
         List<MbRegisterDetail> mbRegisterDetails = MbRegisterHolder.MASTER_POINT_LIST_MAP.get(mbType);
         Map<String, List<MbRegisterDetail>> mbNodeMap = MbRegisterHolder.MASTER_POINT_MAP.get(mbType);
         Map<String, BatchResults<String>> results  = getBatchResults(mbRegisterDetails);

@@ -34,6 +34,10 @@ public class LightSceneTimingRespVO {
     private String code;
 
 
+    @ApiModelProperty(value = "场景id")
+    private Long attributeId;
+
+
     @ApiModelProperty(value = "执行时间")
     @JsonFormat(pattern = "HH:mm", timezone = "GMT+8")
     private Date time;

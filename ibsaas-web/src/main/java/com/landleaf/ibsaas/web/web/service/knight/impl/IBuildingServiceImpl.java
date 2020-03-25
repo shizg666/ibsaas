@@ -130,7 +130,13 @@ public class IBuildingServiceImpl implements IBuildingService {
 //            RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = new RoleFloorDoorsReponseVO();
             List<FloorReponseVO> floors = entry.getValue();
             floors.forEach(obj->{
-                RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = iFloorService.getfloorControlDoorByRoleId(obj.getId(),roleId);
+                RoleFloorDoorsReponseVO roleFloorDoorsReponseVO;
+                if ("0".equals(roleId)){
+                    roleFloorDoorsReponseVO  = iFloorService.getfloorControlDoorByRoleId(obj.getId());
+                }else {
+                    roleFloorDoorsReponseVO  = iFloorService.getfloorControlDoorByRoleId(obj.getId(),roleId);
+                }
+
                 obj.setDataList(roleFloorDoorsReponseVO.getList());
             });
         }

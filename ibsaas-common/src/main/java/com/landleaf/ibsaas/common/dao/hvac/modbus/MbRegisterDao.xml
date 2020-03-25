@@ -27,7 +27,8 @@
         tmr.slave_id,
         tmr.function_code,
         tmr.offset,
-        tmr.data_type
+        tmr.data_type,
+        tmr.coefficient
         FROM
         t_mb_register tmr
         LEFT JOIN t_mb_master tmm ON tmr.master_id=tmm.id AND tmm.is_active=1

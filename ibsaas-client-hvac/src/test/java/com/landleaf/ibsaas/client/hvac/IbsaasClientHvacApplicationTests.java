@@ -317,4 +317,22 @@ public class IbsaasClientHvacApplicationTests {
 
     }
 
+
+    /**
+     * 数据偏差填充0值
+     */
+    @Test
+    public void dataFillZero(){
+        Date start = CalendarUtil.str2Date("2019-12-07 15:00:00");
+
+        Date end = CalendarUtil.str2Date("2019-12-09 12:00:00");
+
+        while (start.compareTo(end) <= 0){
+            iEnergyDataService.zeroDataRecord(start);
+            start = CalendarUtil.nextHour(start);
+        }
+
+    }
+
+
 }

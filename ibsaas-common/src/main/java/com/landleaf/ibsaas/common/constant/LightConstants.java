@@ -7,8 +7,6 @@ import java.io.Serializable;
 */
 public class LightConstants implements Serializable {
 
-
-
     /**
      * 1F灯光设备
      */
@@ -23,7 +21,6 @@ public class LightConstants implements Serializable {
      * 3F灯光设备
      */
     public static final String LIGHT_DEVICE_3F = "light_device_3F";
-
     /**
      * 4F灯光设备
      */

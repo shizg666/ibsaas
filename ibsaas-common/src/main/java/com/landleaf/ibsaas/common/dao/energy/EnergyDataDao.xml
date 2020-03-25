@@ -25,6 +25,27 @@
         AND ted.node_id=t.node_id
         AND ted.energy_data_time=t.energy_data_time
     </select>
+    <select id="getRecentlyEnergyDataByTime" resultType="com.landleaf.ibsaas.common.domain.energy.EnergyData">
+        SELECT
+        ted.node_id,
+        ted.energy_data_time,
+        ted.energy_data_date,
+        ted.energy_data_month,
+        ted.energy_data_year,
+        ted.energy_data_value,
+        ted.energy_data_increase_value,
+        ted.energy_data_type,
+        ted.energy_data_source
+        FROM
+        t_energy_data ted,
+        (SELECT node_id, MAX(energy_data_time) AS energy_data_time FROM t_energy_data WHERE is_active=1 AND energy_data_source=1 AND energy_data_type=#{energyType} AND energy_data_time&lt;#{inTime} GROUP BY node_id) t
+        WHERE ted.is_active=1
+        AND ted.energy_data_source=1
+        AND ted.energy_data_type=#{energyType}
+        AND ted.node_id=t.node_id
+        AND ted.energy_data_time=t.energy_data_time
+    </select>
+
     <select id="overviewLineChart" resultType="com.landleaf.ibsaas.common.domain.energy.HlVlBO">
         SELECT
         <choose>
@@ -231,4 +252,40 @@
         AND energy_data_time=#{energyDataTime}
         AND node_id=#{nodeId}
     </select>
+    <select id="getSumElectricByDate" resultType="java.math.BigDecimal">
+        SELECT
+        SUM(energy_data_value)
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_type=2
+        AND energy_data_time=#{datetime};
+    </select>
+    <select id="getFirstDate" resultType="java.util.Date">
+        SELECT energy_data_time
+        FROM t_energy_data
+        WHERE is_active=1
+        AND energy_data_type=2
+        ORDER BY energy_data_time
+        LIMIT 1
+    </select>
+    <select id="getScreenLineChart" resultType="com.landleaf.ibsaas.common.domain.energy.HlVlBO">
+        SELECT
+        t.e_month AS x,
+        SUM(t.energy_data_increase_value) AS y
+        FROM
+        (SELECT
+        energy_data_time,
+        DATE_SUB(energy_data_time, INTERVAL 1 HOUR) AS e_time,
+        DATE_FORMAT(DATE_SUB(energy_data_time, INTERVAL 1 HOUR),'%Y-%m') AS e_month,
+        energy_data_value,
+        energy_data_increase_value
+        FROM t_energy_data
+        WHERE is_active=1
+        <if test="startDate!=null and endDate!=null">
+            AND energy_data_time &gt;= #{startDate} AND energy_data_time &lt; #{endDate}
+        </if>
+        AND energy_data_type=2) t
+        GROUP BY t.e_month
+    </select>
+
 </mapper>

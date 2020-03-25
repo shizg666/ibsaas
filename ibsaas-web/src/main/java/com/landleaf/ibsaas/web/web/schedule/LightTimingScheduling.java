@@ -37,8 +37,6 @@ import static cn.hutool.core.date.DateTime.now;
 public class LightTimingScheduling {
 
     @Autowired
-    private RedisHandle redisHandle;
-    @Autowired
     private ILightSceneTimingService iLightSceneTimingService;
 
 

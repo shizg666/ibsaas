@@ -54,19 +54,6 @@ public class TaskExecutePool {
         return pool;
     }
 
-
-    @Bean("lightSceneTimeThreadPool")
-    public ExecutorService lightSceneTimeThreadPool() {
-        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
-                .setNameFormat("light-thread-pool-%d").build();
-
-        //Common Thread Pool
-        ExecutorService pool = new ThreadPoolExecutor(2, 3,
-                KEEPALIVETIME, TimeUnit.SECONDS,
-                new LinkedBlockingQueue<>(WORKQUEUE), namedThreadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
-        return pool;
-    }
-
     @Bean("serviceTaskExecutor")
     public ThreadPoolTaskExecutor serviceTaskExecutor(){
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
@@ -77,5 +64,18 @@ public class TaskExecutePool {
         taskExecutor.setThreadNamePrefix("service-executor-thread-%d");
         taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return taskExecutor;
+    }
+
+
+    @Bean("lightTimeThreadPool")
+    public ExecutorService lightTimeThreadPool() {
+        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+                .setNameFormat("light-thread-pool-%d").build();
+
+        //Common Thread Pool
+        ExecutorService pool = new ThreadPoolExecutor(2, 3,
+                KEEPALIVETIME, TimeUnit.SECONDS,
+                new LinkedBlockingQueue<>(WORKQUEUE), namedThreadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
+        return pool;
     }
 }

@@ -29,6 +29,13 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
     List<EnergyData> getRecentlyEnergyData(@Param("energyType") Integer energyType);
 
     /**
+     * 根据能耗类型获取上条最新信息 默认定时任务
+     * @param energyType
+     * @return
+     */
+    List<EnergyData> getRecentlyEnergyDataByTime(@Param("energyType") Integer energyType, @Param("inTime") Date inTime);
+
+    /**
      * 能耗总览-折线图
      *
      * @param energyReportDTO
@@ -99,4 +106,26 @@ public interface EnergyDataDao extends BaseDao<EnergyData> {
      * @return
      */
     EnergyData getEnergyDataByNodeIdAndTime(EnergyData energyData);
+
+
+    /**
+     * 获取数据最早的时间
+     * @return
+     */
+    Date getFirstDate();
+
+    /**
+     * 根据时间获取电表抄表数据
+     * @param datetime
+     * @return
+     */
+    BigDecimal getSumElectricByDate(@Param("datetime") Date datetime);
+
+
+
+    /**
+     * 大屏折线图
+     */
+    List<HlVlBO> getScreenLineChart(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
 }

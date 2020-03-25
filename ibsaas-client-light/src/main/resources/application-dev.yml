@@ -12,7 +12,7 @@ spring:
     database: 0
     sentinel:
       master: mymaster
-      nodes: 40.73.100.153:26378,40.73.100.153:26379,40.73.100.153:26380
+      nodes: 47.102.37.61:26378,47.102.37.61:26379,47.102.37.61:26380
     lettuce:
       pool:
         max-active: 50
@@ -49,7 +49,7 @@ spring:
 
 ibsaas:
   #  face:
-  #    redirecturl: http://40.73.246.184
+  #    redirecturl: http://47.102.37.61
   filter:
     cors:
       enable: true
@@ -118,7 +118,7 @@ rocketmq:
   consumer:
     enable: true
     groupName: ibsaas_light_test
-    namesrvAddr: 40.73.100.153:9876
+    namesrvAddr: 47.102.37.61:9876
     #灯光
     topics: topic_light_control-*
     consumeThreadMin: 16

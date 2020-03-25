@@ -51,9 +51,9 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
     @Autowired
     private IVacationSettingService iVacationSettingService;
     @Autowired
-    private ILightService iLightService;
-    @Autowired
     private RedisHandle redisHandle;
+    @Autowired
+    private ILightService iLightService;
 
     @Override
     public void addAreaTime(LightSceneTimingReqVO reqVO) {
@@ -93,14 +93,8 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
     }
 
     @Override
-    @Async("energyDataToRedisThreadPool")
+    @Async("lightTimeThreadPool")
     public void executeTime(LocalDateTime date) {
-
-        String s = "2019-11-24 10:10:10";
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(s,dateTimeFormatter);
-        int day2 = dateTime.getDayOfWeek().getValue();
-
         String day1 = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         //当天日期标识  正常日期-0  节假日（包括周末（法定节假日）-1 补班日2
         String key = RedisConstants.DAY_INFO.concat(day1);
@@ -126,9 +120,9 @@ public class LightSceneTimingServiceImpl extends AbstractBaseService<LightSceneT
             if ("1".equals(o.getSkipHolidayFlag()) && finalSpecialFlag ==1){
                 return;
             }
-            LightMsg request =LightMsg.builder().device(o.getAddress()).value(o.getCode()).floor(o.getFloor()).type("1").build();
-            log.info("*************************定时开始，操作楼层:{},区域：{},场景：{}",request.getFloor(),request.getAdress(),request.getValue());
-//            iLightService.controlLight(request);
+            LightMsg request =LightMsg.builder().adress(o.getAdress()).value(o.getCode()).floor(o.getFloor()).type("1").build();
+//            log.info("*************************定时开始，操作楼层:{},区域：{},场景：{}",request.getFloor(),request.getAdress(),request.getValue());
+            iLightService.controlLight(request);
         });
     }
 

@@ -12,7 +12,6 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -59,7 +58,7 @@ public class SMSsantiUtil {
      * @return
      */
     public static int send(String appId, String appKey, String url, String modeId, String phones, String vars, String sendTime, String notifyUrl) {
-        String type = MediaType.APPLICATION_JSON_UTF8_VALUE;
+        String type = "application/json;charset=UTF-8";
         String body = null;
         try {
             Map<String, String> requestParm = Maps.newHashMap();

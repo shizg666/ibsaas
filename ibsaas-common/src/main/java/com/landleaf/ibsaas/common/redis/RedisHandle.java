@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
 /**
  * redis实现类
  */
+@ConditionalOnProperty(prefix = "spring.redis", name = "enable")
 @Component
 public class RedisHandle implements BaseRedisDao<String, Object>{
 

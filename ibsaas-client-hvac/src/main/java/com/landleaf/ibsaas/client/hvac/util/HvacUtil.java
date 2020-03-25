@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.common.domain.hvac.assist.HvacPointDetail;
 import com.landleaf.ibsaas.common.domain.hvac.assist.MbRegisterDetail;
 import com.landleaf.ibsaas.common.domain.hvac.vo.HvacFieldVO;
 import com.landleaf.ibsaas.common.enums.hvac.BacnetObjectEnum;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.serotonin.bacnet4j.type.enumerated.ObjectType;
 import com.serotonin.bacnet4j.type.enumerated.PropertyIdentifier;
 import com.serotonin.bacnet4j.type.primitive.ObjectIdentifier;
@@ -73,11 +74,14 @@ public class HvacUtil {
             for (Field field : fields) {
                 if(field.getName().equals(hpd.getFieldName())){
                     ObjectType objectType = BacnetObjectEnum.OBJECT_TYPE_MAP.get(hpd.getBacnetObjectType());
-                    String value = BacnetUtil.getState(values.get(hpd.getDeviceId()).getString(
-                            new ObjectIdentifier(
-                                    objectType,
-                                    hpd.getInstanceNumber())
-                            , PropertyIdentifier.presentValue));
+                    String value = null;
+                    if(values.get(hpd.getDeviceId()) != null) {
+                        value = BacnetUtil.getState(values.get(hpd.getDeviceId()).getString(
+                                new ObjectIdentifier(
+                                        objectType,
+                                        hpd.getInstanceNumber())
+                                , PropertyIdentifier.presentValue));
+                    }
                     field.setAccessible(true);
                     value = dealValue(value, objectType);
                     try {
@@ -130,9 +134,13 @@ public class HvacUtil {
         mbRegisterDetails.forEach(mr -> {
             for (Field field : fields) {
                 if(field.getName().equals(mr.getFieldName())){
-                    Object value = results.get(mr.getMasterId()).getValue(mr.getRegisterId());
+                    Object value = null;
+                    if(results.get(mr.getMasterId()) != null) {
+                        value = results.get(mr.getMasterId()).getValue(mr.getRegisterId());
+                    }
                     field.setAccessible(true);
-                    String v = dealModbusValue(mr.getFieldName(), value);
+                    String oriVal = dealModbusValue(mr.getFieldName(), value);
+                    String v = multiplyCoefficient(oriVal, mr.getCoefficient());
                     try {
                         field.set(target, v);
                     } catch (IllegalAccessException e) {
@@ -143,6 +151,26 @@ public class HvacUtil {
                 }
             }
         });
+    }
+
+    /**
+     * mb乘以返回系数
+     * @param oriVal
+     * @param coefficient
+     * @return
+     */
+    private static String multiplyCoefficient(String oriVal, String coefficient){
+        if (StringUtils.isBlank(oriVal)) {
+            return null;
+        }
+
+        if(StringUtil.isBlank(coefficient) || "1".equals(coefficient)){
+            //无系数或系数为1时 直接返回
+            return oriVal;
+        }
+        BigDecimal ori = new BigDecimal(oriVal);
+        BigDecimal multiply = ori.multiply(new BigDecimal(coefficient));
+        return multiply.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
     }
 
     private static String dealModbusValue(String fieldName, Object o){

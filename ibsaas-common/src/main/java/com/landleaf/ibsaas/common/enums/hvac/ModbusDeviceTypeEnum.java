@@ -12,6 +12,8 @@ public enum  ModbusDeviceTypeEnum {
     /**
      * modbus设备
      */
+    ELECTRIC_METER(6, "电表", "com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO"),
+
     SENSOR(7, "多参数传感器", "com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO"),
     ;
 

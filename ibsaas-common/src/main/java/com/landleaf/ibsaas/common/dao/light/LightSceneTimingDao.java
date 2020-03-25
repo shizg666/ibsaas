@@ -25,7 +25,7 @@ public interface LightSceneTimingDao extends BaseDao<LightSceneTiming> {
 
     int updateById(LightSceneTiming lightSceneTiming);
 
-    int deleteById(@Param("id" )Long id);
+    int deleteById(@Param("id") Long id);
 
     List<SelectedVo> getSceneListByDevice(@Param("deviceId") Long deviceId);
 }

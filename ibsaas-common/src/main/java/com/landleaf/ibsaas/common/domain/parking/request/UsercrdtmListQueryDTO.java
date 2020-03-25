@@ -3,9 +3,9 @@ package com.landleaf.ibsaas.common.domain.parking.request;
 //进出记录请求DTO
 public class UsercrdtmListQueryDTO {
 
-    private Integer page;
+    private Integer page=1;
 
-    private Integer limit;
+    private Integer limit=10;
 
     //起始时间
     private String startTime;

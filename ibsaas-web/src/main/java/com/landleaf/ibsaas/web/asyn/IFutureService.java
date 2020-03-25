@@ -10,4 +10,6 @@ public interface IFutureService {
     public java.util.concurrent.Future getCacheFuture(String msgId, Long timeout);
     @Async
     public Future getKnightCacheFuture(String msgId, Long timeout);
+    @Async
+    public Future getParkingCacheFuture(String msgId, Long timeout);
 }

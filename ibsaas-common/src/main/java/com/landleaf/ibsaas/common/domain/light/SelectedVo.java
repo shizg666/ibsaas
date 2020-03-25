@@ -18,12 +18,12 @@ public class SelectedVo implements Serializable {
 
 
     @ApiModelProperty(value = "值")
-    private String value;
+    private Long value;
 
     @ApiModelProperty(value = "显示的值")
     private String label;
 
-    public SelectedVo(String label, String value) {
+    public SelectedVo(String label, Long value) {
         this.value = value;
         this.label = label;
     }

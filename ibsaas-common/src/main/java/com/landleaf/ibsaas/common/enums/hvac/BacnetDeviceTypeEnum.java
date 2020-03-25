@@ -24,14 +24,14 @@ public enum  BacnetDeviceTypeEnum {
 
     WATER_METER(5, "水表", "com.landleaf.ibsaas.common.domain.hvac.vo.WaterMeterVO"),
 
-    ELECTRIC_METER(6, "电表", "com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO"),
+//    ELECTRIC_METER(6, "电表", "com.landleaf.ibsaas.common.domain.hvac.vo.ElectricMeterVO"),
 
 //    SENSOR(7, "多参数传感器", "com.landleaf.ibsaas.common.domain.hvac.vo.SensorVO"),
 
     AHU(8, "AHU", "com.landleaf.ibsaas.common.domain.hvac.vo.AhuVO"),
 
 
-    ACHP_DETAIL( 9, "风冷热泵详参", "com.landleaf.ibsaas.common.domain.hvac.vo.AchpDetailVO"),
+    ACHP_DETAIL( 9, "风冷热泵-详参", "com.landleaf.ibsaas.common.domain.hvac.vo.AchpDetailVO"),
 
     ACHP_PUMP_VALVE( 10, "风冷热泵-水阀水泵", "com.landleaf.ibsaas.common.domain.hvac.vo.AchpPumpValveVO"),
 

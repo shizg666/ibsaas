@@ -42,9 +42,9 @@ public class LightController extends BasicController {
     @PostMapping("/controlLight")
     @ApiOperation(value = "控制灯光", notes = "控制灯光")
     public Response controlLight(@RequestBody LightMsg requestBody) {
-        if (!control){
-            throw new BusinessException("您没有该权限！");
-        }
+//        if (!control){
+//            throw new BusinessException("您没有该权限！");
+//        }
         iLightService.controlLight(requestBody);
         return returnSuccess();
     }
@@ -76,9 +76,9 @@ public class LightController extends BasicController {
             key =  LightConstants.LIGHT_DEVICE_3F;
         }else if (floor == 4){
             key =  LightConstants.LIGHT_DEVICE_4F;
-        } else if (floor == 2){
+        }else if (floor == 2){
             key =  LightConstants.LIGHT_DEVICE_2F;
-        }else {
+        }else{
             key =  LightConstants.LIGHT_DEVICE_1F;
         }
         String state = redisHandle.getMapField(key,requestVO.getAdress());
@@ -92,6 +92,8 @@ public class LightController extends BasicController {
             //
             state = iLightService.getTryLightState(key,requestVO.getAdress(),2000L);
         }
+        //每次一都去获取下
+        iLightService.getAsynLightState(requestVO);
         return returnSuccess(state,null);
     }
     @GetMapping("/getProtocolList")

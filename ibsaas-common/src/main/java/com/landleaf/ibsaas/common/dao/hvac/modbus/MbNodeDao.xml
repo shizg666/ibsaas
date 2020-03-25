@@ -32,4 +32,35 @@
             AND tmn.mb_type=#{mbType}
         </if>
     </select>
+    <select id="getMbNodeByDeviceType" resultType="com.landleaf.ibsaas.common.domain.hvac.vo.MbNodeVO">
+        SELECT
+        tmn.id,
+        tmn.mb_type,
+        tmn.mb_type AS device_type,
+        tmn.node_name,
+        tmn.floor,
+        tmn.description
+        FROM t_mb_node tmn
+        WHERE tmn.is_active=1
+        <if test="deviceType!=null">
+            AND tmn.mb_type=#{deviceType}
+        </if>
+    </select>
+    <select id="getMbNodeByDeviceTypeWithoutEquip"
+            resultType="com.landleaf.ibsaas.common.domain.hvac.vo.MbNodeVO">
+        SELECT
+        tmn.id,
+        tmn.mb_type,
+        tmn.mb_type AS device_type,
+        tmn.node_name,
+        tmn.floor,
+        tmn.description
+        FROM t_mb_node tmn
+        LEFT JOIN t_energy_equip tee ON tmn.id=tee.node_id AND tee.is_active=1
+        WHERE tmn.is_active=1
+        <if test="deviceType!=null">
+            AND tmn.mb_type=#{deviceType}
+        </if>
+        AND tee.id IS NULL
+    </select>
 </mapper>

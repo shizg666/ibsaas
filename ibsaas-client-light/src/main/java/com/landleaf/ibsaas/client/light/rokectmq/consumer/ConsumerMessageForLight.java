@@ -23,7 +23,7 @@ import java.util.List;
  * @author shizg
  * @description: 通用处理灯光的消息
  */
-@MQConsumeService(topic = TopicConstants.TOPIC_LIGHT_CONTROL, tags = {TagConstants.TAGS_DEFAULT})
+@MQConsumeService(topic = "${rocketmq.consumer.client.light.topic}", tags = {TagConstants.TAGS_DEFAULT})
 @Component
 @Slf4j
 public class ConsumerMessageForLight extends AbstractMQMsgProcessor {

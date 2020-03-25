@@ -1,0 +1,6 @@
+server:
+  port: 9097
+
+spring:
+  profiles:
+    active: prod

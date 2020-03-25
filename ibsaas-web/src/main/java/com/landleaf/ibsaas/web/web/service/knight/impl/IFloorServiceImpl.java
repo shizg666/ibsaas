@@ -121,6 +121,29 @@ public class IFloorServiceImpl implements IFloorService {
         return roleFloorDoorsReponseVO;
     }
 
+
+    @Override
+    public RoleFloorDoorsReponseVO getfloorControlDoorByRoleId(Long floorId) {
+        RoleFloorDoorsReponseVO roleFloorDoorsReponseVO = new RoleFloorDoorsReponseVO();
+        TFloor tFloor = tFloorMapper.selectByPrimaryKey(floorId);
+        if (tFloor == null){
+            throw new BusinessException("楼层信息查不存在");
+        }
+        roleFloorDoorsReponseVO.setImg(StringUtil.isBlank(tFloor.getImg())?"":path+tFloor.getImg());
+        roleFloorDoorsReponseVO.setRoleId(null);
+        List<TDoor> tDoorList = tDoorMapper.selectControlDoorByParentId(floorId);
+        List<RoleDoorsReponseVO> roleDoorsReponseVOS = new ArrayList<>(tDoorList.size());
+        tDoorList.forEach(item -> {
+            RoleDoorsReponseVO roleDoorsReponseVO = new RoleDoorsReponseVO();
+            BeanUtils.copyProperties(item,roleDoorsReponseVO);
+            roleDoorsReponseVO.setAcessflag(false);
+            roleDoorsReponseVOS.add(roleDoorsReponseVO);
+        });
+        roleFloorDoorsReponseVO.setList(roleDoorsReponseVOS);
+        return roleFloorDoorsReponseVO;
+    }
+
+
     public TFloor addFloor(TFloor tFloor) {
         TFloor tFloor1 = tFloorMapper.selectByFloor(tFloor.getFloor(),tFloor.getParentId());
         if (tFloor1 != null){

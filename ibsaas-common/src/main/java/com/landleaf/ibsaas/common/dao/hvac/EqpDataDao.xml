@@ -5,4 +5,52 @@
 <mapper namespace="com.landleaf.ibsaas.common.dao.hvac.EqpDataDao">
 
 
+    <select id="getEnergyExcelData" resultType="com.landleaf.ibsaas.common.domain.excel.EnergyExcelData">
+        SELECT
+        ted.energy_data_time AS dataTime,
+        tee.equip_name AS equipName,
+        tee.equip_floor AS floor,
+        tcs.setting_value AS equipClassification,
+        ted.energy_data_value AS dataValue,
+        ted.energy_data_increase_value AS dataIncreaseValue
+        FROM t_energy_data ted
+        INNER JOIN t_energy_equip tee ON tee.node_id=ted.node_id AND tee.is_active=1
+        INNER JOIN t_config_setting tcs ON tee.equip_classification=tcs.setting_code AND tcs.is_active=1 AND tcs.setting_type='equip_classification'
+        WHERE ted.is_active=1
+        AND ted.energy_data_source=1
+        AND ted.energy_data_type=#{deviceType}
+        <if test="startTime!=null">
+            AND ted.energy_data_time >= #{startTime}
+        </if>
+        <if test="endTime!=null">
+            AND ted.energy_data_time &lt;= #{endTime}
+        </if>
+        ORDER BY ted.energy_data_time DESC,	tee.equip_floor
+    </select>
+
+    <select id="getDeviceExcelData" resultType="com.landleaf.ibsaas.common.domain.excel.DeviceExcelData">
+        SELECT
+        ted.eqp_data_time AS dataTime,
+        ted.node_name AS nodeName,
+        ted.floor AS floor,
+        <if test="deviceType == 7">
+        tmn.description AS description,
+        </if>
+        ted.field_description AS attribute,
+        IF(ted.eqp_data_value = 'null','0', ted.eqp_data_value) AS dataValue
+        FROM t_eqp_data ted
+        <if test="deviceType == 7">
+        INNER JOIN t_mb_node tmn ON ted.node_id=tmn.id AND tmn.is_active=1
+        </if>
+        WHERE ted.is_active=1
+        AND ted.device_type=#{deviceType}
+        <if test="startTime!=null">
+            AND ted.eqp_data_time >= #{startTime}
+        </if>
+        <if test="endTime!=null">
+            AND ted.eqp_data_time &lt;= #{endTime}
+        </if>
+        ORDER BY ted.eqp_data_time DESC, ted.floor,ted.node_name, ted.field_description
+
+    </select>
 </mapper>

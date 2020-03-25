@@ -69,14 +69,17 @@ public class ContentReReadableHttpRequestWrapper extends HttpServletRequestWrapp
             return is.read();
         }
 
+        @Override
         public boolean isFinished() {
             return false;
         }
 
+        @Override
         public boolean isReady() {
             return false;
         }
 
+        @Override
         public void setReadListener(ReadListener listener) {
 
         }

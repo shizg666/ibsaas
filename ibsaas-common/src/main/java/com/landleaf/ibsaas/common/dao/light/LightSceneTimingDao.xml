@@ -46,7 +46,8 @@
                 t.skip_holiday_flag,
                 t.time,
                 a.NAME,
-                a.code
+                a.code,
+                a.id as attributeId
             FROM
                 light_scene_timing t
                 INNER JOIN t_light_attribute a ON a.id = t.attribute_id
@@ -63,7 +64,7 @@
             ad.floor
         FROM
             light_scene_timing t
-            INNER JOIN t_light_device d ON d.id = t.attribute_id
+            INNER JOIN t_light_device d ON d.id = t.device_id
             INNER JOIN t_light_attribute a ON a.id = t.attribute_id
             inner join t_light_area_device ad on ad.device_id = d.id
         WHERE

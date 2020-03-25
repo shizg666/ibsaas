@@ -7,8 +7,10 @@ import com.landleaf.ibsaas.common.dao.leo.UserDao;
 import com.landleaf.ibsaas.common.dao.leo.UserRoleDao;
 import com.landleaf.ibsaas.common.domain.leo.User;
 import com.landleaf.ibsaas.common.domain.leo.UserRole;
+import com.landleaf.ibsaas.common.exception.BusinessException;
 import com.landleaf.ibsaas.common.service.leo.ICommonUserRoleService;
 import com.landleaf.ibsaas.common.service.leo.ICommonUserService;
+import com.landleaf.ibsaas.common.utils.string.StringUtil;
 import com.landleaf.ibsaas.web.web.constant.IbsaasWebConstants;
 import com.landleaf.ibsaas.web.web.context.user.UserContext;
 import com.landleaf.ibsaas.web.web.dataprovider.IdGenerator;
@@ -64,6 +66,10 @@ public class UserService implements IUserService {
      * @date 2017年08月09日08:55:18
      */
     public User addUser(User user) {
+        User existUser = getUser(user.getUserCode());
+        if(existUser!=null){
+            throw new BusinessException("用户名已存在！");
+        }
         initAddParams(user);
         commonUserService.save(user);
         User queryUser = new User();
@@ -99,6 +105,7 @@ public class UserService implements IUserService {
          * 2.删除时必须是从可用状态改为不可用状态
          * 3.更新影响行数必须不等于0
          */
+
         User updateUser = new User();
         updateUser.setId(user.getId());
         initUpdateParams(updateUser);
@@ -108,10 +115,15 @@ public class UserService implements IUserService {
         queryParam.setId(user.getId());
         User existUsr = commonUserService.selectOne(queryParam);
         if (existUsr == null) throw new UserException(UserException.BUSINESS_USER_UPDATE_USER_NOT_EXISTS);
+        user.setUserCode(existUsr.getUserCode());
+        user.setCreateTime(existUsr.getCreateTime());
+        user.setCreateUserCode(existUsr.getCreateUserCode());
         //密码处理
-        if (!StringUtils.equals(user.getPassword(), existUsr.getPassword())) {
+        if (!StringUtil.isEmpty(user.getPassword()) &&!StringUtils.equals(user.getPassword(), existUsr.getPassword())) {
 //            String pwd = CryptoUtil.getInstance().getMD5ofStr(user.getPassword());
             user.setPassword(user.getPassword());
+        }else {
+            user.setPassword(existUsr.getPassword());
         }
 
         Example example = new Example(User.class);

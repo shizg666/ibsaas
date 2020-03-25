@@ -22,6 +22,12 @@ public interface IEnergyDataService extends IBaseService<EnergyData> {
 
 
     /**
+     * 零数据处理 用于填充断电或其他情况的数据缺失
+     * @param date
+     */
+    void zeroDataRecord(Date date);
+
+    /**
      * 电表数值记录
      * @param date
      */

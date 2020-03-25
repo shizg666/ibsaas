@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
@@ -30,6 +31,7 @@ public class LightSceneTimingReqVO {
     private Long deviceId;
 
     @ApiModelProperty(value = "t_light_attribute (场景id)")
+    @NotNull(message = "场景不能为空")
     private Integer attributeId;
 
     @ApiModelProperty( value = "执行时间 时间格式- HH:mm", required = true)

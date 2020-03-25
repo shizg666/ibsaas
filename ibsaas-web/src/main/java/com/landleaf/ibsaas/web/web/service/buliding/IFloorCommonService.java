@@ -8,12 +8,13 @@ import java.util.List;
 
 public interface IFloorCommonService {
 
-    void addFloorOrUpdate (TFloor tFloor);
+    TFloor addFloorOrUpdate (TFloor tFloor);
 
     TFloor getFloorById(Long id);
 
-    Integer deleteFloor(Long id);
+    Integer deleteFloor(Long id,Integer Type);
 
+    Integer deleteFloor(Long id);
 
     List<TFloor> getFloorListByParentId(Long buildingId);
 
