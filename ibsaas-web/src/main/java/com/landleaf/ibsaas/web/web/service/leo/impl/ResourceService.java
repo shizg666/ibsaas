@@ -105,8 +105,8 @@ public class ResourceService implements IResourceService {
         List results = Lists.newArrayList();
         map.put("list", results);
         Set<Resource> allResource = findUsersResourceByCode(systemCode);
-        String language = getCurrentLanguage();
-        getResourcesBoundLanguage(language, allResource);
+//        String language = getCurrentLanguage();
+//        getResourcesBoundLanguage(language, allResource);
         List<Resource> resources = new ArrayList();
         if (!CollectionUtils.isEmpty(allResource) && !StringUtils.isBlank(resourceName)) {
             resources = allResource.stream().filter(item -> item.getResourceName().contains(resourceName)
@@ -250,8 +250,8 @@ public class ResourceService implements IResourceService {
         allResource = findUsersResourceByCode(systemCode);
         if (!CollectionUtils.isEmpty(allResource)) {
             //将菜单进行转换成前台菜单需要的
-            String language = getCurrentLanguage();//根据当前cookie获取语言种类
-            getResourcesBoundLanguage(language, allResource);
+//            String language = getCurrentLanguage();//根据当前cookie获取语言种类
+//            getResourcesBoundLanguage(language, allResource);
             results = convertResources2Tree(allResource);
         }
         return results;
