@@ -53,7 +53,10 @@ public class LargeScreenService {
                 sensorVO = defaultSensorVO(e.getNodeId());
             }
 
-            sensorVO.setSsTemp(ScreenValueUtil.retainDecimals(sensorVO.getSsTemp(), 1));
+            sensorVO.setSsTemp(
+                    ScreenValueUtil.changeVal(
+                        ScreenValueUtil.retainDecimals(sensorVO.getSsTemp(), 1),
+                    "1"));
             sensorVO.setSsHum(ScreenValueUtil.retainDecimals(sensorVO.getSsHum(), 2));
 
             sensorVO.setSsHchoLevel(SensorHchoLevelEnum.getLevel(sensorVO.getSsHcho()));
