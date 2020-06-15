@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class MbNodeHolder {
 
+     // 设备map
     public static final Map<Integer, List<BaseDevice>> MODBUS_NODE_MAP = new ConcurrentHashMap<>();
 
 

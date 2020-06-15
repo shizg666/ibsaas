@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class HvacNodeHolder {
 
+    // 类型下所有设备
     public static final Map<Integer, List<BaseDevice>> DEVICE_NODE_MAP = new ConcurrentHashMap<>();
 
     @Autowired

@@ -3,7 +3,7 @@
   -- ibsaas-common 公共服务端
   -- ibsaas-datasource 数据源提供
   -- ibsaas-rocketmq 消息组件
-  -- ibsaas-client-parking-lifang 立方停车数据客户端
+  -- ibsaas-client-parking-lifang-mq 立方停车数据客户端
   -- ibsaas-client-kngiht-lifang 立方门禁数据客户端
   
 ## 停车模块

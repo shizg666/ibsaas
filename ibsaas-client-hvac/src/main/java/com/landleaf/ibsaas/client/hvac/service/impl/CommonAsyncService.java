@@ -77,8 +77,11 @@ public class CommonAsyncService {
 
     @Async("taskExecutor")
     public void currentOneMbDataToRedis(Integer deviceType){
+         // 当前同一类型下所有设备的值
         List<? extends BaseDevice> currentData = getMbCurrentData(deviceType);
+
         List<? extends BaseDevice> oriData = redisHandle.getMapField(placeId, String.valueOf(deviceType));
+
         oriData = oriData == null ? MbNodeHolder.MODBUS_NODE_MAP.get(deviceType) : oriData;
         if (CollectionUtils.isNotEmpty(currentData)) {
             copyList(currentData, oriData);
@@ -244,11 +247,15 @@ public class CommonAsyncService {
     public List<? extends BaseDevice> getMbCurrentData(Integer mbType) {
         List<MbRegisterDetail> mbRegisterDetails = MbRegisterHolder.MASTER_POINT_LIST_MAP.get(mbType);
         Map<String, List<MbRegisterDetail>> mbNodeMap = MbRegisterHolder.MASTER_POINT_MAP.get(mbType);
+
+         // 这个主站下面某个类型下面的所有的点位的值
         Map<String, BatchResults<String>> results  = getBatchResults(mbRegisterDetails);
 
         List<BaseDevice> result = MbNodeHolder.MODBUS_NODE_MAP.get(mbType);
         result.forEach(bd -> {
+             // 获取点位表这个设备的所有点位信息
             List<MbRegisterDetail> mbRegisterDetailList = mbNodeMap.get(bd.getId());
+
             HvacUtil.assignmentByClassModbus(results, mbRegisterDetailList, bd);
         });
         return result;
@@ -259,10 +266,11 @@ public class CommonAsyncService {
 
         Map<String, BatchRead<String>> readMap = new HashMap<>(8);
         mbRegisterDetails.forEach(mrd -> {
+
             readMap.computeIfAbsent(mrd.getMasterId(), k-> new BatchRead<>());
+
             readMap.get(mrd.getMasterId())
-                    .addLocator(mrd.getRegisterId(),
-                            BaseLocator.inputRegister(mrd.getSlaveId(), mrd.getOffset(), mrd.getDataType()));
+                    .addLocator(mrd.getRegisterId(),BaseLocator.inputRegister(mrd.getSlaveId(), mrd.getOffset(), mrd.getDataType()));
         });
         //查询点位数据
         readMap.forEach((k,v) -> {
