@@ -20,8 +20,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Slf4j
 public class MbRegisterHolder {
+    // 同一类型下某一设备下所有点位map
     public static final Map<Integer, Map<String, List<MbRegisterDetail>>> MASTER_POINT_MAP = new ConcurrentHashMap<>();
 
+    // 同一类型下所有点位map
     public static final Map<Integer, List<MbRegisterDetail>> MASTER_POINT_LIST_MAP = new ConcurrentHashMap<>();
 
 
