@@ -20,7 +20,7 @@ public class ScreenEnergySchedule {
     @Autowired
     private ScreenEnergyService screenEnergyService;
 
-    @Scheduled(cron = "30 0 0 * * *")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void dailySumEnergy2Redis(){
         screenEnergyService.lgcSumElectric2Redis();
         screenEnergyService.lgcElectricLineChart2Redis();
