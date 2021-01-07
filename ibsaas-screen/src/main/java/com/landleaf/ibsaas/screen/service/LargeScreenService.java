@@ -6,6 +6,7 @@ import com.landleaf.ibsaas.common.domain.energy.HlVl;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 import com.landleaf.ibsaas.common.enums.hvac.sensor.SensorHchoLevelEnum;
 import com.landleaf.ibsaas.common.utils.date.LocalAndDateUtil;
+import com.landleaf.ibsaas.common.utils.number.NumberUtils;
 import com.landleaf.ibsaas.screen.enums.ScreenEnergyDateTypeEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenNewFanEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenSensorEnum;
@@ -216,6 +217,14 @@ public class LargeScreenService {
         result.setWeatherStatus(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather"));
         result.setPicUrl(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather_pic"));
         result.setWsTemp(ScreenValueUtil.retainDecimals(ws.getWsTemp(), 1));
+        try {
+            String wsTemp = ScreenValueUtil.retainDecimals(ws.getWsTemp(), 1);
+            if(NumberUtils.isNumber(wsTemp)&&Double.parseDouble(wsTemp)>100){
+               result.setWsTemp(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("temperature"));
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
         result.setWsHum(ScreenValueUtil.retainDecimals(ws.getWsHum(), 2));
         result.setWsPm25(ws.getWsPm25());
 
