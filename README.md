@@ -20,3 +20,18 @@
    自定义jar 
    
    mvn install:install-file -Dfile=E:\langlv\repository\modbus4j\modbus4j-3.0.5.jar -DgroupId=com.infiniteautomation -DartifactId=modbus4j -Dversion=3.0.5 -Dpackaging=jar
+   
+   最新  
+    ```
+        <repositories>
+            <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+            </repository>
+        </repositories>
+       <dependency>
+           <groupId>com.github.infiniteautomation</groupId>
+           <artifactId>modbus4j</artifactId>
+           <version>3.0.5</version>
+       </dependency>
+    ```
