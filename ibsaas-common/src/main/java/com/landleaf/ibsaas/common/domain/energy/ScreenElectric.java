@@ -1,4 +1,4 @@
-package com.landleaf.ibsaas.screen.model.vo;
+package com.landleaf.ibsaas.common.domain.energy;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

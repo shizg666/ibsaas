@@ -15,7 +15,7 @@ public enum ScreenHvacEnum{
     FAN_COIL("FAN_COIL","风盘状态数据", "com.landleaf.ibsaas.screen.service.LargeScreenService", "fanCoilStatus", new Class[]{}),
     ACHP_DETAIL("ACHP_DETAIL","风冷热泵状态数据", "com.landleaf.ibsaas.screen.service.LargeScreenService", "achpDetailStatus", new Class[]{}),
     WEATHER("WEATHER","天气信息", "com.landleaf.ibsaas.screen.service.LargeScreenService", "weatherStatus", new Class[]{}),
-    ENERGY("ENERGY","能耗信息", "com.landleaf.ibsaas.screen.service.LargeScreenService", "energyStatus", new Class[]{}),
+    ENERGY("ENERGY","能耗信息", "com.landleaf.ibsaas.screen.service.LargeScreenService", "energyStatus2", new Class[]{}),
     MEETING("MEETING","会议信息", "com.landleaf.ibsaas.screen.service.LargeScreenService", "meetingStatus", new Class[]{}),
     ;
 

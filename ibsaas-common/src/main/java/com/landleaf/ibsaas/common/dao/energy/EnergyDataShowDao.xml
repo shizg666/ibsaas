@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.landleaf.ibsaas.common.dao.energy.EnergyDataShowDao">
+
+
+    <select id="getListPage" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyDataShowVO">
+        SELECT
+        d.id,
+        d.VALUE,
+        d.time
+        FROM
+        t_energy_data_show d
+        WHERE
+        d.time &gt;= #{startDate} AND d.time &lt;= #{endDate}
+    </select>
+
+    <select id="getCount" resultType="java.math.BigDecimal">
+               SELECT
+        sum(d.VALUE)
+        FROM
+        t_energy_data_show d
+        WHERE
+        d.time &gt;= #{startDate} AND d.time &lt;= #{endDate}
+    </select>
+
+</mapper>
+
+

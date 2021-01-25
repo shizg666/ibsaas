@@ -3,8 +3,10 @@ package com.landleaf.ibsaas.screen.service;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
+import com.landleaf.ibsaas.common.domain.energy.ScreenElectric;
 import com.landleaf.ibsaas.common.domain.hvac.vo.*;
 import com.landleaf.ibsaas.common.enums.hvac.sensor.SensorHchoLevelEnum;
+import com.landleaf.ibsaas.common.redis.RedisHandle;
 import com.landleaf.ibsaas.common.utils.date.LocalAndDateUtil;
 import com.landleaf.ibsaas.common.utils.number.NumberUtils;
 import com.landleaf.ibsaas.screen.enums.ScreenEnergyDateTypeEnum;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,6 +39,15 @@ public class LargeScreenService {
 
     @Autowired
     private WeatherInfoService weatherInfoService;
+
+    @Autowired
+    private RedisHandle redisHandle;
+
+    public static final String ENERGY_SHOW_LIST = "energy:show:list";
+    //当月能耗统计
+    public static final String ENERGY_SHOW_TOTAL_MONTH = "energy:show:total:month";
+    //当年能耗统计
+    public static final String ENERGY_SHOW_TOTAL_YEAR = "energy:show:total:year";
 
     /**
      * 获取大屏多参数据
@@ -160,6 +172,23 @@ public class LargeScreenService {
         HlVl electricGraphics = getElectricGraphics(electricNumeric);
         result.setElectricNumeric(electricNumeric);
         result.setElectricGraphics(electricGraphics);
+        return result;
+    }
+
+    /**
+     * 能耗状态数据
+     * @return
+     */
+    public ScreenEnergy energyStatus2(){
+        ScreenEnergy result = new ScreenEnergy();
+        ScreenElectric electricNumeric = new ScreenElectric();
+        String month = (String) redisHandle.get(ENERGY_SHOW_TOTAL_MONTH);
+        String year = (String) redisHandle.get(ENERGY_SHOW_TOTAL_YEAR);
+        electricNumeric.setYearTotal(year);
+        electricNumeric.setMonthTotal(month);
+        HlVl data = (HlVl) redisHandle.get(ENERGY_SHOW_LIST);
+        result.setElectricGraphics(data);
+        result.setElectricNumeric(electricNumeric);
         return result;
     }
 

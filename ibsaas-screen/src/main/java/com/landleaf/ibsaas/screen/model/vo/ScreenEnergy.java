@@ -1,6 +1,7 @@
 package com.landleaf.ibsaas.screen.model.vo;
 
 import com.landleaf.ibsaas.common.domain.energy.HlVl;
+import com.landleaf.ibsaas.common.domain.energy.ScreenElectric;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
