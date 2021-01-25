@@ -23,4 +23,6 @@ public interface IEnergyDataShowService extends IBaseService<EnergyDataShow> {
     PageInfo<EnergyDataShowVO> getList(EnergyDataShowQryDTO request);
 
     void refreshEnergyDataShow();
+
+    void removeById(Long id);
 }

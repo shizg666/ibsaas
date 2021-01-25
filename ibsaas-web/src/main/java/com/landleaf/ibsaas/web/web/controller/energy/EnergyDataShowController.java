@@ -45,10 +45,24 @@ public class EnergyDataShowController extends BasicController {
 
 
 
-    @PutMapping("update")
+    @PostMapping("update")
     @ApiOperation("修改数据")
     public Response update(@RequestBody @Valid EnergyDataShowDTO request){
         iEnergyDataShowService.updateById(request);
+        return returnSuccess();
+    }
+
+    @DeleteMapping("remove/{id}")
+    @ApiOperation("删除数据")
+    public Response update(@PathVariable("id") Long id){
+        iEnergyDataShowService.removeById(id);
+        return returnSuccess();
+    }
+
+    @GetMapping("refresh")
+    @ApiOperation("刷新数据")
+    public Response refresh(){
+        iEnergyDataShowService.refreshEnergyDataShow();
         return returnSuccess();
     }
 

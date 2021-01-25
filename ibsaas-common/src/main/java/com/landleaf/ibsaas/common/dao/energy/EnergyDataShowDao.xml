@@ -12,8 +12,15 @@
         d.time
         FROM
         t_energy_data_show d
-        WHERE
-        d.time &gt;= #{startDate} AND d.time &lt;= #{endDate}
+        <where>
+            <if test="startDate != 0L">
+                and d.time &gt;= #{startDate}
+            </if>
+            <if test="endDate != 0L">
+                and d.time &lt;= #{endDate}
+            </if>
+        </where>
+        ORDER BY d.time desc
     </select>
 
     <select id="getCount" resultType="java.math.BigDecimal">
@@ -23,6 +30,26 @@
         t_energy_data_show d
         WHERE
         d.time &gt;= #{startDate} AND d.time &lt;= #{endDate}
+    </select>
+
+    <select id="countByTime" resultType="java.lang.Integer">
+          SELECT
+                count(*)
+            FROM
+                t_energy_data_show d
+            WHERE
+                d.time = #{time}
+    </select>
+    <select id="getListLatest12" resultType="com.landleaf.ibsaas.common.domain.energy.vo.EnergyDataShowVO">
+      SELECT
+        d.id,
+        d.VALUE,
+        d.time
+        FROM
+        t_energy_data_show d
+        WHERE
+        d.time &gt;= #{startDate} AND d.time &lt;= #{endDate}
+        order by d.time desc
     </select>
 
 </mapper>

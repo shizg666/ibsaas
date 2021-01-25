@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,8 +20,13 @@ public interface EnergyDataShowDao extends BaseDao<EnergyDataShow> {
     List<EnergyDataShowVO> getListPage(@Param("startDate") Long startDate, @Param("endDate") Long endDate);
 
 
-    @Select(" SELECT d.id,d.VALUE,d.time FROM t_energy_data_show d ORDER BY d.time desc limit 12")
-    List<EnergyDataShowVO> getListLatest12();
+//    @Select(" SELECT d.id,d.VALUE,d.time FROM t_energy_data_show d ORDER BY d.time desc limit 12")
+    List<EnergyDataShowVO> getListLatest12(@Param("startDate") Long startDate, @Param("endDate") Long endDate);
 
     BigDecimal getCount(@Param("startDate") Long startDate, @Param("endDate") Long endDate);
+
+    int countByTime(@Param("time") Long time);
+
+    @Select(" SELECT d.time FROM t_energy_data_show d ORDER BY d.time desc limit 1")
+    Long getListLatestTime();
 }

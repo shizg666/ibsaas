@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author Lokiy
@@ -27,7 +26,8 @@ public class EnergyDataShowVO {
     @ApiModelProperty("能耗数值")
     private BigDecimal value;
 
-//    @ApiModelProperty("创建时间")
+
+    //    @ApiModelProperty("创建时间")
 //    private Date ctime;
 //
 //    @ApiModelProperty("更新时间")
