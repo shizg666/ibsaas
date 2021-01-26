@@ -14,6 +14,7 @@ import com.landleaf.ibsaas.screen.enums.ScreenNewFanEnum;
 import com.landleaf.ibsaas.screen.enums.ScreenSensorEnum;
 import com.landleaf.ibsaas.screen.model.vo.*;
 import com.landleaf.ibsaas.screen.util.ScreenValueUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -246,16 +247,35 @@ public class LargeScreenService {
         result.setWeatherStatus(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather"));
         result.setPicUrl(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("weather_pic"));
         result.setWsTemp(ScreenValueUtil.retainDecimals(ws.getWsTemp(), 1));
+        result.setWsHum(ScreenValueUtil.retainDecimals(ws.getWsHum(), 2));
+        result.setWsPm25(ws.getWsPm25());
         try {
             String wsTemp = ScreenValueUtil.retainDecimals(ws.getWsTemp(), 1);
-            if(NumberUtils.isNumber(wsTemp)&&Double.parseDouble(wsTemp)>100){
-               result.setWsTemp(lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("temperature"));
+            String wsHum = ScreenValueUtil.retainDecimals(ws.getWsHum(), 2);
+            String wsPm25 = ws.getWsPm25();
+            if(NumberUtils.isNumber(wsTemp)&&(Double.parseDouble(wsTemp)>30||Double.parseDouble(wsTemp)<-30)){
+                String tmpTemp = lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("temperature");
+                if(StringUtils.isNotEmpty(tmpTemp)){
+                    result.setWsTemp(tmpTemp);
+                }
+            }
+            if(NumberUtils.isNumber(wsHum)&&(Double.parseDouble(wsHum)>100||Double.parseDouble(wsHum)<0)){
+                String tmpSD = lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getString("sd");
+                if(StringUtils.isNotEmpty(tmpSD)&&tmpSD.contains("%")){
+                    tmpSD= tmpSD.substring(0,tmpSD.indexOf("%"));
+                    result.setWsHum(tmpSD);
+                }
+            }
+            if(NumberUtils.isNumber(wsPm25)&&(Double.parseDouble(wsPm25)>1000||Double.parseDouble(wsPm25)<0)){
+                String tmpPm25 = lgcWeather.getJSONObject("showapi_res_body").getJSONObject("now").getJSONObject("aqiDetail").getString("pm2_5");
+                if(StringUtils.isNotEmpty(tmpPm25)){
+                    result.setWsPm25(tmpPm25);
+                }
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        result.setWsHum(ScreenValueUtil.retainDecimals(ws.getWsHum(), 2));
-        result.setWsPm25(ws.getWsPm25());
+
 
         return result;
     }
