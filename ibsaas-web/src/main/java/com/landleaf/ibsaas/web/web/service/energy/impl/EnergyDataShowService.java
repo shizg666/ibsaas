@@ -107,6 +107,7 @@ public class EnergyDataShowService extends AbstractBaseService<EnergyDataShowDao
         }
         //获取最新的12个月的数据
         LocalDateTime dateTime = LocalDateTimeUtil.long2LocalDateTime(time);
+        int nowMOnth = dateTime.getMonthValue();
         long startLong = LocalDateTimeUtil.getMilliByTime(dateTime.minusMonths(11L));
         long endLong = LocalDateTimeUtil.getMilliByTime(dateTime);
         List<EnergyDataShowVO> data = energyDataShowDao.getListLatest12(startLong,endLong);
@@ -117,7 +118,9 @@ public class EnergyDataShowService extends AbstractBaseService<EnergyDataShowDao
         List<Integer> xpos = buildXPosList(latestTime);
         List<String> ypos = Lists.newArrayListWithCapacity(12);
         Map<Integer,String> mapdata = Maps.newHashMapWithExpectedSize(12);
+        BigDecimal totalYear = BigDecimal.ZERO;
         for (EnergyDataShowVO datum : data) {
+            totalYear = totalYear.add(datum.getValue());
             mapdata.put(LocalDateTimeUtil.long2LocalDateTime(datum.getTime()).getMonthValue(),datum.getValue().toString());
         }
         for (Integer xpo : xpos) {
@@ -130,14 +133,15 @@ public class EnergyDataShowService extends AbstractBaseService<EnergyDataShowDao
         HlVl result = new HlVl();
         result.setXs(xpos);
         result.setYs(ypos);
-        LocalDateTime startTime = LocalDateTimeUtil.getStartOrEndDayOfYear(LocalDate.now(),true);
-        LocalDateTime endTime = LocalDateTimeUtil.getStartOrEndDayOfYear(LocalDate.now(),false);
-        BigDecimal totalYear = energyDataShowDao.getCount(LocalDateTimeUtil.getMilliByTime(startTime),LocalDateTimeUtil.getMilliByTime(endTime));
-        redisUtil.set(ENERGY_SHOW_TOTAL_YEAR,totalYear==null?BigDecimal.ZERO.toString():totalYear.toString());
-        int nowMonth = LocalDate.now().getMonthValue();
+//        LocalDateTime startTime = LocalDateTimeUtil.getStartOrEndDayOfYear(LocalDate.now(),true);
+//        LocalDateTime endTime = LocalDateTimeUtil.getStartOrEndDayOfYear(LocalDate.now(),false);
+//        BigDecimal totalYear = energyDataShowDao.getCount(LocalDateTimeUtil.getMilliByTime(startTime),LocalDateTimeUtil.getMilliByTime(endTime));
+
+        redisUtil.set(ENERGY_SHOW_TOTAL_YEAR,totalYear.toString());
+//        int nowMonth = LocalDate.now().getMonthValue();
         String monthTotal = BigDecimal.ZERO.toString();
-        if (mapdata.containsKey(nowMonth)){
-            monthTotal = mapdata.get(nowMonth);
+        if (mapdata.containsKey(nowMOnth)){
+            monthTotal = mapdata.get(nowMOnth);
         }
         redisUtil.set(ENERGY_SHOW_TOTAL_MONTH,monthTotal);
         redisUtil.set(ENERGY_SHOW_LIST, result);
